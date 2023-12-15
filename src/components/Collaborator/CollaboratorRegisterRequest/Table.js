@@ -166,9 +166,9 @@ class Table extends Component {
       result = collaboratorRegisterRequests.map((data2, index) => {
         var data = data2.collaborator;
         var avatar =
-          data.customer.avatar_image == null
+          data?.customer?.avatar_image == null
             ? Env.IMG_NOT_FOUND
-            : data.customer.avatar_image;
+            : data?.customer?.avatar_image;
         var img_front =
           data.front_card == null ? Env.IMG_NOT_FOUND : data.front_card;
         var img_back =
@@ -176,32 +176,33 @@ class Table extends Component {
 
         var address_default = "";
 
-        if (data.customer != null && typeof data.customer != "undefined") {
+        if (data?.customer != null && typeof data?.customer != "undefined") {
           if (
-            data.customer.address_detail !== null &&
-            data.customer.address_detail !== ""
+            data?.customer?.address_detail !== null &&
+            data?.customer?.address_detail !== ""
           ) {
             address_default =
               address_default + data.customer.address_detail + ", ";
           }
           if (
-            data.customer.wards_name !== null &&
-            data.customer.wards_name !== ""
-          ) {
-            address_default = address_default + data.customer.wards_name + ", ";
-          }
-          if (
-            data.customer.district_name !== null &&
-            data.customer.district_name !== ""
+            data?.customer?.wards_name !== null &&
+            data?.customer?.wards_name !== ""
           ) {
             address_default =
-              address_default + data.customer.district_name + ", ";
+              address_default + data?.customer?.wards_name + ", ";
           }
           if (
-            data.customer.province_name !== null &&
-            data.customer.province_name !== ""
+            data?.customer?.district_name !== null &&
+            data?.customer?.district_name !== ""
           ) {
-            address_default = address_default + data.customer.province_name;
+            address_default =
+              address_default + data?.customer?.district_name + ", ";
+          }
+          if (
+            data?.customer?.province_name !== null &&
+            data?.customer?.province_name !== ""
+          ) {
+            address_default = address_default + data?.customer?.province_name;
           }
         }
         return (
@@ -223,7 +224,7 @@ class Table extends Component {
                   1}
               </td>{" "}
               <td>{data?.customer?.name}</td>
-              <td>{data.account_name}</td>
+              <td>{data?.account_name}</td>
               <td>{data?.customer?.phone_number}</td>
               <td>
                 {data?.customer?.total_after_discount_no_bonus

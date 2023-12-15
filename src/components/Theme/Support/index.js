@@ -26,6 +26,7 @@ class Support extends Component {
       ID_post_id_return_policy: null,
       ID_post_id_support_policy: null,
       ID_post_id_privacy_policy: null,
+      ID_post_id_delivery_policy: null,
       is_show_list_post_contact: false,
       type: "",
       isLoading: false,
@@ -53,8 +54,10 @@ class Support extends Component {
         ID_post_id_return_policy: theme.post_id_return_policy || "",
         ID_post_id_support_policy: theme.post_id_support_policy || "",
         ID_post_id_privacy_policy: theme.post_id_privacy_policy || "",
+        ID_post_id_delivery_policy: theme.post_id_delivery_policy || "",
         is_show_list_post_contact: theme.is_show_list_post_contact,
       });
+
       if (theme.post_id_help != "" && theme.post_id_help != null)
         this.props.fetchBlogId(store_code, {
           id: theme.post_id_help,
@@ -105,6 +108,15 @@ class Support extends Component {
           id: theme.post_id_privacy_policy,
           type: Types.POST_ID_PRIVACY_POLICY,
         });
+
+      if (
+        theme.post_id_delivery_policy != "" &&
+        theme.post_id_delivery_policy != null
+      )
+        this.props.fetchBlogId(store_code, {
+          id: theme.post_id_delivery_policy,
+          type: Types.POST_ID_DELIVERY_POLICY,
+        });
     }
   }
 
@@ -133,6 +145,7 @@ class Support extends Component {
         ID_post_id_return_policy: theme.post_id_return_policy || "",
         ID_post_id_support_policy: theme.post_id_support_policy || "",
         ID_post_id_privacy_policy: theme.post_id_privacy_policy || "",
+        ID_post_id_delivery_policy: theme.post_id_delivery_policy || "",
         is_show_list_post_contact: theme.is_show_list_post_contact,
         isLoading: true,
       });
@@ -153,6 +166,10 @@ class Support extends Component {
       !shallowEqual(
         nextProps.post_id_privacy_policy,
         this.props.post_id_privacy_policy
+      ) ||
+      !shallowEqual(
+        nextProps.post_id_delivery_policy,
+        this.props.post_id_delivery_policy
       )
     ) {
       this.setState({
@@ -163,6 +180,8 @@ class Support extends Component {
         post_id_return_policy: nextProps.post_id_return_policy?.title || null,
         post_id_support_policy: nextProps.post_id_support_policy?.title || null,
         post_id_privacy_policy: nextProps.post_id_privacy_policy?.title || null,
+        post_id_delivery_policy:
+          nextProps.post_id_delivery_policy?.title || null,
 
         ID_post_id_help: nextProps.post_id_help?.id || null,
         ID_post_id_contact: nextProps.post_id_contact?.id || null,
@@ -171,6 +190,7 @@ class Support extends Component {
         ID_post_id_return_policy: nextProps.post_id_return_policy?.id || null,
         ID_post_id_support_policy: nextProps.post_id_support_policy?.id || null,
         ID_post_id_privacy_policy: nextProps.post_id_privacy_policy?.id || null,
+        ID_post_id_delivery_policy: nextProps.post_id_delivery_policy?.id || "",
       });
     }
   }
@@ -186,6 +206,7 @@ class Support extends Component {
         ID_post_id_return_policy,
         ID_post_id_support_policy,
         ID_post_id_privacy_policy,
+        ID_post_id_delivery_policy,
       } = this.state;
       if (ID_post_id_help != "" && ID_post_id_help != null)
         this.props.fetchBlogId(store_code, {
@@ -228,6 +249,14 @@ class Support extends Component {
           id: ID_post_id_privacy_policy,
           type: Types.POST_ID_PRIVACY_POLICY,
         });
+      if (
+        ID_post_id_delivery_policy != "" &&
+        ID_post_id_delivery_policy != null
+      )
+        this.props.fetchBlogId(store_code, {
+          id: ID_post_id_delivery_policy,
+          type: Types.POST_ID_DELIVERY_POLICY,
+        });
 
       this.setState({ isLoading: false });
     }
@@ -263,6 +292,10 @@ class Support extends Component {
       theme.ID_post_id_privacy_policy == ""
         ? null
         : theme.ID_post_id_privacy_policy;
+    form.post_id_delivery_policy =
+      theme.ID_post_id_delivery_policy == ""
+        ? null
+        : theme.ID_post_id_delivery_policy;
     form.is_show_list_post_contact = theme.is_show_list_post_contact;
     console.log(form);
     this.props.updateTheme(store_code, form);
@@ -276,6 +309,7 @@ class Support extends Component {
       post_id_return_policy,
       post_id_support_policy,
       post_id_privacy_policy,
+      post_id_delivery_policy,
       ID_post_id_help,
       ID_post_id_contact,
       ID_post_id_about,
@@ -283,6 +317,7 @@ class Support extends Component {
       ID_post_id_return_policy,
       ID_post_id_support_policy,
       ID_post_id_privacy_policy,
+      ID_post_id_delivery_policy,
       is_show_list_post_contact,
     } = this.state;
 
@@ -461,7 +496,24 @@ class Support extends Component {
                 />
               </div>
             </div>
-
+            <div className="form-group">
+              <label htmlFor="name">Chính sách giao hàng</label>
+              <input value={ID_post_id_delivery_policy} type="hidden" />
+              <div class="right-inner-addon input-container">
+                <i class="fa fa-caret-down"></i>
+                <input
+                  readOnly
+                  onClick={() => this.fetchAllBlog("post_id_delivery_policy")}
+                  value={post_id_delivery_policy}
+                  data-toggle="modal"
+                  data-target="#showListBlog"
+                  type="text"
+                  name="product_name"
+                  class="form-control"
+                  placeholder="Chọn bài viết..."
+                />
+              </div>
+            </div>
             {/* <div className="form-group">
                             <label htmlFor="name">Bài viết liên hệ</label>
                             <input
@@ -507,6 +559,7 @@ const mapStateToProps = (state) => {
     post_id_return_policy: state.themeReducers.post_id_return_policy,
     post_id_support_policy: state.themeReducers.post_id_support_policy,
     post_id_privacy_policy: state.themeReducers.post_id_privacy_policy,
+    post_id_delivery_policy: state.themeReducers.post_id_delivery_policy,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

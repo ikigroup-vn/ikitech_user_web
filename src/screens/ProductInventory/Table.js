@@ -89,7 +89,13 @@ class Table extends Component {
       const { store_code, listType } = this.props;
       // var params = this.props.getParams(listType)
 
-      this.props.editStock(store_code, branchIds, data, 1, this.props.params);
+      this.props.editStock(
+        store_code,
+        branchIds,
+        data,
+        this.props.page,
+        this.props.params
+      );
     }
     return true;
   }

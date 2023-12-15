@@ -1016,7 +1016,12 @@ class Product extends Component {
               limit={numPage}
               searchValue={searchValue}
             />
-            <ModalMultiDelete multi={this.state.multi} />
+            <ModalMultiDelete
+              multi={this.state.multi}
+              page={page}
+              limit={numPage}
+              searchValue={searchValue}
+            />
           </div>
         </ProductStyles>
       );

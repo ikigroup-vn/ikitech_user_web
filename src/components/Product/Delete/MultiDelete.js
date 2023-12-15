@@ -8,7 +8,12 @@ class Modal extends Component {
     e.preventDefault();
     window.$(".modal").modal("hide");
     var { data, store_code } = this.props.multi;
-    this.props.destroyMultiProduct(store_code, data);
+    const { page, limit, searchValue } = this.props;
+    var params = `${
+      searchValue ? `&search=${searchValue}` : ""
+    }&limit=${limit}`;
+
+    this.props.destroyMultiProduct(store_code, data, page, params);
   };
 
   render() {
@@ -24,8 +29,12 @@ class Modal extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
-              <h4 style={{ color: "white" }}>Thông báo</h4>              <button
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
+              <h4 style={{ color: "white" }}>Thông báo</h4>{" "}
+              <button
                 type="button"
                 class="close"
                 data-dismiss="modal"
@@ -44,10 +53,14 @@ class Modal extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn xóa {multi.data.length === 1 ?"sản phẩm" : `${multi.data.length} sản phẩm`} này không?
+                Bạn có muốn xóa{" "}
+                {multi.data.length === 1
+                  ? "sản phẩm"
+                  : `${multi.data.length} sản phẩm`}{" "}
+                này không?
               </div>
               <div class="modal-footer">
-              <button
+                <button
                   type="button"
                   class="btn btn-default"
                   data-dismiss="modal"
@@ -56,7 +69,6 @@ class Modal extends Component {
                 </button>
                 <button type="submit" class="btn btn-warning">
                   Xóa
-
                 </button>
               </div>
             </form>
@@ -69,8 +81,10 @@ class Modal extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    destroyMultiProduct: (store_code, data) => {
-      dispatch(productAction.destroyMultiProduct(store_code, data));
+    destroyMultiProduct: (store_code, data, page, params) => {
+      dispatch(
+        productAction.destroyMultiProduct(store_code, data, page, params)
+      );
     },
   };
 };

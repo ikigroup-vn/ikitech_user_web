@@ -1491,22 +1491,22 @@ class PostOrder extends Component {
                           )} */}
 
                           {oneCart?.info_cart?.total_shipping_fee >= 0 && (
-                            <div className="row item-info">
-                              <div className="item-discount-name col-6">
+                            <div
+                              className="row item-info"
+                              style={{
+                                justifyContent: "space-between",
+                                padding: "0 15px",
+                              }}
+                            >
+                              <div className="item-discount-name">
                                 Phí vận chuyển
                                 {ship_discount_amount > 0 ? (
-                                  <span
-                                    className="col-6"
-                                    style={{ textAlign: "end" }}
-                                  >
+                                  <span style={{ textAlign: "end" }}>
                                     (- {formatNoD(ship_discount_amount)})
                                   </span>
                                 ) : null}
                               </div>
-                              <span
-                                className="col-6"
-                                style={{ textAlign: "end" }}
-                              >
+                              <span style={{ textAlign: "end" }}>
                                 +
                                 {formatNoD(
                                   oneCart?.info_cart?.total_shipping_fee
