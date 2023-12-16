@@ -623,7 +623,7 @@ class InfoShipper extends Component {
                         disabled={!isUpdated}
                       />
                     </div>
-                    <div className="shipping__packet_text">cod</div>
+                    <div className="shipping__packet_text">cod+ship</div>
                   </div>
                 </div>
               </div>
