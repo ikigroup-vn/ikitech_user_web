@@ -369,6 +369,16 @@ const permission = (channel) => {
                 decentralizationName: "customer_change_referral",
                 componentChilds: [],
               },
+              {
+                name: "Export DS khách hàng",
+                decentralizationName: "customer_list_export",
+                componentChilds: [],
+              },
+              {
+                name: "Import DS khách hàng",
+                decentralizationName: "customer_list_import",
+                componentChilds: [],
+              },
             ],
           },
           {
@@ -679,6 +689,8 @@ export const initialPermission = () => {
     product_import_from_excel: true,
     product_export_to_excel: true,
     customer_list: false,
+    customer_list_export: false,
+    customer_list_import: false,
     customer_config_point: false,
     customer_review_list: false,
     customer_role_edit: false,
