@@ -489,13 +489,13 @@ class InfoProduct extends Component {
               onChange={this.onChangeCheckInventory}
               class="form-check-input"
               type="checkbox"
-              id="flexSwitchCheckDefault"
+              id="checkSwitchInventory"
               checked={check_inventory}
             />
             <label
               style={{ fontWeight: "750" }}
               class="form-check-label"
-              for="flexSwitchCheckDefault"
+              for="checkSwitchInventory"
             >
               Theo dõi hàng trong kho
             </label>
