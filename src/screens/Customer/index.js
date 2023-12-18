@@ -239,12 +239,16 @@ class Customer extends Component {
       var permissions = nextProps.permission;
       var chat_allow = permissions.chat_allow;
       var customer_change_point = permissions.customer_change_point;
+      var customer_list_export = permissions.customer_list_export;
+      var customer_list_import = permissions.customer_list_import;
       var isShow = permissions.customer_list || this.isSale();
       this.setState({
         isLoading: true,
         isShow,
-        customer_change_point,
         chat_allow,
+        customer_list_export,
+        customer_list_import,
+        customer_change_point,
       });
     }
   }
@@ -634,6 +638,8 @@ class Customer extends Component {
       pageReferralPhone,
       openModalImport,
       customer_change_point,
+      customer_list_export,
+      customer_list_import,
     } = this.state;
     const { wards, district, province, types } = this.props;
     var customerImg =
@@ -697,34 +703,39 @@ class Customer extends Component {
                         Danh sách khách hàng
                       </h4>{" "}
                       <div>
-                        <button
-                          style={{ margin: "auto 0px", marginRight: 15 }}
-                          onClick={this.exportAllListOrder}
-                          class={`btn btn-success btn-icon-split btn-sm `}
-                        >
-                          <span class="icon text-white-50">
-                            <i class="fas fa-file-export"></i>
-                          </span>
-                          <span style={{ color: "white" }} class="text">
-                            Export Excel
-                          </span>
-                        </button>
-                        {!this.isSale() && (
+                        {customer_list_export ? (
+                          <button
+                            style={{ margin: "auto 0px", marginRight: 15 }}
+                            onClick={this.exportAllListOrder}
+                            class={`btn btn-success btn-icon-split btn-sm `}
+                          >
+                            <span class="icon text-white-50">
+                              <i class="fas fa-file-export"></i>
+                            </span>
+                            <span style={{ color: "white" }} class="text">
+                              Export Excel
+                            </span>
+                          </button>
+                        ) : null}
+
+                        {/* {!this.isSale() && (
                           <>
-                            <button
-                              style={{ marginRight: "10px" }}
-                              onClick={this.showDialogImportExcel}
-                              class={`btn btn-primary btn-icon-split btn-sm `}
-                            >
-                              <span class="icon text-white-50">
-                                <i class="fas fa-file-import"></i>
-                              </span>
-                              <span style={{ color: "white" }} class="text">
-                                Import Excel
-                              </span>
-                            </button>
                           </>
-                        )}
+                        )} */}
+                        {customer_list_import ? (
+                          <button
+                            style={{ marginRight: "10px" }}
+                            onClick={this.showDialogImportExcel}
+                            class={`btn btn-primary btn-icon-split btn-sm `}
+                          >
+                            <span class="icon text-white-50">
+                              <i class="fas fa-file-import"></i>
+                            </span>
+                            <span style={{ color: "white" }} class="text">
+                              Import Excel
+                            </span>
+                          </button>
+                        ) : null}
 
                         <input
                           id="file-excel-import-customer"

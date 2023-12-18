@@ -369,12 +369,27 @@ const permission = (channel) => {
                 decentralizationName: "customer_change_referral",
                 componentChilds: [],
               },
+              {
+                name: "Export DS khách hàng",
+                decentralizationName: "customer_list_export",
+                componentChilds: [],
+              },
+              {
+                name: "Import DS khách hàng",
+                decentralizationName: "customer_list_import",
+                componentChilds: [],
+              },
             ],
           },
           {
             name: "Cộng tác viên",
             decentralizationName: "collaborator_list",
             componentChilds: [
+              {
+                name: "Quản lý cộng tác viên",
+                decentralizationName: "collaborator_list",
+                componentChilds: [],
+              },
               {
                 name: "Danh sách CTV",
                 decentralizationName: "collaborator_view",
@@ -416,6 +431,11 @@ const permission = (channel) => {
             name: "Đại lý",
             decentralizationName: "agency_list",
             componentChilds: [
+              {
+                name: "Quản lý đại lý",
+                decentralizationName: "agency_list",
+                componentChilds: [],
+              },
               {
                 name: "Danh sách đại lý",
                 decentralizationName: "agency_view",
@@ -472,6 +492,11 @@ const permission = (channel) => {
             name: "Sale",
             decentralizationName: "sale_list",
             componentChilds: [
+              {
+                name: "Quản lý sale",
+                decentralizationName: "sale_list",
+                componentChilds: [],
+              },
               {
                 name: "Danh sách sale",
                 decentralizationName: "sale_view",
@@ -679,6 +704,8 @@ export const initialPermission = () => {
     product_import_from_excel: true,
     product_export_to_excel: true,
     customer_list: false,
+    customer_list_export: false,
+    customer_list_import: false,
     customer_config_point: false,
     customer_review_list: false,
     customer_role_edit: false,

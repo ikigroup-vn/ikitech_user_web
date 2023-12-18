@@ -164,15 +164,15 @@ class Table extends Component {
     var result = null;
     if (collaboratorRegisterRequests.length > 0) {
       result = collaboratorRegisterRequests.map((data2, index) => {
-        var data = data2.collaborator;
+        var data = data2?.collaborator;
         var avatar =
           data?.customer?.avatar_image == null
             ? Env.IMG_NOT_FOUND
             : data?.customer?.avatar_image;
         var img_front =
-          data.front_card == null ? Env.IMG_NOT_FOUND : data.front_card;
+          data?.front_card == null ? Env.IMG_NOT_FOUND : data?.front_card;
         var img_back =
-          data.back_card == null ? Env.IMG_NOT_FOUND : data.back_card;
+          data?.back_card == null ? Env.IMG_NOT_FOUND : data?.back_card;
 
         var address_default = "";
 
@@ -285,30 +285,30 @@ class Table extends Component {
                       <p class="sale_user_label">
                         Số tài khoản:{" "}
                         <span id="user_tel">
-                          {data.account_number} - {data.bank}{" "}
+                          {data?.account_number} - {data?.bank}{" "}
                         </span>
                       </p>
                       <p class="sale_user_label">
                         Tên chủ tài khoản:{" "}
-                        <span id="user_tel">{data.account_name}</span>
+                        <span id="user_tel">{data?.account_name}</span>
                       </p>
 
                       <p class="sale_user_label">
                         Tên CMND:{" "}
-                        <span id="user_tel">{data.first_and_last_name}</span>
+                        <span id="user_tel">{data?.first_and_last_name}</span>
                       </p>
 
                       <p class="sale_user_label" id="sale_user_name">
-                        CMND: <span id="user_name"> {data.cmnd} </span>
+                        CMND: <span id="user_name"> {data?.cmnd} </span>
                       </p>
                       <p class="sale_user_label" id="sale_user_name">
                         Nơi đăng kí:{" "}
-                        <span id="user_name"> {data.issued_by} </span>
+                        <span id="user_name"> {data?.issued_by} </span>
                       </p>
                       <p class="sale_user_label" id="sale_user_name">
                         Ngày đăng ký CTV:{" "}
                         <span id="user_name">
-                          {moment(data.created_at).format("DD-MM-YYYY")}{" "}
+                          {moment(data?.created_at).format("DD-MM-YYYY")}{" "}
                         </span>
                       </p>
                       {/* {address_default !== "" && (
