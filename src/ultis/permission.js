@@ -386,6 +386,11 @@ const permission = (channel) => {
             decentralizationName: "collaborator_list",
             componentChilds: [
               {
+                name: "Quản lý cộng tác viên",
+                decentralizationName: "collaborator_list",
+                componentChilds: [],
+              },
+              {
                 name: "Danh sách CTV",
                 decentralizationName: "collaborator_view",
                 componentChilds: [],
@@ -426,6 +431,11 @@ const permission = (channel) => {
             name: "Đại lý",
             decentralizationName: "agency_list",
             componentChilds: [
+              {
+                name: "Quản lý đại lý",
+                decentralizationName: "agency_list",
+                componentChilds: [],
+              },
               {
                 name: "Danh sách đại lý",
                 decentralizationName: "agency_view",
@@ -482,6 +492,11 @@ const permission = (channel) => {
             name: "Sale",
             decentralizationName: "sale_list",
             componentChilds: [
+              {
+                name: "Quản lý sale",
+                decentralizationName: "sale_list",
+                componentChilds: [],
+              },
               {
                 name: "Danh sách sale",
                 decentralizationName: "sale_view",

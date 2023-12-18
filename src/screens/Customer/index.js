@@ -718,24 +718,24 @@ class Customer extends Component {
                           </button>
                         ) : null}
 
-                        {!this.isSale() && (
+                        {/* {!this.isSale() && (
                           <>
-                            {customer_list_import ? (
-                              <button
-                                style={{ marginRight: "10px" }}
-                                onClick={this.showDialogImportExcel}
-                                class={`btn btn-primary btn-icon-split btn-sm `}
-                              >
-                                <span class="icon text-white-50">
-                                  <i class="fas fa-file-import"></i>
-                                </span>
-                                <span style={{ color: "white" }} class="text">
-                                  Import Excel
-                                </span>
-                              </button>
-                            ) : null}
                           </>
-                        )}
+                        )} */}
+                        {customer_list_import ? (
+                          <button
+                            style={{ marginRight: "10px" }}
+                            onClick={this.showDialogImportExcel}
+                            class={`btn btn-primary btn-icon-split btn-sm `}
+                          >
+                            <span class="icon text-white-50">
+                              <i class="fas fa-file-import"></i>
+                            </span>
+                            <span style={{ color: "white" }} class="text">
+                              Import Excel
+                            </span>
+                          </button>
+                        ) : null}
 
                         <input
                           id="file-excel-import-customer"

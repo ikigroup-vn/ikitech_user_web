@@ -1750,9 +1750,10 @@ export const postProductV2 = (store_code, branch_id, data, funcModal) => {
       })
       .catch(function (error) {
         var content = "";
-        if (typeof error.response.data.msg == "undefined")
-          content = "Vui lòng chọn ảnh và nhập đầy đủ các thông tin";
-        else content = error.response.data.msg;
+        // if (typeof error.response.data.msg == "undefined")
+        //   content = "Vui lòng chọn ảnh và nhập đầy đủ các thông tin";
+        // else
+        // content = error.response.data.msg_code;
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
@@ -1763,7 +1764,7 @@ export const postProductV2 = (store_code, branch_id, data, funcModal) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: content,
+            content: "Lỗi hệ thống",
           },
         });
       });
