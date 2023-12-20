@@ -123,7 +123,7 @@ class ModalHistorySpinWheel extends Component {
                             </td>
                             <td>
                               {result.type_gift === Types.GIFT_IS_COIN ? (
-                                result.amount_coin_current
+                                result.amount_coin_change
                               ) : result.type_gift === Types.GIFT_IS_ITEM ? (
                                 <Link
                                   to={`/product/edit/${store_code}/${result.value_gift}`}
