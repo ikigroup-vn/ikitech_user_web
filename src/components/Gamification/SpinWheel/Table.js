@@ -4,6 +4,7 @@ import { getDDMMYYYHis } from "../../../ultis/date";
 import * as Types from "../../../constants/ActionType";
 import history from "../../../history";
 import { getQueryParams } from "../../../ultis/helpers";
+import ModalHistorySpinWheel from "./ModalHistorySpinWheel";
 
 const backgroundImages = [
   {
@@ -40,15 +41,25 @@ const TableStyles = styled.tr`
 class Table extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      gameSpinWheelSelected: null,
+    };
   }
+
+  setGameSpinWheelSelected = (gameSpinWheelSelected) => {
+    this.setState({ gameSpinWheelSelected });
+  };
+
   handleShowModalDeleteGroupCustomer = (id) => {
     const { setOpenModalDeleteGameSpinWheel, setIdGameSpinWheel } = this.props;
     setOpenModalDeleteGameSpinWheel(true);
     setIdGameSpinWheel(id);
   };
   handleUpdateGameSpinWheels = (e, id) => {
-    if (e.target.closest(".btn-delete") === null) {
+    if (
+      e.target.closest(".btn-delete") === null &&
+      e.target.closest(".btn-history") === null
+    ) {
       const { store_code } = this.props;
       const page = getQueryParams("page") || 1;
       history.push(`/game_spin_wheels/${store_code}/update/${id}?page=${page}`);
@@ -124,6 +135,13 @@ class Table extends PureComponent {
           <td>
             <div className="actions">
               <button
+                className="btn btn-info btn-sm btn-history"
+                style={{ marginLeft: "10px", color: "white" }}
+                onClick={() => this.setGameSpinWheelSelected(game)}
+              >
+                <i className="fa fa-history"></i>Lịch sử
+              </button>
+              <button
                 className="btn btn-warning btn-sm"
                 style={{ marginLeft: "10px", color: "white" }}
                 onClick={(e) => this.handleUpdateGameSpinWheels(e, game.id)}
@@ -146,7 +164,9 @@ class Table extends PureComponent {
   };
 
   render() {
-    const { listGameSpinWheels } = this.props;
+    const { listGameSpinWheels, store_code } = this.props;
+    const { gameSpinWheelSelected } = this.state;
+
     return (
       <div class="table-responsive">
         <table
@@ -169,6 +189,13 @@ class Table extends PureComponent {
           </thead>
           <tbody>{this.showData(listGameSpinWheels)}</tbody>
         </table>
+        {gameSpinWheelSelected ? (
+          <ModalHistorySpinWheel
+            store_code={store_code}
+            gameSpinWheelSelected={gameSpinWheelSelected}
+            setGameSpinWheelSelected={this.setGameSpinWheelSelected}
+          ></ModalHistorySpinWheel>
+        ) : null}
       </div>
     );
   }

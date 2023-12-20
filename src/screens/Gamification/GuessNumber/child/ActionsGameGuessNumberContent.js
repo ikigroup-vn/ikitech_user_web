@@ -1247,7 +1247,7 @@ class ActionsGameGuessNumberContent extends Component {
               </div>
             </div>
           </div>
-          {this.handleShowInformationWinner() && (
+          {/* {this.handleShowInformationWinner() && (
             <div className="card mb-4">
               <div className="card-body" style={{ padding: "0.8rem" }}>
                 <div className="row">
@@ -1362,7 +1362,7 @@ class ActionsGameGuessNumberContent extends Component {
                 </div>
               </div>
             </div>
-          )}
+          )} */}
           <div className="card mb-4">
             <div className="card-body" style={{ padding: "0.8rem" }}>
               <div className="row">

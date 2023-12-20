@@ -4,6 +4,8 @@ import { getDDMMYYYHis } from "../../../ultis/date";
 import * as Types from "../../../constants/ActionType";
 import history from "../../../history";
 import { getQueryParams } from "../../../ultis/helpers";
+import ModalHistoryGuessNumber from "./ModalHistoryGuessNumber";
+import moment from "moment";
 
 const TableStyles = styled.tr`
   img {
@@ -21,8 +23,14 @@ const TableStyles = styled.tr`
 class Table extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      gameGuessNumberSelected: null,
+    };
   }
+
+  setGameGuessNumberSelected = (gameGuessNumberSelected) => {
+    this.setState({ gameGuessNumberSelected });
+  };
   handleShowModalDeleteGame = (id) => {
     const { setOpenModalDeleteGameGuessNumber, setIdGameGuessNumber } =
       this.props;
@@ -30,13 +38,28 @@ class Table extends PureComponent {
     setIdGameGuessNumber(id);
   };
   handleUpdateGameGuessNumbers = (e, id) => {
-    if (e.target.closest(".btn-delete") === null) {
+    if (
+      e.target.closest(".btn-delete") === null &&
+      e.target.closest(".btn-history") === null
+    ) {
       const { store_code } = this.props;
       const page = getQueryParams("page") || 1;
       history.push(
         `/game_guess_numbers/${store_code}/update/${id}?page=${page}`
       );
     }
+  };
+
+  handleShowInformationWinner = (game) => {
+    const isCheckedFinalResultAnnounced = game.final_result_announced
+      ? true
+      : false;
+    const timeEnd = moment(game.time_end).diff(moment());
+    const isCheckedTimeEnd = timeEnd > 0 ? false : true;
+
+    return isCheckedFinalResultAnnounced === true && isCheckedTimeEnd === true
+      ? true
+      : false;
   };
 
   showData = (listGameGuessNumbers) => {
@@ -88,6 +111,25 @@ class Table extends PureComponent {
           <td>{getDDMMYYYHis(game.time_end)}</td>
           <td>
             <div className="actions">
+              {this.handleShowInformationWinner(game) ? (
+                <button
+                  className="btn btn-info btn-sm btn-history"
+                  style={{ marginLeft: "10px", color: "white" }}
+                  onClick={() => this.setGameGuessNumberSelected(game)}
+                >
+                  <i className="fa fa-history"></i>Lịch sử
+                </button>
+              ) : (
+                <button
+                  disabled
+                  className="btn btn-info btn-sm btn-history"
+                  style={{ marginLeft: "10px", color: "white" }}
+                  onClick={() => this.setGameGuessNumberSelected(game)}
+                >
+                  <i className="fa fa-history"></i>Lịch sử
+                </button>
+              )}
+
               <button
                 className="btn btn-warning btn-sm"
                 style={{ marginLeft: "10px", color: "white" }}
@@ -112,6 +154,7 @@ class Table extends PureComponent {
 
   render() {
     const { listGameGuessNumbers } = this.props;
+    const { gameGuessNumberSelected } = this.state;
     return (
       <div class="table-responsive">
         <table
@@ -134,6 +177,12 @@ class Table extends PureComponent {
           </thead>
           <tbody>{this.showData(listGameGuessNumbers)}</tbody>
         </table>
+        {gameGuessNumberSelected ? (
+          <ModalHistoryGuessNumber
+            gameGuessNumberSelected={gameGuessNumberSelected}
+            setGameGuessNumberSelected={this.setGameGuessNumberSelected}
+          ></ModalHistoryGuessNumber>
+        ) : null}
       </div>
     );
   }
