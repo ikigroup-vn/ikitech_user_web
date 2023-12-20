@@ -122,8 +122,8 @@ class Table extends PureComponent {
               ) : (
                 <button
                   disabled
-                  className="btn btn-info btn-sm btn-history"
-                  style={{ marginLeft: "10px", color: "white" }}
+                  className="btn btn-secondary btn-sm btn-history"
+                  style={{ marginLeft: "10px", color: "white", opacity: 0.5 }}
                   onClick={() => this.setGameGuessNumberSelected(game)}
                 >
                   <i className="fa fa-history"></i>Lịch sử
