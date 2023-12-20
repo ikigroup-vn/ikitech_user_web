@@ -43,10 +43,6 @@ class ModalHistoryGuessNumber extends Component {
   };
   render() {
     const { gameGuessNumberSelected } = this.props;
-    console.log(
-      "🚀 ~ render ~ gameGuessNumberSelected:",
-      gameGuessNumberSelected
-    );
 
     return (
       <ModalHistoryGuessNumberStyles

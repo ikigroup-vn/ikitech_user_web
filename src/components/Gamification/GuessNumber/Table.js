@@ -5,6 +5,7 @@ import * as Types from "../../../constants/ActionType";
 import history from "../../../history";
 import { getQueryParams } from "../../../ultis/helpers";
 import ModalHistoryGuessNumber from "./ModalHistoryGuessNumber";
+import moment from "moment";
 
 const TableStyles = styled.tr`
   img {
@@ -47,6 +48,18 @@ class Table extends PureComponent {
         `/game_guess_numbers/${store_code}/update/${id}?page=${page}`
       );
     }
+  };
+
+  handleShowInformationWinner = (game) => {
+    const isCheckedFinalResultAnnounced = game.final_result_announced
+      ? true
+      : false;
+    const timeEnd = moment(game.time_end).diff(moment());
+    const isCheckedTimeEnd = timeEnd > 0 ? false : true;
+
+    return isCheckedFinalResultAnnounced === true && isCheckedTimeEnd === true
+      ? true
+      : false;
   };
 
   showData = (listGameGuessNumbers) => {
@@ -98,13 +111,25 @@ class Table extends PureComponent {
           <td>{getDDMMYYYHis(game.time_end)}</td>
           <td>
             <div className="actions">
-              <button
-                className="btn btn-info btn-sm btn-history"
-                style={{ marginLeft: "10px", color: "white" }}
-                onClick={() => this.setGameGuessNumberSelected(game)}
-              >
-                <i className="fa fa-history"></i>Lịch sử
-              </button>
+              {this.handleShowInformationWinner(game) ? (
+                <button
+                  className="btn btn-info btn-sm btn-history"
+                  style={{ marginLeft: "10px", color: "white" }}
+                  onClick={() => this.setGameGuessNumberSelected(game)}
+                >
+                  <i className="fa fa-history"></i>Lịch sử
+                </button>
+              ) : (
+                <button
+                  disabled
+                  className="btn btn-info btn-sm btn-history"
+                  style={{ marginLeft: "10px", color: "white" }}
+                  onClick={() => this.setGameGuessNumberSelected(game)}
+                >
+                  <i className="fa fa-history"></i>Lịch sử
+                </button>
+              )}
+
               <button
                 className="btn btn-warning btn-sm"
                 style={{ marginLeft: "10px", color: "white" }}
