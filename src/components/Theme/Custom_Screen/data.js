@@ -43,6 +43,10 @@ export const headerImg = [
     index: 12,
     header: "../images/header/Header_11.png",
   },
+  {
+    index: 13,
+    header: "../images/header/Header_13.png",
+  },
 ];
 export const bannerImg = [
   {
@@ -143,6 +147,10 @@ export const productImg = [
   {
     index: 11,
     product: "../images/product/Product_9.png",
+  },
+  {
+    index: 12,
+    product: "../images/product/Product_12.png",
   },
 ];
 export const blogImg = [

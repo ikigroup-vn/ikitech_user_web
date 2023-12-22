@@ -215,6 +215,20 @@ class Home_Screen extends Component {
           "Giao diện được thiết kế phù hợp với bán các mặt hàng đồ điện tử, gia dụng",
         carrers: "Điện tử",
       },
+      {
+        isVip: false,
+        index: 12,
+        themeTop: "../images/bachhoaxanh_12.jpg",
+        theme: "../images/bachhoaxanh_12.png",
+        arr_index_component: [13, 1, 12, 5, 2],
+        demo_link: "https://bachhoaxanh.myiki.vn/",
+        name: "Bách hóa xanh",
+        banner_type: "Không có banner",
+        banner_height: "702",
+        banner_width: "355",
+        description: "Giao diện được thiết kế phù hợp với bán bách hóa",
+        carrers: "Tạp hóa",
+      },
     ];
   }
   setShowModalDetailsTheme = (showDetails) => {
