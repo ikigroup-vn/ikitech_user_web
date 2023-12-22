@@ -304,11 +304,6 @@ class Chart extends Component {
       typeSelect,
     } = this.state;
     var { overview, badges, store_code } = this.props;
-    console.log(
-      this.state.chartDataCompare,
-      this.state.chartDataPrime,
-      this.state.chartData
-    );
 
     var totalFinal =
       typeof overview.data_prime_time != "undefined"
@@ -324,7 +319,9 @@ class Chart extends Component {
         : 0;
 
     var disbleCompare =
-      isCompare == false || isCompare == "hide" ? "hide" : "show";
+      isCompare == false || isCompare == "hide" || !overview.data_compare_time
+        ? "hide"
+        : "show";
     var _textLegendPrime_from = moment(datePrime.from, "YYYY-MM-DD").format(
       "DD-MM-YYYY"
     );

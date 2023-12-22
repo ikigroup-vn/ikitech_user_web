@@ -8,6 +8,7 @@ class BadgeTable extends Component {
 
   render() {
     var { store_code, overview } = this.props;
+    console.log("🚀 ~ file ~ render ~ overview:", overview.data_prime_time);
     var order =
       typeof overview.data_prime_time != "undefined"
         ? overview.data_prime_time.details_by_order_status
@@ -16,6 +17,7 @@ class BadgeTable extends Component {
       typeof order != "undefined" && order != null
         ? format(Number(order.COMPLETED.total_final))
         : 0;
+
     var customer_cancelled =
       typeof order != "undefined" && order != null
         ? format(Number(order.CUSTOMER_CANCELLED.total_final))
@@ -28,6 +30,10 @@ class BadgeTable extends Component {
       typeof order != "undefined" && order != null
         ? format(Number(order.CUSTOMER_RETURNING.total_final))
         : 0;
+    var total_order_count_refunds = overview?.data_prime_time
+      ?.total_order_count_refunds
+      ? Number(overview?.data_prime_time?.total_order_count_refunds)
+      : 0;
     var delivery_error =
       typeof order != "undefined" && order != null
         ? format(Number(order.DELIVERY_ERROR.total_final))
@@ -159,7 +165,7 @@ class BadgeTable extends Component {
                   </span>
                 </span>
               </p>
-              
+
               <p class="report-detail">
                 <a> Hết hàng:</a>
                 <span id="user_note">
@@ -226,7 +232,7 @@ class BadgeTable extends Component {
                 </span>
               </p>
               <p class="report-detail " id="booking_time">
-                <a>Chò trả hàng: </a>
+                <a>Chờ trả hàng: </a>
                 <span id="user_tel">
                   <span style={{ paddingRight: "15px" }}>
                     {customer_returning}
@@ -244,7 +250,7 @@ class BadgeTable extends Component {
                     {customer_has_return}
                   </span>
                   <span className={`step  ${statusCustomerHasReturn}`}>
-                    {count_customer_has_return}
+                    {total_order_count_refunds}
                   </span>
                 </span>
               </p>

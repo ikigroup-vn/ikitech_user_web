@@ -3,18 +3,17 @@ import { Bar } from "react-chartjs-2";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import { format } from "../../ultis/helpers";
 import moment from "moment";
-import * as helper from "../../ultis/helpers"
+import * as helper from "../../ultis/helpers";
 import * as dashboardAction from "../../actions/dashboard";
 import { connect } from "react-redux";
-import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
+import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 import { getBranchId } from "../../ultis/branchUtils";
-
 
 class Chart extends Component {
   constructor() {
     super();
     this.state = {
-      chartData:  {
+      chartData: {
         labels: [],
         datasets: [
           {
@@ -24,16 +23,15 @@ class Chart extends Component {
           },
         ],
       },
-        
-      
+
       nameTypeChart: "THÁNG NÀY",
 
-      showDateTime: "hide"
+      showDateTime: "hide",
     };
   }
 
   componentWillMount() {
-    this.loadData(this.props.overview)
+    this.loadData(this.props.overview);
   }
 
   loadData = (overview) => {
@@ -47,29 +45,27 @@ class Chart extends Component {
       dataSets.push(item.total_final);
       if (chartDataProps.data_prime_time.type_chart == "hour") {
         time = moment(item.time, "YYYY-MM-DD HH:mm:ss").format("HH");
-        parseNumberTime = Number(time) + "h"
+        parseNumberTime = Number(time) + "h";
         labels.push(parseNumberTime);
-      }
-      else if (chartDataProps.data_prime_time.type_chart == "day") {
+      } else if (chartDataProps.data_prime_time.type_chart == "day") {
         time = moment(item.time, "YYYY-MM-DD").format("DD/MM");
         labels.push(time);
-      }
-      else if (chartDataProps.data_prime_time.type_chart == "month") {
+      } else if (chartDataProps.data_prime_time.type_chart == "month") {
         time = moment(item.time, "YYYY-MM").format("MM/YYYY");
-        parseNumberTime = time
+        parseNumberTime = time;
         labels.push(parseNumberTime);
       }
     });
-    chartDataState.datasets[0].data = dataSets
+    chartDataState.datasets[0].data = dataSets;
 
-    chartDataState.labels = labels
+    chartDataState.labels = labels;
 
     this.setState({ chartData: chartDataState });
-  }
+  };
 
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.overview, this.props.overview)) {
-      this.loadData(nextProps.overview)
+      this.loadData(nextProps.overview);
     }
   }
 
@@ -90,74 +86,72 @@ class Chart extends Component {
 
   componentDidMount() {
     // this.getChartData();
-
   }
   onchangeDate = (e) => {
     console.log(e);
     var { value } = e.target;
 
-    var date = ""
+    var date = "";
     switch (value) {
       case "HOM-NAY":
-        this.setState({ nameTypeChart: "HÔM NAY" })
-        date = helper.getDateForChartHour()
+        this.setState({ nameTypeChart: "HÔM NAY" });
+        date = helper.getDateForChartHour();
         break;
       case "TUAN-NAY":
-        this.setState({ nameTypeChart: "TUẦN NÀY" })
+        this.setState({ nameTypeChart: "TUẦN NÀY" });
 
-        date = helper.getDateForChartWeek()
+        date = helper.getDateForChartWeek();
         break;
       case "THANG-NAY":
-        this.setState({ nameTypeChart: "THÁNG NÀY" })
+        this.setState({ nameTypeChart: "THÁNG NÀY" });
 
-        date = helper.getDateForChartMonth()
+        date = helper.getDateForChartMonth();
         break;
       case "NAM-NAY":
-        this.setState({ nameTypeChart: "NĂM NÀY" })
-        date = helper.getDateForChartYear()
+        this.setState({ nameTypeChart: "NĂM NÀY" });
+        date = helper.getDateForChartYear();
         break;
       case "TUY-CHINH":
-        this.setState({ nameTypeChart: "", showDateTime: "show" })
+        this.setState({ nameTypeChart: "", showDateTime: "show" });
         return;
       default:
         break;
     }
-    if (this.state.showDateTime == "hide") { }
-    else
-      this.setState({ showDateTime: "hide" })
+    if (this.state.showDateTime == "hide") {
+    } else this.setState({ showDateTime: "hide" });
 
-    var { store_code } = this.props
+    var { store_code } = this.props;
     if (value != "TUY-CHINH")
-      this.props.fetchOverview(store_code, `?date_from=${date.from}&date_to=${date.to}`)
-
-  }
+      this.props.fetchOverview(
+        store_code,
+        `?date_from=${date.from}&date_to=${date.to}`
+      );
+  };
 
   showModal = () => {
-    window.$('#postDateModal').modal('show');
-
-  }
-
-
+    window.$("#postDateModal").modal("show");
+  };
 
   onchangeDateFromTo = (e) => {
     var from = "";
     var to = "";
     try {
-      from = moment(e.value[0], "DD-MM-YYYY").format("YYYY-MM-DD")
-      to = moment(e.value[1], "DD-MM-YYYY").format("YYYY-MM-DD")
+      from = moment(e.value[0], "DD-MM-YYYY").format("YYYY-MM-DD");
+      to = moment(e.value[1], "DD-MM-YYYY").format("YYYY-MM-DD");
     } catch (error) {
-      var date = helper.getDateForChartMonth()
-      var { from, to } = date
+      var date = helper.getDateForChartMonth();
+      var { from, to } = date;
     }
-    var { store_code } = this.props
-    this.props.fetchOverview(store_code, `?date_from=${from}&date_to=${to}`)
-
-
-  }
+    var { store_code } = this.props;
+    this.props.fetchOverview(store_code, `?date_from=${from}&date_to=${to}`);
+  };
   render() {
-    var { nameTypeChart, showDateTime } = this.state
-    var { overview } = this.props
-    var totalFinal = typeof overview.data_prime_time != "undefined" ? format(Number(overview.data_prime_time.total_final)) : 0
+    var { nameTypeChart, showDateTime } = this.state;
+    var { overview } = this.props;
+    var totalFinal =
+      typeof overview.data_prime_time != "undefined"
+        ? format(Number(overview.data_prime_time.total_final))
+        : 0;
     console.log(this.props.overview, this.state.chartData);
     return (
       <div className="chart">
@@ -183,11 +177,9 @@ class Chart extends Component {
           </h5>
 
           <div className={showDateTime}>
-
             <DateRangePickerComponent
               id="daterangepicker"
-              placeholder='Chọn từ ngày... đến ngày...'
-
+              placeholder="Chọn từ ngày... đến ngày..."
               format="dd/MM/yyyy"
               onChange={this.onchangeDateFromTo}
             />
@@ -205,30 +197,29 @@ class Chart extends Component {
             <option value="TUAN-NAY">Tuần này</option>
             <option value="NAM-NAY">Năm này</option>
             <option value="TUY-CHINH">Tùy chỉnh</option>
-
-
           </select>
         </div>
         <br></br>
         <Bar
           data={this.state.chartData}
-          options={
-
-            {
-              scales: {
-                yAxes: [{
+          options={{
+            scales: {
+              yAxes: [
+                {
                   ticks: {
                     beginAtZero: true,
                     callback: function (value, index, values) {
-                      return format(value)
-                    }
-                  }
-                }]
-              },
-              legend: {
-                position: "bottom",
-              },
-            }}
+                      return format(value);
+                    },
+                  },
+                },
+              ],
+            },
+            legend: {
+              position: "bottom",
+              display: false,
+            },
+          }}
         />
       </div>
     );
@@ -236,12 +227,11 @@ class Chart extends Component {
 }
 
 const mapDispatchToProps = (dispatch, props) => {
-  var branch_id = getBranchId()
+  var branch_id = getBranchId();
   return {
     fetchOverview: (store_code, params) => {
       dispatch(dashboardAction.fetchOverview(store_code, branch_id, params));
     },
-
   };
 };
 export default connect(null, mapDispatchToProps)(Chart);

@@ -53,14 +53,10 @@ class InventoryHistory extends Component {
     var params = `${branch_ids ? "" : `branch_id=${branch_id}`}`;
 
     if (from && to) {
-      params =
-        params +
-        `&date_from=${moment(from, "DD-MM-YYYY").format(
-          "YYYY-MM-DD"
-        )}&time_to=${moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")}`;
+      params = params + `&date_from=${from}&date_to=${to}`;
       this.setState({
-        time_from: moment(from, "DD-MM-YYYY").format("YYYY-MM-DD"),
-        time_to: moment(to, "DD-MM-YYYY").format("YYYY-MM-DD"),
+        time_from: from,
+        time_to: to,
       });
     } else {
       params =
@@ -74,6 +70,7 @@ class InventoryHistory extends Component {
         time_to: moment().format("YYYY-MM-DD"),
       });
     }
+
     this.props.fetchAllInventoryHistory(
       store_code,
       branchIds,
