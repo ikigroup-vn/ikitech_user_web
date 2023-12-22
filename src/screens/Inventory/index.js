@@ -21,9 +21,9 @@ class Inventory extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: 1,
-      searchValue: "",
-      filterStatus: getQueryParams("status") || null,
+      page: getQueryParams("page") || 1,
+      searchValue: getQueryParams("search") || "",
+      status: getQueryParams("status") || "",
       fields: [
         "Mã sản phẩm",
         "Tên sản phẩm",
@@ -37,18 +37,10 @@ class Inventory extends Component {
   componentDidMount() {
     const { store_code } = this.props.match.params;
     const branch_id = localStorage.getItem("branch_id");
-    // var { filterStatus } = this.state;
-    // var params = "";
-    // if (filterStatus) params = params + `&status=${filterStatus}`;
+    const { page, searchValue, status } = this.state;
 
-    const page = getQueryParams("page") || 1;
-    const search = getQueryParams("search") || "";
+    const params = `&search=${searchValue}&status=${status}`;
 
-    const params = `&search=${search}`;
-    this.setState({
-      page: page,
-      searchValue: search,
-    });
     this.props.fetchAllInventory(store_code, branch_id, page, params);
     this.props.fetchAllProductV2(store_code, branch_id, 1, "");
   }
@@ -62,20 +54,37 @@ class Inventory extends Component {
   searchData = (e) => {
     e.preventDefault();
     const { store_code } = this.props.match.params;
+    const { status, searchValue } = this.state;
     const branch_id = localStorage.getItem("branch_id");
     this.setState({
       page: 1,
     });
-    const value = this.state.searchValue;
-    history.push(`/inventory/index/${store_code}?page=1&search=${value}`);
-    const params = `&search=${value}`;
+    history.push(
+      `/inventory/index/${store_code}?page=1&search=${searchValue}&status=${status}`
+    );
+    const params = `&search=${searchValue}&status=${status}`;
     this.props.fetchAllInventory(store_code, branch_id, 1, params);
   };
   changePage = (store_code, order_code) => {
-    const { page, searchValue } = this.state;
+    const { page, searchValue, status } = this.state;
     history.push(
-      `/inventory/detail/${store_code}/${order_code}?page=${page}&search=${searchValue}`
+      `/inventory/detail/${store_code}/${order_code}?page=${page}&search=${searchValue}&status=${status}`
     );
+  };
+  onChangeStatus = (e) => {
+    e.preventDefault();
+    const { store_code } = this.props.match.params;
+    const status = e.target.value;
+    const { searchValue } = this.state;
+    const branch_id = localStorage.getItem("branch_id");
+
+    this.setState({ status: status });
+
+    history.push(
+      `/inventory/index/${store_code}?page=1&search=${searchValue}&status=${status}`
+    );
+    const params = `&search=${searchValue}&status=${status}`;
+    this.props.fetchAllInventory(store_code, branch_id, 1, params);
   };
 
   componentWillReceiveProps(nextProps, nextState) {
@@ -147,7 +156,6 @@ class Inventory extends Component {
   };
 
   onChangeExcel = (evt) => {
-    console.log("🚀 ~ file: index.js:150 ~ Inventory ~ evt:", evt);
     const { showError, createInventorys } = this.props;
     const { store_code } = this.props.match.params;
     const { fields } = this.state;
@@ -278,7 +286,7 @@ class Inventory extends Component {
   render() {
     const { store_code } = this.props.match.params;
     const { sheetsInventory, badges, products } = this.props;
-    const { searchValue, isShow } = this.state;
+    const { searchValue, isShow, status } = this.state;
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -395,6 +403,20 @@ class Inventory extends Component {
                           </div>
                         </div>
                       </form>
+                      <select
+                        name=""
+                        id="input"
+                        class="form-control"
+                        value={status}
+                        onChange={this.onChangeStatus}
+                        style={{
+                          width: "auto",
+                        }}
+                      >
+                        <option value="">Tất cả</option>
+                        <option value="0">Đã kiểm kho</option>
+                        <option value="1">Đã cân bằng</option>
+                      </select>
                     </div>
                     <div className="card-body">
                       <div class="table-responsive">
@@ -405,7 +427,6 @@ class Inventory extends Component {
                           cellspacing="0"
                         >
                           <thead>
-                            ``
                             <tr>
                               <th>STT</th>
                               <th>Mã phiếu</th>
@@ -425,6 +446,7 @@ class Inventory extends Component {
                       <Pagination
                         setPage={this.setPage}
                         searchValue={searchValue}
+                        status={status}
                         store_code={store_code}
                         sheetsInventory={sheetsInventory}
                       />

@@ -87,7 +87,9 @@ class General extends Component {
         </div>
 
         <div className="col-xl-4 col-md-6 mb-4">
-          <Link to={`/inventory_histories/${store_code}`}>
+          <Link
+            to={`/inventory_histories/${store_code}${window.location.search}`}
+          >
             <div className="card border-left-success shadow h-100 py-2">
               <div className="card-body set-padding ">
                 <div className="row no-gutters align-items-center">
@@ -108,7 +110,9 @@ class General extends Component {
           </Link>
         </div>
         <div className="col-xl-4 col-md-6 mb-4">
-          <Link to={`/import_export_stock/${store_code}${params}`}>
+          <Link
+            to={`/import_export_stock/${store_code}${window.location.search}`}
+          >
             <div className="card border-left-danger shadow h-100 py-2">
               <div className="card-body set-padding ">
                 <div className="row no-gutters align-items-center">

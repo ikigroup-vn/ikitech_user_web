@@ -98,7 +98,7 @@ class BadgeTable extends Component {
 
                    {
                        getChannel() == IKITECH &&  <p class="item-detail-badges">
-                       <Link to={`/review/${store_code}`}>Đánh giá chờ xác nhận</Link>
+                       <Link to={`/review/${store_code}?status=0`}>Đánh giá chờ xác nhận</Link>
                        <span class="cart_payment_method">
                              <span
                              

@@ -6,6 +6,7 @@ import ModalPostDate from "./ModalPostDates";
 import { connect } from "react-redux";
 import * as reportAction from "../../actions/report";
 import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
+import history from "../../history";
 
 class ChartFinance extends Component {
   constructor(props) {
@@ -19,14 +20,15 @@ class ChartFinance extends Component {
       dateCompare: "",
       typeDate: "",
       reset: "",
-      typeSelect: "Hôm nay",
+      typeSelect: helper.getQueryParams("typeSelect") || "Hôm nay",
     };
   }
   componentDidMount() {
     this.setState({
       datePrime: {
-        from: moment().format("YYYY-MM-DD"),
-        to: moment().format("YYYY-MM-DD"),
+        from:
+          helper.getQueryParams("date_from") || moment().format("YYYY-MM-DD"),
+        to: helper.getQueryParams("date_to") || moment().format("YYYY-MM-DD"),
       },
       dateCompare: {
         from: moment().subtract(1, "days").format("YYYY-MM-DD"),
@@ -60,6 +62,11 @@ class ChartFinance extends Component {
       }`;
       const { store_code } = this.props;
 
+      const paramsDate = `&date_from=${datePrime_from}&date_to=${datePrime_to}`;
+
+      this.props.fetchReportExpenditure(store_code, branchIds, 1, paramsDate);
+      this.props.fetchAllSupplierDebt(store_code, branchIds, 1, paramsDate);
+      this.props.fetchAllCustomerDebt(store_code, branchIds, 1, paramsDate);
       this.props.fetchReportProfit(store_code, branchIds, params1);
       this.props.fetchReportProfitCompare(store_code, branchIds, params2);
     }
@@ -100,6 +107,10 @@ class ChartFinance extends Component {
       isCompare: date.dateCompare?.from != null ? date.isCompare : false,
       typeSelect: typeSelect,
     });
+
+    history.push(
+      `?date_from=${date?.datePrime?.from}&date_to=${date?.datePrime?.to}&typeSelect=${typeSelect}`
+    );
   };
   onchangeDate = (value) => {
     var resetId = helper.randomString(10);
@@ -299,6 +310,21 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchReportProfitCompare: (store_code, branch_id, params) => {
       dispatch(
         reportAction.fetchReportProfitCompare(store_code, branch_id, params)
+      );
+    },
+    fetchReportExpenditure: (store_code, branch_id, page, params) => {
+      dispatch(
+        reportAction.fetchReportExpenditure(store_code, branch_id, page, params)
+      );
+    },
+    fetchAllSupplierDebt: (store_code, branch_id, page, params) => {
+      dispatch(
+        reportAction.fetchAllSupplierDebt(store_code, branch_id, page, params)
+      );
+    },
+    fetchAllCustomerDebt: (store_code, branch_id, page, params) => {
+      dispatch(
+        reportAction.fetchAllCustomerDebt(store_code, branch_id, page, params)
       );
     },
   };

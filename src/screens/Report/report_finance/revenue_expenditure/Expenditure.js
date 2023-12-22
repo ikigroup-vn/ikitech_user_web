@@ -10,10 +10,10 @@ import { MomentInput } from "react-moment-input";
 import moment from "moment";
 import { format } from "../../../../ultis/helpers";
 import Pagination from "./Pagination";
-import history from '../../../../history'
+import history from "../../../../history";
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
-import { getBranchId } from '../../../../ultis/branchUtils'
-import { getQueryParams } from "../../../../ultis/helpers"
+import { getBranchId } from "../../../../ultis/branchUtils";
+import { getQueryParams } from "../../../../ultis/helpers";
 
 class Expenditure extends Component {
   constructor(props) {
@@ -22,30 +22,50 @@ class Expenditure extends Component {
       txtStart: "",
       txtEnd: "",
       time_from: "",
-      time_to: ""
+      time_to: "",
     };
   }
   componentDidMount() {
     const { store_code } = this.props.match.params;
     const branch_id = localStorage.getItem("branch_id");
-    var params = `branch_id=${branch_id}`
-    var from = getQueryParams("from")
-    var to = getQueryParams("to")
+    var params = `branch_id=${branch_id}`;
+    var from = getQueryParams("from");
+    var to = getQueryParams("to");
+    var date_from = getQueryParams("date_from");
+    var date_to = getQueryParams("date_to");
     if (from && to) {
-      params = params + `&date_from=${moment(from, "DD-MM-YYYY").format("YYYY-MM-DD")}&time_to=${moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")}`
-      this.setState({ time_from: moment(from, "DD-MM-YYYY").format("YYYY-MM-DD"), time_to: moment(to, "DD-MM-YYYY").format("YYYY-MM-DD") })
-    }
-    else {
-      params = params + `&date_from=${moment().format("YYYY-MM-DD")}&time_to=${moment().format("YYYY-MM-DD")}`
-      this.setState({ time_from: moment().format("YYYY-MM-DD"), time_to: moment().format("YYYY-MM-DD") })
-
+      params =
+        params +
+        `&date_from=${moment(from, "DD-MM-YYYY").format(
+          "YYYY-MM-DD"
+        )}&time_to=${moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")}`;
+      this.setState({
+        time_from: moment(from, "DD-MM-YYYY").format("YYYY-MM-DD"),
+        time_to: moment(to, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      });
+    } else if (date_from && date_to) {
+      params += `&date_from=${date_from}&date_to=${date_to}`;
+      this.setState({
+        time_from: date_from,
+        time_to: date_to,
+      });
+    } else {
+      params =
+        params +
+        `&date_from=${moment().format("YYYY-MM-DD")}&time_to=${moment().format(
+          "YYYY-MM-DD"
+        )}`;
+      this.setState({
+        time_from: moment().format("YYYY-MM-DD"),
+        time_to: moment().format("YYYY-MM-DD"),
+      });
     }
 
     this.props.fetchReportExpenditure(store_code, branch_id, 1, params);
     try {
       document.getElementsByClassName("r-input")[0].placeholder = "Chọn ngày";
       document.getElementsByClassName("r-input")[1].placeholder = "Chọn ngày";
-    } catch (error) { }
+    } catch (error) {}
   }
 
   handleFindItem = () => {
@@ -68,7 +88,6 @@ class Expenditure extends Component {
     });
   };
   onchangeDateFromTo = (e) => {
-
     var from = "";
     var to = "";
     try {
@@ -79,17 +98,15 @@ class Expenditure extends Component {
       to = null;
     }
 
-    const branch_id = getBranchId()
-    var params = `branch_id=${branch_id}`
-    const { store_code } = this.props.match.params
-    if (from, to) {
-      params = params + `&date_from=${from}&date_to=${to}`
+    const branch_id = getBranchId();
+    var params = `branch_id=${branch_id}`;
+    const { store_code } = this.props.match.params;
+    if ((from, to)) {
+      params = params + `&date_from=${from}&date_to=${to}`;
     }
     this.props.fetchReportExpenditure(store_code, branch_id, 1, params);
-    this.setState({ time_from: from, time_to: to })
-
-
-  }
+    this.setState({ time_from: from, time_to: to });
+  };
   showData = (reportExpenditure) => {
     var result = null;
     if (reportExpenditure) {
@@ -121,14 +138,16 @@ class Expenditure extends Component {
 
   render() {
     var { store_code } = this.props.match.params;
-    var { time_from,
-      time_to } = this.state
+    var { time_from, time_to } = this.state;
     const reportExpenditure = this.props.reportExpenditure;
     const { txtStart, txtEnd } = this.state;
-    var arrDate = null
+    var arrDate = null;
 
-    if (time_from, time_to) {
-      arrDate = [moment(time_from, "YYYY-MM-DD").format("DD/MM/YYYY"), moment(time_to, "YYYY-MM-DD").format("DD/MM/YYYY")]
+    if ((time_from, time_to)) {
+      arrDate = [
+        moment(time_from, "YYYY-MM-DD").format("DD/MM/YYYY"),
+        moment(time_to, "YYYY-MM-DD").format("DD/MM/YYYY"),
+      ];
     }
     return (
       <div id="wrapper">
@@ -161,22 +180,28 @@ class Expenditure extends Component {
                         </div>
                       </h4>
                     </div>
-                    <button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-warning  btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Quay lại</button>
-
-
+                    <button
+                      style={{ marginRight: "10px" }}
+                      type="button"
+                      onClick={this.goBack}
+                      class="btn btn-warning  btn-sm"
+                    >
+                      <i class="fas fa-arrow-left"></i>&nbsp;Quay lại
+                    </button>
                   </div>
 
                   <div className="card-body" style={{ minHeight: "500px" }}>
                     <div className="wap-header" style={{ display: "flex" }}>
                       <DateRangePickerComponent
-                              value={[new Date(moment(time_from , "YYYY-MM-DD")) , new Date(moment(time_to , "YYYY-MM-DD"))]}
-                              id="daterangepicker"
-                              placeholder="Khoảng thời gian..."
-                              format="dd/MM/yyyy"
+                        value={[
+                          new Date(moment(time_from, "YYYY-MM-DD")),
+                          new Date(moment(time_to, "YYYY-MM-DD")),
+                        ]}
+                        id="daterangepicker"
+                        placeholder="Khoảng thời gian..."
+                        format="dd/MM/yyyy"
                         onChange={this.onchangeDateFromTo}
                       />
-
-
                     </div>
                     <div class="table-responsive">
                       <table
@@ -186,7 +211,7 @@ class Expenditure extends Component {
                         cellspacing="0"
                       >
                         <thead>
-                          <tr >
+                          <tr>
                             <th>STT</th>
                             <th>Mã phiếu</th>
                             <th>Người tạo</th>
@@ -201,8 +226,8 @@ class Expenditure extends Component {
                       </table>
                     </div>
                     <Pagination
-                    time_from = {time_from}
-                    time_to = {time_to}
+                      time_from={time_from}
+                      time_to={time_to}
                       store_code={store_code}
                       reportExpenditure={reportExpenditure}
                       txtStart={txtStart}

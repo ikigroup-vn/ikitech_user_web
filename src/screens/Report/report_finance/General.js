@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { format } from "../../../ultis/helpers";
+import { format, getQueryParams } from "../../../ultis/helpers";
 import * as reportAction from "../../../actions/report";
 import { getBranchId, getBranchIds } from "../../../ultis/branchUtils";
 
@@ -14,8 +14,14 @@ class General extends Component {
     const { store_code } = this.props;
     const branch_id = getBranchId();
     const branch_ids = getBranchIds();
+    var date_from = getQueryParams("date_from");
+    var date_to = getQueryParams("date_to");
     const branchIds = branch_ids ? branch_ids : branch_id;
-    const params = branchIds ? "" : `branch_id=${branch_id}`;
+    let params = branchIds ? "" : `branch_id=${branch_id}`;
+
+    if (date_from || date_to) {
+      params += `&date_from=${date_from}&date_to=${date_to}`;
+    }
     this.props.fetchAllSupplierDebt(store_code, branchIds, 1, params);
     this.props.fetchAllCustomerDebt(store_code, branchIds, 1, params);
     this.props.fetchReportExpenditure(store_code, branchIds, 1, params);
@@ -31,7 +37,7 @@ class General extends Component {
     return (
       <div className="row">
         <div className="col-xl-3 col-md-6 mb-4">
-          <Link to={`/report_profit/${store_code}`}>
+          <Link to={`/report_profit/${store_code}${window.location.search}`}>
             <div className="card border-left-primary shadow h-100 py-2">
               <div className="card-body set-padding ">
                 <div className="row no-gutters align-items-center">
@@ -43,7 +49,8 @@ class General extends Component {
                       {format(Number(profitToltal))}
                     </div>
                     <div className="text-gray-800">
-                      Hiển thị doanh thu,chi phí và lãi lỗ của cửa hàng trong kỳ
+                      Hiển thị doanh thu, chi phí và lãi lỗ của cửa hàng trong
+                      kỳ
                     </div>
                   </div>
                   <div className="col-auto">
@@ -56,7 +63,7 @@ class General extends Component {
         </div>
 
         <div className="col-xl-3 col-md-6 mb-4">
-          <Link to={`/expenditure/${store_code}`}>
+          <Link to={`/expenditure/${store_code}${window.location.search}`}>
             <div className="card border-left-success shadow h-100 py-2">
               <div className="card-body set-padding ">
                 <div className="row no-gutters align-items-center">
@@ -80,7 +87,7 @@ class General extends Component {
           </Link>
         </div>
         <div className="col-xl-3 col-md-6 mb-4">
-          <Link to={`/customer_debt/${store_code}`}>
+          <Link to={`/customer_debt/${store_code}${window.location.search}`}>
             <div className="card border-left-danger shadow h-100 py-2">
               <div className="card-body set-padding ">
                 <div className="row no-gutters align-items-center">
@@ -89,7 +96,9 @@ class General extends Component {
                       Công nợ phải thu
                     </div>
                     <div className="h5 mb-0 font-weight-bold text-gray-800">
-                      {format(Number(custommerDebt.debt))}
+                      {custommerDebt.debt
+                        ? format(Number(custommerDebt.debt))
+                        : ""}
                     </div>
                     <div className="text-gray-800">
                       Tổng công nợ phải thu của khách hàng
@@ -105,7 +114,7 @@ class General extends Component {
         </div>
 
         <div className="col-xl-3 col-md-6 mb-4">
-          <Link to={`/supplier_debt/${store_code}`}>
+          <Link to={`/supplier_debt/${store_code}${window.location.search}`}>
             <div className="card border-left-danger shadow h-100 py-2">
               <div className="card-body set-padding ">
                 <div className="row no-gutters align-items-center">

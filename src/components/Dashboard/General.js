@@ -103,7 +103,7 @@ class General extends Component {
                         "DD-MM-YYYY"
                       )}&to=${moment().format(
                         "DD-MM-YYYY"
-                      )}&order_status_code=CUSTOMER_HAS_RETURNS`}
+                      )}&order_status_code=CUSTOMER_HAS_RETURNS&payment_status_code=REFUNDS`}
                     >
                       Đơn hoàn trả
                     </Link>
