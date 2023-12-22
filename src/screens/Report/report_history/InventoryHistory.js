@@ -216,12 +216,18 @@ class InventoryHistory extends Component {
     var { time_from, time_to, isShow } = this.state;
     const { reportHistory } = this.props;
     const { reportInventory, reportImportExport } = this.props;
-    const {
-      import_total_amount,
-      export_total_amount,
-      import_count_stock,
-      export_count_stock,
-    } = reportImportExport;
+    console.log(
+      "🚀 ~ file: InventoryHistory ~ reportInventory:",
+      reportHistory
+    );
+    const { import_value, export_value, count_import, count_export } =
+      reportHistory;
+    // const {
+    //   import_total_amount,
+    //   export_total_amount,
+    //   import_count_stock,
+    //   export_count_stock,
+    // } = reportImportExport;
     var arrDate = null;
     console.log(time_from, time_to);
     if ((time_from, time_to)) {
@@ -269,15 +275,15 @@ class InventoryHistory extends Component {
                         <p className="sale_user_label bold">
                           Giá trị nhập kho:{" "}
                           <span id="total_selected">
-                            {formatNoD(import_total_amount?.toFixed(2))} - SL:{" "}
-                            {formatNoD(import_count_stock)}{" "}
+                            {formatNoD(import_value?.toFixed(2))} - SL:{" "}
+                            {formatNoD(count_import)}{" "}
                           </span>
                         </p>
                         <p className="sale_user_label bold">
                           Giá trị xuất kho:{" "}
                           <span id="total_selected">
-                            {formatNoD(export_total_amount?.toFixed(2))} - SL:{" "}
-                            {formatNoD(export_count_stock)}
+                            {formatNoD(export_value?.toFixed(2))} - SL:{" "}
+                            {formatNoD(count_export)}
                           </span>
                         </p>
                       </div>

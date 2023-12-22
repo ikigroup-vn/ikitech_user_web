@@ -217,7 +217,7 @@ class Chart extends Component {
             },
             legend: {
               position: "bottom",
-              display: false,
+              onClick: () => {},
             },
           }}
         />
