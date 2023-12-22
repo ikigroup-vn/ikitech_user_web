@@ -96,9 +96,7 @@ class General extends Component {
                       Công nợ phải thu
                     </div>
                     <div className="h5 mb-0 font-weight-bold text-gray-800">
-                      {custommerDebt.debt
-                        ? format(Number(custommerDebt.debt))
-                        : ""}
+                      {format(Number(custommerDebt.debt))}
                     </div>
                     <div className="text-gray-800">
                       Tổng công nợ phải thu của khách hàng
