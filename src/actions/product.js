@@ -438,6 +438,97 @@ async function saveAsSheetInventoryExcel(value, nameFile = "DS_kiem_kho") {
   });
 }
 
+async function saveAsProductAgencyExcel(value, nameFile = "DS_kiem_kho") {
+  var data = value.data;
+  var data_header = value.header;
+  XlsxPopulate.fromBlankAsync().then(async (workbook) => {
+    const sheet1 = workbook.sheet(0);
+    const sheetData = getSheetData(data, data_header);
+    const totalColumns = sheetData[0].length;
+
+    sheet1.cell("A1").value(sheetData);
+
+    const range = sheet1.usedRange();
+    const endColumn = String.fromCharCode(64 + totalColumns);
+    sheet1.row(1).style("bold", true);
+
+    const listColumn = [
+      {
+        name: "A",
+        width: 18,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "B",
+        width: 30,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "C",
+        width: 12,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "D",
+        width: 15,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "E",
+        width: 20,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      // {
+      //   name: "F",
+      //   width: 20,
+      //   style: {
+      //     fontSize: 8,
+      //     shrinkToFit: true,
+      //     wrapText: true,
+      //   },
+      // },
+    ];
+    for (let column of listColumn) {
+      sheet1.column(column.name).style(column.style);
+      sheet1.column(column.name).width(column.width);
+    }
+
+    sheet1.range("A1:" + endColumn + "1").style({
+      horizontalAlignment: "center",
+      verticalAlignment: "center",
+      wrapText: true,
+    });
+    const row = sheet1.row(1);
+    row.height(50);
+
+    // range.style("border", true);
+    sheet1.freezePanes(1, 1);
+    return workbook.outputAsync().then((res) => {
+      saveAs(res, `${nameFile}.xlsx`);
+    });
+  });
+}
+
 export const fetchAllListProduct = (store_code, search) => {
   return (dispatch) => {
     dispatch({
@@ -1200,6 +1291,264 @@ const componentExportSheet = (dataSheetInventory) => {
   saveAsSheetInventoryExcel({ data: newArray, header: header }, "DS_kiem_kho");
 };
 
+export const exportProductAgency = (
+  store_code,
+  branch_id,
+  params,
+  level_agency,
+  productsAgency
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    productApi
+      .fetchAllListProduct(store_code, "", params)
+      .then((res) => {
+        if (res.data.code !== 401) {
+          if (res.data.data.data.length > 0) {
+            let dataSheetInventory = [];
+            if (!productsAgency) {
+              for (const item of res.data.data.data) {
+                const distribute =
+                  item.agency_price?.distributes !== null &&
+                  item.agency_price?.distributes.length > 0
+                    ? item.agency_price?.distributes[0]
+                    : null;
+
+                if (distribute === null) {
+                  let _data = {
+                    product_id: item.id,
+                    name: item.name,
+                    percent_agency: item.agency_price?.percent_agency,
+                    main_price: item.agency_price?.main_price,
+                    level_agency: level_agency,
+                    distribute_name: null,
+                    element_distribute_name: null,
+                    sub_element_distribute_name: null,
+                    element_distribute_price: null,
+                    sub_element_distribute_price: null,
+                  };
+
+                  dataSheetInventory.push(_data);
+                } else {
+                  if (distribute?.element_distributes?.length > 0) {
+                    distribute.element_distributes.forEach(
+                      (element, _index) => {
+                        if (
+                          distribute.element_distributes[0]
+                            ?.sub_element_distributes?.length > 0
+                        ) {
+                          element.sub_element_distributes.forEach(
+                            (sub_element) => {
+                              dataSheetInventory.push({
+                                product_id: item.id,
+                                name: item.name,
+                                percent_agency:
+                                  item.agency_price?.percent_agency,
+                                main_price: item.agency_price?.main_price,
+                                level_agency: level_agency,
+                                distribute_name: distribute.name,
+                                element_distribute_name: element.name,
+                                element_distribute_price: null,
+                                sub_element_distribute_name: sub_element.name,
+                                sub_element_distribute_price: sub_element.price,
+                              });
+                            }
+                          );
+                        } else {
+                          dataSheetInventory.push({
+                            product_id: item.id,
+                            name: item.name,
+                            percent_agency: item.agency_price?.percent_agency,
+                            main_price: item.agency_price?.main_price,
+                            level_agency: level_agency,
+                            distribute_name: distribute.name,
+                            element_distribute_name: element.name,
+                            element_distribute_price: element.price,
+                            sub_element_distribute_name: null,
+                            sub_element_distribute_price: null,
+                          });
+                        }
+                      }
+                    );
+                  }
+                }
+              }
+            } else {
+              if (productsAgency?.length > 0) {
+                for (const item of res.data.data.data) {
+                  for (const productItem of productsAgency) {
+                    if (item.id == productItem.product_id) {
+                      const distribute =
+                        item.agency_price?.distributes !== null &&
+                        item.agency_price?.distributes.length > 0
+                          ? item.agency_price?.distributes[0]
+                          : null;
+
+                      if (
+                        distribute === null &&
+                        productItem.distribute_name == null
+                      ) {
+                        let _data = {
+                          product_id: item.id,
+                          name: item.name,
+                          percent_agency: item.agency_price?.percent_agency,
+                          main_price: item.agency_price?.main_price,
+                          level_agency: level_agency,
+                          distribute_name: null,
+                          element_distribute_name: null,
+                          sub_element_distribute_name: null,
+                          element_distribute_price: null,
+                          sub_element_distribute_price: null,
+                        };
+
+                        dataSheetInventory.push(_data);
+                      } else {
+                        if (
+                          distribute?.element_distributes?.length > 0 &&
+                          productItem.element_distribute_name
+                        ) {
+                          distribute.element_distributes.forEach(
+                            (element, _index) => {
+                              if (
+                                distribute.element_distributes[0]
+                                  ?.sub_element_distributes?.length > 0 &&
+                                productItem.sub_element_distribute_name
+                              ) {
+                                element.sub_element_distributes.forEach(
+                                  (sub_element) => {
+                                    if (
+                                      sub_element.name ==
+                                        productItem.sub_element_distribute_name &&
+                                      element.name ==
+                                        productItem.element_distribute_name
+                                    ) {
+                                      dataSheetInventory.push({
+                                        product_id: item.id,
+                                        name: item.name,
+                                        percent_agency:
+                                          item.agency_price?.percent_agency,
+                                        main_price:
+                                          item.agency_price?.main_price,
+                                        level_agency: level_agency,
+                                        distribute_name: distribute.name,
+                                        element_distribute_name: element.name,
+                                        element_distribute_price: null,
+                                        sub_element_distribute_name:
+                                          sub_element.name,
+                                        sub_element_distribute_price:
+                                          sub_element.price,
+                                      });
+                                    }
+                                  }
+                                );
+                              } else {
+                                if (
+                                  element.name ==
+                                  productItem.element_distribute_name
+                                ) {
+                                  dataSheetInventory.push({
+                                    product_id: item.id,
+                                    name: item.name,
+                                    percent_agency:
+                                      item.agency_price?.percent_agency,
+                                    main_price: item.agency_price?.main_price,
+                                    level_agency: level_agency,
+                                    distribute_name: distribute.name,
+                                    element_distribute_name: element.name,
+                                    element_distribute_price: element.price,
+                                    sub_element_distribute_name: null,
+                                    sub_element_distribute_price: null,
+                                  });
+                                }
+                              }
+                            }
+                          );
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+            componentExportProductAgency(dataSheetInventory);
+          }
+        }
+      })
+      .finally(() => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+      });
+  };
+};
+
+const componentExportProductAgency = (dataProductAgency) => {
+  var newArray = [];
+
+  for (const item of dataProductAgency) {
+    var newItem = {};
+    var arangeKeyItem = {
+      product_id: item.product_id,
+      name: item.name,
+      distribute_name: item.distribute_name,
+      percent_agency: item.percent_agency,
+      main_price: item.main_price,
+      level_agency: item.level_agency,
+      element_distribute_name: item.element_distribute_name,
+      sub_element_distribute_name: item.sub_element_distribute_name,
+      price_agency: "",
+      // element_distribute_price: item.element_distribute_price,
+      // sub_element_distribute_price: item.sub_element_distribute_price,
+    };
+    // eslint-disable-next-line no-loop-func
+    Object.entries(arangeKeyItem).forEach(([key, value], index) => {
+      if (key == "product_id") {
+        newItem["Mã sản phẩm"] = formatStringCharactor(value);
+      }
+      if (key == "name") {
+        newItem["Tên sản phẩm"] = formatStringCharactor(value);
+      }
+      if (key == "distribute_name") {
+        newItem["Tên phân loại chính"] = value;
+
+        if (item["sub_element_distribute_name"]) {
+          newItem[
+            "DS phân loại"
+          ] = `${item["element_distribute_name"]},${item["sub_element_distribute_name"]}`;
+        } else {
+          newItem["DS phân loại"] = `${item["element_distribute_name"] ?? ""}`;
+        }
+      }
+      // if (key == "percent_agency") {
+      //   newItem["Hoa hồng(%)"] = value;
+      // }
+      if (key == "price_agency") {
+        newItem["Giá đại lý"] =
+          item.sub_element_distribute_price ||
+          item.element_distribute_price ||
+          item.main_price;
+      }
+    });
+
+    newArray.push(newItem);
+  }
+  var header = [];
+  if (newArray.length > 0) {
+    Object.entries(newArray[0]).forEach(([key, value], index) => {
+      header.push(key);
+    });
+  }
+  saveAsProductAgencyExcel(
+    { data: newArray, header: header },
+    "DS_sản phẩm_cấu_hình_đại_lý"
+  );
+};
+
 export const fetchAllAttributeP = (store_code) => {
   return (dispatch) => {
     dispatch({
@@ -1334,6 +1683,7 @@ export const destroyAttributeP = ($this, store_code, data) => {
       });
   };
 };
+
 export const uploadAvataProduct = (file) => {
   return (dispatch) => {
     dispatch({
@@ -1902,6 +2252,55 @@ export const updateAgencyPrice = (
             title: "Lỗi",
             disable: "show",
             content: content,
+          },
+        });
+      });
+  };
+};
+
+export const updateListAgencyPrice = (
+  store_code,
+  data,
+  onSuccess = () => {}
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    productApi
+      .updateListAgencyPrice(store_code, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+
+        if (onSuccess) {
+          onSuccess();
+        }
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Error",
           },
         });
       });

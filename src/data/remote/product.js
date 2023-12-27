@@ -159,9 +159,9 @@ export const createMultiProduct = (store_code, data) => {
   return callApi(`/store/${store_code}/products/all`, "post", data);
 };
 
-export const fetchAllListProduct = (store_code, search) => {
+export const fetchAllListProduct = (store_code, search, params) => {
   return callApi(
-    `/store/${store_code}/products?is_show_description=${true}&is_get_all=${true}&search=${search}`,
+    `/store/${store_code}/products?is_show_description=${true}&is_get_all=${true}&search=${search}${params}`,
     "get",
     null
   );
@@ -185,6 +185,14 @@ export const fetchProductAgencyPrice = (store_code, id, agency_id) => {
 export const updateAgencyPrice = (store_code, data, id) => {
   return callApi(
     `/store/${store_code}/products/${id}/agency_price`,
+    "put",
+    data
+  );
+};
+
+export const updateListAgencyPrice = (store_code, data) => {
+  return callApi(
+    `/store/${store_code}/products/agency_price/list`,
     "put",
     data
   );
