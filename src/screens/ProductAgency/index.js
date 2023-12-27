@@ -14,6 +14,7 @@ import * as productAction from "../../actions/product";
 import * as CategoryPAction from "../../actions/category_product";
 import * as agencyAction from "../../actions/agency";
 import { getQueryParams } from "../../ultis/helpers";
+import * as XLSX from "xlsx";
 
 import history from "../../history";
 import ModalUpdatePercentDiscount from "./ModalUpdatePercentDiscount";
@@ -21,6 +22,8 @@ import ModalUpdatePercentDiscountAll from "./ModalUpdatePercentDiscountAll";
 import ModalUpdateCommission from "./ModalUpdateCommission";
 import ModalUpdateCommissionAll from "./ModalUpdateCommissionAll";
 import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
+import { confirmAlert } from "react-confirm-alert";
+import ListProduct from "./ListProduct";
 
 class Product extends Component {
   constructor(props) {
@@ -46,7 +49,16 @@ class Product extends Component {
       categoryChildSelected:
         getQueryParams("category_children_ids")?.split(",") || [],
       arrayCheckBox: [],
+      fields: [
+        "Mã sản phẩm",
+        "Tên sản phẩm",
+        "Tên phân loại chính",
+        "DS phân loại",
+        // "Hoa hồng(%)",
+        "Giá đại lý",
+      ],
     };
+    this.fileInputRef = React.createRef();
   }
 
   onChangeNumPage = (e) => {
@@ -477,6 +489,250 @@ class Product extends Component {
     return params;
   };
 
+  exportProducts = () => {
+    const { store_code, agency_type_id } = this.props.match.params;
+    const { exportProductAgency } = this.props;
+    const branch_id = localStorage.getItem("branch_id");
+
+    exportProductAgency(
+      store_code,
+      branch_id,
+      `&agency_type_id=${agency_type_id}`,
+      this.getNameType(),
+      ""
+    );
+  };
+
+  onChangeExcel = (evt) => {
+    const { showError, updateListAgencyPrice } = this.props;
+    const { store_code, agency_type_id } = this.props.match.params;
+    const { fields } = this.state;
+    const branch_id = localStorage.getItem("branch_id");
+
+    var f = evt.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const bstr = evt.target.result;
+      const wb = XLSX.read(bstr, { type: "binary" });
+      const wsname = wb.SheetNames[0];
+      const ws = wb.Sheets[wsname];
+      const header = XLSX.utils.sheet_to_json(ws, { header: 1 });
+      const data = XLSX.utils.sheet_to_json(ws, { header: 2 });
+      const xlsxFields = header[0];
+
+      //Check Valid XLSX Field
+      let isCheckedValidField = true;
+      const lengthXlsxFields = xlsxFields.length;
+      if (fields.length > lengthXlsxFields.length) isCheckedValidField = false;
+      else {
+        const arraysXlsxFields = xlsxFields;
+        fields.forEach((element) => {
+          if (!arraysXlsxFields.includes(element)) {
+            isCheckedValidField = false;
+            return;
+          }
+        });
+      }
+
+      if (!isCheckedValidField) {
+        showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content:
+              "Trường 'Mã sản phẩm', 'Tên sản phẩm', 'Tên phân loại chính', 'DS phân loại', 'Giá đại lý' không hợp lệ!",
+          },
+        });
+        return;
+      }
+
+      //Filter Data
+      const newListCustomers = [];
+      for (var item of data) {
+        const newCustomer = {};
+        newCustomer["product_id"] = item["Mã sản phẩm"];
+        newCustomer["name"] = item["Tên sản phẩm"];
+        newCustomer["distribute_name"] = item["Tên phân loại chính"]
+          ? item["Tên phân loại chính"]
+          : null;
+
+        const classify = item["DS phân loại"]
+          ? item["DS phân loại"]?.split(",")
+          : null;
+
+        newCustomer["element_distribute_name"] = classify ? classify[0] : null;
+        newCustomer["sub_element_distribute_name"] = classify
+          ? classify[1]
+          : null;
+
+        // newCustomer["percent_agency"] = item["Hoa hồng(%)"];
+        newCustomer["price_agency"] = item["Giá đại lý"];
+
+        newListCustomers.push(newCustomer);
+      }
+
+      const transformedData = this.transformData(newListCustomers);
+
+      if (newListCustomers.length > 400) {
+        confirmAlert({
+          customUI: ({ onClose }) => {
+            return (
+              <div
+                className="custom-ui"
+                style={{
+                  width: "400px",
+                  padding: "30px",
+                  textAlign: "left",
+                  background: "#fff",
+                  borderRadius: "10px",
+                  boxShadow: "0 20px 75px rgba(0, 0, 0, 0.13)",
+                  color: "#666",
+                }}
+              >
+                <h3>Lưu ý</h3>
+                <p>
+                  Chỉ cho phép tối đa 400 sản phẩm mỗi lần import, vui lòng tách
+                  nhiều file Excel để thực hiện !
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    columnGap: "20px",
+                  }}
+                >
+                  <button
+                    onClick={() => {
+                      onClose();
+                    }}
+                    className="btn btn-primary"
+                  >
+                    Đồng ý
+                  </button>
+                </div>
+              </div>
+            );
+          },
+          buttons: [
+            {
+              label: "Đồng ý",
+              onClick: () => alert("Click Yes"),
+            },
+          ],
+        });
+
+        return;
+      }
+
+      const dataImport = {
+        list_agency_price: {
+          data: transformedData,
+          agency_type_id: agency_type_id,
+        },
+      };
+
+      updateListAgencyPrice(store_code, dataImport, () => {
+        var { store_code, agency_type_id } = this.props.match.params;
+
+        this.setState({
+          page: 1,
+          search: "",
+          categorySelected: [],
+          categoryChildSelected: [],
+        });
+
+        history.push(`/product-agency/index/${store_code}/${agency_type_id}`);
+        this.props.fetchAllProduct(store_code, 1, "", agency_type_id);
+      });
+    };
+    document.getElementById("file-excel-import-sheet-inventory").value = null;
+    reader.readAsBinaryString(f);
+  };
+
+  transformData = (data) => {
+    const result = [];
+
+    data.forEach((item) => {
+      const {
+        distribute_name,
+        element_distribute_name,
+        sub_element_distribute_name,
+        product_id,
+        // percent_agency,
+        price_agency,
+      } = item;
+
+      const element_distributes_price = element_distribute_name
+        ? [
+            {
+              distribute_name,
+              element_distribute: element_distribute_name,
+              price: sub_element_distribute_name ? "0" : price_agency,
+            },
+          ]
+        : null;
+
+      const sub_element_distributes_price = sub_element_distribute_name
+        ? [
+            {
+              distribute_name,
+              element_distribute: element_distribute_name,
+              sub_element_distribute: sub_element_distribute_name,
+              price: sub_element_distribute_name ? price_agency : "0",
+            },
+          ]
+        : null;
+
+      const elementDistributeItem = {
+        distribute_name,
+        element_distribute: element_distribute_name,
+        price: sub_element_distribute_name ? "0" : price_agency,
+      };
+
+      const subElementDistributeItem = {
+        distribute_name,
+        element_distribute: element_distribute_name,
+        sub_element_distribute: sub_element_distribute_name,
+        price: sub_element_distribute_name ? price_agency : "0",
+      };
+
+      // Tìm kiếm đối tượng theo product_id
+      const existingObject = result.find(
+        (obj) => obj.product_id === product_id
+      );
+
+      if (existingObject) {
+        // Nếu đã tồn tại, thêm dữ liệu vào mảng phù hợp
+        if (existingObject.element_distributes_price) {
+          existingObject.element_distributes_price.push(elementDistributeItem);
+        }
+        if (existingObject.sub_element_distributes_price) {
+          existingObject.sub_element_distributes_price.push(
+            subElementDistributeItem
+          );
+        }
+      } else {
+        // Nếu chưa tồn tại, tạo đối tượng mới
+        const newObject = {
+          product_id,
+          // percent_agency,
+          element_distributes_price: element_distributes_price,
+          sub_element_distributes_price: sub_element_distributes_price,
+        };
+
+        if (!element_distributes_price && !sub_element_distributes_price) {
+          newObject.main_price = price_agency;
+        }
+
+        result.push(newObject);
+      }
+    });
+
+    return result;
+  };
+
   render() {
     if (this.props.auth) {
       var { products } = this.props;
@@ -512,14 +768,67 @@ class Product extends Component {
                       <h4 className="h4 title_content mb-0 text-gray-800">
                         Sản phẩm - Đại lý {this.getNameType()}
                       </h4>
-                      <button
-                        style={{ marginRight: "10px" }}
-                        type="button"
-                        onClick={this.goBack}
-                        class="btn btn-warning  btn-sm"
-                      >
-                        <i class="fas fa-arrow-left"></i>&nbsp;Trở về
-                      </button>
+                      <div>
+                        <div
+                          style={{ marginRight: "10px" }}
+                          onClick={this.exportProducts}
+                          className={`btn btn-success btn-icon-split btn-sm`}
+                          // class={`btn btn-success btn-icon-split btn-sm  ${
+                          //   _export == true ? "show" : "hide"
+                          // }`}
+                        >
+                          <span class="icon text-white-50">
+                            <i class="fas fa-file-export"></i>
+                          </span>
+                          <span style={{ color: "white" }} class="text">
+                            Export tất cả sản phẩm mẫu
+                          </span>
+                        </div>
+                        <div
+                          style={{ marginRight: "10px" }}
+                          className={`btn btn-success btn-icon-split btn-sm`}
+                          data-toggle="modal"
+                          data-target="#showListProduct"
+                          // class={`btn btn-success btn-icon-split btn-sm  ${
+                          //   _export == true ? "show" : "hide"
+                          // }`}
+                        >
+                          <span class="icon text-white-50">
+                            <i class="fas fa-file-export"></i>
+                          </span>
+                          <span style={{ color: "white" }} class="text">
+                            Export sản phẩm được chọn mẫu
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => this.fileInputRef?.current?.click()}
+                          style={{ marginRight: "10px" }}
+                          class={`btn btn-primary btn-icon-split btn-sm `}
+                        >
+                          <span class="icon text-white-50">
+                            <i class="fas fa-file-import"></i>
+                          </span>
+                          <span style={{ color: "white" }} class="text">
+                            Import Excel
+                          </span>
+                        </button>
+                        <input
+                          ref={this.fileInputRef}
+                          id="file-excel-import-sheet-inventory"
+                          type="file"
+                          name="name"
+                          hidden
+                          onChange={this.onChangeExcel}
+                        />
+                        <button
+                          style={{ marginRight: "10px" }}
+                          type="button"
+                          onClick={this.goBack}
+                          class="btn btn-warning  btn-sm"
+                        >
+                          <i class="fas fa-arrow-left"></i>&nbsp;Trở về
+                        </button>
+                      </div>
                     </div>
                     <br></br>
                     <Alert
@@ -877,6 +1186,13 @@ class Product extends Component {
                         </div>
                       </div>
                     </div>
+
+                    <ListProduct
+                      agency_type_id={agency_type_id}
+                      store_code={store_code}
+                      products={products}
+                      level_agency={this.getNameType()}
+                    />
                   </div>
                 ) : (
                   <NotAccess />
@@ -951,6 +1267,31 @@ const mapDispatchToProps = (dispatch, props) => {
         type: Types.UPDATE_PERCENT_DISCOUNT_AGENCY,
         data: false,
       });
+    },
+    updateListAgencyPrice(store_code, dataImport, onSuccess) {
+      dispatch(
+        productAction.updateListAgencyPrice(store_code, dataImport, onSuccess)
+      );
+    },
+    showError: (error) => {
+      dispatch(error);
+    },
+    exportProductAgency: (
+      store_code,
+      branch_id,
+      params,
+      level_agency,
+      data
+    ) => {
+      dispatch(
+        productAction.exportProductAgency(
+          store_code,
+          branch_id,
+          params,
+          level_agency,
+          data
+        )
+      );
     },
     resetCommissionSuccessfully: () => {
       dispatch({
