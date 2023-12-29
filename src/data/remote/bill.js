@@ -54,6 +54,14 @@ export const updateStatusOrder = (store_code, data) => {
     data
   );
 };
+export const updateListStatusOrder = (store_code, data) => {
+  console.log(data);
+  return callApi(
+    `/store/${store_code}/orders/change_list_order_status`,
+    "post",
+    data
+  );
+};
 export const updateStatusPayment = (store_code, data) => {
   return callApi(
     `/store/${store_code}/orders/change_payment_status`,

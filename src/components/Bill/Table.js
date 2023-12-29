@@ -32,15 +32,129 @@ const TableStyles = styled.div`
   }
 `;
 
+const statusCode = {
+  WAITING_FOR_PROGRESSING: "WAITING_FOR_PROGRESSING",
+  PACKING: "PACKING",
+  OUT_OF_STOCK: "OUT_OF_STOCK",
+  SHIPPING: "SHIPPING",
+  RECEIVED_PRODUCT: "RECEIVED_PRODUCT",
+  COMPLETED: "COMPLETED",
+  USER_CANCELLED: "USER_CANCELLED",
+  CUSTOMER_CANCELLED: "CUSTOMER_CANCELLED",
+  DELIVERY_ERROR: "DELIVERY_ERROR",
+  CUSTOMER_RETURNING: "CUSTOMER_RETURNING",
+  CUSTOMER_HAS_RETURNS: "CUSTOMER_HAS_RETURNS",
+};
+
 class Table extends Component {
   constructor(props) {
     super(props);
     this.state = {
       statusOrder: "",
+      changeStatusOrder: "",
       statusPayment: "",
       orderFrom: "",
       isLoading: false,
       selected: [],
+
+      statuses: [
+        // {
+        //   name: "Chờ xử lý",
+        //   code: "WAITING_FOR_PROGRESSING",
+        //   accept: [
+        //     statusCode["PACKING"],
+        //     statusCode["OUT_OF_STOCK"],
+        //     statusCode["SHIPPING"],
+        //     statusCode["RECEIVED_PRODUCT"],
+        //     statusCode["COMPLETED"],
+        //     statusCode["USER_CANCELLED"],
+        //     statusCode["CUSTOMER_CANCELLED"],
+        //   ],
+        // },
+        {
+          name: "Đang chuẩn bị hàng",
+          code: "PACKING",
+          accept: [
+            statusCode["OUT_OF_STOCK"],
+            statusCode["SHIPPING"],
+            statusCode["RECEIVED_PRODUCT"],
+            statusCode["COMPLETED"],
+            statusCode["USER_CANCELLED"],
+            statusCode["CUSTOMER_CANCELLED"],
+          ],
+        },
+        // {
+        //   name: "Hết hàng",
+        //   code: "OUT_OF_STOCK",
+        //   accept: [],
+        // },
+        {
+          name: "Đang giao hàng",
+          code: "SHIPPING",
+          accept: [
+            statusCode["RECEIVED_PRODUCT"],
+            statusCode["COMPLETED"],
+            statusCode["USER_CANCELLED"],
+            statusCode["CUSTOMER_CANCELLED"],
+            statusCode["DELIVERY_ERROR"],
+            statusCode["CUSTOMER_RETURNING"],
+            statusCode["CUSTOMER_HAS_RETURNS"],
+          ],
+        },
+        {
+          name: "Đã nhận hàng",
+          code: "RECEIVED_PRODUCT",
+          accept: [
+            statusCode["COMPLETED"],
+            statusCode["CUSTOMER_RETURNING"],
+            statusCode["CUSTOMER_HAS_RETURNS"],
+          ],
+        },
+        {
+          name: "Đã hoàn thành",
+          code: "COMPLETED",
+          accept: [
+            statusCode["CUSTOMER_RETURNING"],
+            statusCode["CUSTOMER_HAS_RETURNS"],
+          ],
+        },
+        // {
+        //   name: "Shop đã hủy",
+        //   code: "USER_CANCELLED",
+        //   accept: [
+        //     statusCode["CUSTOMER_RETURNING"],
+        //     statusCode["CUSTOMER_HAS_RETURNS"],
+        //   ],
+        // },
+        // {
+        //   name: "Khách đã hủy",
+        //   code: "CUSTOMER_CANCELLED",
+        //   accept: [
+        //     statusCode["CUSTOMER_RETURNING"],
+        //     statusCode["CUSTOMER_HAS_RETURNS"],
+        //   ],
+        // },
+
+        // {
+        //   name: "Lỗi giao hàng",
+        //   code: "DELIVERY_ERROR",
+        //   accept: [
+        //     statusCode["CUSTOMER_RETURNING"],
+        //     statusCode["CUSTOMER_HAS_RETURNS"],
+        //   ],
+        // },
+
+        // {
+        //   name: "Chờ trả hàng",
+        //   code: "CUSTOMER_RETURNING",
+        //   accept: [statusCode["CUSTOMER_HAS_RETURNS"]],
+        // },
+        // {
+        //   name: "Đã trả hàng",
+        //   code: "CUSTOMER_HAS_RETURNS",
+        //   accept: [],
+        // },
+      ],
     };
     this.syncArr = [];
     this.asyncElm = null;
@@ -660,10 +774,76 @@ class Table extends Component {
     }
   };
 
+  onChangeStatusMulti = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    this.setState({ [name]: value });
+  };
+
+  changeMultiStatusOrder = () => {
+    var {
+      store_code,
+      updateListStatusOrder,
+      time_from,
+      time_to,
+      numPage,
+      searchValue,
+      collaborator_by_customer_id,
+      statusTime,
+      paginate,
+    } = this.props;
+    const { selected, statusPayment, statusOrder, orderFrom } = this.state;
+
+    const { changeStatusOrder } = this.state;
+    const data = {
+      order_codes:
+        selected?.length > 0 ? selected.map((item) => item.order_code) : [],
+      order_status_code: changeStatusOrder,
+    };
+    updateListStatusOrder(data, store_code, () => {
+      const branch_id = getBranchId();
+      const branch_ids = getBranchIds();
+      const branchIds = branch_ids ? branch_ids : branch_id;
+      var params = this.props.getParams(
+        time_from,
+        time_to,
+        searchValue,
+        statusOrder,
+        statusPayment,
+        numPage,
+        orderFrom,
+        collaborator_by_customer_id,
+        statusTime
+      );
+
+      this.setState({ selected: [] });
+      this.props.onchangeOrderFrom(orderFrom);
+      var params_agency =
+        this.props.agency_by_customer_id != null
+          ? `&agency_by_customer_id=${this.props.agency_by_customer_id}`
+          : null;
+
+      this.props.fetchAllBill(
+        store_code,
+        paginate,
+        branchIds,
+        params,
+        params_agency
+      );
+    });
+  };
   render() {
     var { store_code, bills, numPage, badges, currentBranch, stores } =
       this.props;
-    var { statusOrder, statusPayment, orderFrom, selected } = this.state;
+    var {
+      statusOrder,
+      statusPayment,
+      orderFrom,
+      selected,
+      changeStatusOrder,
+      statuses,
+    } = this.state;
+
     var per_page = bills.per_page;
     var current_page = bills.current_page;
     var listBill = bills.data ?? [];
@@ -690,6 +870,37 @@ class Table extends Component {
           hàng
         </button>
         <div class="table-responsive">
+          <select
+            value={changeStatusOrder || ""}
+            name="changeStatusOrder"
+            id="input"
+            required="required"
+            onChange={this.onChangeStatusMulti}
+            placeholder="Chuyển trạng thái"
+            className={`form-control ${multiPrint}`}
+            style={{
+              display: "inline-block",
+              width: "190px",
+            }}
+          >
+            <option value="" disabled>
+              Trạng thái đơn hàng
+            </option>
+            {statuses.map((status) => (
+              <option value={status.code} key={status.code}>
+                {status.name}
+              </option>
+            ))}
+          </select>
+          <button
+            style={{ marginLeft: "10px" }}
+            title="Chuyển trạng thái đơn hàng"
+            class={`btn btn-primary btn-sm ${multiPrint}`}
+            disabled={!changeStatusOrder}
+            onClick={this.changeMultiStatusOrder}
+          >
+            Chuyển trạng thái
+          </button>
           <ReactToPrint
             trigger={() => {
               return (
@@ -698,7 +909,7 @@ class Table extends Component {
                   // data-toggle="modal"
                   // data-target="#removeMultiModal"
                   style={{ marginLeft: "10px" }}
-                  title="Đồng bộ trạng thái đơn hàng với đơn vị vận chuy"
+                  title="In đơn hàng"
                   class={`btn btn-danger btn-sm ${multiPrint}`}
                 >
                   <i class="fa fa-print"></i> In {selected.length} đơn hàng
@@ -786,6 +997,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     syncShipment: (store_code, order_code, data, syncArr) => {
       dispatch(billAction.syncShipment(store_code, order_code, data, syncArr));
+    },
+    updateListStatusOrder: (data, store_code, onSuccess) => {
+      dispatch(billAction.updateListStatusOrder(data, store_code, onSuccess));
     },
     syncShipmentStatus: (data) => {
       dispatch(data);

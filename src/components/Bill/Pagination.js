@@ -31,6 +31,7 @@ class Pagination extends Component {
       collaborator_by_customer_id,
       statusTime,
       getParams,
+      setPaginate,
     } = this.props;
     const branch_id = getBranchId();
     const branch_ids = getBranchIds();
@@ -49,6 +50,10 @@ class Pagination extends Component {
         collaborator_by_customer_id,
         statusTime
       );
+
+    if (setPaginate) {
+      setPaginate(page);
+    }
 
     insertParam({ page: page });
     var params_agency =
