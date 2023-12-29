@@ -1082,24 +1082,6 @@ class Product extends Component {
                               columnGap: "20px",
                             }}
                           >
-                            {arrayCheckBox.length > 0 && (
-                              <>
-                                <div
-                                  className="btn btn-success"
-                                  data-toggle="modal"
-                                  data-target="#updateCommission"
-                                >
-                                  Sửa hoa hồng được chọn
-                                </div>
-                                <div
-                                  className="btn btn-primary"
-                                  data-toggle="modal"
-                                  data-target="#updatePercentDiscount"
-                                >
-                                  Sửa chiết khấu được chọn
-                                </div>
-                              </>
-                            )}
                             <div
                               className="btn btn-success"
                               data-toggle="modal"
@@ -1114,6 +1096,28 @@ class Product extends Component {
                             >
                               Sửa chiết khấu cho tất cả
                             </div>
+                            <button
+                              className="btn btn-success"
+                              data-toggle="modal"
+                              data-target="#updateCommission"
+                              disabled={arrayCheckBox.length > 0 ? false : true}
+                              style={{
+                                opacity: arrayCheckBox.length > 0 ? 1 : 0.5,
+                              }}
+                            >
+                              Sửa hoa hồng được chọn
+                            </button>
+                            <button
+                              className="btn btn-primary"
+                              data-toggle="modal"
+                              data-target="#updatePercentDiscount"
+                              disabled={arrayCheckBox.length > 0 ? false : true}
+                              style={{
+                                opacity: arrayCheckBox.length > 0 ? 1 : 0.5,
+                              }}
+                            >
+                              Sửa chiết khấu được chọn
+                            </button>
                           </div>
                         </div>
                       </div>

@@ -156,6 +156,7 @@ class Bill extends Component {
       var statusTime = getQueryParams("type_query_time");
       var statusOrder = getQueryParams("order_status_code");
       var statusPayment = getQueryParams("payment_status_code");
+      var paginate = getQueryParams("page");
       var { collaborator_by_customer_id, numPage } = this.state;
 
       if (
@@ -229,6 +230,9 @@ class Bill extends Component {
           statusPayment: statusPayment,
         });
       }
+      if (paginate) {
+        this.setPaginate(paginate);
+      }
       var params = "";
       params =
         params +
@@ -271,6 +275,7 @@ class Bill extends Component {
     var statusTime = getQueryParams("type_query_time");
     var statusOrder = getQueryParams("order_status_code");
     var statusPayment = getQueryParams("payment_status_code");
+    var paginate = getQueryParams("page");
     var { collaborator_by_customer_id, numPage } = this.state;
 
     if (
@@ -340,6 +345,10 @@ class Bill extends Component {
       this.setState({
         statusPayment: statusPayment,
       });
+    }
+
+    if (paginate) {
+      this.setPaginate(paginate);
     }
     var params = "";
     params =
@@ -1044,6 +1053,7 @@ class Bill extends Component {
                           collaborator_by_customer_id={
                             collaborator_by_customer_id
                           }
+                          paginate={this.state.paginate}
                           agency_by_customer_id={agency_by_customer_id}
                           handleShowChatBox={this.handleShowChatBox}
                           store_code={store_code}
