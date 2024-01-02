@@ -1011,25 +1011,53 @@ class Bill extends Component {
                           </p>
                         </div>
                         <div
-                          className="bill-total"
                           style={{
-                            marginTop: "15px",
-                            paddingLeft: "20px",
+                            display: "flex",
+                            gap: "column",
                           }}
                         >
-                          <span
-                            className="text-total_item"
-                            id="user_name"
+                          <div
+                            className="bill-total"
                             style={{
-                              display: "inline-block",
-                              marginRight: "5px",
+                              marginTop: "15px",
+                              paddingLeft: "20px",
                             }}
                           >
-                            Hóa đơn:
-                          </span>
-                          <span className="num-total_item">
-                            {bills.total} đơn
-                          </span>
+                            <span
+                              className="text-total_item"
+                              id="user_name"
+                              style={{
+                                display: "inline-block",
+                                marginRight: "5px",
+                              }}
+                            >
+                              Hóa đơn:
+                            </span>
+                            <span className="num-total_item">
+                              {bills.total} đơn
+                            </span>
+                          </div>
+                          <div
+                            className="bill-total"
+                            style={{
+                              marginTop: "15px",
+                              paddingLeft: "20px",
+                            }}
+                          >
+                            <span
+                              className="text-total_item"
+                              id="user_name"
+                              style={{
+                                display: "inline-block",
+                                marginRight: "5px",
+                              }}
+                            >
+                              Tổng tiền:
+                            </span>
+                            <span className="num-total_item">
+                              {helper.format(bills.total_price)}
+                            </span>
+                          </div>
                         </div>
                       </div>
 
