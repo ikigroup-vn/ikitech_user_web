@@ -112,10 +112,143 @@ class ReportProfit extends Component {
   goBack = () => {
     history.goBack();
   };
+
   render() {
     var { time_from, time_to } = this.state;
     var { store_code } = this.props.match.params;
     const reportProfit = this.props.reportProfit;
+
+    const reportProfitData = [
+      {
+        id: 1,
+        step: 0,
+        title: "I. Doanh thu bán hàng",
+        value: format(Number(reportProfit.sales_revenue)),
+      },
+      {
+        id: 2,
+        step: 1,
+        title: "1. Tiền hàng thực bán (1a - 1b)",
+        value: format(
+          Number(reportProfit.money_sales) - Number(reportProfit.money_back)
+        ),
+      },
+      {
+        id: 3,
+        step: 2,
+        title: "a. Tiền hàng bán ra",
+        value: format(Number(reportProfit.money_sales)),
+      },
+      {
+        id: 4,
+        step: 2,
+        title: "b. Tiền hàng trả lại",
+        value: format(Number(reportProfit.money_back)),
+      },
+      {
+        id: 5,
+        step: 1,
+        title: "2. Thuế VAT",
+        value: format(Number(reportProfit.tax_vat)),
+      },
+      {
+        id: 6,
+        step: 1,
+        title: "3. Phí giao hàng thu của khách",
+        value: format(Number(reportProfit.customer_delivery_fee)),
+      },
+      {
+        id: 7,
+        step: 1,
+        title: "4. Chiết khấu",
+        value: format(Number(reportProfit.discount)),
+      },
+      {
+        id: 18,
+        step: 1,
+        title: "5. Giảm giá sản phẩm",
+        value: format(Number(reportProfit.product_discount)),
+      },
+      {
+        id: 19,
+        step: 1,
+        title: "6. Giảm giá Combo",
+        value: format(Number(reportProfit.combo)),
+      },
+      {
+        id: 20,
+        step: 1,
+        title: "7. Giảm giá Voucher",
+        value: format(Number(reportProfit.voucher)),
+      },
+      // {
+      //   id: 21,
+      //   step: 1,
+      //   title: "8. Chiết khấu đơn hàng",
+      //   value: format(Number(reportProfit.discount)),
+      // },
+      {
+        id: 8,
+        step: 0,
+        title: "II. Chi phí bán hàng (1+2+3)",
+        value: format(Number(reportProfit.cost_of_sales)),
+      },
+      {
+        id: 9,
+        step: 1,
+        title: "1. Chi phí giá vốn hàng hóa",
+        value: format(Number(reportProfit.selling_expenses)),
+      },
+      {
+        id: 10,
+        step: 1,
+        title: "2. Thanh toán bằng điểm",
+        value: format(Number(reportProfit.pay_with_points)),
+      },
+      {
+        id: 11,
+        step: 1,
+        title: "3. Phí giao hàng trả đối tác",
+        value: format(Number(reportProfit.partner_delivery_fee)),
+      },
+      {
+        id: 12,
+        step: 0,
+        title: "III. Thu nhập khác (1+2)",
+        value: format(Number(reportProfit.other_costs)),
+      },
+      {
+        id: 13,
+        step: 1,
+        title: "1. Phiếu thu khác hạch toán kết quả kinh doanh",
+        value: format(Number(reportProfit.revenue_auto_create)),
+      },
+      {
+        id: 14,
+        step: 1,
+        title: "2. Phí khách trả hàng",
+        value: format(Number(reportProfit.customer_return)),
+      },
+      {
+        id: 15,
+        step: 0,
+        title: "IV. Chi phí khác",
+        value: format(Number(reportProfit.other_costs)),
+      },
+      // {
+      //   id: 16,
+      //   step: 0,
+      //   title: "1. Phiếu chi khác hạch toán kết quả kinh doanh",
+      //   value: format(Number(reportProfit.sales_revenue)),
+      // },
+      {
+        id: 17,
+        step: 0,
+        title: "Lợi nhuận (I + III - II - IV)",
+        value: format(Number(reportProfit.profit)),
+        isTotal: true,
+      },
+    ];
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -191,7 +324,7 @@ class ReportProfit extends Component {
                       {/* <button className='btn btn-primary btn-sm' style={{ marginLeft: "20px", marginBottom: "10px" }} onClick={this.handleFindItem}>Tìm kiếm</button> */}
                     </div>
                   </div>
-                  <div className="card-body info-report">
+                  {/* <div className="card-body info-report">
                     <div className="row">
                       <div className="col-6">
                         <div
@@ -495,6 +628,53 @@ class ReportProfit extends Component {
                         </div>
                       </div>
                     </div>
+                  </div> */}
+                  <div className="card-body info-report">
+                    <table class="table table-striped">
+                      <thead
+                        style={{
+                          backgroundColor: "#0462a5",
+                          color: "white",
+                        }}
+                      >
+                        <tr>
+                          <th scope="col">Chỉ tiêu báo cáo</th>
+                          <th scope="col">Chi phí</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {reportProfitData.map((data) => (
+                          <tr key={data.id}>
+                            {data.step === 0 ? (
+                              <th
+                                scope="row"
+                                style={{
+                                  color: data.isTotal ? "#119f9f" : "initial",
+                                }}
+                              >
+                                {data.title}
+                              </th>
+                            ) : (
+                              <td
+                                style={{
+                                  paddingLeft: `calc(25px * ${data.step})`,
+                                }}
+                              >
+                                {data.title}
+                              </td>
+                            )}
+
+                            <td
+                              style={{
+                                color: data.isTotal ? "#119f9f" : "initial",
+                              }}
+                            >
+                              {data.value}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
