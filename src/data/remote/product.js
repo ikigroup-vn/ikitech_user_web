@@ -161,7 +161,9 @@ export const createMultiProduct = (store_code, data) => {
 
 export const fetchAllListProduct = (store_code, search, params) => {
   return callApi(
-    `/store/${store_code}/products?is_show_description=${true}&is_get_all=${true}&search=${search}${params}`,
+    `/store/${store_code}/products?is_show_description=${true}&is_get_all=${true}&search=${search}${
+      params ? params : ""
+    }`,
     "get",
     null
   );
