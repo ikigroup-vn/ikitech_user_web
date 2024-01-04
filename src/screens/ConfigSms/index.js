@@ -12,6 +12,8 @@ import { Redirect } from "react-router-dom";
 import * as otpUnitAction from "../../actions/otp_unit";
 import * as configSmsAction from "../../actions/config_sms";
 import Table from "../../components/OtpUnit/Table";
+import TableHistorySMS from "../../components/OtpUnit/TableHistorySMS";
+import Pagination from "../../components/OtpUnit/Pagination";
 import Alert from "../../components/Partials/Alert";
 import * as Types from "../../constants/ActionType";
 import Loading from "../Loading";
@@ -47,6 +49,7 @@ class ConfigSms extends Component {
 
     this.props.fetchAllOtpUnit(store_code);
     this.props.fetchSmsConfig(store_code);
+    this.props.fetchHistorySMS(store_code, "");
   }
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.smsConfig, this.props.smsConfig)) {
@@ -88,7 +91,7 @@ class ConfigSms extends Component {
   };
   render() {
     var { store_code } = this.props.match.params;
-    var { alert, allOtpUnit } = this.props;
+    var { alert, allOtpUnit, allHistorySMS } = this.props;
     var { update, isShow, is_use } = this.state;
 
     if (this.props.auth) {
@@ -186,6 +189,35 @@ class ConfigSms extends Component {
                         />
                       </div>
                     </div>
+                    <div class="card shadow mb-4">
+                      <div
+                        class="card-header py-3"
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          rowGap: "5px",
+                        }}
+                      >
+                        <h6 class="m-0 title_content font-weight-bold text-primary">
+                          Lịch sử sms
+                        </h6>
+                      </div>
+                      <div class="card-body" style={{ padding: "2px" }}>
+                        <TableHistorySMS
+                          update={update}
+                          store_code={store_code}
+                          allHistorySMS={allHistorySMS}
+                          handleUpdateCallBack={this.handleUpdateCallBack}
+                          handleDelCallBack={this.handleDelCallBack}
+                        />
+                        <div>
+                          <Pagination
+                            store_code={store_code}
+                            allHistorySMS={allHistorySMS}
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ) : (
                   <NotAccess />
@@ -218,6 +250,7 @@ const mapStateToProps = (state) => {
   return {
     auth: state.authReducers.login.authentication,
     allOtpUnit: state.otpUnitReducers.otp_unit.allOtpUnit,
+    allHistorySMS: state.otpUnitReducers.otp_unit.allHistorySMS,
     smsConfig: state.configSmsReducers.configSms.smsConfig,
     alert: state.otpUnitReducers.alert.alert_success,
     permission: state.authReducers.permission.data,
@@ -227,6 +260,9 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     fetchAllOtpUnit: (store_code) => {
       dispatch(otpUnitAction.fetchAllOtpUnit(store_code));
+    },
+    fetchHistorySMS: (store_code, params) => {
+      dispatch(otpUnitAction.fetchHistorySMS(store_code, params));
     },
     fetchSmsConfig: (store_code) => {
       dispatch(configSmsAction.fetchSmsConfig(store_code));
