@@ -22,6 +22,26 @@ export const fetchAllOtpUnit = (store_code) => {
   };
 };
 
+export const fetchHistorySMS = (store_code, params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    otpUnitApi.fetchHistorySMS(store_code, params).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_HISTORY_SMS,
+          data: res.data.data,
+        });
+    });
+  };
+};
+
 export const createOtpUnit = (store_code, data, onSuccess) => {
   return (dispatch) => {
     dispatch({

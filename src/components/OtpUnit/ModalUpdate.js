@@ -14,6 +14,8 @@ class ModalUpdate extends Component {
       sender: "",
       content: "",
       image_url: "",
+      is_order: false,
+      content_order: "",
     };
   }
 
@@ -26,6 +28,8 @@ class ModalUpdate extends Component {
         sender: otpUnit.sender,
         content: otpUnit.content,
         image_url: otpUnit.image_url,
+        is_order: otpUnit.is_order,
+        content_order: otpUnit.content_order,
       });
     }
   }
@@ -37,6 +41,16 @@ class ModalUpdate extends Component {
 
     this.setState({
       [name]: value,
+    });
+  };
+
+  onChangeSelect = (e) => {
+    var target = e.target;
+    var name = target.name;
+    var checked = target.checked;
+
+    this.setState({
+      [name]: checked,
     });
   };
   setImage = (image) => {
@@ -66,7 +80,9 @@ class ModalUpdate extends Component {
         token: otpUnit.token,
         sender: otpUnit.sender,
         content: otpUnit.content,
+        is_order: otpUnit.is_order,
         image_url: otpUnit.image_url,
+        content_order: otpUnit.content_order,
       },
       () => {
         window.$(".modal").modal("hide");
@@ -74,7 +90,8 @@ class ModalUpdate extends Component {
     );
   };
   render() {
-    var { token, sender, content, image_url } = this.state;
+    var { token, sender, content, image_url, is_order, content_order } =
+      this.state;
     return (
       <div
         class="modal fade"
@@ -164,6 +181,38 @@ class ModalUpdate extends Component {
                     name="content"
                   />
                 </div>
+                <div class="form-group">
+                  <label for="product_name">Bật gửi OTP đơn hàng</label>
+                  <label className="status-product">
+                    <input
+                      type="checkbox"
+                      hidden
+                      name="is_order"
+                      value={is_order}
+                      checked={is_order}
+                      onChange={this.onChangeSelect}
+                    />
+                    <div></div>
+                  </label>
+                </div>
+                {is_order ? (
+                  <div class="form-group">
+                    <label for="product_name">
+                      Nội dung đơn hàng ( {`{name}, {order_code}, {total}`} là
+                      bắt buộc trong nội dung )
+                    </label>
+                    <textarea
+                      type="text"
+                      class="form-control"
+                      id="content_order"
+                      placeholder="VD: Cam on {name} da mua don hang {order_code} voi tong tien la: {total}"
+                      autoComplete="off"
+                      value={content_order}
+                      onChange={this.onChange}
+                      name="content_order"
+                    />
+                  </div>
+                ) : null}
               </div>
               <div class="modal-footer">
                 <button

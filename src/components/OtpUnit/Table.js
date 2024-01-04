@@ -19,6 +19,8 @@ class Table extends Component {
       token: data.token,
       content: data.content,
       image_url: data.image_url,
+      is_order: data.is_order,
+      content_order: data.content_order,
     });
     e.preventDefault();
   };

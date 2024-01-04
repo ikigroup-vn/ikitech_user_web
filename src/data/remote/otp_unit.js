@@ -23,3 +23,11 @@ export const updateOtpUnit = (store_code, id, data) => {
 export const updateStatusOtpUnit = (store_code, id, data) => {
   return callApi(`/store/${store_code}/otp_units/${id}/status`, "put", data);
 };
+
+export const fetchHistorySMS = (store_code, params) => {
+  return callApi(
+    `/store/${store_code}/otp_histories${params ? `?${params}` : ""}`,
+    "get",
+    null
+  );
+};

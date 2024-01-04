@@ -5,7 +5,7 @@ import * as attributePApi from "../data/remote/attribute_product";
 import * as uploadApi from "../data/remote/upload";
 import { compressed, formatStringCharactor } from "../ultis/helpers";
 import { saveAs } from "file-saver";
-import XlsxPopulate from "xlsx-populate";
+import XlsxPopulate, { RichText } from "xlsx-populate";
 import { getBranchId, getBranchIds } from "../ultis/branchUtils";
 
 export const fetchAllProduct = (
@@ -346,6 +346,272 @@ async function saveAsExcel(value, nameFile = "Danh sách sản phẩm") {
     });
     const row = sheet1.row(1);
     row.height(50);
+
+    sheet1.range("A1:P1").style("fill", "deebf7");
+    sheet1.range("Q1:" + endColumn + "1").style("fill", "f6f9d4");
+    // range.style("border", true);
+    sheet1.freezePanes(1, 1);
+    return workbook.outputAsync().then((res) => {
+      saveAs(res, `${nameFile}.xlsx`);
+    });
+  });
+}
+async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
+  var data = value.data;
+  var data_header = value.header;
+  XlsxPopulate.fromBlankAsync().then(async (workbook) => {
+    const sheet1 = workbook.sheet(0);
+    const sheetData = getSheetData(data, data_header);
+    const totalColumns = sheetData[0].length;
+
+    sheet1.cell("A1").value(sheetData);
+
+    const range = sheet1.usedRange();
+    const endColumn = String.fromCharCode(64 + totalColumns);
+    sheet1.row(1).style("bold", true);
+    const listColumn = [
+      {
+        name: "A",
+        width: 14,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "B",
+        width: 9,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "C",
+        width: 9,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "D",
+        width: 9,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "E",
+        width: 8,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "F",
+        width: 10,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "G",
+        width: 7,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "H",
+        width: 7,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "I",
+        width: 5,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "J",
+        width: 7,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "K",
+        width: 7,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "L",
+        width: 8,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "M",
+        width: 8,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "N",
+        width: 8,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "O",
+        width: 8,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "P",
+        width: 8,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "Q",
+        width: 9,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "R",
+        width: 7,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "S",
+        width: 7,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "T",
+        width: 10,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "U",
+        width: 9,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "V",
+        width: 9,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "W",
+        width: 12,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+    ];
+    for (let column of listColumn) {
+      sheet1.column(column.name).style(column.style);
+      sheet1.column(column.name).width(column.width);
+    }
+
+    sheet1.range("A1:" + endColumn + "1").style({
+      horizontalAlignment: "center",
+      verticalAlignment: "center",
+      wrapText: true,
+    });
+    const row = sheet1.row(1);
+    row.height(50);
+
+    // //Chuyển màu required
+    // const cell = workbook.sheet(0).cell("A1");
+    // cell.value(new RichText());
+    // cell
+    //   .value()
+    //   .add("Tên sản phẩm", {
+    //     width: 14,
+    //     fontSize: 8,
+    //     shrinkToFit: true,
+    //     wrapText: true,
+    //     bold: true,
+    //   })
+    //   .add("(*)", {
+    //     width: 14,
+    //     fontSize: 8,
+    //     shrinkToFit: true,
+    //     wrapText: true,
+    //     fontColor: "FF0000",
+    //   });
+
+    // //
     sheet1.range("A1:P1").style("fill", "deebf7");
     sheet1.range("Q1:" + endColumn + "1").style("fill", "f6f9d4");
     // range.style("border", true);
