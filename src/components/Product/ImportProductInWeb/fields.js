@@ -1,5 +1,5 @@
 export const fields = [
-  "Tên sản phẩm",
+  "Tên sản phẩm(*)",
   "Mã BARCODE",
   "Theo dõi kho (Có/Không)",
   "Vị trí kệ hàng",
@@ -14,12 +14,12 @@ export const fields = [
   "Trạng thái (Ẩn/Hiện)",
   "Tiêu đề SEO",
   "Miêu tả SEO",
-  "Phân loại (Có/Không)",
+  "Phân loại(Có/Không)(*)",
   "Phân loại chính",
   "Phân loại phụ",
   "DS phân loại",
   "Giá bán lẻ",
   "Giá nhập",
-  "Mã SKU",
+  "Mã SKU(*)",
   "Hình ảnh",
 ];

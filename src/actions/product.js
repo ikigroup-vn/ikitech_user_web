@@ -706,22 +706,6 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
       );
 
       range.dataValidation(column.data);
-
-      // Handle beforeChange event for column J
-      // if (column.title === "J") {
-      //   range.forEach((cell) => {
-      //     cell?._row?._cells.forEach((cellInfo) => {
-      //       cellInfo.input(function (newValue) {
-      //         // Check if the new value is not a number
-      //         if (isNaN(Number(newValue))) {
-      //           // Reset the value to the old value
-      //           cellInfo.value(cellInfo.oldValue());
-      //           console.log("Chỉ được phép nhập số");
-      //         }
-      //       });
-      //     });
-      //   });
-      // }
     }
 
     //Chuyển màu required
@@ -778,12 +762,494 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
     // //
     sheet1.range("A1:P1").style("fill", "deebf7");
     sheet1.range("Q1:" + endColumn + "1").style("fill", "f6f9d4");
-    // range.style("border", true);
+    range.style("border", true);
     sheet1.freezePanes(1, 1);
+
+    //Sheet 2 hướng dẫn
+    sheetTemplate(workbook, endColumn, listColumn);
+
     return workbook.outputAsync().then((res) => {
       saveAs(res, `${nameFile}.xlsx`);
     });
   });
+}
+
+function sheetTemplate(workbook, endColumn, listColumn) {
+  const sheetTemplate = workbook.addSheet("Form mẫu");
+  sheetTemplate.name("Form mẫu");
+  sheetTemplate.row(1).style("bold", true);
+
+  const data_sheet2 = [
+    [
+      "Tên sản phẩm",
+      "Mã BARCODE",
+      "Theo dõi kho (Có/Không)",
+      "Vị trí kệ hàng",
+      "Danh mục",
+      "Thuộc tính",
+      "Thuộc tính tìm kiếm",
+      "Cân nặng",
+      "Hoa hồng CTV (%/VND)",
+      "Xu cho đại lý",
+      "Mô tả",
+      "Nội dung cho CTV",
+      "Trạng thái (Ẩn/Hiện)",
+      "Tiêu đề SEO",
+      "Miêu tả SEO",
+      "Phân loại(Có/Không)",
+      "Phân loại chính",
+      "Phân loại phụ",
+      "DS phân loại",
+      "Giá bán lẻ",
+      "Giá nhập",
+      "Mã SKU",
+      "Hình ảnh",
+    ],
+    [
+      "Set Vest thanh lịch",
+      "18852424",
+      "Có",
+      "10",
+      "Thời trang[Công sở,Thanh lịch];Đồ bộ",
+      "Xuất xứ:Việt Nam;Đối tượng sử dụng:Phụ nữ 30-50 tuổi",
+      "Vest nữ;Đồ công sở",
+      "800",
+      "20(%)",
+      "100",
+      "Thiết kế được biến tấu từ áo khoác cổ hai ve cổ điển bên cạnh dáng croptop trẻ trung, hiện đại.",
+      "",
+      "Hiện",
+      "",
+      "",
+      "Có",
+      "Màu",
+      "Kích thước",
+      "",
+      "",
+      "",
+      "",
+      "https://prnt.sc/n20h41bhBi34",
+    ],
+    [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Đen,S",
+      "1100000",
+      "800000",
+      "SH8542615",
+      "",
+    ],
+    [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Đen,M",
+      "1100000",
+      "800000",
+      "SH8542616",
+      "",
+    ],
+    [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Be,S",
+      "1100000",
+      "800000",
+      "SH8542617",
+      "",
+    ],
+    [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "Be,M",
+      "1100000",
+      "800000",
+      "SH8542618",
+      "",
+    ],
+    [
+      "Kem Rửa Mặt Có Hạt Sạch Sâu Oxy Deep Wash (100g)",
+      "58423621",
+      "Không",
+      "",
+      "Mỹ phẩm[Sữa rửa mặt]",
+      "Xuất xứ:Việt Nam",
+      "Kem rửa mặt",
+      "50",
+      "1000(VND)",
+      "10",
+      "Thiết kế hiện đại.",
+      "",
+      "Ẩn",
+      "",
+      "",
+      "Không",
+      "",
+      "",
+      "",
+      "100000",
+      "75000",
+      "81815272",
+      "https://salt.tikicdn.com/cache/280x280/ts/product/29/83/85/073a118a19ecfdf7e84bbbf2be8ec025.jpg?new-width=320&image-type=webp",
+    ],
+  ];
+
+  sheetTemplate.cell("A1").value(data_sheet2);
+
+  for (let column of listColumn) {
+    sheetTemplate.column(column.name).style(column.style);
+    sheetTemplate.column(column.name).width(column.width);
+  }
+
+  //Chuyển màu required
+  const cellA1Template = sheetTemplate.cell("A1");
+  cellA1Template.value(new RichText());
+  cellA1Template
+    .value()
+    .add("Tên sản phẩm", {
+      bold: true,
+      fontSize: 8,
+    })
+    .add("(*)", {
+      bold: true,
+      fontSize: 8,
+      fontColor: "FF0000",
+    });
+
+  const cellP1Template = sheetTemplate.cell("P1");
+  cellP1Template.value(new RichText());
+  cellP1Template
+    .value()
+    .add("Phân loại(Có/Không)", {
+      bold: true,
+      fontSize: 8,
+    })
+    .add("(*)", {
+      bold: true,
+      fontSize: 8,
+      fontColor: "FF0000",
+    });
+
+  const cellV1Template = sheetTemplate.cell("V1");
+  cellV1Template.value(new RichText());
+  cellV1Template
+    .value()
+    .add("Mã SKU", {
+      bold: true,
+      fontSize: 8,
+    })
+    .add("(*)", {
+      bold: true,
+      fontSize: 8,
+      fontColor: "FF0000",
+    });
+
+  sheetTemplate.range("A1:" + endColumn + "1").style({
+    horizontalAlignment: "center",
+    verticalAlignment: "center",
+    wrapText: true,
+  });
+  const row2 = sheetTemplate.row(1);
+  row2.height(50);
+
+  const range = sheetTemplate.usedRange();
+  range.style("border", true);
+  sheetTemplate.range("A1:P1").style("fill", "deebf7");
+  sheetTemplate.range("Q1:" + endColumn + "1").style("fill", "f6f9d4");
+
+  sheetTemplate.cell("B12").value(new RichText()).value().add("Lưu ý", {
+    bold: true,
+    fontSize: 10,
+    fontColor: "FF0000",
+  });
+
+  // Tạo ô, gán giá trị và merge
+
+  const noteRange = [
+    {
+      range: "B14:D15",
+      value: "Trường/Cột",
+      style: {
+        fill: "9dc3e6",
+        bold: true,
+        horizontalAlignment: "center",
+        verticalAlignment: "center",
+        fontSize: 14,
+        border: true,
+      },
+    },
+    {
+      range: "E14:I15",
+      value: "Form giá trị nhập vào",
+      style: {
+        fill: "9dc3e6",
+        bold: true,
+        horizontalAlignment: "center",
+        verticalAlignment: "center",
+        fontSize: 14,
+        border: true,
+      },
+    },
+    {
+      range: "J14:N15",
+      value: "Ví dụ",
+      style: {
+        fill: "9dc3e6",
+        bold: true,
+        horizontalAlignment: "center",
+        verticalAlignment: "center",
+        fontSize: 14,
+        border: true,
+      },
+    },
+    {
+      range: "B16:D16",
+      value: "Danh mục",
+      style: {
+        horizontalAlignment: "center",
+        verticalAlignment: "center",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "E16:I16",
+      value: "DanhMucCha1[Con1,Con2];DanhMucCha2[Con1,Con2];DanhMucCha3",
+      style: {
+        horizontalAlignment: "left",
+        verticalAlignment: "top",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "J16:N16",
+      value: "Váy[Váy thu đông,Váy hè];Mỹ phẩm[Son,Sữa rửa mặt];Đồ bộ thể thao",
+      style: {
+        horizontalAlignment: "left",
+        verticalAlignment: "top",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "B17:D17",
+      value: "Thuộc tính",
+      style: {
+        horizontalAlignment: "center",
+        verticalAlignment: "center",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "E17:I17",
+      value:
+        "ThuocTinh1_Name:ThuocTinh1_Value;ThuocTinh2_Name:ThuocTinh2_Value",
+      style: {
+        horizontalAlignment: "left",
+        verticalAlignment: "top",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "J17:N17",
+      value: "Xuất xứ:Việt Nam;Đối tượng sử dụng:Người tập gym",
+      style: {
+        horizontalAlignment: "left",
+        verticalAlignment: "top",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "B18:D18",
+      value: "Thuộc tính tìm kiếm",
+      style: {
+        horizontalAlignment: "center",
+        verticalAlignment: "center",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "E18:I18",
+      value: "ThuocTinhTimKiem1;ThuocTinhTimKiem2;ThuocTinhTimKiem3",
+      style: {
+        horizontalAlignment: "left",
+        verticalAlignment: "top",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "J18:N18",
+      value: "Áo chống nắng;Xe tải ben;Bàn làm việc",
+      style: {
+        horizontalAlignment: "left",
+        verticalAlignment: "top",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "B19:D20",
+      value: "Hoa hồng CTV(%/VND)",
+      style: {
+        horizontalAlignment: "center",
+        verticalAlignment: "center",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "E19:I19",
+      value: "Tylephantram(%)",
+      style: {
+        horizontalAlignment: "left",
+        verticalAlignment: "top",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "E20:I20",
+      value: "Giatri(VND)",
+      style: {
+        horizontalAlignment: "left",
+        verticalAlignment: "top",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "J19:N19",
+      value: "20(%)",
+      style: {
+        horizontalAlignment: "left",
+        verticalAlignment: "top",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "J20:N20",
+      value: "200000(VND)",
+      style: {
+        horizontalAlignment: "left",
+        verticalAlignment: "top",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "B21:D22",
+      value: "Danh sách phân loại",
+      style: {
+        horizontalAlignment: "center",
+        verticalAlignment: "center",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "E21:I22",
+      value: "PhanLoaiChinh_Value, PhanLoaiPhu_Value",
+      style: {
+        horizontalAlignment: "left",
+        verticalAlignment: "top",
+        fontSize: 12,
+        border: true,
+      },
+    },
+    {
+      range: "J21:N22",
+      value: "Đen,M",
+      style: {
+        horizontalAlignment: "left",
+        verticalAlignment: "top",
+        fontSize: 12,
+        border: true,
+      },
+    },
+  ];
+
+  for (let item of noteRange) {
+    const mergedRange = sheetTemplate.range(item.range);
+    mergedRange.merged(true);
+    mergedRange.value(item.value);
+    mergedRange.style(item.style);
+    sheetTemplate.row(16).height(50);
+    sheetTemplate.row(17).height(50);
+    sheetTemplate.row(18).height(50);
+    sheetTemplate.row(19).height(25);
+    sheetTemplate.row(20).height(25);
+    sheetTemplate.row(21).height(50);
+  }
 }
 
 async function saveAsSheetInventoryExcel(value, nameFile = "DS_kiem_kho") {
@@ -1204,7 +1670,7 @@ export const fetchAllListProduct = (store_code, search) => {
                                 checkedDistributeExist === false &&
                                 checkedDistributeExist2 === false
                               ) {
-                                newItem["Phân loại (Có/Không)"] = "Có";
+                                newItem["Phân loại(Có/Không)"] = "Có";
                                 newItem["Phân loại chính"] =
                                   typeDistributeOrigin;
                                 newItem["Phân loại phụ"] = typeDistributeSub;
@@ -1275,7 +1741,7 @@ export const fetchAllListProduct = (store_code, search) => {
                             }
                           } else {
                             if (index == 0) {
-                              newItem["Phân loại (Có/Không)"] = "Có";
+                              newItem["Phân loại(Có/Không)"] = "Có";
                               newItem["Phân loại chính"] = typeDistributeOrigin;
                               newItem["Phân loại phụ"] = typeDistributeSub;
                               newItem["DS phân loại"] = "";
@@ -1334,7 +1800,7 @@ export const fetchAllListProduct = (store_code, search) => {
                         }
                       }
                     } else {
-                      newItem["Phân loại (Có/Không)"] = "Không";
+                      newItem["Phân loại(Có/Không)"] = "Không";
                       newItem["Phân loại chính"] = "";
                       newItem["Phân loại phụ"] = "";
                       newItem["DS phân loại"] = "";
@@ -1359,7 +1825,7 @@ export const fetchAllListProduct = (store_code, search) => {
                   header.push(key);
                 });
               }
-              saveAsExcel({ data: newArray, header: header });
+              saveAsExcelProduct({ data: newArray, header: header });
             }
           }
         }
@@ -1435,7 +1901,7 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                               checkedDistributeExist === false &&
                               checkedDistributeExist2 === false
                             ) {
-                              newItem["Phân loại (Có/Không)"] = "Có";
+                              newItem["Phân loại(Có/Không)"] = "Có";
                               newItem["DS phân loại"] = "";
                               newItem["Giá bán lẻ"] = "";
                               newItem["Giá vốn"] = "";
@@ -1494,7 +1960,7 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                           }
                         } else {
                           if (index == 0) {
-                            newItem["Phân loại (Có/Không)"] = "Có";
+                            newItem["Phân loại(Có/Không)"] = "Có";
                             newItem["DS phân loại"] = "";
                             newItem["Giá bán lẻ"] = "";
                             newItem["Giá vốn"] = "";
@@ -1546,7 +2012,7 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                       }
                     }
                   } else {
-                    newItem["Phân loại (Có/Không)"] = "Không";
+                    newItem["Phân loại(Có/Không)"] = "Không";
                     newItem["DS phân loại"] = "";
                     newItem["Giá bán lẻ"] = `${item.price ? item.price : "0"}`;
                     newItem[
