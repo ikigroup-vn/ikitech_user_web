@@ -141,12 +141,12 @@ class ModalUpdate extends Component {
                   </div>
                 </div> */}
                 <div class="form-group">
-                  <label for="product_name">Đơn vị gửi </label>
+                  <label for="product_name">BranchName </label>
                   <input
                     type="text"
                     class="form-control"
                     id="sender"
-                    placeholder="Nhập đơn vị gửi"
+                    placeholder="Nhập BranchName"
                     autoComplete="off"
                     value={sender}
                     onChange={this.onChange}
