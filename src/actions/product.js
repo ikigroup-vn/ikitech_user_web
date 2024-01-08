@@ -632,13 +632,13 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
           showInputMessage: true,
           prompt: "Chỉ được phép nhập số",
           promptTitle: "Chú ý",
-          customFormula: function (input) {
-            const isNumber = !isNaN(Number(input));
-            if (!isNumber) {
-              alert("Chỉ được phép nhập số");
-            }
-            return isNumber;
-          },
+          // customFormula: function (input) {
+          //   const isNumber = !isNaN(Number(input));
+          //   if (!isNumber) {
+          //     alert("Chỉ được phép nhập số");
+          //   }
+          //   return isNumber;
+          // },
         },
       },
       {
