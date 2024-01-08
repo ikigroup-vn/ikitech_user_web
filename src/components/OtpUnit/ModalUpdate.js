@@ -197,10 +197,13 @@ class ModalUpdate extends Component {
                 </div>
                 {is_order ? (
                   <div class="form-group">
-                    <label for="product_name">
-                      Nội dung đơn hàng ( {`{name}, {order_code}, {total}`} là
-                      bắt buộc trong nội dung )
-                    </label>
+                    <label for="product_name">Nội dung đơn hàng</label>
+                    <p
+                      style={{
+                        fontStyle: "italic",
+                        color: "#787878",
+                      }}
+                    >{`{name} là tên khách hàng, {order_code} là mã đơn hàng, {total} là tổng tiền hàng`}</p>
                     <textarea
                       type="text"
                       class="form-control"

@@ -364,6 +364,7 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
     const sheetData = getSheetData(data, data_header);
     const totalColumns = sheetData[0].length;
 
+    sheet1.name("DS sản phẩm");
     sheet1.cell("A1").value(sheetData);
 
     const range = sheet1.usedRange();
@@ -444,7 +445,7 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
       },
       {
         name: "I",
-        width: 5,
+        width: 7,
         style: {
           fontSize: 8,
           shrinkToFit: true,
@@ -463,6 +464,7 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
       {
         name: "K",
         width: 7,
+        height: 10,
         style: {
           fontSize: 8,
           shrinkToFit: true,
@@ -507,7 +509,7 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
       },
       {
         name: "P",
-        width: 8,
+        width: 11,
         style: {
           fontSize: 8,
           shrinkToFit: true,
@@ -583,6 +585,188 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
       sheet1.column(column.name).width(column.width);
     }
 
+    for (var i = 2; i < data.length + 1; i++) {
+      const row = sheet1.row(i);
+      row.height(20);
+    }
+
+    const columnsToApplyValidation = [
+      {
+        title: "A",
+        data: {
+          type: "string",
+          allowBlank: false,
+          showInputMessage: true,
+          prompt: "Tên sản phẩm là trường bắt buộc",
+          promptTitle: "Chú ý",
+        },
+      },
+      {
+        title: "C",
+        data: {
+          type: "list",
+          prompt: "Chỉ được chọn giá trị trong Droplist",
+          promptTitle: "Chú ý",
+          allowBlank: false,
+          showInputMessage: true,
+          operator: "String",
+          formula1: '"Có","Không"',
+          formula2: "String",
+        },
+      },
+      {
+        title: "I",
+        data: {
+          type: "string",
+          allowBlank: false,
+          showInputMessage: true,
+          prompt: "Nếu là %(0% <= Hoa hồng CTV <= 100%)",
+          promptTitle: "Chú ý",
+        },
+      },
+      {
+        title: "J",
+        data: {
+          type: "custom", // Sử dụng "custom" để kiểm tra tùy chỉnh
+          allowBlank: false,
+          showInputMessage: true,
+          prompt: "Chỉ được phép nhập số",
+          promptTitle: "Chú ý",
+          customFormula: function (input) {
+            const isNumber = !isNaN(Number(input));
+            if (!isNumber) {
+              alert("Chỉ được phép nhập số");
+            }
+            return isNumber;
+          },
+        },
+      },
+      {
+        title: "M",
+        data: {
+          type: "list",
+          prompt: "Trạng thái sản phẩm chỉ được chọn theo giá trị Droplist",
+          promptTitle: "Chú ý",
+          allowBlank: false,
+          showInputMessage: true,
+          operator: "String",
+          formula1: '"Hiện","Ẩn"',
+          formula2: "String",
+        },
+      },
+      {
+        title: "P",
+        data: {
+          type: "list",
+          prompt: "Trường bắt buộc, người dùng phải chọn giá trị",
+          promptTitle: "Chú ý",
+          allowBlank: false,
+          showInputMessage: true,
+          operator: "String",
+          formula1: '"Có","Không"',
+          formula2: "String",
+        },
+      },
+      {
+        title: "T",
+        data: {
+          type: "string",
+          allowBlank: false,
+          showInputMessage: true,
+          prompt: "Chỉ được phép nhập ký tự số",
+          promptTitle: "Chú ý",
+        },
+      },
+      {
+        title: "U",
+        data: {
+          type: "string",
+          allowBlank: false,
+          showInputMessage: true,
+          prompt: "Chỉ được phép nhập ký tự số",
+          promptTitle: "Chú ý",
+        },
+      },
+      {
+        title: "V",
+        data: {
+          type: "string",
+          allowBlank: false,
+          showInputMessage: true,
+          prompt:
+            "Trường bắt buộc, phải nhập mã sku. Nếu có phân loại thì phải nhập mã sku theo phân loại",
+          promptTitle: "Chú ý",
+        },
+      },
+    ];
+
+    for (const column of columnsToApplyValidation) {
+      const range = sheet1.range(
+        `${column.title}2:${column.title}` + data?.length + 1
+      );
+
+      range.dataValidation(column.data);
+
+      // Handle beforeChange event for column J
+      // if (column.title === "J") {
+      //   range.forEach((cell) => {
+      //     cell?._row?._cells.forEach((cellInfo) => {
+      //       cellInfo.input(function (newValue) {
+      //         // Check if the new value is not a number
+      //         if (isNaN(Number(newValue))) {
+      //           // Reset the value to the old value
+      //           cellInfo.value(cellInfo.oldValue());
+      //           console.log("Chỉ được phép nhập số");
+      //         }
+      //       });
+      //     });
+      //   });
+      // }
+    }
+
+    //Chuyển màu required
+    const cellA1 = workbook.sheet(0).cell("A1");
+    cellA1.value(new RichText());
+    cellA1
+      .value()
+      .add("Tên sản phẩm", {
+        bold: true,
+        fontSize: 8,
+      })
+      .add("(*)", {
+        bold: true,
+        fontSize: 8,
+        fontColor: "FF0000",
+      });
+
+    const cellP1 = workbook.sheet(0).cell("P1");
+    cellP1.value(new RichText());
+    cellP1
+      .value()
+      .add("Phân loại(Có/Không)", {
+        bold: true,
+        fontSize: 8,
+      })
+      .add("(*)", {
+        bold: true,
+        fontSize: 8,
+        fontColor: "FF0000",
+      });
+
+    const cellV1 = workbook.sheet(0).cell("V1");
+    cellV1.value(new RichText());
+    cellV1
+      .value()
+      .add("Mã SKU", {
+        bold: true,
+        fontSize: 8,
+      })
+      .add("(*)", {
+        bold: true,
+        fontSize: 8,
+        fontColor: "FF0000",
+      });
+
     sheet1.range("A1:" + endColumn + "1").style({
       horizontalAlignment: "center",
       verticalAlignment: "center",
@@ -590,26 +774,6 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
     });
     const row = sheet1.row(1);
     row.height(50);
-
-    // //Chuyển màu required
-    // const cell = workbook.sheet(0).cell("A1");
-    // cell.value(new RichText());
-    // cell
-    //   .value()
-    //   .add("Tên sản phẩm", {
-    //     width: 14,
-    //     fontSize: 8,
-    //     shrinkToFit: true,
-    //     wrapText: true,
-    //     bold: true,
-    //   })
-    //   .add("(*)", {
-    //     width: 14,
-    //     fontSize: 8,
-    //     shrinkToFit: true,
-    //     wrapText: true,
-    //     fontColor: "FF0000",
-    //   });
 
     // //
     sheet1.range("A1:P1").style("fill", "deebf7");
