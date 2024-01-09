@@ -694,11 +694,18 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
     ];
 
     for (const column of columnsToApplyValidation) {
-      const range = sheet1.range(
-        `${column.title}2:${column.title}` + data?.length + 1
-      );
+      try {
+        const range = sheet1.range(
+          `${column.title}2:${column.title}` + data.length + 1
+        );
 
-      range.dataValidation(column.data);
+        range.dataValidation(column.data);
+      } catch (error) {
+        console.error(
+          `Lỗi khi áp dụng kiểm tra cho cột ${column.title}:`,
+          error
+        );
+      }
     }
 
     //Chuyển màu required
