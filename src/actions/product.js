@@ -608,7 +608,7 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
           showDropDown: true,
           prompt: "Chỉ được chọn giá trị trong Droplist",
           promptTitle: "Chú ý",
-          // allowBlank: false,
+          allowBlank: false,
           // showInputMessage: true,
           showErrorMessage: true,
           errorTitle: "Chú ý",
