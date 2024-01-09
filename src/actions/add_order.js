@@ -417,53 +417,23 @@ export const subQuantityProduct = (store_code, data) => {
 //     });
 //   };
 // };
-export const fetchAllVoucher = (store_code) => {
+export const fetchAllVoucher = (store_code, params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
     orderApi
-      .fetchAllVoucher(store_code)
+      .fetchAllVoucher(store_code, params)
       .then((res) => {
-        console.log("aaaaaa");
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
-        orderApi
-          .fetchAllVoucher(store_code)
-          .then((res) => {
-            if (res.data.code !== 401)
-              dispatch({
-                type: Types.FETCH_ALL_VOUCHER_PRODUCT,
-                data: res.data.data,
-              });
-            // dispatch({
-            //   type: Types.ALERT_UID_STATUS,
-            //   alert: {
-            //     type: "success",
-            //     title: "Thành công ",
-            //     disable: "show",
-            //     content: "loi",
-            //   },
-            // });
-          })
-          .catch(function (error) {
-            dispatch({
-              type: Types.SHOW_LOADING,
-              loading: "hide",
-            });
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "danger",
-                title: "Lỗi",
-                disable: "show",
-                content: error?.response?.data?.msg,
-              },
-            });
-          });
+        dispatch({
+          type: Types.FETCH_ALL_VOUCHER_PRODUCT,
+          data: res.data.data,
+        });
       })
       .catch(function (error) {
         dispatch({
