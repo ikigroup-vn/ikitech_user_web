@@ -403,7 +403,7 @@ class PostOrder extends Component {
       orderFrom == OrderFrom.ORDER_FROM_WEB;
 
     this.props.fetchAllPertion(this.props.match.params.store_code);
-    this.props.fetchAllVoucher(this.props.match.params.store_code);
+    // this.props.fetchAllVoucher(this.props.match.params.store_code);
     this.props.fetchAllBadge(this.props.match.params.store_code, branch_id);
     this.props.fetchAllCategoryP(this.props.match.params.store_code);
 
@@ -2154,8 +2154,8 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchVoucher: (store_code, branch_id, id_cart, data) => {
       dispatch(posAction.fetchVoucher(store_code, branch_id, id_cart, data));
     },
-    fetchAllVoucher: (store_code) => {
-      dispatch(OrderAction.fetchAllVoucher(store_code));
+    fetchAllVoucher: (store_code, params) => {
+      dispatch(OrderAction.fetchAllVoucher(store_code, params));
     },
     fetchAllBadge: (store_code, branch_id) => {
       dispatch(notificationAction.fetchAllBadge(store_code, branch_id));

@@ -247,8 +247,6 @@ class PanelBottom extends Component {
       !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
       nextProps.oneCart !== undefined
     ) {
-      console.log("nextProps.oneCart:: ", nextProps.oneCart);
-
       if (nextProps.oneCart?.province != null) {
         this.props.fetchPlaceDistrict(nextProps.oneCart.province);
       }
@@ -258,6 +256,15 @@ class PanelBottom extends Component {
 
       const customer = nextProps.oneCart?.customer;
       const oneCart = nextProps.oneCart;
+      console.log("nextProps.oneCart:: ", nextProps.oneCart);
+      var { store_code, listVoucher, fetchAllVoucher } = this.props;
+
+      let params = "";
+      if (oneCart?.customer?.id) {
+        params = `customer_id=${oneCart?.customer?.id}`;
+      }
+
+      fetchAllVoucher(store_code, params);
 
       this.setState({
         ...this.state,
@@ -1698,6 +1705,7 @@ const mapStateToProps = (state) => {
     isFromPosAndSave: state.customerReducers.customer.isFromPosAndSave,
     oneCart: state.posReducers.pos_reducer.oneCart,
     listCombo: state.orderReducers.order_product.listCombo,
+    listVoucher: state.orderReducers.order_product.listVoucher,
     category_product: state.categoryPReducers.category_product.allCategoryP,
     products: state.productReducers.product.allProduct,
   };
@@ -1722,6 +1730,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllCombo: (store_code) => {
       dispatch(OrderAction.fetchAllCombo(store_code));
+    },
+    fetchAllVoucher: (store_code, params) => {
+      dispatch(OrderAction.fetchAllVoucher(store_code, params));
     },
     fetchAllCustomer: (id, page, params) => {
       dispatch(customerAction.fetchAllCustomer(id, page, params));
