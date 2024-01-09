@@ -601,19 +601,20 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
           promptTitle: "Chú ý",
         },
       },
-      // {
-      //   title: "C",
-      //   data: {
-      //     type: "list",
-      //     prompt: "Chỉ được chọn giá trị trong Droplist",
-      //     promptTitle: "Chú ý",
-      //     allowBlank: false,
-      //     showInputMessage: true,
-      //     operator: "String",
-      //     formula1: '"Có","Không"',
-      //     formula2: "String",
-      //   },
-      // },
+      {
+        title: "C",
+        data: {
+          type: "list",
+          showDropDown: true,
+          prompt: "Chỉ được chọn giá trị trong Droplist",
+          promptTitle: "Chú ý",
+          allowBlank: false,
+          showInputMessage: true,
+          operator: "Between",
+          formula1: '"Có","Không"',
+          formula2: '"Có","Không"',
+        },
+      },
       // {
       //   title: "I",
       //   data: {
