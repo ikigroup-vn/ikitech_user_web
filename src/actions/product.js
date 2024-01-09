@@ -609,7 +609,7 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
           prompt: "Chỉ được chọn giá trị trong Droplist",
           promptTitle: "Chú ý",
           allowBlank: false,
-          // showInputMessage: true,
+          showInputMessage: true,
           showErrorMessage: true,
           errorTitle: "Chú ý",
           error: "Chỉ được chọn giá trị trong Droplist",
@@ -618,83 +618,90 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
           formula2: '"Có, Không"',
         },
       },
-      // {
-      //   title: "I",
-      //   data: {
-      //     type: "string",
-      //     allowBlank: false,
-      //     showInputMessage: true,
-      //     prompt: "Nếu là %(0% <= Hoa hồng CTV <= 100%)",
-      //     promptTitle: "Chú ý",
-      //   },
-      // },
-      // {
-      //   title: "J",
-      //   data: {
-      //     type: "string",
-      //     allowBlank: false,
-      //     showInputMessage: true,
-      //     prompt: "Chỉ được phép nhập số",
-      //     promptTitle: "Chú ý",
-      //   },
-      // },
-      // {
-      //   title: "M",
-      //   data: {
-      //     type: "list",
-      //     prompt: "Trạng thái sản phẩm chỉ được chọn theo giá trị Droplist",
-      //     promptTitle: "Chú ý",
-      //     allowBlank: false,
-      //     showInputMessage: true,
-      //     operator: "String",
-      //     formula1: '"Hiện","Ẩn"',
-      //     formula2: "String",
-      //   },
-      // },
-      // {
-      //   title: "P",
-      //   data: {
-      //     type: "list",
-      //     prompt: "Trường bắt buộc, người dùng phải chọn giá trị",
-      //     promptTitle: "Chú ý",
-      //     allowBlank: false,
-      //     showInputMessage: true,
-      //     operator: "String",
-      //     formula1: '"Có","Không"',
-      //     formula2: "String",
-      //   },
-      // },
-      // {
-      //   title: "T",
-      //   data: {
-      //     type: "string",
-      //     allowBlank: false,
-      //     showInputMessage: true,
-      //     prompt: "Chỉ được phép nhập ký tự số",
-      //     promptTitle: "Chú ý",
-      //   },
-      // },
-      // {
-      //   title: "U",
-      //   data: {
-      //     type: "string",
-      //     allowBlank: false,
-      //     showInputMessage: true,
-      //     prompt: "Chỉ được phép nhập ký tự số",
-      //     promptTitle: "Chú ý",
-      //   },
-      // },
-      // {
-      //   title: "V",
-      //   data: {
-      //     type: "string",
-      //     allowBlank: false,
-      //     showInputMessage: true,
-      //     prompt:
-      //       "Trường bắt buộc, phải nhập mã sku. Nếu có phân loại thì phải nhập mã sku theo phân loại",
-      //     promptTitle: "Chú ý",
-      //   },
-      // },
+      {
+        title: "I",
+        data: {
+          type: "string",
+          allowBlank: false,
+          showInputMessage: true,
+          prompt: "Nếu là %(0% <= Hoa hồng CTV <= 100%)",
+          promptTitle: "Chú ý",
+        },
+      },
+      {
+        title: "J",
+        data: {
+          type: "string",
+          allowBlank: false,
+          showInputMessage: true,
+          prompt: "Chỉ được phép nhập số",
+          promptTitle: "Chú ý",
+        },
+      },
+      {
+        title: "M",
+        data: {
+          type: "list",
+          showDropDown: true,
+          prompt: "Trạng thái sản phẩm chỉ được chọn theo giá trị Droplist",
+          promptTitle: "Chú ý",
+          allowBlank: false,
+          showInputMessage: true,
+          showErrorMessage: true,
+          errorTitle: "Chú ý",
+          error: "Chỉ được chọn giá trị trong Droplist",
+          operator: "between",
+          formula1: '"Hiện, Ẩn"',
+          formula2: '"Hiện, Ẩn"',
+        },
+      },
+      {
+        title: "P",
+        data: {
+          type: "list",
+          showDropDown: true,
+          prompt: "Trường bắt buộc, người dùng phải chọn giá trị",
+          promptTitle: "Chú ý",
+          allowBlank: false,
+          showInputMessage: true,
+          showErrorMessage: true,
+          errorTitle: "Chú ý",
+          error: "Chỉ được chọn giá trị trong Droplist",
+          formula1: '"Có, Không"',
+          formula2: '"Có, Không"',
+        },
+      },
+      {
+        title: "T",
+        data: {
+          type: "string",
+          allowBlank: false,
+          showInputMessage: true,
+          prompt: "Chỉ được phép nhập ký tự số",
+          promptTitle: "Chú ý",
+        },
+      },
+      {
+        title: "U",
+        data: {
+          type: "string",
+          allowBlank: false,
+          showInputMessage: true,
+          prompt: "Chỉ được phép nhập ký tự số",
+          promptTitle: "Chú ý",
+        },
+      },
+      {
+        title: "V",
+        data: {
+          type: "string",
+          allowBlank: false,
+          showInputMessage: true,
+          prompt:
+            "Trường bắt buộc, phải nhập mã sku. Nếu có phân loại thì phải nhập mã sku theo phân loại",
+          promptTitle: "Chú ý",
+        },
+      },
     ];
 
     for (const column of columnsToApplyValidation) {
