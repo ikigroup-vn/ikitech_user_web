@@ -231,9 +231,7 @@ class Table extends Component {
                 />
               </td>
               <td>{data.customer.name}</td>
-              <td>
-                {data.customer.phone_number}
-              </td>
+              <td>{data.customer.phone_number}</td>
               <td>
                 <div
                   className="collaborators_balance"
@@ -245,12 +243,14 @@ class Table extends Component {
                   </span>
                 </div>
               </td>
-
-              <td><span
-                className="total_customers primary"
-                onClick={() => this.handleShowSidebar(data)}
-              >{data?.customer?.referral_phone_number || null}</span></td>
-              
+              <td>
+                <span
+                  className="total_customers primary"
+                  onClick={() => this.handleShowSidebar(data)}
+                >
+                  {data?.customer?.referral_phone_number || null}
+                </span>
+              </td>
               <td>
                 <Link
                   style={{ margin: "2px 0" }}
@@ -285,7 +285,7 @@ class Table extends Component {
                         Tên chủ tài khoản:{" "}
                         <span id="user_tel">{data.account_name}</span>
                       </p>
-                     
+
                       <p
                         class="sale_user_label"
                         style={{
@@ -324,7 +324,17 @@ class Table extends Component {
                             </button>
                             <button
                               type="button"
-                              style={{ width: "25px" }}
+                              style={{
+                                width: "25px",
+                                pointerEvents:
+                                  !data.balance || Number(data.balance) <= 0
+                                    ? "none"
+                                    : "initial",
+                                opacity:
+                                  !data.balance || Number(data.balance) <= 0
+                                    ? 0.7
+                                    : 1,
+                              }}
                               className=" btn-outline-danger btn-exploder"
                               onClick={() =>
                                 this.handleOpenModalChangeBalance(data, true)

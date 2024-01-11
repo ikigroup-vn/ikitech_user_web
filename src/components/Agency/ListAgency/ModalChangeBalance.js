@@ -70,13 +70,29 @@ class ModalChangeBalance extends Component {
   handleChangeBalance = (e) => {
     const name = e.target.name;
     const value = e.target.value;
+    const _value = value?.toString()?.replace(/\./g, "");
     const { balance } = this.state;
-    this.setState({
-      balance: {
-        ...balance,
-        [name]: name === "money" ? formatNumberV2(value) : value,
-      },
-    });
+    const { agencySelectedForChangeBalance, isSub } = this.props;
+
+    if (name === "money") {
+      this.setState({
+        balance: {
+          ...balance,
+          [name]:
+            Number(_value) > Number(agencySelectedForChangeBalance.balance) &&
+            isSub
+              ? formatNumberV2(Number(agencySelectedForChangeBalance.balance))
+              : formatNumberV2(value),
+        },
+      });
+    } else {
+      this.setState({
+        balance: {
+          ...balance,
+          [name]: value,
+        },
+      });
+    }
   };
   handleSubmitChangeBalance = (e) => {
     const { balance } = this.state;
@@ -105,6 +121,10 @@ class ModalChangeBalance extends Component {
 
   render() {
     const { agencySelectedForChangeBalance, isSub } = this.props;
+    console.log(
+      "🚀 ~ ModalChangeBalance ~ render:",
+      agencySelectedForChangeBalance
+    );
     return (
       <ModalChangeBalanceStyles
         className="modal "
