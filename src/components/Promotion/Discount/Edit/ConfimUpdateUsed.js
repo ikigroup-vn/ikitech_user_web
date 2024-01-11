@@ -3,10 +3,9 @@ import { connect } from "react-redux";
 import * as discountAction from "../../../../actions/discount";
 
 class ConfimUpdateUsed extends Component {
-    
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
+    window.$(".modal").modal("hide");
     this.props.onOk();
   };
 
@@ -43,7 +42,7 @@ class ConfimUpdateUsed extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-              Thay đổi số lượng giới hạn sẽ sập nhật số lượng đã sử dụng về 0
+                Thay đổi số lượng giới hạn sẽ cập nhật số lượng đã sử dụng về 0
               </div>
               <div class="modal-footer">
                 <button
@@ -54,9 +53,7 @@ class ConfimUpdateUsed extends Component {
                   Đóng
                 </button>
                 <button type="submit" class="btn btn-info">
-                Đồng ý
-
-                  
+                  Đồng ý
                 </button>
               </div>
             </form>
@@ -70,8 +67,8 @@ class ConfimUpdateUsed extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     updateDiscountIsEnd: (store_code, discount, id) => {
-        dispatch(discountAction.updateDiscountIsEnd(store_code, discount, id));
-      },
+      dispatch(discountAction.updateDiscountIsEnd(store_code, discount, id));
+    },
   };
 };
 export default connect(null, mapDispatchToProps)(ConfimUpdateUsed);

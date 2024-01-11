@@ -70,13 +70,31 @@ class ModalChangeBalance extends Component {
   handleChangeBalance = (e) => {
     const name = e.target.name;
     const value = e.target.value;
+    const _value = value?.toString()?.replace(/\./g, "");
     const { balance } = this.state;
-    this.setState({
-      balance: {
-        ...balance,
-        [name]: name === "money" ? formatNumberV2(value) : value,
-      },
-    });
+    const { collaboratorSelectedForChangeBalance, isSub } = this.props;
+
+    if (name === "money") {
+      this.setState({
+        balance: {
+          ...balance,
+          [name]:
+            Number(_value) >
+              Number(collaboratorSelectedForChangeBalance.balance) && isSub
+              ? formatNumberV2(
+                  Number(collaboratorSelectedForChangeBalance.balance)
+                )
+              : formatNumberV2(value),
+        },
+      });
+    } else {
+      this.setState({
+        balance: {
+          ...balance,
+          [name]: value,
+        },
+      });
+    }
   };
   handleSubmitChangeBalance = (e) => {
     const { balance } = this.state;

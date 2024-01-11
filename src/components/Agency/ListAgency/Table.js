@@ -282,9 +282,7 @@ class Table extends Component {
                 />
               </td>
               <td>{data.customer.name}</td>
-              <td>
-                {data.customer.phone_number}
-              </td>
+              <td>{data.customer.phone_number}</td>
               <td>
                 <span className="primary">
                   <div
@@ -303,12 +301,14 @@ class Table extends Component {
                   </div>
                 </span>
               </td>
-
-              <td><span
-                className="total_customers primary"
-                onClick={() => this.handleShowSidebar(data)}
-              >{data?.customer?.referral_phone_number || null}</span></td>
-
+              <td>
+                <span
+                  className="total_customers primary"
+                  onClick={() => this.handleShowSidebar(data)}
+                >
+                  {data?.customer?.referral_phone_number || null}
+                </span>
+              </td>
               <td>
                 <select
                   style={{ width: "100%" }}
@@ -330,7 +330,6 @@ class Table extends Component {
                   ))}
                 </select>
               </td>
-              
               <td
                 style={{
                   display: "flex",
@@ -355,7 +354,7 @@ class Table extends Component {
               </td>
             </tr>
             <tr class="explode hide">
-              <td colSpan={7}>
+              <td colSpan={9}>
                 <div class="row">
                   <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                     <div class="info_user">
@@ -407,7 +406,17 @@ class Table extends Component {
                             </button>
                             <button
                               type="button"
-                              style={{ width: "25px" }}
+                              style={{
+                                width: "25px",
+                                pointerEvents:
+                                  !data.balance || Number(data.balance) <= 0
+                                    ? "none"
+                                    : "initial",
+                                opacity:
+                                  !data.balance || Number(data.balance) <= 0
+                                    ? 0.7
+                                    : 1,
+                              }}
                               className=" btn-outline-danger btn-exploder"
                               onClick={() =>
                                 this.handleOpenModalChangeBalance(data, true)
