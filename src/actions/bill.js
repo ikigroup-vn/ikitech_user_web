@@ -68,6 +68,7 @@ export const exportAllListOrder = (
                     orderer_customer_address_detail:
                       item.customer?.address_detail,
 
+                    staffName: item.staff_name,
                     order_from:
                       item.order_from == OrderFrom.ORDER_FROM_APP
                         ? "App"
@@ -123,6 +124,9 @@ export const exportAllListOrder = (
                       }
                       if (key == "updated_at") {
                         newItem["Ngày cập nhật"] = value;
+                      }
+                      if (key == "staffName") {
+                        newItem["Tên nhân viên"] = value;
                       }
                       if (key == "receiver_customer_phone") {
                         newItem["Số điện thoại người nhận"] = value;
@@ -432,7 +436,7 @@ async function saveAsExcel(value) {
     sheet1.range("A1:" + endColumn + "1").style("fill", "F4D03F");
     range.style("border", true);
 
-    sheet1.range("AA1:AI1").style("fill", "F4D03F");
+    sheet1.range("AA1:AJ1").style("fill", "F4D03F");
     range.style("border", true);
 
     return workbook.outputAsync().then((res) => {
