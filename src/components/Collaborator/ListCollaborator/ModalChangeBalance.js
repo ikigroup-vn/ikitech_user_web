@@ -3,7 +3,7 @@ import themeData from "../../../ultis/theme_data";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import * as collaboratorAction from "../../../actions/collaborator";
-import { formatNumberV2 } from "../../../ultis/helpers";
+import { format, formatNumberV2 } from "../../../ultis/helpers";
 import moment from "moment";
 
 const ModalChangeBalanceStyles = styled.div`
@@ -167,10 +167,7 @@ class ModalChangeBalance extends Component {
                       fontSize: "18px",
                     }}
                   >
-                    {formatNumberV2(
-                      collaboratorSelectedForChangeBalance.balance
-                    )}{" "}
-                    VND
+                    {format(collaboratorSelectedForChangeBalance.balance)}
                   </span>
                 </h5>
                 <div className="item-balance">
