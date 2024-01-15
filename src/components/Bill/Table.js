@@ -523,7 +523,7 @@ class Table extends Component {
                 {data.order_code}
               </span>
             </td>
-            <td>{data.customer != null ? data.customer.name : null}</td>
+            <td>{data.customer_name ? data.customer_name : null}</td>
             {/* {
               getChannel() == IKITECH &&
               <td className="status_check"><i class={`fas fa-${is_collaborator} ${is_collaborator + "-status"} `}></i></td>
