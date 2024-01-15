@@ -154,28 +154,28 @@ export const exportAllListOrder = (
                       }
 
                       if (key == "orderer_customer_phone") {
-                        newItem["Số điện thoại người gửi"] = value;
+                        newItem["Số điện thoại khách hàng"] = value;
                       }
                       if (key == "orderer_customer_name") {
-                        newItem["Tên người gửi"] = value;
+                        newItem["Tên khách hàng"] = value;
                       }
                       if (key == "orderer_customer_email") {
-                        newItem["Email người gửi"] = value;
+                        newItem["Email khách hàng"] = value;
                       }
                       if (key == "orderer_customer_wards") {
-                        newItem["Phường/Xã người gửi"] = value;
+                        newItem["Phường/Xã khách hàng"] = value;
                       }
                       if (key == "orderer_customer_district") {
-                        newItem["Quận/Huyện người gửi"] = value;
+                        newItem["Quận/Huyện khách hàng"] = value;
                       }
                       if (key == "orderer_customer_province") {
-                        newItem["Tỉnh/TP người gửi"] = value;
+                        newItem["Tỉnh/TP khách hàng"] = value;
                       }
                       if (key == "orderer_customer_address_detail") {
-                        newItem["Chi tiết địa chỉ người gửi"] = value;
+                        newItem["Chi tiết địa chỉ khách hàng"] = value;
                       }
                       if (key == "orderer_customer_address_detail") {
-                        newItem["Chi tiết địa chỉ người gửi"] = value;
+                        newItem["Chi tiết địa chỉ khách hàng"] = value;
                       }
 
                       if (key == "order_from") {
