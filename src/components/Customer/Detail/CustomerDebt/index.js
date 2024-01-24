@@ -172,11 +172,15 @@ class Footer extends Component {
           >
             <td>{per_page * (current_page - 1) + (index + 1)}</td>
             <td>{data.code}</td>
-            <td>
+            <td style={{ verticalAlign: "middle" }}>
               {data.is_revenue ? (
-                <p style={{ color: " rgb(54 185 204)" }}>Phiếu thu</p>
+                <p style={{ color: "rgb(54, 185, 204)", margin: 0 }}>
+                  Phiếu thu
+                </p>
               ) : (
-                <p style={{ color: "rgb(231 74 59)" }}>Phiếu chi</p>
+                <p style={{ color: "rgb(231, 74, 59)", margin: 0 }}>
+                  Phiếu chi
+                </p>
               )}
             </td>
             <td>
