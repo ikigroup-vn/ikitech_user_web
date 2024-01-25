@@ -129,12 +129,20 @@ class SidebarFilterCustomer extends Component {
   setShowDropdownOptions(showDropdownOptions) {
     this.setState({ showDropdownOptions });
   }
-  
   handleChangeInputFilterSearch = (e, indexCondition) => {
     const name = e.target.name;
     const value = e.target.value;
 
     const type_compare = Number(value);
+    const comparison_expression =
+      type_compare === Types.TYPE_COMPARE_AGE ||
+      type_compare === Types.TYPE_COMPARE_SEX ||
+      type_compare === Types.TYPE_COMPARE_PROVINCE ||
+      type_compare === Types.TYPE_COMPARE_CUSTOMER_NORMAL ||
+      type_compare === Types.TYPE_COMPARE_CTV ||
+      type_compare === Types.TYPE_COMPARE_AGENCY
+        ? expressions[2].value
+        : expressions[0].value;
     const value_compare =
       type_compare < Types.TYPE_COMPARE_MONTH_BIRTH
         ? 0
@@ -154,6 +162,7 @@ class SidebarFilterCustomer extends Component {
       if (index === indexCondition) {
         newOptionsFilter.push({
           ...option,
+          comparison_expression,
           value_compare,
           [name]:
             name === "value_compare" &&
@@ -230,7 +239,7 @@ class SidebarFilterCustomer extends Component {
           showSidebar={this.props.showFilterSearch}
           setShowSidebar={this.props.setShowFilterSearch}
           widthSideBar="auto"
-          title="Bộ lọc 1"
+          title="Bộ lọc"
         >
           <SidebarFilterCustomerStyles className="sidebar__conditions">
             {this.state.optionsFilter.length > 0 &&

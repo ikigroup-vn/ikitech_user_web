@@ -207,6 +207,7 @@ class ConditionFilterCustomer extends Component {
                   this.props.handleChangeInputFilterSearch(e, indexOption)
                 }
                 name="value_compare"
+                max={new Date().toISOString().split("T")[0]}
               />
             </div>
           ) : Number(optionsFilter[indexOption].type_compare) ===
