@@ -339,7 +339,7 @@ class Form extends Component {
                 onChange={this.onChange}
               />
             </div>
-            <div class="form-group">
+            {/* <div class="form-group">
               <label for="product_name">Lương theo giờ (VNĐ/H)</label>
               <input
                 type="text"
@@ -351,7 +351,7 @@ class Form extends Component {
                 autoComplete="off"
                 onChange={this.onChange}
               />
-            </div>
+            </div> */}
           </div>
           <div class="box-footer">
             <button type="submit" class="btn btn-info   btn-sm">
