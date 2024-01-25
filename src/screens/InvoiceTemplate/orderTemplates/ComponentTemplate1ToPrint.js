@@ -120,8 +120,8 @@ export default class ComponentTemplate1ToPrint extends Component {
               ) : null}
             </div>
           </td>
-          <td>{format(element.item_price)}</td>
           <td>{element.quantity}</td>
+          <td>{format(element.item_price)}</td>
           <td style={{ textAlign: "end" }}>
             {element.is_bonus == true
               ? format(0)
@@ -448,8 +448,8 @@ export default class ComponentTemplate1ToPrint extends Component {
                   <tr>
                     <th>STT</th>
                     <th>Tên sản phẩm</th>
-                    <th>Đ.Giá</th>
                     <th>Số lượng</th>
+                    <th>Đ.Giá</th>
                     <th>Thành tiền</th>
                   </tr>
                 </thead>
