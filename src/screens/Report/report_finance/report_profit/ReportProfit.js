@@ -53,7 +53,7 @@ class ReportProfit extends Component {
     } else {
       params =
         params +
-        `&date_from=${moment().format("YYYY-MM-DD")}&time_to=${moment().format(
+        `&date_from=${moment().format("YYYY-MM-DD")}&date_to=${moment().format(
           "YYYY-MM-DD"
         )}`;
       this.setState({
