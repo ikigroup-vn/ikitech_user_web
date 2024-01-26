@@ -83,9 +83,9 @@ class Table extends Component {
             <td>{data.username}</td>
             <td>{data.phone_number}</td>
 
-            <td>
+            {/* <td>
               {data.salary_one_hour != null ? format(data.salary_one_hour) : ""}
-            </td>
+            </td> */}
             <td>{decentralization}</td>
             <td>
               <label
@@ -179,7 +179,7 @@ class Table extends Component {
               <th>Tên tài khoản</th>
               <th>Số điện thoại</th>
 
-              <th>Lương theo giờ</th>
+              {/* <th>Lương theo giờ</th> */}
 
               <th>Vai trò</th>
               <th>Sale</th>

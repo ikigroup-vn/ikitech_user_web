@@ -516,6 +516,7 @@ class Customer extends Component {
         const newCustomer = {};
         newCustomer["name"] = item["Tên khách hàng"];
         newCustomer["phone_number"] = item["Số điện thoại"];
+        newCustomer["referral_phone_number"] = item["SĐT người giới thiệu"];
         newCustomer["address_detail"] = item["Địa chỉ chi tiết"];
         newCustomer["wards_name"] = item["Phường/Xã"];
         newCustomer["district_name"] = item["Quận/Huyện"];
@@ -614,7 +615,22 @@ class Customer extends Component {
         password: "123456",
         list: newListCustomers,
       };
-      importAllListCustomer(store_code, dataImport);
+      importAllListCustomer(store_code, dataImport, () => {
+        this.setState({
+          paginate: 1,
+          searchValue: "",
+          openModalImport: false,
+        });
+        if (this.isSale()) {
+          this.fetchListCustomerOfSale(
+            this.props.match.params.store_code,
+            1,
+            ""
+          );
+        } else {
+          this.fetchAllCustomer(this.props.match.params.store_code, 1, "");
+        }
+      });
     };
     document.getElementById("file-excel-import-customer").value = null;
     reader.readAsBinaryString(f);
@@ -990,8 +1006,10 @@ const mapDispatchToProps = (dispatch, props) => {
         customerAction.exportAllListCustomer(store_code, params, isSale)
       );
     },
-    importAllListCustomer: (store_code, data) => {
-      dispatch(customerAction.importAllListCustomer(store_code, data));
+    importAllListCustomer: (store_code, data, onSuccess) => {
+      dispatch(
+        customerAction.importAllListCustomer(store_code, data, onSuccess)
+      );
     },
     fetchAllCustomerByInferralPhone: (
       store_code,
