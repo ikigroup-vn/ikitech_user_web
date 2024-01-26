@@ -131,6 +131,7 @@ class SidebarFilterCustomer extends Component {
   }
   handleChangeInputFilterSearch = (e, indexCondition) => {
     const name = e.target.name;
+    console.log(name)
     const value = e.target.value;
 
     const type_compare = Number(value);

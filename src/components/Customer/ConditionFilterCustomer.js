@@ -3,6 +3,7 @@ import styled from "styled-components";
 import * as Types from "../../constants/ActionType";
 import { expressions } from "../../ultis/groupCustomer/expressions";
 import { genders } from "../../ultis/groupCustomer/genders";
+import moment from "moment";
 
 const ConditionFilterCustomerStyles = styled.div`
   display: flex;
@@ -207,7 +208,7 @@ class ConditionFilterCustomer extends Component {
                   this.props.handleChangeInputFilterSearch(e, indexOption)
                 }
                 name="value_compare"
-                max={new Date().toISOString().split("T")[0]}
+                max={moment().format("YYYY-MM-DD")}
               />
             </div>
           ) : Number(optionsFilter[indexOption].type_compare) ===
