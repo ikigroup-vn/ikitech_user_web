@@ -134,15 +134,19 @@ class SidebarFilterCustomer extends Component {
     const value = e.target.value;
 
     const type_compare = Number(value);
-    const comparison_expression =
-      type_compare === Types.TYPE_COMPARE_AGE ||
-      type_compare === Types.TYPE_COMPARE_SEX ||
-      type_compare === Types.TYPE_COMPARE_PROVINCE ||
-      type_compare === Types.TYPE_COMPARE_CUSTOMER_NORMAL ||
-      type_compare === Types.TYPE_COMPARE_CTV ||
-      type_compare === Types.TYPE_COMPARE_AGENCY
-        ? expressions[2].value
-        : expressions[0].value;
+    const comparison_expression = expressions.find(
+      (expression) =>
+        expression.id ===
+        (type_compare === Types.TYPE_COMPARE_AGE ||
+        type_compare === Types.TYPE_COMPARE_SEX ||
+        type_compare === Types.TYPE_COMPARE_PROVINCE ||
+        type_compare === Types.TYPE_COMPARE_CUSTOMER_NORMAL ||
+        type_compare === Types.TYPE_COMPARE_CTV ||
+        type_compare === Types.TYPE_COMPARE_AGENCY
+          ? 2
+          : 0)
+    ).value;
+
     const value_compare =
       type_compare < Types.TYPE_COMPARE_MONTH_BIRTH
         ? 0
@@ -157,33 +161,43 @@ class SidebarFilterCustomer extends Component {
         ? moment().format("YYYY-MM-DD")
         : 0;
     //Handle change condition input,select
-    const newOptionsFilter = [];
-    this.state.optionsFilter.forEach((option, index) => {
+    const newOptionsFilter = this.state.optionsFilter.map((option, index) => {
       if (index === indexCondition) {
-        newOptionsFilter.push({
-          ...option,
-          comparison_expression,
-          value_compare,
-          [name]:
-            name === "value_compare" &&
-            this.state.optionsFilter[indexCondition].type_compare <
-              Types.TYPE_COMPARE_MONTH_BIRTH
-              ? formatNumberV2(value)
-              : name === "value_compare" &&
-                Number(
-                  this.state.optionsFilter[indexCondition].type_compare
-                ) === Types.TYPE_COMPARE_AGE
-              ? Math.floor(Math.min(Math.max(Number(value), 1), 99))
-              : value,
-        });
+        // Check if `name` is 'type_compare'
+        if (name === "type_compare") {
+          return {
+            ...option,
+            comparison_expression,
+            value_compare,
+            [name]: value,
+          };
+        } else {
+          // Check nếu `name` khác giá trị trước đó của nó
+          return {
+            ...option,
+            [name]:
+              name === "value_compare" &&
+              this.state.optionsFilter[indexCondition].type_compare <
+                Types.TYPE_COMPARE_MONTH_BIRTH
+                ? formatNumberV2(value)
+                : name === "value_compare" &&
+                  Number(
+                    this.state.optionsFilter[indexCondition].type_compare
+                  ) === Types.TYPE_COMPARE_AGE
+                ? Math.floor(Math.min(Math.max(Number(value), 1), 99))
+                : value,
+          };
+        }
       } else {
-        newOptionsFilter.push(option);
+        return option;
       }
     });
+    console.log(newOptionsFilter)
     this.setState({
       optionsFilter: newOptionsFilter,
     });
   };
+
   handleDeleteOptionConditionById = (indexOption) => {
     const newOptionCondition = this.state.optionsFilter.filter(
       (option, index) => index !== indexOption
