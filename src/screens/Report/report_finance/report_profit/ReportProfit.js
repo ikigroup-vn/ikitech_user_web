@@ -190,7 +190,7 @@ class ReportProfit extends Component {
       {
         id: 8,
         step: 0,
-        title: "II. Chi phí bán hàng (1+2+3)",
+        title: "II. Chi phí bán hàng (1+2)",
         value: format(Number(reportProfit.cost_of_sales)),
       },
       {
@@ -202,19 +202,19 @@ class ReportProfit extends Component {
       {
         id: 10,
         step: 1,
-        title: "2. Thanh toán bằng điểm",
+        title: "2. Thanh toán bằng xu",
         value: format(Number(reportProfit.pay_with_points)),
       },
-      {
-        id: 11,
-        step: 1,
-        title: "3. Phí giao hàng trả đối tác",
-        value: format(Number(reportProfit.partner_delivery_fee)),
-      },
+      // {
+      //   id: 11,
+      //   step: 1,
+      //   title: "3. Phí giao hàng trả đối tác",
+      //   value: format(Number(reportProfit.partner_delivery_fee)),
+      // },
       {
         id: 12,
         step: 0,
-        title: "III. Thu nhập khác (1+2)",
+        title: "III. Thu nhập khác",
         value: format(Number(reportProfit.other_costs)),
       },
       {
@@ -223,12 +223,12 @@ class ReportProfit extends Component {
         title: "1. Phiếu thu khác hạch toán kết quả kinh doanh",
         value: format(Number(reportProfit.revenue_auto_create)),
       },
-      {
-        id: 14,
-        step: 1,
-        title: "2. Phí khách trả hàng",
-        value: format(Number(reportProfit.customer_return)),
-      },
+      // {
+      //   id: 14,
+      //   step: 1,
+      //   title: "2. Phí khách trả hàng",
+      //   value: format(Number(reportProfit.customer_return)),
+      // },
       {
         id: 15,
         step: 0,
