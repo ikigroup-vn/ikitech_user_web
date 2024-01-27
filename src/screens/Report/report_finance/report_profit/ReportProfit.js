@@ -122,7 +122,7 @@ class ReportProfit extends Component {
       {
         id: 1,
         step: 0,
-        title: "I. Doanh thu bán hàng",
+        title: "I. Doanh thu bán hàng(1 + 2 + 3 - 4 - 5 - 6 - 7)",
         value: format(Number(reportProfit.sales_revenue)),
       },
       {
