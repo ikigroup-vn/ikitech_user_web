@@ -191,13 +191,13 @@ class ReportProfit extends Component {
         id: 8,
         step: 0,
         title: "II. Chi phí bán hàng (1+2)",
-        value: format(Number(reportProfit.cost_of_sales)),
+        value: format(Number(reportProfit.selling_expenses)),
       },
       {
         id: 9,
         step: 1,
         title: "1. Chi phí giá vốn hàng hóa",
-        value: format(Number(reportProfit.selling_expenses)),
+        value: format(Number(reportProfit.cost_of_sales)),
       },
       {
         id: 10,
@@ -215,13 +215,13 @@ class ReportProfit extends Component {
         id: 12,
         step: 0,
         title: "III. Thu nhập khác",
-        value: format(Number(reportProfit.other_costs)),
+        value: format(Number(reportProfit.other_income)),
       },
       {
         id: 13,
         step: 1,
         title: "1. Phiếu thu khác hạch toán kết quả kinh doanh",
-        value: format(Number(reportProfit.revenue_auto_create)),
+        value: format(Number(reportProfit.other_income)),
       },
       // {
       //   id: 14,
@@ -235,12 +235,12 @@ class ReportProfit extends Component {
         title: "IV. Chi phí khác",
         value: format(Number(reportProfit.other_costs)),
       },
-      // {
-      //   id: 16,
-      //   step: 0,
-      //   title: "1. Phiếu chi khác hạch toán kết quả kinh doanh",
-      //   value: format(Number(reportProfit.sales_revenue)),
-      // },
+      {
+        id: 16,
+        step: 1,
+        title: "1. Phiếu chi khác hạch toán kết quả kinh doanh",
+        value: format(Number(reportProfit.other_costs)),
+      },
       {
         id: 17,
         step: 0,
