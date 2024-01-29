@@ -205,12 +205,12 @@ class ReportProfit extends Component {
         title: "2. Thanh toán bằng xu",
         value: format(Number(reportProfit.pay_with_points)),
       },
-      // {
-      //   id: 11,
-      //   step: 1,
-      //   title: "3. Phí giao hàng trả đối tác",
-      //   value: format(Number(reportProfit.partner_delivery_fee)),
-      // },
+      {
+        id: 11,
+        step: 1,
+        title: "3. Phí giao hàng trả đối tác",
+        value: format(Number(reportProfit.partner_delivery_fee)),
+      },
       {
         id: 12,
         step: 0,
