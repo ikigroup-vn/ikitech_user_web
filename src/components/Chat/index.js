@@ -10,8 +10,8 @@ import * as Types from "../../constants/ActionType";
 import ModalSendImg from "./ModalSendImg";
 import Alert from "../../components/Partials/Alert";
 import LoadMess from "../Loading/Chatbox/LoadMess";
-import * as Env from "../../ultis/default"
-import * as  helpers  from '../../ultis/helpers';
+import * as Env from "../../ultis/default";
+import * as helpers from "../../ultis/helpers";
 
 class Chat extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class Chat extends Component {
       message: "",
       showIcon: "show",
       showChat: "hide",
-      showChatBox : "show",
+      showChatBox: "show",
       chat: {},
       newMessage: "",
       pag: 1,
@@ -40,14 +40,10 @@ class Chat extends Component {
     });
   };
 
-
-
   closeChat = () => {
     this.setState({ showIcon: "show", showChat: "hide" });
     if (typeof this.props.closeChatBox != "undefined")
-      this.props.closeChatBox("hide")
-
-    
+      this.props.closeChatBox("hide");
   };
 
   closeIcon = () => {
@@ -57,17 +53,15 @@ class Chat extends Component {
   showListImg = (imgs) => {
     var result = <LoadMess />;
     if (typeof imgs == "undefined" || imgs == null) {
-      return null
+      return null;
     }
     if (imgs.length > 0) {
-      console.log(imgs)
-      var img = ""
+      console.log(imgs);
+      var img = "";
       result = imgs.map((item, index) => {
         try {
-          if (typeof item.link_images == "undefined")
-            img = Env.IMG_NOT_FOUND
-          else
-            img = item.link_images
+          if (typeof item.link_images == "undefined") img = Env.IMG_NOT_FOUND;
+          else img = item.link_images;
 
           return (
             <img
@@ -105,7 +99,9 @@ class Chat extends Component {
   };
 
   loadData = () => {
+    var { chat } = this.state;
     var pag = this.state.pag + 1;
+
     var { store_code, customerId } = this.props;
 
     this.setState({ loading: true, pag: pag });
@@ -113,14 +109,14 @@ class Chat extends Component {
   };
   showMessages = (messages, customerImg, userImg) => {
     var result = null;
-    
+
     if (typeof messages.data == "undefined") {
-      return  <LoadMess/>;
+      return <LoadMess />;
     }
     var dateTimeOld = "";
     if (messages.data.length > 0) {
       var numPages = messages.last_page;
-      console.log(numPages)
+      console.log(numPages);
       var listMes = [...messages.data].reverse();
       result = listMes.map((mes, index) => {
         var isUser = mes.is_user == true ? "right-msg" : "left-msg";
@@ -128,26 +124,25 @@ class Chat extends Component {
         var isImg = mes.link_images == null ? "hide" : "show";
         var backGroundImg = isImg == "show" ? "img-chat" : null;
         var showIconLoading = this.state.loading == true ? "show" : "hide";
-        
-        var listimg = ""
-        try {
-           listimg =mes.link_images == null ? [] : JSON.parse(mes.link_images);
-        } catch (error) {
-           listimg =[];
 
+        var listimg = "";
+        try {
+          listimg = mes.link_images == null ? [] : JSON.parse(mes.link_images);
+        } catch (error) {
+          listimg = [];
         }
         var time = moment(mes.created_at, "YYYY-MM-DD HH:mm:ss").format(
           "HH:mm"
         );
         var img = mes.is_user == true ? userImg : customerImg;
         var showLoading = index == 0 && numPages > 1 ? "show" : "hide";
-        var date =   moment(
-          mes.created_at,
-          "YYYY-MM-DD HH:mm:ss"
-        ).format("YYYY-MM-DD") == moment().format("YYYY-MM-DD") ? "Hôm nay" :  moment(
-          mes.created_at,
-          "YYYY-MM-DD HH:mm:ss"
-        ).format("DD-MM-YYYY")
+        var date =
+          moment(mes.created_at, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD") ==
+          moment().format("YYYY-MM-DD")
+            ? "Hôm nay"
+            : moment(mes.created_at, "YYYY-MM-DD HH:mm:ss").format(
+                "DD-MM-YYYY"
+              );
 
         var showDateTime = date == dateTimeOld ? "hide" : "show";
         dateTimeOld = date;
@@ -162,17 +157,19 @@ class Chat extends Component {
                 width="28px"
                 src="https://icon-library.com/images/facebook-loading-icon/facebook-loading-icon-8.jpg"
               ></img>
-              <a
-                onClick={this.loadData}
-                style={{
-                  fontSize: "14px",
-                  textDecoration: "underline",
-                  cursor: "pointer",
-                  color: "blue",
-                }}
-              >
-                Xem thêm
-              </a>
+              {numPages > this.state.pag ? (
+                <a
+                  onClick={this.loadData}
+                  style={{
+                    fontSize: "14px",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                    color: "blue",
+                  }}
+                >
+                  Xem thêm
+                </a>
+              ) : null}
             </div>
             <div
               style={{ textAlign: "center", marginBottom: "10px" }}
@@ -194,9 +191,10 @@ class Chat extends Component {
                 style={{ backgroundImage: `url(${img})`, cursor: "pointer" }}
               ></div>
 
-              <div class={`msg-bubble ${backGroundImg}`} style = {{maxWidth : "70%"}}>
-               
-
+              <div
+                class={`msg-bubble ${backGroundImg}`}
+                style={{ maxWidth: "70%" }}
+              >
                 <div class={` ${isImg}`}>{this.showListImg(listimg)}</div>
                 <div class={`msg-text ${isContent}`}>{mes.content}</div>
                 <div class="msg-info">
@@ -213,40 +211,38 @@ class Chat extends Component {
 
   componentDidMount() {
     this.setState({
-      showChatBox : this.props.showChatBox
-    })
+      showChatBox: this.props.showChatBox,
+    });
     var c = $(".msger-chat");
     c.scrollTop(c.prop("scrollHeight"), 1000);
   }
 
   componentWillReceiveProps(nextProps) {
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.product_list != "undefined"
+    ) {
+      var permissions = nextProps.permission;
+      var chat_allow = permissions.chat_allow;
 
-
-    if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
-      var permissions = nextProps.permission
-      var chat_allow = permissions.chat_allow
-
-      this.setState({ isLoading: true, chat_allow })
+      this.setState({ isLoading: true, chat_allow });
     }
 
-
-
-    if(typeof nextProps.showChatBox != "undefined" && nextProps.showChatBox != this.props.showChatBox)
-    {
-      if(nextProps.showChatBox == "show")
-      {
-      this.setState({
-        showIcon: "hide",
-        showChat: "show",
-        showChatBox : "show"
-      })
-    }
+    if (
+      typeof nextProps.showChatBox != "undefined" &&
+      nextProps.showChatBox != this.props.showChatBox
+    ) {
+      if (nextProps.showChatBox == "show") {
+        this.setState({
+          showIcon: "hide",
+          showChat: "show",
+          showChatBox: "show",
+        });
+      }
     }
     if (nextProps.customerId != this.props.customerId) {
-
-
       this.socket = io(helpers.callUrlSocket(), {
-        transports: ["websocket"]
+        transports: ["websocket"],
       });
       this.socket.on(
         `chat:message_from_customer:${nextProps.customerId}`,
@@ -256,14 +252,14 @@ class Chat extends Component {
   }
   shouldComponentUpdate(nextProps, nextState) {
     if (!shallowEqual(nextProps.chat, this.props.chat)) {
-      console.log("3")
+      console.log("3");
 
       if (nextState.pag !== 1) {
         var chat = { ...nextState.chat };
-        
-        var arrChat = [...nextProps.chat.data]
+
+        var arrChat = [...nextProps.chat.data];
         var newArr = chat.data.concat(arrChat);
-        console.log(nextState.pag , arrChat , newArr)
+        console.log(nextState.pag, arrChat, newArr);
 
         chat.data = newArr;
         this.setState({ chat: chat, loading: false });
@@ -276,7 +272,7 @@ class Chat extends Component {
       !shallowEqual(nextState.newMessage, this.state.newMessage) &&
       nextState.newMessage != ""
     ) {
-      console.log("2")
+      console.log("2");
 
       var messengers = { ...nextState.chat };
       var mess = { ...nextState.newMessage };
@@ -291,7 +287,6 @@ class Chat extends Component {
     if (
       !shallowEqual(nextProps.message, this.props.message) &&
       nextProps.message != {}
-
     ) {
       var messengers = { ...this.state.chat };
       var mess = { ...nextProps.message };
@@ -302,8 +297,6 @@ class Chat extends Component {
 
       this.setState({ chat: messengers });
     }
-
-
 
     return true;
   }
@@ -331,15 +324,14 @@ class Chat extends Component {
     var { store_code, customerId } = this.props;
 
     this.props.sendMessage(store_code, customerId, message);
-    this.setState({message  : ""})
+    this.setState({ message: "" });
   };
 
-  
-
   render() {
-
-    var { showIcon, showChat, chat, img, message ,showChatBox , chat_allow} = this.state;
-    var { customerImg, user  , customerId , store_code , customerName } = this.props;
+    var { showIcon, showChat, chat, img, message, showChatBox, chat_allow } =
+      this.state;
+    var { customerImg, user, customerId, store_code, customerName } =
+      this.props;
     var customerImg =
       typeof customerImg == "undefined" || customerImg == null
         ? Env.IMG_NOT_FOUND
@@ -349,16 +341,9 @@ class Chat extends Component {
         ? Env.IMG_NOT_FOUND
         : user.avatar_image;
 
-      
     return (
-      <div
-      className ={`${showChatBox}`}
-
-      >
-        <section
-          class={`msger msger_chat scrollChat ${showChat}`}
-    
-        >
+      <div className={`${showChatBox}`}>
+        <section class={`msger msger_chat scrollChat ${showChat}`}>
           <header class="msger-header">
             <div class="msger-header-title">
               <i class="fas fa-comment-alt"></i> {customerName}
@@ -383,13 +368,14 @@ class Chat extends Component {
               class="msger-input"
               placeholder="Nhập tin nhắn..."
               required
-              autoComplete = "off"
-              />
-             <button type="button"
+              autoComplete="off"
+            />
+            <button
+              type="button"
               data-toggle="modal"
               data-target="#modalSendingImg"
-              >
-              <i class="fa fa-camera"  aria-hidden="true"></i>
+            >
+              <i class="fa fa-camera" aria-hidden="true"></i>
             </button>
             <button type="submit" class="msger-send-btn">
               <i class="fa fa-paper-plane" aria-hidden="true"></i>
@@ -397,7 +383,7 @@ class Chat extends Component {
           </form>
         </section>
         <img
-        title = "Liên hệ khách hàng"
+          title="Liên hệ khách hàng"
           onClick={this.closeIcon}
           style={{
             position: "fixed",
@@ -408,17 +394,17 @@ class Chat extends Component {
           src="https://e7.pngegg.com/pngimages/397/178/png-clipart-computer-icons-message-chat-icon-miscellaneous-text-thumbnail.png"
           width="55px"
           height="55px"
-          class={`img-responsive ${showIcon} ${chat_allow == true ? "show" : "hide"}`}
+          class={`img-responsive ${showIcon} ${
+            chat_allow == true ? "show" : "hide"
+          }`}
           alt="Image"
         />
-             <Alert
-                  type={Types.ALERT_UID_STATUS}
-                  alert={this.props.alert}
-                />
+        <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
         <ModalImg img={img}></ModalImg>
-        <ModalSendImg customerId = {customerId} store_code = {store_code}></ModalSendImg>
-
-        
+        <ModalSendImg
+          customerId={customerId}
+          store_code={store_code}
+        ></ModalSendImg>
       </div>
     );
   }
@@ -430,7 +416,6 @@ const mapStateToProps = (state) => {
     message: state.chatReducers.chat.message,
     alert: state.chatReducers.alert.alert_send,
     permission: state.authReducers.permission.data,
-
   };
 };
 
