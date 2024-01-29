@@ -190,7 +190,7 @@ class ReportProfit extends Component {
       {
         id: 8,
         step: 0,
-        title: "II. Chi phí bán hàng (1+2)",
+        title: "II. Chi phí bán hàng (1 + 2 + 3)",
         value: format(Number(reportProfit.selling_expenses)),
       },
       {
