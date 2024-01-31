@@ -619,6 +619,22 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
         },
       },
       {
+        title: "H",
+        data: {
+          type: "custom",
+          allowBlank: true,
+          showInputMessage: true,
+          prompt: "Chỉ được nhập ký tự số",
+          promptTitle: "Chú ý",
+          showErrorMessage: true,
+          errorTitle: "Chú ý",
+          error: "Chỉ được nhập ký tự số",
+          operator: "between",
+          formula1: "=ISNUMBER(H2)",
+          formula2: "=ISNUMBER(H2)",
+        },
+      },
+      {
         title: "I",
         data: {
           type: "string",
@@ -631,11 +647,17 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
       {
         title: "J",
         data: {
-          type: "string",
-          allowBlank: false,
+          type: "custom",
+          allowBlank: true,
           showInputMessage: true,
-          prompt: "Chỉ được phép nhập số",
+          prompt: "Chỉ được nhập ký tự số",
           promptTitle: "Chú ý",
+          showErrorMessage: true,
+          errorTitle: "Chú ý",
+          error: "Chỉ được nhập ký tự số",
+          operator: "between",
+          formula1: "=ISNUMBER(J2)",
+          formula2: "=ISNUMBER(J2)",
         },
       },
       {
@@ -771,13 +793,21 @@ async function saveAsExcelProduct(value, nameFile = "Danh sách sản phẩm") {
     row.height(50);
 
     // //
-    sheet1.range("A1:P1").style("fill", "deebf7");
-    sheet1.range("Q1:" + endColumn + "1").style("fill", "f6f9d4");
+    sheet1.range("A1:P1").style("fill", "d9d9d9");
+    sheet1.range("Q1:" + endColumn + "1").style("fill", "bfbfbf");
     range.style("border", true);
     sheet1.freezePanes(1, 1);
 
     //Sheet 2 hướng dẫn
     sheetTemplate(workbook, endColumn, listColumn);
+
+    // Duyệt qua tất cả các ô trong file Excel
+    workbook.sheets().forEach((sheet) => {
+      sheet.usedRange().forEach((cell) => {
+        // Thiết lập font cho mỗi ô thành Times New Roman
+        cell.style("fontFamily", "Times New Roman");
+      });
+    });
 
     return workbook.outputAsync().then((res) => {
       saveAs(res, `${nameFile}.xlsx`);
@@ -799,7 +829,7 @@ function sheetTemplate(workbook, endColumn, listColumn) {
       "Danh mục",
       "Thuộc tính",
       "Thuộc tính tìm kiếm",
-      "Cân nặng",
+      "Cân nặng(g)",
       "Hoa hồng CTV (%/VND)",
       "Xu cho đại lý",
       "Mô tả",
@@ -1028,8 +1058,8 @@ function sheetTemplate(workbook, endColumn, listColumn) {
 
   const range = sheetTemplate.usedRange();
   range.style("border", true);
-  sheetTemplate.range("A1:P1").style("fill", "deebf7");
-  sheetTemplate.range("Q1:" + endColumn + "1").style("fill", "f6f9d4");
+  sheetTemplate.range("A1:P1").style("fill", "d9d9d9");
+  sheetTemplate.range("Q1:" + endColumn + "1").style("fill", "bfbfbf");
 
   sheetTemplate.cell("B12").value(new RichText()).value().add("Lưu ý", {
     bold: true,
@@ -1464,7 +1494,8 @@ export const fetchAllListProduct = (store_code, search) => {
                   quantity_in_stock: item.quantity_in_stock,
                   categories: item.categories,
                   attributes: item.attributes,
-                  attribute_search_children: item.attribute_search_children,
+                  attribute_searches: item.attribute_searches,
+                  // attribute_search_children: item.attribute_search_children,
                   weight: item.weight,
                   type_share_collaborator_number:
                     item.type_share_collaborator_number,
@@ -1491,8 +1522,8 @@ export const fetchAllListProduct = (store_code, search) => {
                   }
 
                   if (key == "name") {
-                    newItem["Tên sản phẩm"] = formatStringCharactor(value);
-                    // newItem["Tên sản phẩm"] = value
+                    // newItem["Tên sản phẩm"] = formatStringCharactor(value);
+                    newItem["Tên sản phẩm"] = value;
                   }
 
                   if (key == "type_share_collaborator_number" && value == 0) {
@@ -1560,22 +1591,51 @@ export const fetchAllListProduct = (store_code, search) => {
                     }
                   }
 
-                  if (key == "attribute_search_children") {
+                  if (key == "attribute_searches") {
                     if (Array.isArray(value)) {
                       var stringAttributeSearch = "";
                       for (const [index, attribute_search] of value.entries()) {
                         if (
-                          attribute_search.name &&
+                          attribute_search.name != null &&
                           typeof attribute_search.name != "undefined"
                         ) {
+                          var stringAttributeSearchChild = "";
+                          for (const [
+                            index,
+                            attributeSearchChild,
+                          ] of attribute_search.attribute_search_children.entries()) {
+                            if (attributeSearchChild.name) {
+                              stringAttributeSearchChild += `${formatStringCharactor(
+                                attributeSearchChild.name
+                              )}${
+                                index ==
+                                attribute_search.attribute_search_children
+                                  .length -
+                                  1
+                                  ? ""
+                                  : ","
+                              }`;
+                            }
+                          }
                           if (index == value.length - 1) {
-                            stringAttributeSearch += formatStringCharactor(
-                              attribute_search.name
-                            );
-                          } else {
-                            stringAttributeSearch +=
+                            stringAttributeSearch =
+                              stringAttributeSearch +
                               formatStringCharactor(attribute_search.name) +
-                              ",";
+                              `${
+                                stringAttributeSearchChild != ""
+                                  ? `[${stringAttributeSearchChild}]`
+                                  : ""
+                              }`;
+                          } else {
+                            stringAttributeSearch =
+                              stringAttributeSearch +
+                              formatStringCharactor(attribute_search.name) +
+                              `${
+                                stringAttributeSearchChild != ""
+                                  ? `[${stringAttributeSearchChild}]`
+                                  : ""
+                              }` +
+                              ";";
                           }
                         }
                       }
@@ -1583,8 +1643,31 @@ export const fetchAllListProduct = (store_code, search) => {
                     }
                   }
 
+                  // if (key == "attribute_search_children") {
+                  //   if (Array.isArray(value)) {
+                  //     var stringAttributeSearch = "";
+                  //     for (const [index, attribute_search] of value.entries()) {
+                  //       if (
+                  //         attribute_search.name &&
+                  //         typeof attribute_search.name != "undefined"
+                  //       ) {
+                  //         if (index == value.length - 1) {
+                  //           stringAttributeSearch += formatStringCharactor(
+                  //             attribute_search.name
+                  //           );
+                  //         } else {
+                  //           stringAttributeSearch +=
+                  //             formatStringCharactor(attribute_search.name) +
+                  //             ",";
+                  //         }
+                  //       }
+                  //     }
+                  //     newItem["Thuộc tính tìm kiếm"] = stringAttributeSearch;
+                  //   }
+                  // }
+
                   if (key == "weight") {
-                    newItem["Cân nặng"] = value;
+                    newItem["Cân nặng(g)"] = value;
                   }
 
                   if (key == "sku") {
