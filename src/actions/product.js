@@ -1179,7 +1179,7 @@ function sheetTemplate(workbook, endColumn, listColumn) {
     },
     {
       range: "E18:I18",
-      value: "ThuocTinhTimKiem1;ThuocTinhTimKiem2;ThuocTinhTimKiem3",
+      value: "TTTKCha1[TTTKCon1,TTTKCon2];TTTKCha2[TTTKCon1,TTTKCon2]",
       style: {
         horizontalAlignment: "left",
         verticalAlignment: "top",
@@ -1189,7 +1189,7 @@ function sheetTemplate(workbook, endColumn, listColumn) {
     },
     {
       range: "J18:N18",
-      value: "Áo chống nắng;Xe tải ben;Bàn làm việc",
+      value: "Giá cả[Giá rẻ, giá vừa, giá đắt];Kích thước[Lớn,nhỏ]",
       style: {
         horizontalAlignment: "left",
         verticalAlignment: "top",
