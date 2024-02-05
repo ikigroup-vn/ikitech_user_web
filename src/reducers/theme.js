@@ -13,6 +13,9 @@ var initialState = {
   post_id_support_policy: "",
   post_id_privacy_policy: "",
   post_id_delivery_policy: "",
+  post_id_participating: "",
+  post_id_payment_policy: "",
+  post_id_goods_inspecstion_policy: "",
 };
 
 export const themeReducers = (state = initialState, action) => {
@@ -54,6 +57,15 @@ export const themeReducers = (state = initialState, action) => {
       return newState;
     case Types.POST_ID_DELIVERY_POLICY:
       newState.post_id_delivery_policy = action.data;
+      return newState;
+    case Types.POST_ID_PARTICIPATING:
+      newState.post_id_participating = action.data;
+      return newState;
+    case Types.POST_ID_PAYMENT_POLICY:
+      newState.post_id_payment_policy = action.data;
+      return newState;
+    case Types.POST_ID_GOODS_INSPECSTION_POLICY:
+      newState.post_id_goods_inspecstion_policy = action.data;
       return newState;
     default:
       return newState;
