@@ -3,6 +3,9 @@ import moment from "moment";
 import * as Env from "../../ultis/default";
 import FormChat from "./FormChat";
 import { shallowEqual } from "../../ultis/shallowEqual";
+import { AsyncPaginate } from "react-select-async-paginate";
+import { connect } from "react-redux";
+import * as customerAction from "../../actions/customer";
 class ChatBox extends Component {
   constructor(props) {
     super(props);
@@ -12,6 +15,7 @@ class ChatBox extends Component {
       listChat: { data: [] },
       loadMesageId: false,
       isCheck: false,
+      customerSearchSelected: null,
     };
   }
 
@@ -77,6 +81,31 @@ class ChatBox extends Component {
     this.setState({ loading: true, pag: pag });
     this.props.handleFetchAllChat(pag);
   };
+  loadOptions1 = async (search, loadedOptions, { page }) => {
+    const { store_code } = this.props;
+    const params = `&search=${search}`;
+    const res = await this.props.fetchAllCustomer(store_code, page, params);
+
+    return {
+      options: this.props.customers.data.map((i) => {
+        return { value: i.id, label: `${i.name}  (${i.phone_number})` };
+      }),
+
+      hasMore:
+        this.props.customers.current_page !== this.props.customers.last_page,
+      additional: {
+        page: page + 1,
+      },
+    };
+  };
+
+  onChangeSelect4 = (selectValue) => {
+    if (selectValue) {
+      this.props.handleFetchChatId(selectValue?.value);
+    }
+    this.setState({ customerSearchSelected: selectValue });
+  };
+
   showListUserChat = (listChat, isActive, numPages) => {
     var { store_code } = this.props;
     var result = <div>Không có dữ liệu</div>;
@@ -197,33 +226,70 @@ class ChatBox extends Component {
   };
   render() {
     var { customerImg, customerId, chat, store_code, isActive } = this.props;
-    var { listChat } = this.state;
+    var { listChat, customerSearchSelected } = this.state;
     var numPages = listChat.last_page;
 
     var listChat = typeof listChat.data == "undefined" ? [] : listChat.data;
     console.log(this.checkRead());
     return (
-      <div style={{ background: "white" }} className="row no-gutters">
-        <div
-          className="col-md-4 border-right"
-          style={{ overflow: "auto", height: "530px" }}
-        >
-          {this.showListUserChat(listChat, isActive, numPages)}
-        </div>
-        <div className="col-md-8" style={{ height: "500px" }}>
-          <FormChat
-            isActive={isActive}
-            unRead={this.checkRead()}
-            listChat={listChat}
-            customerImg={customerImg}
-            customerId={customerId}
-            chat={chat}
-            store_code={store_code}
-          />
+      <div>
+        <div style={{ background: "white" }} className="row no-gutters">
+          <div
+            className="col-md-4"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              rowGap: "10px",
+            }}
+          >
+            <div>
+              <AsyncPaginate
+                placeholder="Tìm kiếm khách hàng..."
+                value={customerSearchSelected}
+                loadOptions={this.loadOptions1}
+                name="recipientReferences1"
+                onChange={this.onChangeSelect4}
+                additional={{
+                  page: 1,
+                }}
+                debounceTimeout={500}
+                isClearable
+                isSearchable
+              />
+            </div>
+            <div style={{ overflow: "auto", height: "530px" }}>
+              {this.showListUserChat(listChat, isActive, numPages)}
+            </div>
+          </div>
+          <div className="col-md-8" style={{ height: "600px" }}>
+            <FormChat
+              isActive={isActive}
+              unRead={this.checkRead()}
+              listChat={listChat}
+              customerImg={customerImg}
+              customerId={customerId}
+              chat={chat}
+              store_code={store_code}
+            />
+          </div>
         </div>
       </div>
     );
   }
 }
 
-export default ChatBox;
+const mapStateToProps = (state) => {
+  return {
+    customers: state.customerReducers.customer.allCustomer,
+  };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    fetchAllCustomer: (id, page, params) => {
+      dispatch(customerAction.fetchAllCustomer(id, page, params));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatBox);
