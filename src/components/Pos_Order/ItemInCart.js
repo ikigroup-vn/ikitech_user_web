@@ -13,6 +13,7 @@ import {
   findImportPriceSub,
   findPrice,
   findTotalStock,
+  findTotalStockPos,
   stockOfProduct,
 } from "../../ultis/productUltis";
 import styled from "styled-components";
@@ -332,8 +333,18 @@ class ItemInCart extends Component {
       this.changeQuantity(q);
     }
   }
-  handleOnChange = (e) => {
+  handleOnChange = (e, product) => {
     let quantity = e.target.value;
+
+    if (product.check_inventory) {
+      const maxQuantityInventory = findTotalStockPos(product);
+      if (Number(quantity) > 0) {
+        quantity =
+          Number(quantity) > maxQuantityInventory
+            ? maxQuantityInventory
+            : Number(quantity);
+      }
+    }
 
     if (isNaN(quantity) || Number(quantity) <= 0) quantity = 1;
     this.changeQuantity(quantity);
@@ -1068,7 +1079,9 @@ class ItemInCart extends Component {
                 <input
                   disabled={is_bonus}
                   className="input-quantity"
-                  onChange={(e) => is_bonus === false && this.handleOnChange(e)}
+                  onChange={(e) =>
+                    is_bonus === false && this.handleOnChange(e, item.product)
+                  }
                   style={{
                     width: "40px",
                     textAlign: "center",

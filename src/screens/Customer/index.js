@@ -69,6 +69,7 @@ const CustomerStyles = styled.div`
       transition: all 0.3s;
       top: calc(100% + 10px);
       left: 0;
+      z-index: 20;
       width: max-content;
       border-radius: 6px;
       box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
