@@ -346,7 +346,14 @@ class ModalCreate extends Component {
                 <h4 style={{ color: "white", margin: "10px" }}>
                   Tạo khách hàng
                 </h4>
-                <button type="button" class="close" data-dismiss="modal">
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  style={{
+                    marginRight: "10px",
+                  }}
+                >
                   &times;
                 </button>
               </div>
