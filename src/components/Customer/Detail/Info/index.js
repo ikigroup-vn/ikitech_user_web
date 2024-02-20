@@ -163,7 +163,8 @@ class Customer extends Component {
         goFirst: false,
         txtDateOfBirth:
           nextProps.customer.date_of_birth != null &&
-          nextProps.customer.date_of_birth != ""
+          nextProps.customer.date_of_birth != "" &&
+          nextProps.customer.date_of_birth != "0000-00-00 00:00:00"
             ? moment(
                 nextProps.customer.date_of_birth,
                 "YYYY-MM-DD HH:mm:ss"
@@ -368,6 +369,9 @@ class Customer extends Component {
                 onChange={this.onChangeDate}
                 dateFormat="DD-MM-YYYY"
                 timeFormat={false}
+                isValidDate={(current) =>
+                  current.isSameOrBefore(new Date(), "day")
+                }
               />
             )}
           </div>

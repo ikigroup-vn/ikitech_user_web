@@ -548,15 +548,18 @@ export const getCalculate = (store_code, data, branch_id = getBranchId()) => {
           type: Types.GET_CALCULATE,
           data: {},
         });
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi",
-            disable: "show",
-            content: error?.response?.data?.msg,
-          },
-        });
+
+        if (error?.response?.data?.msg_code !== "NO_LINE_ITEMS") {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: error?.response?.data?.msg,
+            },
+          });
+        }
       });
   };
 };
