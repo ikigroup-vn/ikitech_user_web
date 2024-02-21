@@ -189,10 +189,7 @@ class SidebarShowStatisticalSale extends Component {
                                 )}
                               </div>
                               <div className="font-weight-bold text-gray-800 h5">
-                                {
-                                  statisticalUser.count_in_qtotal_final_in_quarter
-                                }{" "}
-                                đơn
+                                {statisticalUser.count_in_quarter} đơn
                               </div>
                             </div>
                           </div>
