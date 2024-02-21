@@ -291,6 +291,199 @@ class ProductInventory extends Component {
     reader.readAsBinaryString(f);
   };
 
+  onClickImport = () => {
+    $("#import_file_excel").trigger("click");
+  };
+
+  handleImportFile = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const bstr = evt.target.result;
+      const wb = XLSX.read(bstr, { type: "binary" });
+      const wsname = wb.SheetNames[0];
+      const ws = wb.Sheets[wsname];
+      const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+
+      //Filter Data
+
+      //Index: 0: "Tên sản phẩm", 1: "Mã BARCODE", 2: "Theo dõi kho (Có/Không)", 3: "Vị trí kệ hàng", 4: "Phân loại(Có/Không)", 5: "Phân loại chính", 6: "Phân loại phụ", 7: "DS phân loại", 8: "Mã SKU", 9: "Hình ảnh", 10: "Giá bán lẻ", 11: "Giá nhập", 12: "Giá vốn", 13: "Tồn kho"
+
+      const dataXlsxEmptyTitle = data.slice(1);
+      const newProducts = [];
+
+      let newDistributes = [];
+      let isDistributeProduct = false;
+      let nameElementDistribute = "";
+      let newProductHasDistribute = {};
+      let positionDistributeProduct = -1;
+      dataXlsxEmptyTitle.forEach((product, index) => {
+        const newProduct = {};
+
+        if (product[4]?.toString().toLowerCase().trim() === "không") {
+          newProduct["name"] = product[0];
+          newProduct["barcode"] = product[1];
+
+          if (product[2]?.toString().toLowerCase().trim() === "có") {
+            newProduct["shelf_position"] = product[3];
+            newProduct["check_inventory"] = true;
+          } else {
+            newProduct["shelf_position"] = "";
+            newProduct["check_inventory"] = false;
+          }
+
+          newProduct["distributes"] = [];
+          newProduct["sku"] = product[8] ? product[8] : null;
+          newProduct["images"] = !product[9] ? [] : product[9].split(",");
+          newProduct["price"] = !product[10] ? 0 : Number(product[10]);
+          newProduct["import_price"] = !product[11] ? 0 : Number(product[11]);
+          newProduct["cost_of_capital"] = !product[12]
+            ? 0
+            : Number(product[12]);
+          newProduct["stock"] = !product[13] ? 0 : Number(product[13]);
+          newProducts.push(newProduct);
+        } else if (product[4]?.toString().toLowerCase().trim() === "có") {
+          newProductHasDistribute["name"] = product[0];
+          newProductHasDistribute["barcode"] = product[1];
+          if (product[2]?.toString().toLowerCase().trim() === "có") {
+            newProductHasDistribute["shelf_position"] = product[3];
+            newProductHasDistribute["check_inventory"] = true;
+          } else {
+            newProductHasDistribute["shelf_position"] = "";
+            newProductHasDistribute["check_inventory"] = false;
+          }
+          newProductHasDistribute["sku"] = product[8] ? product[8] : null;
+          newProductHasDistribute["images"] = !product[9]
+            ? []
+            : product[9].split(",");
+
+          const dataDistribute = {
+            name: product[5],
+            sub_element_distribute_name: !product[6] ? "" : product[6],
+            element_distributes: [],
+          };
+          newDistributes.push(dataDistribute);
+        } else {
+          const nameProductDistributeTemp = product[7]
+            ? product[7]?.toString().split(",")[0]
+            : "";
+          const nameProductSubDistributeTemp = product[7]
+            ? product[7]?.toString().split(",")[1]
+            : "";
+          const imagesProductDistributeTemp = !product[9]
+            ? ""
+            : product[9]?.split(",");
+          isDistributeProduct = true;
+          if (nameElementDistribute !== nameProductDistributeTemp) {
+            positionDistributeProduct++;
+            newDistributes[0]["element_distributes"].push({
+              name: nameProductDistributeTemp,
+              price: nameProductDistributeTemp
+                ? !product[10]
+                  ? 0
+                  : Number(product[10])
+                : 0,
+              import_price: nameProductDistributeTemp
+                ? !product[11]
+                  ? 0
+                  : Number(product[11])
+                : 0,
+              sku: !nameProductSubDistributeTemp
+                ? !product[8]
+                  ? null
+                  : product[8]
+                : null,
+              image_url: imagesProductDistributeTemp
+                ? imagesProductDistributeTemp[0]
+                : "",
+              cost_of_capital: !nameProductSubDistributeTemp
+                ? !product[12]
+                  ? null
+                  : product[12]
+                : null,
+              stock: !nameProductSubDistributeTemp
+                ? !product[13]
+                  ? null
+                  : product[13]
+                : null,
+              sub_element_distributes: [],
+            });
+            nameElementDistribute = nameProductDistributeTemp;
+          }
+          if (nameProductSubDistributeTemp) {
+            newDistributes[0]["element_distributes"][positionDistributeProduct][
+              "sub_element_distributes"
+            ].push({
+              name: nameProductSubDistributeTemp,
+              price: !product[10] ? 0 : Number(product[10]),
+              import_price: !product[11] ? 0 : Number(product[11]),
+              sku: !product[8] ? null : product[8],
+              cost_of_capital: !product[12] ? 0 : Number(product[12]),
+              stock: !product[13] ? 0 : Number(product[13]),
+            });
+          }
+        }
+
+        if (
+          isDistributeProduct === true &&
+          index !== dataXlsxEmptyTitle.length - 1 &&
+          dataXlsxEmptyTitle[index + 1][0]
+        ) {
+          newProductHasDistribute["distributes"] = newDistributes;
+          newProducts.push({ ...newProductHasDistribute });
+          newDistributes = [];
+          isDistributeProduct = false;
+          nameElementDistribute = "";
+          positionDistributeProduct = -1;
+          newProduct["distributes"] = [];
+        } else if (
+          isDistributeProduct === true &&
+          index === dataXlsxEmptyTitle.length - 1
+        ) {
+          newProductHasDistribute["distributes"] = newDistributes;
+          newProducts.push({ ...newProductHasDistribute });
+          newDistributes = [];
+          isDistributeProduct = false;
+          nameElementDistribute = "";
+          positionDistributeProduct = -1;
+          newProduct["distributes"] = [];
+        }
+      });
+
+      //Add products to server
+      const { store_code, postMultiProductInventory } = this.props;
+      const dataPostProducts = {
+        list: newProducts,
+      };
+
+      const branch_id = getBranchId();
+      const branch_ids = getBranchIds();
+      const branchIds = branch_ids ? branch_ids : branch_id;
+
+      postMultiProductInventory(
+        this.props.match.params.store_code,
+        branchIds,
+        dataPostProducts,
+        () => {
+          this.setState({
+            searchValue: "",
+            page: 1,
+            numPage: 20,
+          });
+
+          this.props.fetchAllProductV2(
+            this.props.match.params.store_code,
+            branchIds,
+            1,
+            ""
+          );
+        }
+      );
+    };
+    document.getElementById("import_file_excel").value = null;
+    reader.readAsBinaryString(file);
+  };
+
   fetchProductInventory = () => {
     var { store_code } = this.props.match.params;
     const branch_id = getBranchId();
@@ -380,6 +573,24 @@ class ProductInventory extends Component {
                             Export Excel
                           </span>
                         </button>
+                        <button
+                          style={{ marginRight: "10px" }}
+                          onClick={this.onClickImport}
+                          className={`btn btn-primary btn-icon-split btn-sm`}
+                        >
+                          <span class="icon text-white-50">
+                            <i class="fas fa-file-export"></i>
+                          </span>
+                          <span style={{ color: "white" }} class="text">
+                            Import Excel
+                          </span>
+                        </button>
+                        <input
+                          type="file"
+                          id="import_file_excel"
+                          hidden
+                          onChange={this.handleImportFile}
+                        />
                       </div>
                     </div>
                     <br></br>
@@ -564,6 +775,16 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchDataId: (id) => {
       dispatch(dashboardAction.fetchDataId(id));
+    },
+    postMultiProductInventory: (store_code, branch_id, data, onSuccess) => {
+      dispatch(
+        productAction.postMultiProductInventory(
+          store_code,
+          branch_id,
+          data,
+          onSuccess
+        )
+      );
     },
   };
 };
