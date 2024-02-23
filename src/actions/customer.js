@@ -34,7 +34,12 @@ export const fetchAllCustomer = (
   };
 };
 
-export const exportAllListCustomer = (store_code, params, isSale) => {
+export const exportAllListCustomer = (
+  store_code,
+  params,
+  isSale,
+  referral_phone_number
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -161,7 +166,7 @@ export const exportAllListCustomer = (store_code, params, isSale) => {
         });
     } else {
       customerApi
-        .fetchAllCustomer(store_code, 1, params, "", true)
+        .fetchAllCustomer(store_code, 1, params, referral_phone_number, true)
         .then((res) => {
           dispatch({
             type: Types.SHOW_LOADING,
