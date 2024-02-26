@@ -241,6 +241,7 @@ class Upload extends Component {
       multiple,
       limit,
       showError,
+      imageType,
     } = this.props;
 
     const areAllFilesImages = Array.from(newFiles).every((newFile) => {
@@ -277,11 +278,14 @@ class Upload extends Component {
             return;
           }
         }
-        uploadListImgProduct(updatedList);
+        uploadListImgProduct(updatedList, imageType);
       } else {
         const newFile = newFiles[0];
         const fd = new FormData();
         fd.append("image", await compressed(newFile));
+        if (imageType) {
+          fd.append("image_type", imageType);
+        }
         uploadAvataProduct(fd);
       }
     }
@@ -443,7 +447,12 @@ class Upload extends Component {
                       height: 130,
                       border: "1px solid #ddd",
                       borderRadius: 6,
-                      marginLeft: index === 0 && limit === fileList.length ? 0 : index !== 0 ? 0 : 160
+                      marginLeft:
+                        index === 0 && limit === fileList.length
+                          ? 0
+                          : index !== 0
+                          ? 0
+                          : 160,
                     }}
                   >
                     <div
@@ -532,8 +541,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    uploadListImgProduct: (file) => {
-      dispatch(productAction.uploadListImgProduct(file));
+    uploadListImgProduct: (file, imageType) => {
+      dispatch(productAction.uploadListImgProduct(file, imageType));
     },
     uploadAvataProduct: (file) => {
       dispatch(productAction.uploadAvataProduct(file));

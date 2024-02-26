@@ -735,6 +735,7 @@ class ProductCreate extends Component {
                       files={this.state.images}
                       images={""}
                       limit={13}
+                      imageType="PRODUCT"
                     />
                   </div>
                 </div>

@@ -216,6 +216,7 @@ export const createBanner = function (store_code, data, banner, form) {
       const fd = new FormData();
 
       fd.append(`image`, data.file);
+      fd.append("image_type", "HOME");
       try {
         res = await uploadApi.upload(fd);
       } catch (error) {
@@ -272,6 +273,7 @@ export const updateBanner = function (store_code, data, banner, form) {
       const fd = new FormData();
 
       fd.append(`image`, data.file);
+      fd.append("image_type", "HOME");
       try {
         res = await uploadApi.upload(fd);
       } catch (error) {

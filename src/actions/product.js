@@ -2890,7 +2890,7 @@ export const editListStock = (
   };
 };
 
-export const uploadListImgProduct = function (files) {
+export const uploadListImgProduct = function (files, imageType) {
   return async (dispatch) => {
     var images = [];
     dispatch({
@@ -2900,6 +2900,9 @@ export const uploadListImgProduct = function (files) {
     for (let i = 0; i < files.length; i++) {
       const fd = new FormData();
       fd.append(`image`, await compressed(files[i]));
+      if (imageType) {
+        fd.append(`image_type`, imageType);
+      }
       try {
         var res = await uploadApi.upload(fd);
       } catch (error) {
