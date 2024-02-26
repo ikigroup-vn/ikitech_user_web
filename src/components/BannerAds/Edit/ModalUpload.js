@@ -1,48 +1,39 @@
 import React, { Component } from "react";
-import * as helper from "../../../ultis/helpers"
+import * as helper from "../../../ultis/helpers";
 import { connect } from "react-redux";
-import * as bannerAdsAction from "../../../actions/banner_ads"
-import {compressed} from "../../../ultis/helpers"
+import * as bannerAdsAction from "../../../actions/banner_ads";
+import { compressed } from "../../../ultis/helpers";
 
 class ModalUpload extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fileUpload: null
-
+      fileUpload: null,
     };
   }
 
-
-  onSave= async (e) =>{
-    
+  onSave = async (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
+    window.$(".modal").modal("hide");
     var file = this.state.fileUpload;
-    if(typeof file !== "undefined" && file != "" && file != null )
-    {
-      window.$('#file-bannerAds').fileinput('clear');
+    if (typeof file !== "undefined" && file != "" && file != null) {
+      window.$("#file-bannerAds").fileinput("clear");
       const fd = new FormData();
-      fd.append('image' , await compressed(file))
-      this.props.uploadImgBannerAds(fd )
-      this.setState({fileUpload: null})
-
+      fd.append("image", await compressed(file));
+      fd.append("image_type", "BANNER_AD");
+      this.props.uploadImgBannerAds(fd);
+      this.setState({ fileUpload: null });
     }
-
-   
-
-
-
-  }
+  };
 
   componentDidMount() {
-    var _this = this
+    var _this = this;
 
-    window.$('#file-bannerAds').on('fileloaded', function (event, file) {
-      _this.setState({ fileUpload: file })
+    window.$("#file-bannerAds").on("fileloaded", function (event, file) {
+      _this.setState({ fileUpload: file });
     });
-    window.$('#file-bannerAds').on('fileremoved', function (event, id, index) {
-      _this.setState({ fileUpload: null })
+    window.$("#file-bannerAds").on("fileremoved", function (event, id, index) {
+      _this.setState({ fileUpload: null });
     });
 
     helper.loadFileInput("file-bannerAds");
@@ -88,7 +79,7 @@ class ModalUpload extends Component {
                         className="file"
                         data-overwrite-initial="false"
                         data-min-file-count="2"
-                        />
+                      />
                     </div>
                   </div>
                 </form>
@@ -113,11 +104,10 @@ class ModalUpload extends Component {
   }
 }
 
-
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    uploadImgBannerAds: ( file ) => {
-      dispatch(bannerAdsAction.uploadImgBannerAds(file ));
+    uploadImgBannerAds: (file) => {
+      dispatch(bannerAdsAction.uploadImgBannerAds(file));
     },
   };
 };

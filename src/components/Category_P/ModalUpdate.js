@@ -111,7 +111,7 @@ class ModalUpdate extends Component {
       isShowHome: false,
       bannerImages: [],
       mainImage: "",
-      bannerLinks: ["", ""]
+      bannerLinks: ["", ""],
     };
   }
 
@@ -147,7 +147,7 @@ class ModalUpdate extends Component {
         txtName: "",
         fileUpload: null,
         isShowHome: false,
-        mainImage: ""
+        mainImage: "",
       });
     }
     return true;
@@ -187,7 +187,7 @@ class ModalUpdate extends Component {
       name: this.state.txtName,
       is_show_home: this.state.isShowHome,
       banner_ads: bannerAds,
-      image_url: this.state.mainImage
+      image_url: this.state.mainImage,
     };
     this.props.updateCategoryP(this.props.store_code, category.id, params);
   };
@@ -213,11 +213,11 @@ class ModalUpdate extends Component {
   };
 
   onChangeLink = (e, index) => {
-    var newBannerLinks = this.state.bannerLinks
-    newBannerLinks[index] = e.target.value
-    console.log('newBannerLinks: ', newBannerLinks);
-    this.setState({bannerLinks: newBannerLinks})
-  }
+    var newBannerLinks = this.state.bannerLinks;
+    newBannerLinks[index] = e.target.value;
+    console.log("newBannerLinks: ", newBannerLinks);
+    this.setState({ bannerLinks: newBannerLinks });
+  };
 
   renderBannerImages = () => {
     const { bannerImages } = this.state;
@@ -230,27 +230,28 @@ class ModalUpdate extends Component {
           files={bannerImages}
           images={this.state.bannerImages}
           limit={2}
+          imageType="CATEGORY"
         />
-        <div style={{marginLeft: '162px', display: 'flex', gap: '16px'}}>
-        {
-          bannerImages && bannerImages.length ? bannerImages.map((item, index) => {
-            return (
-              <div style={{width: '290px', marginTop: '12px'}}>
-                <label>Link ảnh {index + 1}:</label>
-                <input
-                type="text"
-                class="form-control"
-                id="txtName"
-                placeholder={`Đường dẫn ảnh ${index + 1}`}
-                autoComplete="off"
-                value={this.state.bannerLinks[index]}
-                onChange={(e) => this.onChangeLink(e, index)}
-                name="txtName"
-              />
-              </div>
-            )
-          }) : null
-        }
+        <div style={{ marginLeft: "162px", display: "flex", gap: "16px" }}>
+          {bannerImages && bannerImages.length
+            ? bannerImages.map((item, index) => {
+                return (
+                  <div style={{ width: "290px", marginTop: "12px" }}>
+                    <label>Link ảnh {index + 1}:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="txtName"
+                      placeholder={`Đường dẫn ảnh ${index + 1}`}
+                      autoComplete="off"
+                      value={this.state.bannerLinks[index]}
+                      onChange={(e) => this.onChangeLink(e, index)}
+                      name="txtName"
+                    />
+                  </div>
+                );
+              })
+            : null}
         </div>
       </div>
     );
@@ -259,8 +260,8 @@ class ModalUpdate extends Component {
   handleRemoveImage = () => {
     this.setState({
       mainImage: "",
-    })
-  }
+    });
+  };
 
   handleUploadImage = async (e, id) => {
     const file = e.target.files;
@@ -516,7 +517,9 @@ class ModalUpdate extends Component {
 
                 {isShowHome && (
                   <div>
-                    <p style={{fontWeight: '600'}}>Thêm ảnh banner(Giới hạn 2 ảnh):</p>
+                    <p style={{ fontWeight: "600" }}>
+                      Thêm ảnh banner(Giới hạn 2 ảnh):
+                    </p>
                     <div>{this.renderBannerImages()}</div>
                   </div>
                 )}
