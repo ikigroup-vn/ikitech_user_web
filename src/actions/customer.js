@@ -34,7 +34,12 @@ export const fetchAllCustomer = (
   };
 };
 
-export const exportAllListCustomer = (store_code, params, isSale) => {
+export const exportAllListCustomer = (
+  store_code,
+  params,
+  isSale,
+  referral_phone_number
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -161,7 +166,7 @@ export const exportAllListCustomer = (store_code, params, isSale) => {
         });
     } else {
       customerApi
-        .fetchAllCustomer(store_code, 1, params, "", true)
+        .fetchAllCustomer(store_code, 1, params, referral_phone_number, true)
         .then((res) => {
           dispatch({
             type: Types.SHOW_LOADING,
@@ -177,6 +182,7 @@ export const exportAllListCustomer = (store_code, params, isSale) => {
                   name: item.name ?? "",
                   phone_number: item.phone_number ?? "",
                   referral_phone_number: item.referral_phone_number ?? "",
+                  sale_name: item.sale_staff?.name ?? "",
                   address_detail: item.address_detail ?? "",
                   wards_name: item.wards_name ?? "",
                   district_name: item.district_name ?? "",
@@ -212,6 +218,9 @@ export const exportAllListCustomer = (store_code, params, isSale) => {
                   }
                   if (key == "referral_phone_number") {
                     newItem["SĐT người giới thiệu"] = value;
+                  }
+                  if (key == "sale_name") {
+                    newItem["Sale được phân công"] = value;
                   }
                   if (key == "wards_name") {
                     newItem["Phường/Xã"] = value;

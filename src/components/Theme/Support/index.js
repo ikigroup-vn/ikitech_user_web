@@ -18,6 +18,10 @@ class Support extends Component {
       post_id_return_policy: null,
       post_id_support_policy: null,
       post_id_privacy_policy: null,
+      post_id_delivery_policy: null,
+      post_id_participating: null,
+      post_id_payment_policy: null,
+      post_id_goods_inspecstion_policy: null,
 
       ID_post_id_help: null,
       ID_post_id_contact: null,
@@ -27,6 +31,9 @@ class Support extends Component {
       ID_post_id_support_policy: null,
       ID_post_id_privacy_policy: null,
       ID_post_id_delivery_policy: null,
+      ID_post_id_participating: null,
+      ID_post_id_payment_policy: null,
+      ID_post_id_goods_inspecstion_policy: null,
       is_show_list_post_contact: false,
       type: "",
       isLoading: false,
@@ -55,6 +62,10 @@ class Support extends Component {
         ID_post_id_support_policy: theme.post_id_support_policy || "",
         ID_post_id_privacy_policy: theme.post_id_privacy_policy || "",
         ID_post_id_delivery_policy: theme.post_id_delivery_policy || "",
+        ID_post_id_participating: theme.post_id_participating || "",
+        ID_post_id_payment_policy: theme.post_id_payment_policy || "",
+        ID_post_id_goods_inspecstion_policy:
+          theme.post_id_goods_inspecstion_policy || "",
         is_show_list_post_contact: theme.is_show_list_post_contact,
       });
 
@@ -117,6 +128,33 @@ class Support extends Component {
           id: theme.post_id_delivery_policy,
           type: Types.POST_ID_DELIVERY_POLICY,
         });
+
+      if (
+        theme.post_id_participating != "" &&
+        theme.post_id_participating != null
+      )
+        this.props.fetchBlogId(store_code, {
+          id: theme.post_id_participating,
+          type: Types.POST_ID_PARTICIPATING,
+        });
+
+      if (
+        theme.post_id_payment_policy != "" &&
+        theme.post_id_payment_policy != null
+      )
+        this.props.fetchBlogId(store_code, {
+          id: theme.post_id_payment_policy,
+          type: Types.POST_ID_PAYMENT_POLICY,
+        });
+
+      if (
+        theme.post_id_goods_inspecstion_policy != "" &&
+        theme.post_id_goods_inspecstion_policy != null
+      )
+        this.props.fetchBlogId(store_code, {
+          id: theme.post_id_goods_inspecstion_policy,
+          type: Types.POST_ID_GOODS_INSPECSTION_POLICY,
+        });
     }
   }
 
@@ -146,6 +184,10 @@ class Support extends Component {
         ID_post_id_support_policy: theme.post_id_support_policy || "",
         ID_post_id_privacy_policy: theme.post_id_privacy_policy || "",
         ID_post_id_delivery_policy: theme.post_id_delivery_policy || "",
+        ID_post_id_participating: theme.post_id_participating || "",
+        ID_post_id_payment_policy: theme.post_id_payment_policy || "",
+        ID_post_id_goods_inspecstion_policy:
+          theme.post_id_goods_inspecstion_policy || "",
         is_show_list_post_contact: theme.is_show_list_post_contact,
         isLoading: true,
       });
@@ -170,6 +212,18 @@ class Support extends Component {
       !shallowEqual(
         nextProps.post_id_delivery_policy,
         this.props.post_id_delivery_policy
+      ) ||
+      !shallowEqual(
+        nextProps.post_id_participating,
+        this.props.post_id_participating
+      ) ||
+      !shallowEqual(
+        nextProps.post_id_payment_policy,
+        this.props.post_id_payment_policy
+      ) ||
+      !shallowEqual(
+        nextProps.post_id_goods_inspecstion_policy,
+        this.props.post_id_goods_inspecstion_policy
       )
     ) {
       this.setState({
@@ -182,6 +236,10 @@ class Support extends Component {
         post_id_privacy_policy: nextProps.post_id_privacy_policy?.title || null,
         post_id_delivery_policy:
           nextProps.post_id_delivery_policy?.title || null,
+        post_id_participating: nextProps.post_id_participating?.title || null,
+        post_id_payment_policy: nextProps.post_id_payment_policy?.title || null,
+        post_id_goods_inspecstion_policy:
+          nextProps.post_id_goods_inspecstion_policy?.title || null,
 
         ID_post_id_help: nextProps.post_id_help?.id || null,
         ID_post_id_contact: nextProps.post_id_contact?.id || null,
@@ -191,6 +249,10 @@ class Support extends Component {
         ID_post_id_support_policy: nextProps.post_id_support_policy?.id || null,
         ID_post_id_privacy_policy: nextProps.post_id_privacy_policy?.id || null,
         ID_post_id_delivery_policy: nextProps.post_id_delivery_policy?.id || "",
+        ID_post_id_participating: nextProps.post_id_participating?.id || "",
+        ID_post_id_payment_policy: nextProps.post_id_payment_policy?.id || "",
+        ID_post_id_goods_inspecstion_policy:
+          nextProps.post_id_goods_inspecstion_policy?.id || "",
       });
     }
   }
@@ -207,6 +269,9 @@ class Support extends Component {
         ID_post_id_support_policy,
         ID_post_id_privacy_policy,
         ID_post_id_delivery_policy,
+        ID_post_id_participating,
+        ID_post_id_payment_policy,
+        ID_post_id_goods_inspecstion_policy,
       } = this.state;
       if (ID_post_id_help != "" && ID_post_id_help != null)
         this.props.fetchBlogId(store_code, {
@@ -258,6 +323,27 @@ class Support extends Component {
           type: Types.POST_ID_DELIVERY_POLICY,
         });
 
+      if (ID_post_id_participating != "" && ID_post_id_participating != null)
+        this.props.fetchBlogId(store_code, {
+          id: ID_post_id_participating,
+          type: Types.POST_ID_PARTICIPATING,
+        });
+
+      if (ID_post_id_payment_policy != "" && ID_post_id_payment_policy != null)
+        this.props.fetchBlogId(store_code, {
+          id: ID_post_id_payment_policy,
+          type: Types.POST_ID_PAYMENT_POLICY,
+        });
+
+      if (
+        ID_post_id_goods_inspecstion_policy != "" &&
+        ID_post_id_goods_inspecstion_policy != null
+      )
+        this.props.fetchBlogId(store_code, {
+          id: ID_post_id_goods_inspecstion_policy,
+          type: Types.POST_ID_GOODS_INSPECSTION_POLICY,
+        });
+
       this.setState({ isLoading: false });
     }
     return true;
@@ -296,6 +382,19 @@ class Support extends Component {
       theme.ID_post_id_delivery_policy == ""
         ? null
         : theme.ID_post_id_delivery_policy;
+
+    form.post_id_participating =
+      theme.ID_post_id_participating == ""
+        ? null
+        : theme.ID_post_id_participating;
+    form.post_id_payment_policy =
+      theme.ID_post_id_payment_policy == ""
+        ? null
+        : theme.ID_post_id_payment_policy;
+    form.post_id_goods_inspecstion_policy =
+      theme.ID_post_id_goods_inspecstion_policy == ""
+        ? null
+        : theme.ID_post_id_goods_inspecstion_policy;
     form.is_show_list_post_contact = theme.is_show_list_post_contact;
     console.log(form);
     this.props.updateTheme(store_code, form);
@@ -310,6 +409,9 @@ class Support extends Component {
       post_id_support_policy,
       post_id_privacy_policy,
       post_id_delivery_policy,
+      post_id_participating,
+      post_id_payment_policy,
+      post_id_goods_inspecstion_policy,
       ID_post_id_help,
       ID_post_id_contact,
       ID_post_id_about,
@@ -318,6 +420,9 @@ class Support extends Component {
       ID_post_id_support_policy,
       ID_post_id_privacy_policy,
       ID_post_id_delivery_policy,
+      ID_post_id_participating,
+      ID_post_id_payment_policy,
+      ID_post_id_goods_inspecstion_policy,
       is_show_list_post_contact,
     } = this.state;
 
@@ -421,9 +526,27 @@ class Support extends Component {
                 />
               </div>
             </div>
+            <div className="form-group">
+              <label htmlFor="name">Bài viết tham gia</label>
+              <input readOnly value={ID_post_id_participating} type="hidden" />
+              <div class="right-inner-addon input-container">
+                <i class="fa fa-caret-down"></i>
+                <input
+                  readOnly
+                  onClick={() => this.fetchAllBlog("post_id_participating")}
+                  value={post_id_participating}
+                  data-toggle="modal"
+                  data-target="#showListBlog"
+                  type="text"
+                  name="product_name"
+                  class="form-control"
+                  placeholder="Chọn bài viết..."
+                />
+              </div>
+            </div>
 
             <div className="form-group">
-              <label htmlFor="name">Bài viết điều khoản điều kiện</label>
+              <label htmlFor="name">Quy chế hoạt động website</label>
               <input value={ID_post_id_terms} type="hidden" />
               <div class="right-inner-addon input-container">
                 <i class="fa fa-caret-down"></i>
@@ -442,7 +565,7 @@ class Support extends Component {
             </div>
 
             <div className="form-group">
-              <label htmlFor="name">Chính sách hoàn trả</label>
+              <label htmlFor="name">Chính sách đổi trả và hoàn tiền</label>
               <input value={ID_post_id_return_policy} type="hidden" />
               <div class="right-inner-addon input-container">
                 <i class="fa fa-caret-down"></i>
@@ -461,7 +584,7 @@ class Support extends Component {
             </div>
 
             <div className="form-group">
-              <label htmlFor="name">Chính sách hỗ trợ</label>
+              <label htmlFor="name">Chính sách bảo hành</label>
               <input value={ID_post_id_support_policy} type="hidden" />
               <div class="right-inner-addon input-container">
                 <i class="fa fa-caret-down"></i>
@@ -479,7 +602,7 @@ class Support extends Component {
               </div>
             </div>
             <div className="form-group">
-              <label htmlFor="name">Chính sách bảo mật</label>
+              <label htmlFor="name">Chính sách bảo mật thông tin</label>
               <input value={ID_post_id_privacy_policy} type="hidden" />
               <div class="right-inner-addon input-container">
                 <i class="fa fa-caret-down"></i>
@@ -497,7 +620,7 @@ class Support extends Component {
               </div>
             </div>
             <div className="form-group">
-              <label htmlFor="name">Chính sách giao hàng</label>
+              <label htmlFor="name">Chính sách vận chuyển và giao nhận</label>
               <input value={ID_post_id_delivery_policy} type="hidden" />
               <div class="right-inner-addon input-container">
                 <i class="fa fa-caret-down"></i>
@@ -505,6 +628,47 @@ class Support extends Component {
                   readOnly
                   onClick={() => this.fetchAllBlog("post_id_delivery_policy")}
                   value={post_id_delivery_policy}
+                  data-toggle="modal"
+                  data-target="#showListBlog"
+                  type="text"
+                  name="product_name"
+                  class="form-control"
+                  placeholder="Chọn bài viết..."
+                />
+              </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="name">Chính sách thanh toán</label>
+              <input value={ID_post_id_payment_policy} type="hidden" />
+              <div class="right-inner-addon input-container">
+                <i class="fa fa-caret-down"></i>
+                <input
+                  readOnly
+                  onClick={() => this.fetchAllBlog("post_id_payment_policy")}
+                  value={post_id_payment_policy}
+                  data-toggle="modal"
+                  data-target="#showListBlog"
+                  type="text"
+                  name="product_name"
+                  class="form-control"
+                  placeholder="Chọn bài viết..."
+                />
+              </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="name">Chính sách kiểm hàng</label>
+              <input
+                value={ID_post_id_goods_inspecstion_policy}
+                type="hidden"
+              />
+              <div class="right-inner-addon input-container">
+                <i class="fa fa-caret-down"></i>
+                <input
+                  readOnly
+                  onClick={() =>
+                    this.fetchAllBlog("post_id_goods_inspecstion_policy")
+                  }
+                  value={post_id_goods_inspecstion_policy}
                   data-toggle="modal"
                   data-target="#showListBlog"
                   type="text"
@@ -560,6 +724,10 @@ const mapStateToProps = (state) => {
     post_id_support_policy: state.themeReducers.post_id_support_policy,
     post_id_privacy_policy: state.themeReducers.post_id_privacy_policy,
     post_id_delivery_policy: state.themeReducers.post_id_delivery_policy,
+    post_id_participating: state.themeReducers.post_id_participating,
+    post_id_payment_policy: state.themeReducers.post_id_payment_policy,
+    post_id_goods_inspecstion_policy:
+      state.themeReducers.post_id_goods_inspecstion_policy,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

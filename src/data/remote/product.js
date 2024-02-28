@@ -159,6 +159,14 @@ export const createMultiProduct = (store_code, data) => {
   return callApi(`/store/${store_code}/products/all`, "post", data);
 };
 
+export const createMultiProductInventory = (store_code, branch_id, data) => {
+  return callApi(
+    `/store_v2/${store_code}/${branch_id}/products_inventory/all`,
+    "post",
+    data
+  );
+};
+
 export const fetchAllListProduct = (store_code, search, params) => {
   return callApi(
     `/store/${store_code}/products?is_show_description=${true}&is_get_all=${true}&search=${search}${

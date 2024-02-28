@@ -35,6 +35,8 @@ import ModalUpdatePasswordImport from "./ModalUpdatePasswordImport";
 import history from "../../history";
 import * as saleAction from "../../actions/sale";
 import Chat from "../../components/Chat";
+import DateRangePickerCustom from "../../components/DatePicker/DateRangePickerCustom";
+import Select from "react-select";
 
 const CustomerStyles = styled.div`
   .filter-search-customer {
@@ -69,6 +71,7 @@ const CustomerStyles = styled.div`
       transition: all 0.3s;
       top: calc(100% + 10px);
       left: 0;
+      z-index: 20;
       width: max-content;
       border-radius: 6px;
       box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
@@ -141,6 +144,21 @@ const CustomerStyles = styled.div`
     justify-content: space-between;
   }
 `;
+
+const roles = [
+  {
+    label: "Khách hàng",
+    value: 0,
+  },
+  {
+    label: "Cộng tác viên",
+    value: 1,
+  },
+  {
+    label: "Đại lý",
+    value: 2,
+  },
+];
 class Customer extends Component {
   constructor(props) {
     super(props);
@@ -159,6 +177,9 @@ class Customer extends Component {
       fields: ["Tên khách hàng", "Số điện thoại"],
       openModalImport: false,
       isUpdatedPasswordImport: false,
+      dateToCustomerReferral: "",
+      dateFromCustomerReferral: "",
+      roleCustomer: null,
     };
   }
 
@@ -635,6 +656,58 @@ class Customer extends Component {
     document.getElementById("file-excel-import-customer").value = null;
     reader.readAsBinaryString(f);
   };
+  onChangeDateFromComponent = (date) => {
+    const { fetchAllCustomerByInferralPhone } = this.props;
+    var { store_code } = this.props.match.params;
+    const { customerInfo, roleCustomer } = this.state;
+
+    const params = `&date_from=${date.from}&date_to=${date.to}&sale_type=${
+      roleCustomer?.value || roleCustomer?.value === 0
+        ? roleCustomer?.value
+        : ""
+    }`;
+    fetchAllCustomerByInferralPhone(
+      store_code,
+      1,
+      params,
+      customerInfo?.phone_number
+    );
+    this.setState({
+      dateFromCustomerReferral: date.from,
+      dateToCustomerReferral: date.to,
+      page: 1,
+    });
+  };
+  handleChangeRoleCustomer = (role) => {
+    const { fetchAllCustomerByInferralPhone } = this.props;
+    var { store_code } = this.props.match.params;
+    const { dateFromCustomerReferral, dateToCustomerReferral, customerInfo } =
+      this.state;
+
+    this.setState({ roleCustomer: role });
+
+    const params = `&date_from=${dateFromCustomerReferral}&date_to=${dateToCustomerReferral}&sale_type=${
+      role?.value || role?.value === 0 ? role.value : ""
+    }`;
+
+    fetchAllCustomerByInferralPhone(
+      store_code,
+      1,
+      params,
+      customerInfo?.phone_number
+    );
+  };
+  exportAllListCustomerReferral = () => {
+    var { store_code } = this.props.match.params;
+    var { customerInfo } = this.state;
+
+    this.props.exportAllListCustomer(
+      store_code,
+      "",
+      false,
+      customerInfo.phone_number
+    );
+  };
   render() {
     var { customer, customers, customersSale, chat } = this.props;
 
@@ -656,6 +729,7 @@ class Customer extends Component {
       customer_change_point,
       customer_list_export,
       customer_list_import,
+      roleCustomer,
     } = this.state;
     const { wards, district, province, types } = this.props;
     var customerImg =
@@ -920,39 +994,92 @@ class Customer extends Component {
             }
             pageReferralPhone={pageReferralPhone}
           >
-            {this.props.customersByInferralPhone?.data?.length > 0 && (
-              <div className="card-body">
-                <Table
-                  handleSetInfor={this.handleSetInfor}
-                  paginate={paginate}
-                  searchValue={searchValue}
-                  currentParams={this.state.currentParams}
-                  chat_allow={chat_allow}
-                  showChatBox={showChatBox}
-                  handleShowChatBox={this.handleShowChatBox}
-                  store_code={store_code}
-                  handleDelCallBack={this.handleDelCallBack}
-                  customers={this.props.customersByInferralPhone}
-                  setCustomerInfo={this.setCustomerInfo}
-                  setShowCustomersByReferralPhone={
-                    this.setShowCustomersByReferralPhone
-                  }
-                  isSale={this.isSale}
+            <div
+              style={{
+                marginBottom: "10px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "15px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "15px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "180px",
+                  }}
+                >
+                  <Select
+                    options={roles}
+                    placeholder="Vai trò"
+                    className="select-role-customer"
+                    onChange={this.handleChangeRoleCustomer}
+                    value={roleCustomer}
+                    noOptionsMessage={() => "Không tìm thấy kết quả"}
+                    isClearable
+                  ></Select>
+                </div>
+                <DateRangePickerCustom
+                  row={true}
+                  onChangeDate={this.onChangeDateFromComponent}
                 />
-                <div className="totalContent">
-                  <div className="totalCustomers">
-                    Hiển thị 1{" "}
-                    {this.props.customersByInferralPhone.data.length > 1
-                      ? `đến ${this.props.customersByInferralPhone.data.length}`
-                      : null}{" "}
-                    trong số {this.props.customersByInferralPhone.total} khách
-                    hàng
-                  </div>
-                  <Pagination
-                    setPageReferralPhone={this.setPageReferralPhone}
+              </div>
+              <div>
+                <button
+                  style={{ margin: "auto 0px", marginRight: 15 }}
+                  onClick={this.exportAllListCustomerReferral}
+                  class={`btn btn-success btn-icon-split btn-sm `}
+                >
+                  <span class="icon text-white-50">
+                    <i class="fas fa-file-export"></i>
+                  </span>
+                  <span style={{ color: "white" }} class="text">
+                    Export Excel
+                  </span>
+                </button>
+              </div>
+            </div>
+            {this.props.customersByInferralPhone?.data?.length > 0 && (
+              <div>
+                <div className="card-body">
+                  <Table
+                    handleSetInfor={this.handleSetInfor}
+                    paginate={paginate}
+                    searchValue={searchValue}
+                    currentParams={this.state.currentParams}
+                    chat_allow={chat_allow}
+                    showChatBox={showChatBox}
+                    handleShowChatBox={this.handleShowChatBox}
                     store_code={store_code}
+                    handleDelCallBack={this.handleDelCallBack}
                     customers={this.props.customersByInferralPhone}
+                    setCustomerInfo={this.setCustomerInfo}
+                    setShowCustomersByReferralPhone={
+                      this.setShowCustomersByReferralPhone
+                    }
+                    isSale={this.isSale}
                   />
+                  <div className="totalContent">
+                    <div className="totalCustomers">
+                      Hiển thị 1{" "}
+                      {this.props.customersByInferralPhone.data.length > 1
+                        ? `đến ${this.props.customersByInferralPhone.data.length}`
+                        : null}{" "}
+                      trong số {this.props.customersByInferralPhone.total} khách
+                      hàng
+                    </div>
+                    <Pagination
+                      setPageReferralPhone={this.setPageReferralPhone}
+                      store_code={store_code}
+                      customers={this.props.customersByInferralPhone}
+                    />
+                  </div>
                 </div>
               </div>
             )}
@@ -1001,9 +1128,19 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllCustomer: (id, page, params) => {
       dispatch(customerAction.fetchAllCustomer(id, page, params));
     },
-    exportAllListCustomer: (store_code, params, isSale) => {
+    exportAllListCustomer: (
+      store_code,
+      params,
+      isSale,
+      referral_phone_number
+    ) => {
       dispatch(
-        customerAction.exportAllListCustomer(store_code, params, isSale)
+        customerAction.exportAllListCustomer(
+          store_code,
+          params,
+          isSale,
+          referral_phone_number
+        )
       );
     },
     importAllListCustomer: (store_code, data, onSuccess) => {

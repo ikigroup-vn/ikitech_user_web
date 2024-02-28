@@ -1,44 +1,39 @@
 import React, { Component } from "react";
 import * as helper from "../../ultis/helpers";
 import { connect } from "react-redux";
-import * as popupAction from "../../actions/popup"
-import {compressed} from "../../ultis/helpers"
+import * as popupAction from "../../actions/popup";
+import { compressed } from "../../ultis/helpers";
 
 class ModalUpload extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fileUpload: null
-
+      fileUpload: null,
     };
   }
 
-
-  onSave= async (e) =>{
-    
+  onSave = async (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
+    window.$(".modal").modal("hide");
     var file = this.state.fileUpload;
-    if(typeof file !== "undefined" && file != "" && file != null )
-    {
-      window.$('#file-discount').fileinput('clear');
+    if (typeof file !== "undefined" && file != "" && file != null) {
+      window.$("#file-discount").fileinput("clear");
       const fd = new FormData();
-      fd.append('image' , await compressed(file))
-      this.props.uploadImgPopup(fd)
-      this.setState({fileUpload: null})
-
+      fd.append("image", await compressed(file));
+      fd.append("image_type", "POPUP");
+      this.props.uploadImgPopup(fd);
+      this.setState({ fileUpload: null });
     }
-   
-  }
+  };
 
   componentDidMount() {
-    var _this = this
+    var _this = this;
 
-    window.$('#file-popup').on('fileloaded', function (event, file) {
-      _this.setState({ fileUpload: file })
+    window.$("#file-popup").on("fileloaded", function (event, file) {
+      _this.setState({ fileUpload: file });
     });
-    window.$('#file-popup').on('fileremoved', function (event, id, index) {
-      _this.setState({ fileUpload: null })
+    window.$("#file-popup").on("fileremoved", function (event, id, index) {
+      _this.setState({ fileUpload: null });
     });
     helper.loadFileInput("file-popup");
   }
@@ -107,10 +102,9 @@ class ModalUpload extends Component {
   }
 }
 
-
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    uploadImgPopup: ( file) => {
+    uploadImgPopup: (file) => {
       dispatch(popupAction.uploadImgPopup(file));
     },
   };

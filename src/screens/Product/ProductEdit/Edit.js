@@ -828,6 +828,7 @@ class ProductEdit extends Component {
                       files={this.state.images}
                       images={this.state.images}
                       limit={13}
+                      imageType="PRODUCT"
                     />
                   </div>
                 </div>

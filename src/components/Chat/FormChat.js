@@ -93,7 +93,6 @@ class FormChat extends Component {
     this.props.fetchChatId(store_code, customerId, pag);
   };
   showMessages = (messages, customerImg, userImg) => {
-    console.log(messages);
     var result = null;
 
     if (typeof messages.data == "undefined" || messages == null) {
@@ -193,7 +192,22 @@ class FormChat extends Component {
           </React.Fragment>
         );
       });
+    } else {
+      result = (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-end",
+          }}
+        >
+          <p>Chưa có tin nhắn nào!</p>
+        </div>
+      );
     }
+
     return result;
   };
 
@@ -362,7 +376,7 @@ class FormChat extends Component {
       <React.Fragment>
         <div
           className="chat-panel msger-chatbox"
-          style={{ height: "455px", overflow: "auto", padding: "15px" }}
+          style={{ height: "505px", overflow: "auto", padding: "15px" }}
         >
           {this.showMessages(chat, customerImg, userImg)}
         </div>

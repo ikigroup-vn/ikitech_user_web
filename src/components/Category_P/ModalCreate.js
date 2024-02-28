@@ -19,7 +19,7 @@ class ModalCreate extends Component {
       isShowHome: false,
       bannerImages: [],
       bannerLinks: ["", ""],
-      mainImage: ""
+      mainImage: "",
     };
   }
 
@@ -83,18 +83,18 @@ class ModalCreate extends Component {
       });
       return;
     }
-    const BannerAds = this.state.bannerImages.length ? this.state.bannerImages.map((item, index) => (
-      {
-        "image": item,
-        "link": this.state.bannerLinks[index] || ""
-      }
-    )) : []
+    const BannerAds = this.state.bannerImages.length
+      ? this.state.bannerImages.map((item, index) => ({
+          image: item,
+          link: this.state.bannerLinks[index] || "",
+        }))
+      : [];
     const params = {
       name: this.state.txtName,
       is_show_home: this.state.isShowHome,
       banner_ads: BannerAds,
-      image_url: this.state.mainImage
-    }
+      image_url: this.state.mainImage,
+    };
     this.props.createCategoryP(this.props.store_code, { ...params });
     this.setState({ fileUpload: null });
   };
@@ -121,21 +121,21 @@ class ModalCreate extends Component {
   handleRemoveImage = () => {
     this.setState({
       mainImage: "",
-    })
-  }
+    });
+  };
 
   setBannerImages = (images) => {
     this.setState({ bannerImages: images });
   };
 
   onChangeLink = (e, index) => {
-    var newBannerLinks = this.state.bannerLinks
-    newBannerLinks[index] = e.target.value
-    this.setState({bannerLinks: newBannerLinks})
-  }
+    var newBannerLinks = this.state.bannerLinks;
+    newBannerLinks[index] = e.target.value;
+    this.setState({ bannerLinks: newBannerLinks });
+  };
 
   renderBannerImages = () => {
-    const { bannerImages } = this.state
+    const { bannerImages } = this.state;
     return (
       <div className="group-banner-image">
         <Upload
@@ -144,31 +144,33 @@ class ModalCreate extends Component {
           setFiles={this.setBannerImages}
           files={bannerImages}
           images={bannerImages}
-          limit={2} />
-        <div style={{marginLeft: '162px', display: 'flex', gap: '16px'}}>
-        {
-          bannerImages && bannerImages.length ? bannerImages.map((item, index) => {
-            return (
-              <div style={{width: '290px', marginTop: '12px'}}>
-                <label>Link ảnh {index + 1}:</label>
-                <input
-                type="text"
-                class="form-control"
-                id="txtName"
-                placeholder={`Đường dẫn ảnh ${index + 1}`}
-                autoComplete="off"
-                onChange={(e) => this.onChangeLink(e, index)}
-                name="txtName"
-                style={{width: '290px'}}
-              />
-              </div>
-            )
-          }) : null
-        }
+          limit={2}
+          imageType="CATEGORY"
+        />
+        <div style={{ marginLeft: "162px", display: "flex", gap: "16px" }}>
+          {bannerImages && bannerImages.length
+            ? bannerImages.map((item, index) => {
+                return (
+                  <div style={{ width: "290px", marginTop: "12px" }}>
+                    <label>Link ảnh {index + 1}:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="txtName"
+                      placeholder={`Đường dẫn ảnh ${index + 1}`}
+                      autoComplete="off"
+                      onChange={(e) => this.onChangeLink(e, index)}
+                      name="txtName"
+                      style={{ width: "290px" }}
+                    />
+                  </div>
+                );
+              })
+            : null}
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   render() {
     var { txtName, isShowHome } = this.state;
@@ -253,12 +255,14 @@ class ModalCreate extends Component {
                     />
                   </div>
                 </div>
-                {isShowHome && <div>
-                  <p style={{fontWeight: '600'}}>Thêm ảnh banner(Giới hạn 2 ảnh):</p>
+                {isShowHome && (
                   <div>
-                    {this.renderBannerImages()}
+                    <p style={{ fontWeight: "600" }}>
+                      Thêm ảnh banner(Giới hạn 2 ảnh):
+                    </p>
+                    <div>{this.renderBannerImages()}</div>
                   </div>
-                </div>}
+                )}
               </div>
               <div class="modal-footer">
                 <button

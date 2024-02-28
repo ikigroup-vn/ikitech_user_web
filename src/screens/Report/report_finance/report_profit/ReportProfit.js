@@ -122,7 +122,7 @@ class ReportProfit extends Component {
       {
         id: 1,
         step: 0,
-        title: "I. Doanh thu bán hàng",
+        title: "I. Doanh thu bán hàng(1 + 2 + 3 - 4 - 5 - 6 - 7)",
         value: format(Number(reportProfit.sales_revenue)),
       },
       {
@@ -190,19 +190,19 @@ class ReportProfit extends Component {
       {
         id: 8,
         step: 0,
-        title: "II. Chi phí bán hàng (1+2+3)",
-        value: format(Number(reportProfit.cost_of_sales)),
+        title: "II. Chi phí bán hàng (1 + 2 + 3)",
+        value: format(Number(reportProfit.selling_expenses)),
       },
       {
         id: 9,
         step: 1,
         title: "1. Chi phí giá vốn hàng hóa",
-        value: format(Number(reportProfit.selling_expenses)),
+        value: format(Number(reportProfit.cost_of_sales)),
       },
       {
         id: 10,
         step: 1,
-        title: "2. Thanh toán bằng điểm",
+        title: "2. Thanh toán bằng xu",
         value: format(Number(reportProfit.pay_with_points)),
       },
       {
@@ -214,33 +214,33 @@ class ReportProfit extends Component {
       {
         id: 12,
         step: 0,
-        title: "III. Thu nhập khác (1+2)",
-        value: format(Number(reportProfit.other_costs)),
+        title: "III. Thu nhập khác",
+        value: format(Number(reportProfit.other_income)),
       },
       {
         id: 13,
         step: 1,
         title: "1. Phiếu thu khác hạch toán kết quả kinh doanh",
-        value: format(Number(reportProfit.revenue_auto_create)),
+        value: format(Number(reportProfit.other_income)),
       },
-      {
-        id: 14,
-        step: 1,
-        title: "2. Phí khách trả hàng",
-        value: format(Number(reportProfit.customer_return)),
-      },
+      // {
+      //   id: 14,
+      //   step: 1,
+      //   title: "2. Phí khách trả hàng",
+      //   value: format(Number(reportProfit.customer_return)),
+      // },
       {
         id: 15,
         step: 0,
         title: "IV. Chi phí khác",
         value: format(Number(reportProfit.other_costs)),
       },
-      // {
-      //   id: 16,
-      //   step: 0,
-      //   title: "1. Phiếu chi khác hạch toán kết quả kinh doanh",
-      //   value: format(Number(reportProfit.sales_revenue)),
-      // },
+      {
+        id: 16,
+        step: 1,
+        title: "1. Phiếu chi khác hạch toán kết quả kinh doanh",
+        value: format(Number(reportProfit.other_costs)),
+      },
       {
         id: 17,
         step: 0,

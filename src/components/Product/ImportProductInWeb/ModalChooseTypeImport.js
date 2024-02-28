@@ -99,13 +99,11 @@ class ModalChooseTypeImport extends Component {
         return;
       }
       //Filter Data
-      //Index: 0: "Tên sản phẩm", 1: "Mã SKU", 2: "Mã BARCODE", 3: "Theo dõi kho (Có/Không)", 4: "Danh mục", 5: "Thuộc tính", 6: "Thuộc tính tìm kiếm", 7: "Cân nặng", 8: "Hoa hồng CTV (%/VND)", 9: "Xu cho đại lý", 10: "Mô tả", 11: "Nội dung cho CTV", 12: "Trạng thái (Ẩn/Hiện)", 13: "Tiêu đề SEO", 14: "Miêu tả SEO", 15: "Phân loại (Có/Không)", 16: "Phân loại chính", 17: "Phân loại phụ", 18: "DS phân loại", 19: "Giá bán lẻ", 20: "Giá nhập", 21: "Hình ảnh",
+      //Index: 0: "Tên sản phẩm", 1: "Mã SKU", 2: "Mã BARCODE", 3: "Theo dõi kho (Có/Không)", 4: "Danh mục", 5: "Thuộc tính", 6: "Thuộc tính tìm kiếm", 7: "Cân nặng(g)", 8: "Hoa hồng CTV (%/VND)", 9: "Xu cho đại lý", 10: "Mô tả", 11: "Nội dung cho CTV", 12: "Trạng thái (Ẩn/Hiện)", 13: "Tiêu đề SEO", 14: "Miêu tả SEO", 15: "Phân loại (Có/Không)", 16: "Phân loại chính", 17: "Phân loại phụ", 18: "DS phân loại", 19: "Giá bán lẻ", 20: "Giá nhập", 21: "Hình ảnh",
 
-      //Index: 0: "Tên sản phẩm", 1: "Mã BARCODE", 2: "Theo dõi kho (Có/Không)", 3: "Vị trí kệ hàng" , 4: "Danh mục", 5: "Thuộc tính", 6: "Thuộc tính tìm kiếm", 7: "Cân nặng", 8: "Hoa hồng CTV (%/VND)", 9: "Xu cho đại lý", 10: "Mô tả", 11: "Nội dung cho CTV", 12: "Trạng thái (Ẩn/Hiện)", 13: "Tiêu đề SEO", 14: "Miêu tả SEO", 15: "Phân loại (Có/Không)", 16: "Phân loại chính", 17: "Phân loại phụ", 18: "DS phân loại", 19: "Giá bán lẻ", 20: "Giá nhập", 21: "Mã SKU", 22: "Hình ảnh",
+      //Index: 0: "Tên sản phẩm", 1: "Mã BARCODE", 2: "Theo dõi kho (Có/Không)", 3: "Vị trí kệ hàng" , 4: "Danh mục", 5: "Thuộc tính", 6: "Thuộc tính tìm kiếm", 7: "Cân nặng(g)", 8: "Hoa hồng CTV (%/VND)", 9: "Xu cho đại lý", 10: "Mô tả", 11: "Nội dung cho CTV", 12: "Trạng thái (Ẩn/Hiện)", 13: "Tiêu đề SEO", 14: "Miêu tả SEO", 15: "Phân loại (Có/Không)", 16: "Phân loại chính", 17: "Phân loại phụ", 18: "DS phân loại", 19: "Giá bán lẻ", 20: "Giá nhập", 21: "Mã SKU", 22: "Hình ảnh",
 
       const dataXlsxEmptyTitle = data.slice(1);
-      // console.log("🚀 ~ file: ~ dataXlsxEmptyTitle:", dataXlsxEmptyTitle);
-      // return;
       const newProducts = [];
 
       let newDistributes = [];
@@ -186,9 +184,30 @@ class ModalChooseTypeImport extends Component {
                   return [...prevAttribute, newAttribute];
                 }, []);
           // Handle Attribute Search
-          newProduct["attribute_search_children"] = product[6]
-            ? product[6]?.toString().split(",")
+          // newProduct["attribute_search_children"] = product[6]
+          //   ? product[6]?.toString().split(",")
+          //   : [];
+          newProduct["list_attribute_search"] = product[6]
+            ? product[6]
+                ?.toString()
+                .split(";")
+                .reduce((prevAttributeSearch, currentAttributeSearch) => {
+                  const newAttributeSearch = {};
+                  const childs = currentAttributeSearch.substring(
+                    currentAttributeSearch.indexOf("[") + 1,
+                    currentAttributeSearch.lastIndexOf("]")
+                  );
+                  newAttributeSearch.name =
+                    currentAttributeSearch.split("[")[0];
+                  newAttributeSearch.childs = !childs
+                    ? []
+                    : childs
+                        .split(",")
+                        .map((childAttributeSearch) => childAttributeSearch);
+                  return [...prevAttributeSearch, newAttributeSearch];
+                }, [])
             : [];
+
           newProduct["weight"] = product[7] ? Number(product[7]) : 0;
           newProduct["distributes"] = [];
           newProduct["sku"] = product[21] ? product[21] : null;
@@ -269,9 +288,30 @@ class ModalChooseTypeImport extends Component {
                   return [...prevAttribute, newAttribute];
                 }, []);
           // Handle Attribute Search
-          newProductHasDistribute["attribute_search_children"] = product[6]
-            ? product[6]?.toString().split(",")
+          // newProductHasDistribute["attribute_search_children"] = product[6]
+          //   ? product[6]?.toString().split(",")
+          //   : [];
+          newProductHasDistribute["list_attribute_search"] = product[6]
+            ? product[6]
+                ?.toString()
+                .split(";")
+                .reduce((prevAttributeSearch, currentAttributeSearch) => {
+                  const newAttributeSearch = {};
+                  const childs = currentAttributeSearch.substring(
+                    currentAttributeSearch.indexOf("[") + 1,
+                    currentAttributeSearch.lastIndexOf("]")
+                  );
+                  newAttributeSearch.name =
+                    currentAttributeSearch.split("[")[0];
+                  newAttributeSearch.childs = !childs
+                    ? []
+                    : childs
+                        .split(",")
+                        .map((childAttributeSearch) => childAttributeSearch);
+                  return [...prevAttributeSearch, newAttributeSearch];
+                }, [])
             : [];
+
           newProductHasDistribute["weight"] = product[7]
             ? Number(product[7])
             : 0;

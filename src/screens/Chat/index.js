@@ -115,7 +115,6 @@ class Customer extends Component {
     var { store_code } = this.props.match.params;
     var customerParam = this.props.match.params.id || null;
 
-    console.log(customerId);
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
