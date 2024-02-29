@@ -36,6 +36,9 @@ export const changeTypeRoleCustomer = (store_code, id, data) => {
     data
   );
 };
+export const changeTypeManyRoleCustomer = (store_code, data) => {
+  return callApi(`/store/${store_code}/customers/sale_type/list`, "post", data);
+};
 export const fetchAllPointHistory = (
   id,
   store_code,
