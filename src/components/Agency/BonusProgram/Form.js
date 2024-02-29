@@ -131,7 +131,7 @@ class Form extends Component {
 
   goBack = () => {
     var { store_code } = this.props;
-    history.replace(`/agency/${store_code}?tab-index=3`);
+    history.replace(`/agency/${store_code}?tab-index=4`);
   };
 
   render() {
