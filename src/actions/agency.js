@@ -532,7 +532,7 @@ export const addBonusSteps = (store_code, data) => {
               });
           });
 
-          history.push("/agency/" + store_code + "?tab-index=3");
+          history.push("/agency/" + store_code + "?tab-index=4");
         }
       })
       .catch(function (error) {
