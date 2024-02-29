@@ -6,6 +6,7 @@ class ModalCreate extends Component {
     super(props);
     this.state = {
       txtName: "",
+      error: "",
     };
   }
   onChange = (e) => {
@@ -13,12 +14,29 @@ class ModalCreate extends Component {
     var name = target.name;
     var value = target.value;
 
+    if (value.trim() === "") {
+      this.setState({
+        error: "Tên thuộc tính không được để trống",
+      });
+    } else {
+      this.setState({
+        [name]: value,
+        error: "",
+      });
+    }
+
     this.setState({
       [name]: value,
     });
   };
   onSave = (e) => {
     e.preventDefault();
+    if (this.state.txtName.trim() === "") {
+      this.setState({
+        error: "Tên thuộc tính không được để trống",
+      });
+      return;
+    }
     window.$(".modal").modal("hide");
     var attribute = [...this.props.attribute];
     attribute.push(this.state.txtName);
@@ -27,10 +45,11 @@ class ModalCreate extends Component {
     });
     this.setState({
       txtName: "",
+      error: "",
     });
   };
   render() {
-    var { txtName } = this.state;
+    var { txtName, error } = this.state;
     return (
       <div
         class="modal fade"
@@ -75,6 +94,7 @@ class ModalCreate extends Component {
                     name="txtName"
                   />
                 </div>
+                {error && <div className="text-danger">{error}</div>}
               </div>
               <div class="modal-footer">
                 <button
