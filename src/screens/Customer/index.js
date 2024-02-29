@@ -952,6 +952,7 @@ class Customer extends Component {
                           isSale={this.isSale}
                           fetchAllCustomer={this.fetchAllCustomer}
                           fetchListCustomerOfSale={this.fetchListCustomerOfSale}
+                          roles={roles}
                         />
 
                         <Pagination

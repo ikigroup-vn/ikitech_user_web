@@ -639,6 +639,52 @@ export const changeTypeRoleCustomer = (store_code, id, data) => {
   };
 };
 
+export const changeTypeManyRoleCustomer = (store_code, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    customerApi
+      .changeTypeManyRoleCustomer(store_code, data)
+      .then((res) => {
+        dispatch({
+          type: Types.UPDATE_ROLE_CUSTOMER_FOR_INTERFACE,
+          data: res.data.success,
+        });
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        console.log("return ~ error", error);
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.message,
+          },
+        });
+      });
+  };
+};
+
 export const changePointForCustomer = (store_code, id, data) => {
   return (dispatch) => {
     dispatch({
