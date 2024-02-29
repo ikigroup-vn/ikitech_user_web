@@ -14,6 +14,7 @@ import ModalChangePoint from "./ModalChangePoint";
 import Select from "react-select";
 import { getBranchId } from "../../ultis/branchUtils";
 import * as Types from "../../constants/ActionType";
+import * as customerAction from "../../actions/customer";
 
 const typeRoleCustomer = [
   {
@@ -151,6 +152,8 @@ class Table extends Component {
       isSub: true,
       listItemSelected: [],
       currentStaff: null,
+      roleCustomerChange: null,
+      typeAgencyChange: null,
     };
   }
 
@@ -232,6 +235,8 @@ class Table extends Component {
       this.setTypeSaleCustomer(null);
       this.setTypeAgency(null);
       this.setShowListAgencies(false);
+      this.setRoleCustomerChange(null);
+      this.setTypeAgencyChange(null);
       resetUpdateRoleMessage();
     }
     return true;
@@ -241,6 +246,16 @@ class Table extends Component {
       helper.loadExpandTable();
     }
   }
+  setRoleCustomerChange = (customer) => {
+    this.setState({
+      roleCustomerChange: customer,
+    });
+  };
+  setTypeAgencyChange = (typeAgency) => {
+    this.setState({
+      typeAgencyChange: typeAgency,
+    });
+  };
   setCurrentStaff = (staff) => {
     this.setState({
       currentStaff: staff,
@@ -377,6 +392,19 @@ class Table extends Component {
     addCustomerToSale(store_code, data);
   };
 
+  handleChangeManyRoleCustomer = () => {
+    const { listItemSelected, roleCustomerChange, typeAgencyChange } =
+      this.state;
+    const { store_code, changeTypeManyRoleCustomer } = this.props;
+    const data = {
+      customer_ids: listItemSelected,
+      sale_type: roleCustomerChange?.value,
+      agency_type_id: typeAgencyChange?.value ? typeAgencyChange.value : null,
+    };
+
+    changeTypeManyRoleCustomer(store_code, data);
+  };
+
   handleChangeStaffSelect = (staffs) => {
     const newStaffs = staffs.filter((staff) => staff.is_sale === true);
     const options = newStaffs.reduce((prevData, currentData) => {
@@ -392,6 +420,32 @@ class Table extends Component {
   };
   handleChangeStaff = (event) => {
     this.setCurrentStaff(event);
+  };
+  handleChangeRoleCustomer = (role) => {
+    if (role?.value != 2) {
+      this.setState({ typeAgencyChange: null });
+    }
+    this.setState({ roleCustomerChange: role });
+  };
+  handleChangeTypeCustomer = (role) => {
+    this.setState({ typeAgencyChange: role });
+  };
+  optionLevelAgencies = (types) => {
+    if (types?.length > 0) {
+      return types.map((type) => ({
+        value: type.id,
+        label: type.name,
+      }));
+    }
+
+    return [];
+  };
+
+  optionTypeRoles = (types) => {
+    return types.map((type) => ({
+      value: type.sale_type,
+      label: type.name,
+    }));
   };
 
   showData = (customer) => {
@@ -716,6 +770,8 @@ class Table extends Component {
       customerSelectedPoint,
       listItemSelected,
       currentStaff,
+      roleCustomerChange,
+      typeAgencyChange,
     } = this.state;
 
     return (
@@ -724,32 +780,95 @@ class Table extends Component {
           <div
             style={{
               display: "flex",
-              columnGap: "10px",
+              columnGap: "30px",
             }}
           >
             <div
               style={{
-                width: "200px",
+                display: "flex",
+                columnGap: "10px",
               }}
             >
-              <Select
-                options={this.handleChangeStaffSelect(staff)}
-                placeholder="Nhân viên"
-                className="select-staff"
-                onChange={this.handleChangeStaff}
-                value={currentStaff}
-                noOptionsMessage={() => "Không tìm thấy kết quả"}
-              ></Select>
+              <div
+                style={{
+                  width: "200px",
+                }}
+              >
+                <Select
+                  options={this.handleChangeStaffSelect(staff)}
+                  placeholder="Nhân viên"
+                  className="select-staff"
+                  onChange={this.handleChangeStaff}
+                  value={currentStaff}
+                  noOptionsMessage={() => "Không tìm thấy kết quả"}
+                ></Select>
+              </div>
+              <button
+                className={`btn  mb-2 ${
+                  !currentStaff ? "btn-secondary disabled" : "btn-success "
+                }`}
+                onClick={this.handleAddCustomerToSale}
+                disabled={!currentStaff}
+              >
+                Phân công Sale ({listItemSelected.length})
+              </button>
             </div>
-            <button
-              className={`btn  mb-2 ${
-                !currentStaff ? "btn-secondary disabled" : "btn-success "
-              }`}
-              onClick={this.handleAddCustomerToSale}
-              disabled={!currentStaff}
+            <div
+              style={{
+                display: "flex",
+                columnGap: "10px",
+              }}
             >
-              Phân công Sale ({listItemSelected.length})
-            </button>
+              <div
+                style={{
+                  width: "190px",
+                }}
+              >
+                <Select
+                  options={this.optionTypeRoles(typeRoleCustomer)}
+                  placeholder="Vai trò"
+                  className="select-role-customer"
+                  onChange={this.handleChangeRoleCustomer}
+                  value={roleCustomerChange}
+                  noOptionsMessage={() => "Không tìm thấy kết quả"}
+                  isClearable
+                ></Select>
+              </div>
+              {roleCustomerChange?.value == 2 &&
+              this.props.types?.length > 0 ? (
+                <div
+                  style={{
+                    width: "190px",
+                  }}
+                >
+                  <Select
+                    options={this.optionLevelAgencies(this.props.types)}
+                    placeholder="Cấp đại lý"
+                    className="select-role-customer"
+                    onChange={this.handleChangeTypeCustomer}
+                    value={typeAgencyChange}
+                    noOptionsMessage={() => "Không tìm thấy kết quả"}
+                    isClearable
+                  ></Select>
+                </div>
+              ) : null}
+
+              <button
+                className={`btn  mb-2 ${
+                  !roleCustomerChange ||
+                  (roleCustomerChange?.value == 2 && !typeAgencyChange)
+                    ? "btn-secondary disabled"
+                    : "btn-success "
+                }`}
+                onClick={this.handleChangeManyRoleCustomer}
+                disabled={
+                  !roleCustomerChange ||
+                  (roleCustomerChange?.value == 2 && !typeAgencyChange)
+                }
+              >
+                Xác nhận
+              </button>
+            </div>
           </div>
         )}
 
@@ -841,6 +960,11 @@ const mapDispatchToProps = (dispatch) => {
     },
     fetchAllStaff: (id, page, params, branch_id) => {
       dispatch(staffAction.fetchAllStaff(id, page, params, branch_id));
+    },
+    changeTypeManyRoleCustomer: (store_code, data, onSuccess) => {
+      dispatch(
+        customerAction.changeTypeManyRoleCustomer(store_code, data, onSuccess)
+      );
     },
     resetCustomerToSaleMessage: () => {
       dispatch({ type: Types.ADD_CUSTOMER_TO_SALE, data: false });
