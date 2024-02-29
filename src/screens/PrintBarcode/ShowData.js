@@ -154,6 +154,7 @@ class ShowData extends Component {
                 float: "left",
                 border: "1px solid #9c9898ba",
                 borderRadius: "2px",
+                display: "flex"
               }}
             >
               <button
