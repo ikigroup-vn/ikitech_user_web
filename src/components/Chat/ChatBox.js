@@ -109,7 +109,7 @@ class ChatBox extends Component {
   showListUserChat = (listChat, isActive, numPages) => {
     var { store_code } = this.props;
     var result = <div>Không có dữ liệu</div>;
-    console.log(listChat);
+    console.log("listChat", listChat);
     if (listChat.length > 0) {
       result = listChat.map((chat, index) => {
         var time =
@@ -230,7 +230,7 @@ class ChatBox extends Component {
     var numPages = listChat.last_page;
 
     var listChat = typeof listChat.data == "undefined" ? [] : listChat.data;
-    console.log(this.checkRead());
+
     return (
       <div>
         <div style={{ background: "white" }} className="row no-gutters">

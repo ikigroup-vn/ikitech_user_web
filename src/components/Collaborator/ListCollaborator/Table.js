@@ -13,6 +13,7 @@ import SidebarListReferences from "./SidebarListReferences";
 import styled from "styled-components";
 import ModalHistoryBalance from "./ModalHistoryBalance";
 import ModalChangeBalance from "./ModalChangeBalance";
+import ModalChangeBankInfo from "./ModalChangeBankInfo";
 
 const ListCollaboratorStyles = styled.div`
   .exploder {
@@ -81,9 +82,18 @@ class Table extends Component {
       customerInfo: {},
       collaboratorSelected: {},
       collaboratorSelectedForChangeBalance: {},
+      bankInfo: {},
+      isModalBankInfo: false,
       isSub: true,
     };
   }
+
+  setBankInfo = (bankInfo) => {
+    this.setState({
+      bankInfo,
+    });
+  };
+
   setIsSub = (isSub) => {
     this.setState({ isSub });
   };
@@ -97,6 +107,14 @@ class Table extends Component {
       collaboratorSelectedForChangeBalance: collab,
     });
   };
+
+  handleOpenModalBankInfo = (bankInfo) => {
+    this.setState({
+      bankInfo,
+      isModalBankInfo: !this.isModalBankInfo,
+    });
+  };
+
   handleOpenModalChangeBalance = (collab, isSub) => {
     this.setState({
       collaboratorSelectedForChangeBalance: collab,
@@ -273,17 +291,28 @@ class Table extends Component {
             <tr class="explode hide">
               <td colSpan={7}>
                 <div class="row">
-                  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-6">
                     <div class="info_user">
                       <p class="sale_user_label">
-                        Số tài khoản:{" "}
+                        Thông tin ngân hàng: Số tài khoản:{" "}
                         <span id="user_tel">
-                          {data.account_number} - {data.bank}{" "}
+                          {data.account_number} - {data.bank} -{" "}
+                          {data.account_name}
                         </span>
-                      </p>
-                      <p class="sale_user_label">
-                        Tên chủ tài khoản:{" "}
-                        <span id="user_tel">{data.account_name}</span>
+                        <button
+                          type="button"
+                          style={{ width: "25px", marginLeft: "4px" }}
+                          className=" btn-outline-success btn-exploder"
+                          onClick={() => {
+                            this.setBankInfo({
+                              bankNumber: data.account_number,
+                              bankName: data.bank,
+                              bankOwner: data.account_name,
+                            });
+                          }}
+                        >
+                          <span className="fa fa-edit"></span>
+                        </button>
                       </p>
 
                       <p
@@ -371,7 +400,7 @@ class Table extends Component {
                       )}
                     </div>
                   </div>
-                  <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                  <div class="col-xs-7 col-sm-7 col-md-7 col-lg-6">
                     <div class="info_user">
                       <div class="row">
                         <div
@@ -432,7 +461,7 @@ class Table extends Component {
                   >
                     <i class="fa fa-comment-alt"></i> Chat
                   </button>
-                  <a
+                  {/* <a
                     href={`tel:${data.customer.phone_number}`}
                     class="btn btn-outline-primary btn-sm"
                     style={{
@@ -440,7 +469,7 @@ class Table extends Component {
                     }}
                   >
                     <i class="fa fa-phone"></i> Gọi ngay
-                  </a>
+                  </a> */}
                   <button
                     class="btn btn-outline-info btn-sm"
                     style={{
@@ -479,7 +508,7 @@ class Table extends Component {
       typeof this.props.collaborators.data == "undefined"
         ? []
         : this.props.collaborators.data;
-    const { collaboratorSelected, collaboratorSelectedForChangeBalance } =
+    const { collaboratorSelected, collaboratorSelectedForChangeBalance, bankInfo } =
       this.state;
     return (
       <ListCollaboratorStyles class="" style={{ overflow: "auto" }}>
@@ -532,6 +561,13 @@ class Table extends Component {
             setCollaboratorSelectedForChangeBalance={
               this.setCollaboratorSelectedForChangeBalance
             }
+          />
+        ) : null}
+        {Object.entries(bankInfo).length > 0 ? (
+          <ModalChangeBankInfo
+            store_code={this.props.store_code}
+            bankInfo={bankInfo}
+            setBankInfo={this.setBankInfo}
           />
         ) : null}
       </ListCollaboratorStyles>

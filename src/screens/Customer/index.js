@@ -504,12 +504,15 @@ class Customer extends Component {
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
       const data = XLSX.utils.sheet_to_json(ws, { header: 2 });
+      console.log("data", data);
+
       const xlsxFields = data[0];
       //Check Valid XLSX Field
       let isCheckedValidField = true;
       const lengthXlsxFields = Object.keys(xlsxFields).length;
-      if (fields.length > lengthXlsxFields.length) isCheckedValidField = false;
-      else {
+      if (fields.length > lengthXlsxFields.length) {
+        isCheckedValidField = false
+      } else {  
         const arraysXlsxFields = Object.keys(xlsxFields);
         fields.forEach((element) => {
           if (!arraysXlsxFields.includes(element)) {
@@ -534,6 +537,18 @@ class Customer extends Component {
       //Filter Data
       const newListCustomers = [];
       for (var item of data) {
+        if(item["Số điện thoại"] == item["SĐT người giới thiệu"]) {
+          showError({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: `Trường 'Số điện thoại' và 'SĐT người giới thiệu' của người dùng ${item["Tên khách hàng"]}`,
+            },
+          });
+          return;
+        }
         const newCustomer = {};
         newCustomer["name"] = item["Tên khách hàng"];
         newCustomer["phone_number"] = item["Số điện thoại"];
@@ -643,12 +658,16 @@ class Customer extends Component {
           openModalImport: false,
         });
         if (this.isSale()) {
+          console.log("test123");
+
           this.fetchListCustomerOfSale(
             this.props.match.params.store_code,
             1,
             ""
           );
         } else {
+          console.log("test1234");
+
           this.fetchAllCustomer(this.props.match.params.store_code, 1, "");
         }
       });
@@ -731,6 +750,7 @@ class Customer extends Component {
       customer_list_import,
       roleCustomer,
     } = this.state;
+
     const { wards, district, province, types } = this.props;
     var customerImg =
       typeof customer.avatar_image == "undefined" ||
@@ -791,7 +811,7 @@ class Customer extends Component {
                     >
                       <h4 className="h4 title_content mb-0 text-gray-800">
                         Danh sách khách hàng
-                      </h4>{" "}
+                      </h4>
                       <div>
                         {customer_list_export ? (
                           <button
@@ -807,11 +827,6 @@ class Customer extends Component {
                             </span>
                           </button>
                         ) : null}
-
-                        {/* {!this.isSale() && (
-                          <>
-                          </>
-                        )} */}
                         {customer_list_import ? (
                           <button
                             style={{ marginRight: "10px" }}

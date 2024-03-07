@@ -395,6 +395,7 @@ class Table extends Component {
   handleChangeManyRoleCustomer = () => {
     const { listItemSelected, roleCustomerChange, typeAgencyChange } =
       this.state;
+    console.log("typeAgencyChange", typeAgencyChange);
     const { store_code, changeTypeManyRoleCustomer } = this.props;
     const data = {
       customer_ids: listItemSelected,
@@ -422,6 +423,7 @@ class Table extends Component {
     this.setCurrentStaff(event);
   };
   handleChangeRoleCustomer = (role) => {
+    console.log("111", this.props.types);
     if (role?.value != 2) {
       this.setState({ typeAgencyChange: null });
     }
@@ -431,6 +433,7 @@ class Table extends Component {
     this.setState({ typeAgencyChange: role });
   };
   optionLevelAgencies = (types) => {
+    console.log("types", types);
     if (types?.length > 0) {
       return types.map((type) => ({
         value: type.id,
@@ -855,15 +858,17 @@ class Table extends Component {
 
               <button
                 className={`btn  mb-2 ${
-                  !roleCustomerChange ||
-                  (roleCustomerChange?.value == 2 && !typeAgencyChange)
-                    ? "btn-secondary disabled"
-                    : "btn-success "
+                  roleCustomerChange ||
+                  (roleCustomerChange?.value == 2 &&
+                    !typeAgencyChange &&
+                    this.props.types.length > 0)
+                    ? "btn-success "
+                    : "btn-secondary disabled"
                 }`}
                 onClick={this.handleChangeManyRoleCustomer}
                 disabled={
                   !roleCustomerChange ||
-                  (roleCustomerChange?.value == 2 && !typeAgencyChange)
+                  (roleCustomerChange?.value == 2 && !typeAgencyChange && this.props.types.length > 0)
                 }
               >
                 Xác nhận

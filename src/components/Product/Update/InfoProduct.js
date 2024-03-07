@@ -633,7 +633,7 @@ class InfoProduct extends Component {
             id="sku"
             placeholder="Nhập mã SKU"
             autoComplete="off"
-            // value={sku}
+            value={sku}
             name="sku"
             onChange={this.onChange}
           />

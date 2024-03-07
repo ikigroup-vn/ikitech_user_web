@@ -27,13 +27,16 @@ const ModalChooseImportStyles = styled.div`
   }
 `;
 class ModalUpdatePasswordImport extends Component {
+  
   handleChangeUpdatePasswordImport = (e) => {
     const { setIsUpdatedPasswordImport } = this.props;
     setIsUpdatedPasswordImport(e.target.checked);
   };
+  
   handleImportDataCustomers = () => {
     $("#file-excel-import-customer").trigger("click");
   };
+
   render() {
     const { openModal, setOpenModal } = this.props;
     return (

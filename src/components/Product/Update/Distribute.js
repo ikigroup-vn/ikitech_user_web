@@ -859,7 +859,6 @@ class Distribute extends Component {
   }
 
   showDetail = (list_distribute) => {
-    console.log(list_distribute);
     var result = [];
     if (typeof list_distribute == "undefined" || list_distribute.length == 0) {
       return result;
@@ -887,6 +886,7 @@ class Distribute extends Component {
                   var sku =
                     list_distribute[0].element_distributes[_index]
                       .sub_element_distributes[index].sku;
+
                   var value_import_price =
                     list_distribute[0].element_distributes[_index]
                       .sub_element_distributes[index].import_price;
@@ -1096,7 +1096,9 @@ class Distribute extends Component {
               }
             );
           } else {
+
             try {
+              var { sku } = element;
               var barcode = element.barcode;
 
               const _value =
@@ -1118,7 +1120,7 @@ class Distribute extends Component {
                 _value_S == "" ? "" : new Intl.NumberFormat().format(_value_S);
             } catch (error) {
               var barcode = element.barcode;
-              var sku = element.sku;
+              // var sku = element.sku;
               var price = element.price;
               var quantity_in_stock = element.quantity_in_stock;
             }
@@ -1195,6 +1197,8 @@ class Distribute extends Component {
                 </tr>
               );
           }
+        } else {
+          console.log("element", element);
         }
       });
     }

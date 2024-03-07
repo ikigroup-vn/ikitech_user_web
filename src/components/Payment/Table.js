@@ -77,7 +77,7 @@ class Table extends Component {
   };
 
   render() {
-    console.log(this.props.payment);
+    console.log("this.props.payment", this.props.payment);
     return (
       <div class="table-responsive">
         <table class="table table-border " id="dataTable" width="100%" cellspacing="0">
