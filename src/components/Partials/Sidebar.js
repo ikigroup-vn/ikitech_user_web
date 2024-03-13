@@ -121,7 +121,6 @@ class Sidebar extends Component {
         total_status_3,
         total,
       } = this.props.customers;
-
       result = link.map((link, index) => {
         if (link.children) {
           return (
@@ -287,7 +286,7 @@ class Sidebar extends Component {
                         className={`collapse-item  ${active} ${
                           _class[link.class] == true ||
                           typeof link.class == "undefined" ||
-                          link.class == null
+                          link.class == null || link.display == "show"
                             ? "show"
                             : "hide"
                         }`}

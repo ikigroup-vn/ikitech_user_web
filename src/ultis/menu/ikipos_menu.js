@@ -144,6 +144,13 @@ export const ikipos_menu = [
                         exact: true,
                         to: "/report_finance",
                     },
+                    {
+                        class: null,
+                        display: "show",
+                        name: "Báo cáo thanh toán",
+                        exact: true,
+                        to: "/report_payment",
+                    },
                 ],
             },
             {

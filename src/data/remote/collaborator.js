@@ -126,6 +126,10 @@ export const updateAllRequestPayment = (store_code) => {
 export const updateCollaborator = (store_code, id, data) => {
   return callApi(`/store/${store_code}/collaborators/${id}`, "put", data);
 };
+
+export const updateBankInfoCollaborator = (store_code, id, data) => {
+  return callApi(`/store/${store_code}/collaborators/${id}/updateBankInfo`, "put", data);
+};
 export const fetchAllTopReport = (store_code, page = 1, params) => {
   if (params != null) {
     return callApi(

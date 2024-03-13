@@ -1037,3 +1037,72 @@ export const changePriceBalance = (store_code, id, data) => {
       });
   };
 };
+
+export const updateBankInfoCollaborator = (store_code, id, data, page, params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    collaboratorApi
+      .updateBankInfoCollaborator(store_code, id, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        collaboratorApi
+          .fetchAllCollaborator(store_code, page, params)
+          .then((res) => {
+            dispatch({
+              type: Types.SHOW_LOADING_LAZY,
+              loading: "hide",
+            });
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_ALL_COLLABORATOR,
+                data: res.data.data,
+              });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};

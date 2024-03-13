@@ -259,6 +259,222 @@ export const exportAllListOrder = (
       });
   };
 };
+export const exportReportProductSold = (
+  store_code,
+  page = 1,
+  branch_id,
+  params = null,
+  params_agency = null
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    billApi
+      .fetchReportProducSold(
+        store_code,
+        page,
+        branch_id,
+        params,
+        params_agency,
+        true
+      )
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (res.data.code !== 401) {
+          if (typeof res.data.data != "undefined") {
+            if (typeof res.data.data.data != "undefined") {
+              if (res.data.data.data.length > 0) {
+                var newArray = [];
+                let i = 1;
+                for (const item of res.data.data.data) {
+                  console.log("item", item);
+                  var newItem = {};
+                  var arangeKeyItem = {
+                    stt: i,
+                    name: item.name ?? "",
+                    quantity: item.quantity ?? "",
+                  };
+                  Object.entries(arangeKeyItem).forEach(
+                    ([key, value], index) => {
+                      if (key == "stt") {
+                        newItem["STT"] = value;
+                      }
+                      if (key == "name") {
+                        newItem["Tên sản phẩm"] = value;
+                      }
+                      if (key == "quantity") {
+                        newItem["Số lượng bán"] = value;
+                      }
+                    }
+                  );
+                  newArray.push(newItem);
+                  i++;
+                }
+                var header = [];
+                if (newArray.length > 0) {
+                  Object.entries(newArray[0]).forEach(([key, value], index) => {
+                    header.push(key);
+                  });
+                }
+                // saveAsExcel({ data: newArray, header: header });
+                var data = newArray;
+                var data_header = header;
+                XlsxPopulate.fromBlankAsync().then(async (workbook) => {
+                  const sheet1 = workbook.sheet(0);
+                  const sheetData = getSheetData(data, data_header);
+
+                  const totalColumns = sheetData[0].length;
+
+                  sheet1.cell("A1").value(sheetData);
+                  sheet1.column("B").width(100);
+                  const range = sheet1.usedRange();
+                  // const endColumn = String.fromCharCode(64 + totalColumns);
+
+                  const endColumn = "Z";
+                  sheet1.row(1).style("bold", true);
+
+                  sheet1.range("A1:" + endColumn + "1").style("fill", "F4D03F");
+                  range.style("border", true);
+
+                  sheet1.range("AA1:AJ1").style("fill", "F4D03F");
+                  range.style("border", true);
+
+                  return workbook.outputAsync().then((res) => {
+                    saveAs(res, "BAO CAO SAN PHAM DA BAN.xlsx");
+                  });
+                });
+              }
+            }
+          }
+        }
+      });
+  };
+};
+
+export const exportAllBillByMethodPayment = (
+  store_code,
+  page = 1,
+  branch_id,
+  params = null,
+  params_agency = null,
+  methodPaymentId
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    billApi
+      .fetchAllBillByMethodPayment(
+        store_code,
+        page,
+        branch_id,
+        params,
+        params_agency,
+        methodPaymentId,
+        true
+      )
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        const handleGetPaymentMethodName = (paymentMethodId) => {
+          const payment = [
+            {id: 0, name: "Thanh toán khi nhận hàng"},
+            {id: 1, name: "Chuyển khoản đến tài khoản ngân hàng"},
+            {id: 2, name: "Thanh toán bằng VNPay"},
+            {id: 3, name: "Thanh toán bằng OnePay"},
+            {id: 4, name: "Thanh toán bằng Momo"},
+          ];
+          return payment.find((item) => item.id === paymentMethodId)?.name;
+        };
+        if (res.data.code !== 401) {
+          if (typeof res.data.data != "undefined") {
+            if (typeof res.data.data.data != "undefined") {
+              if (res.data.data.data.length > 0) {
+                var newArray = [];
+                let i = 1;
+                for (const item of res.data.data.data) {
+                  var newItem = {};
+                  var arangeKeyItem = {
+                    stt: i,
+                    code: item.order_code ?? "",
+                    customer: item.customer_name ?? "",
+                    totalPrice: item.total_final,
+                    methodPayment: handleGetPaymentMethodName(item.payment_method_id),
+                    createAt: item.created_at
+                  };
+                  Object.entries(arangeKeyItem).forEach(
+                    ([key, value], index) => {
+                      if (key == "stt") {
+                        newItem["STT"] = value;
+                      }
+                      if (key == "code") {
+                        newItem["Mã đơn"] = value;
+                      }
+                      if (key == "customer") {
+                        newItem["Tên người nhận"] = value;
+                      }
+                      if (key == "totalPrice") {
+                        newItem["Tổng tiền"] = value;
+                      }
+                      if (key == "methodPayment") {
+                        newItem["Phương thức thanh toán"] = value;
+                      }
+                      if (key == "createAt") {
+                        newItem["Thời gian tạo đơn"] = value;
+                      }
+                    }
+                  );
+                  newArray.push(newItem);
+                  i++;
+                }
+                var header = [];
+                if (newArray.length > 0) {
+                  Object.entries(newArray[0]).forEach(([key, value], index) => {
+                    header.push(key);
+                  });
+                }
+                var data = newArray;
+                var data_header = header;
+                XlsxPopulate.fromBlankAsync().then(async (workbook) => {
+                  const sheet1 = workbook.sheet(0);
+                  const sheetData = getSheetData(data, data_header);
+
+                  const totalColumns = sheetData[0].length;
+
+                  sheet1.cell("A1").value(sheetData);
+                  sheet1.column("B").width(30);
+                  const range = sheet1.usedRange();
+                  // const endColumn = String.fromCharCode(64 + totalColumns);
+
+                  const endColumn = "Z";
+                  sheet1.row(1).style("bold", true);
+
+                  sheet1.range("A1:" + endColumn + "1").style("fill", "F4D03F");
+                  range.style("border", true);
+
+                  sheet1.range("AA1:AJ1").style("fill", "F4D03F");
+                  range.style("border", true);
+
+                  return workbook.outputAsync().then((res) => {
+                    saveAs(res, "BAO CAO THANH TOAN.xlsx");
+                  });
+                });
+              }
+            }
+          }
+        }
+      });
+  };
+};
+
 async function saveAsExcelMisa(value) {
   var data = value.data;
   var data_header = value.header;
@@ -460,6 +676,92 @@ export const fetchAllBill = (
       });
       billApi
         .fetchAllBill(store_code, page, branch_id, params, params_agency)
+        .then((res) => {
+          dispatch({
+            type: Types.SHOW_LOADING_LAZY,
+            loading: "hide",
+          });
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_ALL_BILL,
+              data: res.data.data,
+            });
+        })
+        .catch(function (error) {
+          dispatch({
+            type: Types.SHOW_LOADING_LAZY,
+            loading: "hide",
+          });
+        });
+    };
+  }
+};
+
+export const fetchReportProducSold = (
+  store_code,
+  page = 1,
+  branch_id,
+  params = null,
+  params_agency = null
+) => {
+  if (branch_id != null) {
+    return (dispatch) => {
+      dispatch({
+        type: Types.SHOW_LOADING_LAZY,
+        loading: "show",
+      });
+      billApi
+        .fetchReportProducSold(
+          store_code,
+          page,
+          branch_id,
+          params,
+          params_agency
+        )
+        .then((res) => {
+          dispatch({
+            type: Types.SHOW_LOADING_LAZY,
+            loading: "hide",
+          });
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_ALL_BILL,
+              data: res.data.data,
+            });
+        })
+        .catch(function (error) {
+          dispatch({
+            type: Types.SHOW_LOADING_LAZY,
+            loading: "hide",
+          });
+        });
+    };
+  }
+};
+
+export const fetchAllBillByMethodPayment = (
+  store_code,
+  page = 1,
+  branch_id,
+  params = null,
+  params_agency = null,
+  methodPaymentId
+) => {
+  if (branch_id != null) {
+    return (dispatch) => {
+      dispatch({
+        type: Types.SHOW_LOADING_LAZY,
+        loading: "show",
+      });
+      billApi
+        .fetchAllBillByMethodPayment(
+          store_code,
+          page,
+          branch_id,
+          params,
+          params_agency,
+          methodPaymentId
+        )
         .then((res) => {
           dispatch({
             type: Types.SHOW_LOADING_LAZY,

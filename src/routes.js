@@ -154,6 +154,7 @@ import ReportInventory from "./screens/Report/ReportInventory";
 import ImportExpostStock from "./screens/Report/import_export/ImportExpostStock";
 import InventoryHistory from "./screens/Report/report_history/InventoryHistory";
 import ReportFinance from "./screens/Report/report_finance";
+import ReportPayment from "./screens/Report/report_payment";
 import ReportProfit from "./screens/Report/report_finance/report_profit/ReportProfit";
 import CustomerDebt from "./screens/Report/report_finance/customer_debt/CustomerDebt";
 import SupplierDebt from "./screens/Report/report_finance/supplier_debt/SupplierDebt";
@@ -183,6 +184,7 @@ import ConfigSms from "./screens/ConfigSms";
 import PublicApiHook from "./screens/PublicApiHook/index.js";
 import HistoryQuiz from "./screens/Train/HistoryQuiz/index.js";
 import HistoryDetailQuizForCustomer from "./screens/Train/HistoryQuiz/historyDetail/HistoryDetailQuizForCustomer.js";
+import ReportProduct from "./screens/Report/report_product";
 
 const routes = [
   {
@@ -652,6 +654,22 @@ const routes = [
 
     main: ({ match, history }) => (
       <RevenueExpenditures match={match} history={history} />
+    ),
+  },
+  {
+    path: "/report_pay/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <ReportPayment match={match} history={history} />
+    ),
+  },
+  {
+    path: "/report_product/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <ReportProduct match={match} history={history} />
     ),
   },
   {

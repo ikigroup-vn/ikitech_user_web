@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import * as collaboratorAction from "../../../actions/collaborator";
 import { format, formatNumberV2 } from "../../../ultis/helpers";
 import moment from "moment";
+import callApi from "../../../ultis/apiCaller";
 
 const ModalChangeBalanceStyles = styled.div`
   background-color: rgba(0, 0, 0, 0.3);
@@ -52,7 +53,8 @@ class ModalChangeBankInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bankInfo: {
+      bankInfoState: {
+        collaboratorId: null,
         bankName: "",
         bankNumber: "",
         bankOwner: "",
@@ -60,9 +62,76 @@ class ModalChangeBankInfo extends Component {
     };
   }
 
+  componentDidMount = () => {
+    this.setState({
+      bankInfoState: {
+        collaboratorId: this.props.bankInfo.collaboratorId,
+        bankName: this.props.bankInfo.bankName,
+        bankNumber: this.props.bankInfo.bankNumber,
+        bankOwner: this.props.bankInfo.bankOwner,
+      },
+    });
+  };
+
+  handleChangeValue = (e) => {
+    this.setState({
+      errorMessage: "",
+      bankInfoState: {
+        ...this.state.bankInfoState,
+        [e.target.name]: e.target.value,
+      },
+    });
+  };
+
+  handleChangeBankInfo = async (e) => {
+    e.preventDefault();
+
+    const { bankInfoState } = this.state;
+    const {
+      bankInfo,
+      setBankInfo,
+      storeCode,
+      page,
+      getParams,
+      numPage,
+      searchValue,
+    } = this.props;
+
+    if (
+      bankInfoState.bankName === "" ||
+      bankInfoState.bankNumber === "" ||
+      bankInfoState.bankOwner === ""
+    ) {
+      this.setState({
+        errorMessage: "Vui lòng nhập đầy đủ thông tin",
+      });
+    } else {
+      this.setState({
+        errorMessage: "",
+      });
+      setBankInfo({
+        ...bankInfo,
+        bankName: bankInfoState.bankName,
+        bankNumber: bankInfoState.bankNumber,
+        bankOwner: bankInfoState.bankOwner,
+      });
+    }
+
+    await this.props.updateBankInfoCollaborator(
+      storeCode,
+      bankInfoState.collaboratorId,
+      bankInfoState,
+      page,
+      getParams(searchValue, numPage)
+    );
+
+    setBankInfo({});
+  };
+
   render() {
-    const { bankName, bankNumber, bankOwner } = this.state;
-    const {bankInfo, setBankInfo} = this.props;
+    const { bankInfoState } = this.state;
+    const { bankInfo, setBankInfo } = this.props;
+    const { bankName, bankNumber, bankOwner } = bankInfoState;
 
     return (
       <ModalChangeBalanceStyles
@@ -98,7 +167,10 @@ class ModalChangeBankInfo extends Component {
               </button>
             </div>
             <div class="modal-body">
-              <form onSubmit={() => {}} className="formBalance">
+              <form
+                onSubmit={this.handleChangeBankInfo}
+                className="formBalance"
+              >
                 <div className="item-balance">
                   <label htmlFor="money">Số tài khoản</label>
                   <input
@@ -107,11 +179,7 @@ class ModalChangeBankInfo extends Component {
                     placeholder={"Số tài khoản..."}
                     name="bankNumber"
                     value={bankNumber}
-                    onChange={(e) => {
-                      setBankInfo((prev) => {
-                        console.log("prev", prev);
-                      });
-                    }}
+                    onChange={this.handleChangeValue}
                   />
                 </div>
                 <div className="item-balance">
@@ -122,12 +190,7 @@ class ModalChangeBankInfo extends Component {
                     placeholder="Ngân hàng..."
                     name="bankName"
                     value={bankName}
-                    onChange={(e) => {
-                      this.props.setBankInfo((prev) => ({
-                        ...prev,
-                        bankName: e.target.value,
-                      }));
-                    }}
+                    onChange={this.handleChangeValue}
                   />
                 </div>
                 <div className="item-balance">
@@ -138,14 +201,19 @@ class ModalChangeBankInfo extends Component {
                     placeholder="Chủ tài khoản..."
                     name="bankOwner"
                     value={bankOwner}
-                    onChange={(e) => {
-                      this.props.setBankInfo((prev) => ({
-                        ...prev,
-                        bankOwner: e.target.value,
-                      }));
-                    }}
+                    onChange={this.handleChangeValue}
                   />
                 </div>
+                {this.state.errorMessage !== "" ? (
+                  <div
+                    style={{
+                      fontSize: "14px",
+                      color: "#e74c3c",
+                    }}
+                  >
+                    {this.state.errorMessage}
+                  </div>
+                ) : null}
                 <div
                   style={{
                     display: "flex",
@@ -179,11 +247,17 @@ class ModalChangeBankInfo extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // changePriceBalance: (store_code, idCollaborator, data) => {
-    //   dispatch(
-    //     collaboratorAction.changePriceBalance(store_code, idCollaborator, data)
-    //   );
-    // },
+    updateBankInfoCollaborator: (store_code, id, data, page, params) => {
+      dispatch(
+        collaboratorAction.updateBankInfoCollaborator(
+          store_code,
+          id,
+          data,
+          page,
+          params
+        )
+      );
+    },
   };
 };
 

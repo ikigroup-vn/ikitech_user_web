@@ -36,9 +36,11 @@ class BlogEdit extends Component {
       this.setState({ isLoading: true, isShow });
     }
   }
+  
   render() {
     var { store_code } = this.props.match.params;
     var { history, categories } = this.props;
+    console.log("categories", categories);
     var { isShow } = this.state;
     if (this.props.auth) {
       return (

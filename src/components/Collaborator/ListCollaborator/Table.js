@@ -166,6 +166,7 @@ class Table extends Component {
       getParams(searchValue, numPage)
     );
   };
+
   showModalImg = (url) => {
     this.setState({ modalImg: url });
   };
@@ -305,6 +306,7 @@ class Table extends Component {
                           className=" btn-outline-success btn-exploder"
                           onClick={() => {
                             this.setBankInfo({
+                              collaboratorId: data.id,
                               bankNumber: data.account_number,
                               bankName: data.bank,
                               bankOwner: data.account_name,
@@ -508,8 +510,11 @@ class Table extends Component {
       typeof this.props.collaborators.data == "undefined"
         ? []
         : this.props.collaborators.data;
-    const { collaboratorSelected, collaboratorSelectedForChangeBalance, bankInfo } =
-      this.state;
+    const {
+      collaboratorSelected,
+      collaboratorSelectedForChangeBalance,
+      bankInfo,
+    } = this.state;
     return (
       <ListCollaboratorStyles class="" style={{ overflow: "auto" }}>
         <ModalImg img={this.state.modalImg}></ModalImg>
@@ -565,9 +570,13 @@ class Table extends Component {
         ) : null}
         {Object.entries(bankInfo).length > 0 ? (
           <ModalChangeBankInfo
-            store_code={this.props.store_code}
+            storeCode={this.props.store_code}
             bankInfo={bankInfo}
             setBankInfo={this.setBankInfo}
+            page={this.props.page}
+            getParams={this.props.getParams}
+            numPage={this.props.numPage}
+            searchValue={this.props.searchValue}
           />
         ) : null}
       </ListCollaboratorStyles>

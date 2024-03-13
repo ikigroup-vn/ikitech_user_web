@@ -108,7 +108,7 @@ class InfoShipper extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { bill, store_code } = this.props;
-
+    console.log("bill", bill);
     if (!shallowEqual(bill, nextProps.bill)) {
       const newPacket = {
         weight: nextProps?.bill?.package_weight,
@@ -172,7 +172,9 @@ class InfoShipper extends Component {
     const { isUpdated } = this.state;
     const { packet } = this.state;
     const value = e.target.value;
-    const _value = formatNumber(value);
+    // const _value = formatNumber(value);
+    const _value = value;
+
     const name = e.target.name;
     if (!isUpdated) return;
 

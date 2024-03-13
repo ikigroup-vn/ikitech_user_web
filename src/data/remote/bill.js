@@ -26,6 +26,61 @@ export const fetchAllBill = (
   return callApi(stringURL, "get", null);
 };
 
+export const fetchReportProducSold = (
+  store_code,
+  page = 1,
+  branch_ids,
+  params,
+  params_agency,
+  is_export = false
+) => {
+  var stringURL = `/store/${store_code}/orders/report_product/products?page=${page}&is_export=${is_export}`;
+
+  if (branch_ids) {
+    stringURL =
+      stringURL +
+      `${
+        branch_ids?.toString()?.includes(",")
+          ? `&branch_id_list=${branch_ids}`
+          : `&branch_id=${branch_ids}`
+      }`;
+  }
+  if (params && params != null) stringURL = stringURL + params;
+  if (params_agency && params_agency != null)
+    stringURL = stringURL + params_agency;
+
+  return callApi(stringURL, "get", null);
+};
+
+export const fetchAllBillByMethodPayment = (
+  store_code,
+  page = 1,
+  branch_ids,
+  params,
+  params_agency,
+  methodPaymentId,
+  is_export = false,
+) => {
+  console.log("methodPaymentId", methodPaymentId);
+
+  var stringURL = `/store/${store_code}/orders/totalPriceByMethodPayment/${methodPaymentId}?page=${page}&is_export=${is_export}`;
+
+  if (branch_ids) {
+    stringURL =
+      stringURL +
+      `${
+        branch_ids?.toString()?.includes(",")
+          ? `&branch_id_list=${branch_ids}`
+          : `&branch_id=${branch_ids}`
+      }`;
+  }
+  if (params && params != null) stringURL = stringURL + params;
+  if (params_agency && params_agency != null)
+    stringURL = stringURL + params_agency;
+
+  return callApi(stringURL, "get", null);
+};
+
 export const fetchBillId = (store_code, order_code) => {
   return callApi(`/store/${store_code}/orders/${order_code}`, "get", null);
 };

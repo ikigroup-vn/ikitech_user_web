@@ -268,6 +268,7 @@ const permission = (channel) => {
           "report_finance",
           "add_revenue",
           "add_expenditure",
+          "report_payment",
         ],
       },
       {
@@ -405,8 +406,8 @@ const permission = (channel) => {
       },
       {
         name: "Báo cáo",
-        header: ["Báo cáo bán hàng", "Báo cáo kho", "Báo cáo tài chính"],
-        body: ["report_overview", "report_inventory", "report_finance"],
+        header: ["Báo cáo bán hàng", "Báo cáo kho", "Báo cáo tài chính", "Báo cáo thanh toán"],
+        body: ["report_overview", "report_inventory", "report_finance", "report_payment"],
       },
       {
         name: "Quản lý nhân viên & khách hàng",
@@ -452,6 +453,7 @@ export const initialPermission = () => {
     revenue_expenditure: false,
     name: "",
     description: "",
+    report_payment: true,
     product_list: false,
     product_add: false,
     product_update: false,

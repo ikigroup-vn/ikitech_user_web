@@ -299,6 +299,20 @@ export const ikitech_menu = [
             exact: true,
             to: "/revenue_expenditure",
           },
+          {
+            class: "report",
+            display: "show",
+            name: "Báo cáo thanh toán",
+            exact: true,
+            to: "/report_pay",
+          },
+          {
+            class: "report_product",
+            display: "show",
+            name: "Báo cáo sản phẩm",
+            exact: true,
+            to: "/report_product",
+          },
 
           // {
           //   name: "Bảng công",

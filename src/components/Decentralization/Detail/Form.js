@@ -13,6 +13,7 @@ class Form extends Component {
     this.state = {
       name: "",
       description: "",
+      report_payment: true,
       product_list: false,
       product_add: false,
       product_update: false,
@@ -266,6 +267,7 @@ class Form extends Component {
       { value: "staff_update", name: "Cập nhật nhân viên" },
       { value: "staff_add", name: "Thêm nhân viên" },
       { value: "staff_remove", name: "Xóa nhân viên" },
+      { value: "report_payment", name: "Báo cáo thanh toán" },
       // { value: "staff_delegating", name: "Uỷ quyền cho nhân viên" },
     ];
   }
@@ -383,6 +385,7 @@ class Form extends Component {
             staff_add: item.staff_add,
             staff_remove: item.staff_remove,
             staff_delegating: item.staff_delegating,
+            report_payment: item.report_payment,
           });
         }
       }

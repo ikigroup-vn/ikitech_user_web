@@ -323,6 +323,11 @@ const permission = (channel) => {
                 decentralizationName: "revenue_expenditure",
                 componentChilds: [],
               },
+              {
+                name: "Báo cáo thanh toán",
+                decentralizationName: "report_payment",
+                componentChilds: [],
+              },
             ],
           },
         ],
@@ -667,6 +672,7 @@ export const initialPermission = () => {
   var state = {
     name: "",
     description: "",
+    report_payment: true,
     revenue_expenditure: false,
     accountant_time_sheet: false,
     product_list: false,

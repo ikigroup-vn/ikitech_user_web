@@ -39,10 +39,14 @@ class Form extends Component {
       txtTitle: "",
       image: "",
       listCategory: [],
+      categoryParent: [],
+      categoryChildrenIds: [],
+      textCategories: [],
       txtSumary: "",
       txtPublished: 1,
       txtCategories: "",
       txtContent: "",
+      icon: false,
     };
   }
   componentDidMount() {
@@ -50,8 +54,12 @@ class Form extends Component {
     var categories = [...this.props.categories];
     if (categories.length > 0) {
       options = categories.map((category, index) => {
-        console.log(category);
-        return { value: category.id, label: category.title };
+        return {
+          id: category.id,
+          value: category.id,
+          label: category.title,
+          categories_child: category.category_children,
+        };
       });
       this.setState({ listCategory: options });
     }
@@ -162,12 +170,124 @@ class Form extends Component {
       published: published,
       seo_title: txtSeoTitle,
       seo_description: txtSeoDescription,
+      category_parent: this.state.categoryParent.map(item => item.id),
+      category_children_ids: this.state.categoryChildrenIds.map(item => item.id),
     });
   };
 
   goBack = () => {
     var { history } = this.props;
     history.goBack();
+  };
+
+  handleChangeCheckChild(id) {
+    return this.state.categoryChildrenIds.map((e) => e.id).indexOf(id) > -1;
+  }
+
+  handleChangeCheckParent(id) {
+    return this.state.categoryParent.map((e) => e.id).indexOf(id) > -1;
+  }
+
+  handleChangeChild = (categoryChild) => {
+    var categoryParentOb;
+    this.state.listCategory.forEach((category) => {
+      if (category.categories_child != null) {
+        category.categories_child.forEach((categorychild2) => {
+          if (categorychild2.id === categoryChild.id) {
+            categoryParentOb = category;
+          }
+        });
+      }
+    });
+    if (categoryParentOb != null) {
+      var indexHas = this.state.categoryParent
+        .map((e) => e.id)
+        .indexOf(categoryParentOb.id);
+      if (indexHas !== -1) {
+      } else {
+        this.setState({
+          categoryParent: [...this.state.categoryParent, categoryParentOb],
+        });
+      }
+    }
+
+    /////
+    var indexHasChild = this.state.categoryChildrenIds
+      .map((e) => e.id)
+      .indexOf(categoryChild.id);
+    if (indexHasChild !== -1) {
+      var newListChild = this.state.categoryChildrenIds;
+      newListChild.splice(indexHasChild, 1);
+      this.setState({ categoryChildrenIds: newListChild });
+    } else {
+      this.setState({
+        categoryChildrenIds: [...this.state.categoryChildrenIds, categoryChild],
+      });
+    }
+    // this.props.handleDataFromInfo(this.state);
+  };
+
+  handleChangeParent = (category) => {
+    var indexHas = this.state.categoryParent
+      .map((e) => e.id)
+      .indexOf(category.id);
+    if (indexHas !== -1) {
+      var newList = this.state.categoryParent;
+      newList.splice(indexHas, 1);
+      this.setState({ categoryParent: newList });
+      this.state.listCategory.forEach((category1) => {
+        if (category1.id === category.id) {
+          category1.categories_child.forEach((categoryChild1) => {
+            const indexChild = this.state.categoryChildrenIds
+              .map((e) => e.id)
+              .indexOf(categoryChild1.id);
+            if (indexChild !== -1) {
+              const newChild = this.state.categoryChildrenIds.splice(
+                indexChild,
+                1
+              );
+            }
+          });
+        }
+      });
+    } else {
+      this.setState({
+        categoryParent: [...this.state.categoryParent, category],
+      });
+    }
+    // this.props.handleDataFromInfo(this.state);
+  };
+
+  handleGetListSelectedCategories = () => {
+    let name = "";
+    const categories = this.state.listCategory;
+    if (this.state.categoryParent !== null) {
+      categories.forEach((category) => {
+        if (
+          this.state.categoryParent.map((e) => e.id).indexOf(category.id) > -1
+        ) {
+          name = name + category.label + ", ";
+        }
+      });
+
+      if (this.state.categoryChildrenIds !== null) {
+        categories.forEach((category) => {
+          category.categories_child.forEach((categoryChild) => {
+            if (
+              this.state.categoryChildrenIds
+                .map((e) => e.id)
+                .indexOf(categoryChild.id) > -1
+            ) {
+              name = name + categoryChild.name + ", ";
+            }
+          });
+        });
+      }
+    }
+    if (name.length > 0) {
+      name = name.substring(0, name.length - 2);
+    }
+    return name;
   };
 
   render() {
@@ -185,6 +305,8 @@ class Form extends Component {
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
 
     var { store_code } = this.props;
+    // console.log("this.state.categoryParent", this.state.categoryParent);
+    // console.log("this.state.categoryChildrenIds", this.state.categoryChildrenIds);
 
     return (
       <React.Fragment>
@@ -220,6 +342,115 @@ class Form extends Component {
                     onChange={this.onChangeSelect}
                   />
                 </div>
+                {/* <div class="form-group">
+                  <label for="product_name">Danh mục</label>
+                  <div className="Choose-category-product">
+                    <div
+                      className="wrap_category"
+                      style={{ display: "flex" }}
+                      onClick={() => {
+                        this.setState({
+                          icon: !this.state.icon,
+                        });
+                      }}
+                      data-toggle="collapse"
+                      data-target="#demo2"
+                    >
+                      <input
+                        // disabled
+                        type="text"
+                        class="form-control"
+                        placeholder="--Chọn danh mục--"
+                        style={{
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          paddingRight: "55px",
+                          position: "relative",
+                        }}
+                        value={this.handleGetListSelectedCategories()}
+                      ></input>
+                      <button
+                        class="btn"
+                        style={{
+                          position: "absolute",
+                          right: "27px",
+                          outline: "none",
+                        }}
+                      >
+                        <i
+                          class={
+                            this.state.icon
+                              ? "fa fa-caret-up"
+                              : "fa fa-caret-down"
+                          }
+                        ></i>
+                      </button>
+                    </div>
+                    <div id="demo2" class="collapse">
+                      <ul
+                        style={{ listStyle: "none", margin: "5px 0" }}
+                        class="list-group"
+                      >
+                        {listCategory?.length > 0 ? (
+                          listCategory.map((category) => (
+                            <li
+                              class=""
+                              style={{ cursor: "pointer", paddingLeft: "5px" }}
+                            >
+                              <input
+                                type="checkbox"
+                                style={{
+                                  marginRight: "10px",
+                                  width: "30px",
+                                  height: "15px",
+                                }}
+                                checked={this.handleChangeCheckParent(
+                                  category.id
+                                )}
+                                onChange={() =>
+                                  this.handleChangeParent(category)
+                                }
+                              />
+                              {category.label}
+                              <ul
+                                style={{
+                                  listStyle: "none",
+                                  margin: "0px 45px",
+                                }}
+                              >
+                                {(category?.categories_child ?? []).map(
+                                  (categoryChild) => (
+                                    <li style={{ cursor: "pointer" }}>
+                                      <input
+                                        type="checkbox"
+                                        style={{
+                                          marginRight: "10px",
+                                          width: "30px",
+                                          height: "15px",
+                                          marginTop: "3px",
+                                        }}
+                                        checked={this.handleChangeCheckChild(
+                                          categoryChild.id
+                                        )}
+                                        onChange={() =>
+                                          this.handleChangeChild(categoryChild)
+                                        }
+                                      />
+                                      {categoryChild.name}
+                                    </li>
+                                  )
+                                )}
+                              </ul>
+                            </li>
+                          ))
+                        ) : (
+                          <div>Không có kết quả</div>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+                </div> */}
 
                 <div class="form-group">
                   <label for="product_name">Trạng thái</label>
