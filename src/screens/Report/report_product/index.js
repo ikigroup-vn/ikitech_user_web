@@ -508,9 +508,9 @@ class ReportProduct extends Component {
                               },
                             }}
                             onChange={([date]) => this.onchangeDateFrom(date)}
-                            onClose={(selectedDates, dateStr) => {
-                              this.onchangeDateFrom(selectedDates[0]);
-                            }}
+                            // onClose={(selectedDates, dateStr) => {
+                            //   this.onchangeDateFrom(selectedDates[0]);
+                            // }}
                           />
                           <Flatpickr
                             data-enable-time
@@ -532,9 +532,9 @@ class ReportProduct extends Component {
                               },
                             }}
                             onChange={([date]) => this.onchangeDateTo(date)}
-                            onClose={(selectedDates, dateStr) => {
-                              this.onchangeDateTo(selectedDates[0]);
-                            }}
+                            // onClose={(selectedDates, dateStr) => {
+                            //   this.onchangeDateTo(selectedDates[0]);
+                            // }}
                           />
                         </div>
                       </div>

@@ -138,7 +138,7 @@ class Table extends Component {
                   // color: "#5e72e4",
                 }
               }
-              className="product_order_code"
+              // className="product_order_code"
             >
               {product.name}
             </span>

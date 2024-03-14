@@ -30,9 +30,7 @@ class ReportPayment extends Component {
       totalPrice: 0,
       numPage: 20,
       statusPayment: "",
-      time_from: moment()
-      .startOf("month")
-      .format("YYYY-MM-DD"),
+      time_from: moment().startOf("month").format("YYYY-MM-DD"),
       time_to: moment().format("YYYY-MM-DD"),
       statusOrder: "",
       statusTime: "",
@@ -272,9 +270,11 @@ class ReportPayment extends Component {
     const params = `&time_from=${moment()
       .startOf("month")
       .format("YYYY-MM-DD")}&time_to=${moment().format("YYYY-MM-DD")}`;
-      history.push(`?time_from=${moment()
+    history.push(
+      `?time_from=${moment()
         .startOf("month")
-        .format("YYYY-MM-DD")}&time_to=${moment().format("YYYY-MM-DD")}`);
+        .format("YYYY-MM-DD")}&time_to=${moment().format("YYYY-MM-DD")}`
+    );
 
     // this.props.fetchAllBill(store_code, 1, branch, null, null);
     if (!methodPaymentId) {
@@ -489,9 +489,7 @@ class ReportPayment extends Component {
                         >
                           <Flatpickr
                             data-enable-time
-                            value={
-                              new Date(this.state.time_from)
-                            }
+                            value={new Date(this.state.time_from)}
                             className="date_from"
                             placeholder="Chọn ngày bắt đầu..."
                             options={{
@@ -509,15 +507,10 @@ class ReportPayment extends Component {
                               },
                             }}
                             onChange={([date]) => this.onchangeDateFrom(date)}
-                            onClose={(selectedDates, dateStr) => {
-                              this.onchangeDateFrom(selectedDates[0]);
-                            }}
                           />
                           <Flatpickr
                             data-enable-time
-                            value={
-                              new Date(this.state.time_to)
-                            }
+                            value={new Date(this.state.time_to)}
                             className="date_to"
                             placeholder="Chọn ngày kết thúc..."
                             options={{
@@ -535,9 +528,6 @@ class ReportPayment extends Component {
                               },
                             }}
                             onChange={([date]) => this.onchangeDateTo(date)}
-                            onClose={(selectedDates, dateStr) => {
-                              this.onchangeDateTo(selectedDates[0]);
-                            }}
                           />
                         </div>
                       </div>
