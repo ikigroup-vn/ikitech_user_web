@@ -31,7 +31,7 @@ class Pagination extends Component {
     } = this.props;
     var params = null;
 
-    setPage(page);
+    // setPage(page);
     if (typeof recipient_group != "undefined" && recipient_references_id)
       params = `&recipient_group=${recipient_group}&recipient_references_id=${recipient_references_id}`;
     else
@@ -71,14 +71,14 @@ class Pagination extends Component {
         if (data.url == null) {
           return (
             <li class={`page-item ${active} `}>
-              <a class="page-link">{label}</a>
+              <a class="page-link"  onClick={() => this.passPagination(data?.url?.split("?page=")[1])}>{label}</a>
             </li>
           );
         } else {
           return (
             <li class={`page-item ${active} `}>
               <a
-                onClick={() => this.passPagination(data.url.split("?page=")[1])}
+                onClick={() => this.passPagination(data?.url?.split("?page=")[1])}
                 class="page-link"
               >
                 {label}

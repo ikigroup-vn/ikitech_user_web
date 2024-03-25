@@ -307,6 +307,14 @@ class ReportPayment extends Component {
     const branch = branchIds ? branchIds : branchId;
     var { store_code } = this.props.match.params;
     const { methodPaymentId } = this.state;
+    const params = `&time_from=${moment()
+      .startOf("month")
+      .format("YYYY-MM-DD")}&time_to=${moment().format("YYYY-MM-DD")}`;
+    history.push(
+      `?time_from=${moment()
+        .startOf("month")
+        .format("YYYY-MM-DD")}&time_to=${moment().format("YYYY-MM-DD")}`
+    );
 
     // this.props.fetchAllBill(store_code, 1, branch, null, null);
     if (!methodPaymentId) {
@@ -314,7 +322,7 @@ class ReportPayment extends Component {
         store_code,
         1,
         branch,
-        null,
+        params,
         null,
         undefined
       );
@@ -323,7 +331,7 @@ class ReportPayment extends Component {
         store_code,
         1,
         branch,
-        null,
+        params,
         null,
         methodPaymentId
       );
@@ -396,7 +404,12 @@ class ReportPayment extends Component {
                       </span>
                     </button>
                   </div>
-                  <div className="card-body">
+                  <div
+                    className="card-body"
+                    style={{
+                      minHeight: "400px",
+                    }}
+                  >
                     <div
                       style={{
                         display: "flex",
@@ -459,8 +472,8 @@ class ReportPayment extends Component {
                               { value: "", label: "Tất cả" },
                               { value: "0", label: "Thanh toán trực tiếp" },
                               {
-                                value: "1",
-                                label: "Thanh toán qua ngân hàng",
+                                value: "cod",
+                                label: "COD",
                               },
                               { value: "2", label: "Thanh toán qua VNPay" },
                               { value: "3", label: "Thanh toán qua Onepay" },

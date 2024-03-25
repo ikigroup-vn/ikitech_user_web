@@ -13,6 +13,7 @@ class Pagination extends Component {
 
   passPagination = (page) => {
     var { store_code, limit, searchValue } = this.props;
+    if(!limit) limit = 20;
     var params = searchValue ? `&limit=${limit}&search=${searchValue}` : `&limit=${limit}`;
     this.props.fetchAllBlog(store_code, page, params);
   };

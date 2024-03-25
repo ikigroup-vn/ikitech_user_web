@@ -7,6 +7,7 @@ import {
   compressed,
   formatStringCharactor,
   getDetailAdress,
+  getQueryParams,
 } from "../ultis/helpers";
 import { getBranchId } from "../ultis/branchUtils";
 import moment from "moment";
@@ -267,6 +268,8 @@ export const exportReportProductSold = (
   params_agency = null
 ) => {
   return (dispatch) => {
+    const timeFrom = getQueryParams('time_from') || "";
+    const timeTo = getQueryParams('time_to') || "";
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
@@ -329,8 +332,9 @@ export const exportReportProductSold = (
                   const sheetData = getSheetData(data, data_header);
 
                   const totalColumns = sheetData[0].length;
-
-                  sheet1.cell("A1").value(sheetData);
+                  sheet1.range("A1:" + String.fromCharCode(64 + totalColumns) + "1").merged(true);
+                  sheet1.cell("A1").value(`Từ ${timeFrom} đến ${timeTo}`);
+                  sheet1.cell("A2").value(sheetData);
                   sheet1.column("B").width(100);
                   const range = sheet1.usedRange();
                   // const endColumn = String.fromCharCode(64 + totalColumns);
@@ -356,6 +360,7 @@ export const exportReportProductSold = (
   };
 };
 
+
 export const exportAllBillByMethodPayment = (
   store_code,
   page = 1,
@@ -365,6 +370,9 @@ export const exportAllBillByMethodPayment = (
   methodPaymentId
 ) => {
   return (dispatch) => {
+    const timeFrom = getQueryParams('time_from') || "";
+    const timeTo = getQueryParams('time_to') || "";
+
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
@@ -399,6 +407,7 @@ export const exportAllBillByMethodPayment = (
             if (typeof res.data.data.data != "undefined") {
               if (res.data.data.data.length > 0) {
                 var newArray = [];
+
                 let i = 1;
                 for (const item of res.data.data.data) {
                   var newItem = {};
@@ -408,7 +417,7 @@ export const exportAllBillByMethodPayment = (
                     customer: item.customer_name ?? "",
                     totalPrice: item.total_final,
                     methodPayment: handleGetPaymentMethodName(item.payment_method_id),
-                    createAt: item.created_at
+                    createAt: item.created_at,
                   };
                   Object.entries(arangeKeyItem).forEach(
                     ([key, value], index) => {
@@ -426,6 +435,9 @@ export const exportAllBillByMethodPayment = (
                       }
                       if (key == "methodPayment") {
                         newItem["Phương thức thanh toán"] = value;
+                      }
+                      if (key == "createAt") {
+                        newItem["Thời gian tạo đơn"] = value;
                       }
                       if (key == "createAt") {
                         newItem["Thời gian tạo đơn"] = value;
@@ -448,8 +460,9 @@ export const exportAllBillByMethodPayment = (
                   const sheetData = getSheetData(data, data_header);
 
                   const totalColumns = sheetData[0].length;
-
-                  sheet1.cell("A1").value(sheetData);
+                  sheet1.range("A1:" + String.fromCharCode(64 + totalColumns) + "1").merged(true);
+                  sheet1.cell("A1").value(`Từ ${timeFrom} đến ${timeTo}`);
+                  sheet1.cell("A2").value(sheetData);
                   sheet1.column("B").width(30);
                   const range = sheet1.usedRange();
                   // const endColumn = String.fromCharCode(64 + totalColumns);
@@ -457,10 +470,10 @@ export const exportAllBillByMethodPayment = (
                   const endColumn = "Z";
                   sheet1.row(1).style("bold", true);
 
-                  sheet1.range("A1:" + endColumn + "1").style("fill", "F4D03F");
+                  // sheet1.range("A1:" + endColumn + "1").style("fill", "F4D03F");
                   range.style("border", true);
 
-                  sheet1.range("AA1:AJ1").style("fill", "F4D03F");
+                  // sheet1.range("AA1:AJ1").style("fill", "F4D03F");
                   range.style("border", true);
 
                   return workbook.outputAsync().then((res) => {

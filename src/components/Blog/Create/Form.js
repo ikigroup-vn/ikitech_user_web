@@ -31,6 +31,7 @@ import {
 } from "suneditor/src/plugins";
 import imageGallery from "./../../imageGallery";
 import { getApiImageStore } from "../../../constants/Config";
+import './style.css';
 
 class Form extends Component {
   constructor(props) {
@@ -340,6 +341,9 @@ class Form extends Component {
                     options={listCategory}
                     name="txtCategory"
                     onChange={this.onChangeSelect}
+                    styles={{
+                      zIndex: "99"
+                    }}
                   />
                 </div>
                 {/* <div class="form-group">

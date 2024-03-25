@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Pagination from "../../Blog/Pagination"
-import * as Env from "../../../ultis/default"
-import { format } from "../../../ultis/helpers"
+import Pagination from "../../Blog/Pagination";
+import * as Env from "../../../ultis/default";
+import { format } from "../../../ultis/helpers";
 import themeData from "../../../ultis/theme_data";
 
 class ListBlog extends Component {
@@ -11,35 +11,42 @@ class ListBlog extends Component {
   }
 
   handleAddBlog = (id, name, img) => {
-    window.$('.modal').modal('hide');
+    window.$(".modal").modal("hide");
 
     this.props.handleAddBlog({
       id,
       name,
       img,
-    })
-  }
+    });
+  };
 
-  showData = (blogs) => {
+  showData = (blogs, per_page, current_page) => {
     var result = null;
     if (typeof blogs === "undefined") {
       return result;
     }
     if (blogs.length > 0) {
       result = blogs.map((data, index) => {
-        var image_url = data.image_url == null || data.image_url == "" ? Env.IMG_NOT_FOUND : data.image_url
-        var published = data.published == true ? "Đang hiển thị" : "Đang lưu tạm"
-        var published_status = data.published == true ? "success" : "secondary"
+        var image_url =
+          data.image_url == null || data.image_url == ""
+            ? Env.IMG_NOT_FOUND
+            : data.image_url;
+        var published =
+          data.published == true ? "Đang hiển thị" : "Đang lưu tạm";
+        var published_status = data.published == true ? "success" : "secondary";
         return (
-          <tr >
+          <tr>
+            {/* <td>{index + 1}</td> */}
+            <td>{per_page * (current_page - 1) + (index + 1)}</td>
 
-
-            <td>{index + 1}</td>
-     
-
-            <td style = {{textAlign : "center"}}>
-
-              <img src={image_url} className="img-responsive" alt="Image" width="100px" height="100px" />
+            <td style={{ textAlign: "center" }}>
+              <img
+                src={image_url}
+                className="img-responsive"
+                alt="Image"
+                width="100px"
+                height="100px"
+              />
             </td>
 
             <td>{data.title}</td>
@@ -54,18 +61,16 @@ class ListBlog extends Component {
             </td>
             <td>{data.count_view}</td>
 
-
-            <td >
+            <td>
               <button
                 type="button"
-                onClick={() => this.handleAddBlog(data.id, data.title, image_url)}
-
+                onClick={() =>
+                  this.handleAddBlog(data.id, data.title, image_url)
+                }
                 class="btn btn-primary btn-sm"
               >
                 <i class="fa fa-plus"></i> Chọn bài viết
               </button>
-
-
             </td>
           </tr>
         );
@@ -77,7 +82,7 @@ class ListBlog extends Component {
   };
 
   render() {
-    var { blogs, store_code } = this.props
+    var { blogs, store_code } = this.props;
     return (
       <div
         class="modal fade"
@@ -89,19 +94,31 @@ class ListBlog extends Component {
       >
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content" style={{ maxHeight: "630px" }}>
-            <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
               <h4 style={{ color: "white" }}>Danh sách bài viết</h4>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
             <div class="table-responsive">
-              <table class="table  table-hover table-border" style={{ color: "black" }}>
+              <table
+                class="table  table-hover table-border"
+                style={{ color: "black" }}
+              >
                 <thead>
                   <tr>
                     <th>STT</th>
 
-                    <th style = {{textAlign : "center"}}>Hình ảnh</th>
+                    <th style={{ textAlign: "center" }}>Hình ảnh</th>
                     <th>Tên bài viết</th>
                     <th>Trạng thái</th>
                     <th>Lượt xem</th>
@@ -109,15 +126,23 @@ class ListBlog extends Component {
                   </tr>
                 </thead>
 
-                <tbody>{this.showData(blogs.data)}</tbody>
+                <tbody>
+                  {this.showData(
+                    blogs.data,
+                    this.props.per_page,
+                    this.props.current_page
+                  )}
+                </tbody>
               </table>
             </div>
 
             <div class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-              <Pagination style="float-fix" store_code={store_code} blogs={blogs} />
+              <Pagination
+                style="float-fix"
+                store_code={store_code}
+                blogs={blogs}
+              />
               <button
-
                 type="button"
                 class="btn btn-default pagination-btn"
                 data-dismiss="modal"
@@ -132,11 +157,7 @@ class ListBlog extends Component {
   }
 }
 
-
-
 const mapDispatchToProps = (dispatch, props) => {
-  return {
-
-  };
+  return {};
 };
 export default connect(null, mapDispatchToProps)(ListBlog);

@@ -433,6 +433,8 @@ class Support extends Component {
           handleAddBlog={this.handleAddBlog}
           store_code={store_code}
           blogs={blogs}
+          per_page={blogs.per_page}
+          current_page={blogs.current_page}
         />
 
         <form role="form" onSubmit={this.onSave}>
