@@ -171,7 +171,6 @@ class Form extends Component {
                 placeholder="Nhập ..."
                 autoComplete="off"
                 onChange={this.onChange}
-                name="trader_mark_name"
               />
             </div>
 
@@ -186,7 +185,6 @@ class Form extends Component {
                 placeholder="Nhập ..."
                 autoComplete="off"
                 onChange={this.onChange}
-                name="user_copyright"
               />
             </div>
 
@@ -201,7 +199,6 @@ class Form extends Component {
                 placeholder="Nhập ..."
                 autoComplete="off"
                 onChange={this.onChange}
-                name="customer_copyright"
               />
             </div>
 

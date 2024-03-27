@@ -233,6 +233,17 @@ class CreateImportStock extends Component {
     var name = target.name;
     var value = target.value;
     const _value = formatNumber(value);
+
+    const { txtDiscoutType, txtValueDiscount, price_total, vat, cost } =
+      this.state;
+    const txtValuePercent =
+      txtDiscoutType == "1" && txtValueDiscount
+        ? formatNumber(price_total) / formatNumber(txtValueDiscount)
+        : 0;
+    const value_default =
+      txtDiscoutType == "1" ? txtValuePercent : formatNumber(txtValueDiscount);
+
+    let paymentNeed = parseFloat(price_total - value_default + vat + cost);
     if (
       name == "txtValueDiscount" ||
       name == "cost" ||
@@ -241,6 +252,7 @@ class CreateImportStock extends Component {
     ) {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
+
         if (name == "txtValueDiscount" && this.state.txtDiscoutType == "1") {
           if (value.length < 3) {
             if (value == 0) {
@@ -254,6 +266,18 @@ class CreateImportStock extends Component {
             this.setState({ [name]: "" });
           } else {
             this.setState({ [name]: value });
+          }
+        }
+        if (name == "total_payment") {
+          const a = parseFloat(e.target.value) || 0;
+          if (a == 0) {
+            this.setState({ [name]: "" });
+          } else {
+            if (a > paymentNeed) {
+              this.setState({ [name]: paymentNeed });
+            } else {
+              this.setState({ [name]: a });
+            }
           }
         }
       }

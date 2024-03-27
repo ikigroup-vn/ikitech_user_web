@@ -31,6 +31,7 @@ class ConfigVip extends Component {
         var { store_code } = this.props.match.params;
 
         var { user, getConfigVip, configVipUser, vip_user } = this.props;
+        console.log("vip_user", vip_user);
         console.log(user.is_vip)
         return (
             <div id="wrapper">
@@ -66,7 +67,7 @@ class ConfigVip extends Component {
                                                             <div id="messages"></div>
 
                                                             <div class="box">
-                                                                {this.props.vip_user == null ? "" :
+                                                                {Object.keys(this.props.vip_user).length == 0 ? "" :
                                                                     <Form store_code={store_code} getConfigVip={getConfigVip} configVipUser={configVipUser} vip_user={vip_user} />}
                                                             </div>
                                                         </div>
