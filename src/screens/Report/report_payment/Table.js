@@ -82,6 +82,7 @@ class Table extends Component {
   };
 
   handleGetPaymentMethodName = (paymentMethodId) => {
+    console.log("paymentMethodId", paymentMethodId);
     const payment = this.props.payment;
     return payment.find((item) => item.id === paymentMethodId)?.name;
   };
@@ -103,7 +104,7 @@ class Table extends Component {
           </td>
           <td>{bill?.customer_name ? bill?.customer_name : bill?.customer?.name}</td>
           <td>{format(bill.total_final) ?? ""}</td>
-          <td>{this.handleGetPaymentMethodName(bill.payment_method_id)}</td>
+          <td>{this.handleGetPaymentMethodName(bill.payment_partner_id)}</td>
           <td>{bill.created_at}</td>
         </tr>
       );
