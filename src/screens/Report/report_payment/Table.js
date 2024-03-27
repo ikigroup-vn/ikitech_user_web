@@ -82,7 +82,6 @@ class Table extends Component {
   };
 
   handleGetPaymentMethodName = (paymentMethodId) => {
-    console.log("paymentMethodId", paymentMethodId);
     const payment = this.props.payment;
     return payment.find((item) => item.id === paymentMethodId)?.name;
   };

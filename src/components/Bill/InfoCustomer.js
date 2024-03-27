@@ -2,6 +2,9 @@ import { data } from "jquery";
 import React, { Component } from "react";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import getNamePaymentMethod from "../../ultis/payment_method";
+import * as paymentAction from "../../actions/payment";
+import { connect } from "react-redux";
+
 import {
   filter_var,
   filter_arr,
@@ -15,9 +18,32 @@ import * as OrderFrom from "../../ultis/order_from";
 class InfoCustomer extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      // payment: []
+    };
   }
 
+  handleGetPaymentMethodName = (paymentMethodId) => {
+    const payment = this.props.payment;
+    return payment?.find((item) => item.id === paymentMethodId)?.name;
+  };
+
+  componentDidMount() {
+    var { store_code } = this.props;
+
+    this.props.fetchAllPayment(store_code);
+  }
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevState.payment !== this.state.payment) {
+  //     this.setState({
+  //       payment: this.state.payment, 
+  //     })
+  //   }
+  // }
+
   render() {
+
     var { bill, store_code } = this.props;
     var { payment_method_id, payment_method_name, payment_partner_name } = bill;
 
@@ -125,7 +151,8 @@ class InfoCustomer extends Component {
             <p class="sale_user_label" id="booking_time">
               Phương thức thanh toán:{" "}
               <span id="booking_time_txt">
-                {payment_method_name || ""}
+                {this.handleGetPaymentMethodName(this.props.bill.payment_partner_id) || ""} 
+                {/* {payment_method_name || ""} */}
                 {/* {payment_partner_name} */}
               </span>
             </p>
@@ -194,4 +221,18 @@ class InfoCustomer extends Component {
   }
 }
 
-export default InfoCustomer;
+const mapStateToProps = (state) => {
+  return {
+    payment: state.paymentReducers.payment.allPayment,
+  };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    fetchAllPayment: (store_code) => {
+      dispatch(paymentAction.fetchAllPayment(store_code));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(InfoCustomer);
