@@ -76,9 +76,9 @@ class ReportPayment extends Component {
     const branchIds = getBranchIds();
     const branch = branchIds ? branchIds : branchId;
     const { store_code } = this.props.match.params;
-    insertParam({
-      methodPaymentId: methodPaymentId ? methodPaymentId : "",
-    });
+    // insertParam({
+    //   methodPaymentId: methodPaymentId ? methodPaymentId : "",
+    // });
 
     // const {methodPaymentId} = this.state;
     if (!methodPaymentId) {
@@ -112,7 +112,8 @@ class ReportPayment extends Component {
     orderFrom,
     collaborator_by_customer_id,
     statusTime,
-    user
+    user,
+    methodPaymentId
   ) => {
     var params = ``;
     if (to != "" && to != null) {
@@ -122,6 +123,9 @@ class ReportPayment extends Component {
     if (from != "" && from != null) {
       const fromYYYYMMDD = from?.split("-").reverse().join("-");
       params = params + `&time_from=${fromYYYYMMDD}`;
+    }
+    if (methodPaymentId != null && methodPaymentId != "") {
+      params = params + `&methodPaymentId=${methodPaymentId}`;
     }
     if (statusTime != null && statusTime != "") {
       params = params + `&type_query_time=${statusTime}`;
@@ -178,8 +182,11 @@ class ReportPayment extends Component {
       collaborator_by_customer_id,
       statusTime,
       time_to,
+      methodPaymentId
     } = this.state;
-    from = date ? moment(date).format("YYYY-DD-MM") : "";
+    from = date ? moment(date).format("YYYY-MM-DD") : "";
+    console.log("date", date);
+    console.log("from", from);
     var params_agency =
       this.state.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
@@ -194,7 +201,8 @@ class ReportPayment extends Component {
       numPage,
       orderFrom,
       collaborator_by_customer_id,
-      statusTime
+      statusTime,
+      methodPaymentId
     );
 
     const branch_id = getBranchId();
@@ -209,7 +217,8 @@ class ReportPayment extends Component {
       1,
       branchIds,
       params,
-      params_agency
+      params_agency,
+      methodPaymentId
     );
     this.setState({ time_from: from });
   };
@@ -225,6 +234,7 @@ class ReportPayment extends Component {
       collaborator_by_customer_id,
       statusTime,
       time_from,
+      methodPaymentId
     } = this.state;
     to = date ? moment(date).format("YYYY-MM-DD") : "";
     var params_agency =
@@ -241,8 +251,11 @@ class ReportPayment extends Component {
       numPage,
       orderFrom,
       collaborator_by_customer_id,
-      statusTime
+      statusTime,
+      methodPaymentId
     );
+
+    console.log("params1", params);
 
     const branch_id = getBranchId();
     const branch_ids = getBranchIds();
@@ -256,7 +269,8 @@ class ReportPayment extends Component {
       1,
       branchIds,
       params,
-      params_agency
+      params_agency,
+      methodPaymentId
     );
     this.setState({ time_to: to });
   };
