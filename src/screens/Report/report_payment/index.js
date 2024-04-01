@@ -182,7 +182,7 @@ class ReportPayment extends Component {
       collaborator_by_customer_id,
       statusTime,
       time_to,
-      methodPaymentId
+      methodPaymentId,
     } = this.state;
     from = date ? moment(date).format("YYYY-MM-DD") : "";
     console.log("date", date);
@@ -218,7 +218,7 @@ class ReportPayment extends Component {
       branchIds,
       params,
       params_agency,
-      methodPaymentId
+      methodPaymentId ? methodPaymentId : undefined
     );
     this.setState({ time_from: from });
   };
@@ -234,7 +234,7 @@ class ReportPayment extends Component {
       collaborator_by_customer_id,
       statusTime,
       time_from,
-      methodPaymentId
+      methodPaymentId,
     } = this.state;
     to = date ? moment(date).format("YYYY-MM-DD") : "";
     var params_agency =
@@ -270,7 +270,7 @@ class ReportPayment extends Component {
       branchIds,
       params,
       params_agency,
-      methodPaymentId
+      methodPaymentId ? methodPaymentId : undefined
     );
     this.setState({ time_to: to });
   };
