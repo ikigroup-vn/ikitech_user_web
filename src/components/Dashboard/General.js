@@ -35,7 +35,6 @@ class General extends Component {
 
     // var total_stoking = typeof products.total_stoking == "undefined" ? 0 : products.total_stoking
     // var total_out_of_stock = typeof products.total_out_of_stock == "undefined" ? 0 : products.total_out_of_stock
-    console.log(badges);
     return (
       <div className="row">
         <div className="col-xl-3 col-md-6 mb-4 ">

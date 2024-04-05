@@ -180,7 +180,7 @@ export default class ComponentTemplate0ToPrint extends Component {
 
   render() {
     var state = this.state;
-    var { bill, badges, store } = this.props;
+    var { bill, badges, store, currentBranch } = this.props;
     var total_product =
       Array.isArray(bill.line_items_at_time) == true
         ? bill.line_items_at_time.length
@@ -197,6 +197,9 @@ export default class ComponentTemplate0ToPrint extends Component {
           badges.address_pickup.district_name +
           ", " +
           badges.address_pickup.province_name;
+
+    console.log("store.user?.phone_number", store);
+    console.log("bill.user_phone", bill);
     return (
       <div className="parent" style={{ margin: "30px" }}>
         <div
@@ -256,7 +259,8 @@ export default class ComponentTemplate0ToPrint extends Component {
               </p>
               <p class="" id="info">
                 <span>Số điện thoại:</span>{" "}
-                {store.user?.phone_number ?? bill.user_phone}
+                {/* {store.user?.phone_number ?? bill.user_phone} */}
+                {currentBranch?.phone || ""}
               </p>
             </div>
           </div>

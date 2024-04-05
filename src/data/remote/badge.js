@@ -10,7 +10,7 @@ export const fetchAllBadge = (store_code, branch_ids) => {
       );
     } else {
       return callApi(
-        `/store_v2/${store_code}/${branch_ids}/badges`,
+        `/store_v2/${store_code}/${branch_ids}/badges/v1`,
         "get",
         null
       );

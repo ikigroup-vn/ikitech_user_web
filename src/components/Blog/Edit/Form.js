@@ -29,6 +29,8 @@ import {
   link as linkPlugin,
   video,
   audio,
+  align,
+  template,
 } from "suneditor/src/plugins";
 import imageGallery from "./../../imageGallery";
 import { getApiImageStore } from "../../../constants/Config";
@@ -405,7 +407,7 @@ class Form extends Component {
                     onChange={this.onChangeSelect}
                   />
                 </div>
-{/* 
+                {/* 
                 <div class="form-group">
                   <label for="product_name">Danh mục</label>
                   <div className="Choose-category-product">
@@ -597,7 +599,17 @@ class Form extends Component {
                     linkPlugin,
                     video,
                     audio,
+                    align,
                   ],
+                  toolbar: {
+                    codeView: "Code view",
+                    tag_pre: "Code",
+                    tag_blockquote: 'Quote',
+                    showBlocks: 'Show blocks',
+                  },
+                  menu: {
+                    code: "Code",
+                  },
 
                   buttonList: [
                     [
@@ -626,7 +638,7 @@ class Form extends Component {
                       "imageGallery",
                       "fullScreen",
                       "preview",
-                      // "codeView",
+                      "codeView",
                       "removeFormat",
                     ],
                   ],

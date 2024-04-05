@@ -141,16 +141,27 @@ class Form extends Component {
     const _value = formatNumber(value);
     if (name == "txtValue" || name == "txtAmount") {
       if (!isNaN(Number(_value))) {
-        value = new Intl.NumberFormat().format(_value);
         if (name == "txtValue") {
-          if (value.length < 3) {
-            if (value == 0) {
-              this.setState({ [name]: 0 });
-            } else {
-              this.setState({ [name]: value });
-            }
+          if (value >= 100) {
+            return;
           }
+          // if (value.length < 3) {
+          //   if (value == 0) {
+          //     this.setState({ [name]: "" });
+          //   } else {
+          //     this.setState({ [name]: value });
+          //   }
+          // } else {
+          let a = e.target.value;
+          if (a == 0) {
+            this.setState({ [name]: "" });
+          } else {
+            this.setState({ [name]: a });
+          }
+          // }
         } else {
+          value = new Intl.NumberFormat().format(_value);
+
           if (value == 0) {
             this.setState({ [name]: 0 });
           } else {
@@ -285,7 +296,7 @@ class Form extends Component {
       start_time: startTime == "Invalid date" ? null : startTime,
       end_time: endTime == "Invalid date" ? null : endTime,
       value:
-        state.txtValue == null ? state.txtValue : formatNumber(state.txtValue),
+        state.txtValue == null ? state.txtValue : parseFloat(state.txtValue),
       amount:
         state.txtAmount == null
           ? state.txtAmount

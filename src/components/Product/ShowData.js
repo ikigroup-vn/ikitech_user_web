@@ -402,6 +402,10 @@ class ShowData extends Component {
           </span>
         </td>
 
+        <td>
+          <span>{`${data?.percent_collaborator}%` || ""}</span>
+        </td>
+
         {getChannel() == IKITECH && (
           <td>
             {" "}

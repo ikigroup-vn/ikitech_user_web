@@ -372,11 +372,9 @@ export const findTotalStock = (product) => {
         });
       }
     }
-    console.log("co ele");
     return stock;
   }
   if (getTypeProductDistribute(product) == HAS_SUB) {
-    console.log("co sub");
     var stocks = 0;
     if (product.distributes != null && product.distributes.length > 0) {
       const distributes = product.distributes[0];

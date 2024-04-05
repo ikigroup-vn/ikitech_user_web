@@ -250,7 +250,8 @@ export default class ComponentTemplate0ToPrint extends Component {
               </p>
               <p class="" id="info">
                 <span>Số điện thoại:</span>{" "}
-                {store.user?.phone_number ?? bill.user_phone}
+                {/* {store.user?.phone_number ?? bill.user_phone} */}
+                {this.props.currentBranch.phone || ""}
               </p>
             </div>
           </div>

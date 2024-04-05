@@ -16,12 +16,12 @@ export const fetchOverview = (store_code, branch_ids, params) => {
   } else {
     return params
       ? callApi(
-          `/store_v2/${store_code}/${branch_ids}/report/overview${params}`,
+          `/store_v2/${store_code}/${branch_ids}/report/overview/v1${params}`,
           "get",
           null
         )
       : callApi(
-          `/store_v2/${store_code}/${branch_ids}/report/overview`,
+          `/store_v2/${store_code}/${branch_ids}/report/overview/v1`,
           "get",
           null
         );

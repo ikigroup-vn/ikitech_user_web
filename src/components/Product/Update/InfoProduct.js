@@ -646,7 +646,7 @@ class InfoProduct extends Component {
             id="txtBarcode"
             placeholder="Nhập barcode"
             autoComplete="off"
-            // value={txtBarcode}
+            value={txtBarcode}
             name="txtBarcode"
             onChange={this.onChange}
           />

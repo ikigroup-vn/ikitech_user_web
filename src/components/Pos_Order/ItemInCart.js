@@ -17,6 +17,7 @@ import {
   stockOfProduct,
 } from "../../ultis/productUltis";
 import styled from "styled-components";
+import * as SettingAction from "../../actions/notification";
 
 const ItemInCartStyles = styled.div`
   .inputCost {
@@ -298,6 +299,8 @@ class ItemInCart extends Component {
 
   componentDidMount() {
     document.addEventListener("mousedown", this.handleClickOutside, true);
+    const { store_code } = this.props;
+    this.props.fetchAllGeneralSetting(store_code);
 
     this.setState({
       currentQuantity: this.props.item.quantity,
@@ -334,9 +337,10 @@ class ItemInCart extends Component {
     }
   }
   handleOnChange = (e, product) => {
+    const { generalSetting } = this.props;
     let quantity = e.target.value;
 
-    if (product.check_inventory) {
+    if (product.check_inventory && !generalSetting.allow_semi_negative) {
       const maxQuantityInventory = findTotalStockPos(product);
       if (Number(quantity) > 0) {
         quantity =
@@ -541,7 +545,6 @@ class ItemInCart extends Component {
   // "sub_element_distribute_name": "đo111"
   render() {
     const { item, index } = this.props;
-    console.log("🚀 ~  render ~ item:", item);
 
     const {
       currentQuantity,
@@ -570,7 +573,6 @@ class ItemInCart extends Component {
       item.product?.inventory.distributes.length > 0
         ? item.product?.inventory.distributes[0]
         : [];
-    console.log("itemmm", item, this.state);
     var is_bonus = item.is_bonus;
     var allows_choose_distribute = item.allows_choose_distribute;
 
@@ -1231,6 +1233,7 @@ const mapStateToProps = (state) => {
     updatedPrice: state.posReducers.pos_reducer.updatedPrice,
     updatedNote: state.posReducers.pos_reducer.updatedNote,
     permission: state.authReducers.permission.data,
+    generalSetting: state.notificationReducers.generalSetting,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -1257,6 +1260,9 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(
         productAction.getProductRetailSteps(store_code, branch_id, idProduct)
       );
+    },
+    fetchAllGeneralSetting: (store_code) => {
+      dispatch(SettingAction.fetchAllGeneralSetting(store_code));
     },
   };
 };
