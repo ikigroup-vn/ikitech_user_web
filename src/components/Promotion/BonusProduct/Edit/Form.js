@@ -53,7 +53,7 @@ class Form extends Component {
       image: "",
       displayError: "hide",
       multiply_by_number: false,
-      ladder_reward: false,
+      // ladder_reward: false,
       listProductsLadder: [],
       listProductsBonusLadder: [],
       isLoading: false,
@@ -444,7 +444,8 @@ class Form extends Component {
     var productBonus = {};
     var select_products = [];
     var itemLadderCheck = this.checkProductSameQuantity(
-      state.ladder_reward,
+      // state.ladder_reward,
+      this.props.ladder_reward,
       state.listProductsBonusLadder
     );
 
@@ -461,7 +462,8 @@ class Form extends Component {
       });
       return;
     }
-    if (state.ladder_reward === true) {
+    // if (state.ladder_reward === true) {
+    if(this.props.ladder_reward) {
       var data_ladder = {};
       var list = [];
       listProductsLadder.forEach((element, index) => {
@@ -567,7 +569,8 @@ class Form extends Component {
       start_time: startTime == "Invalid date" ? null : startTime,
       end_time: endTime == "Invalid date" ? null : endTime,
       ...productBonus,
-      ladder_reward: state.ladder_reward,
+      // ladder_reward: state.ladder_reward,
+      ladder_reward: this.props.ladder_reward,
       description: state.txtContent,
       image_url: state.image,
       set_limit_amount: true,
@@ -945,7 +948,7 @@ class Form extends Component {
       saveListProductsLadder,
       displayError,
       saveListProducts,
-      ladder_reward,
+      // ladder_reward,
       saveListProductsBonus,
       saveListProductsBonusLadder,
 
@@ -953,7 +956,7 @@ class Form extends Component {
       agency_types,
       group_types,
     } = this.state;
-
+    var {ladder_reward} = this.props
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
     var { products, store_code, combos, types, groupCustomer } = this.props;
     var type_discount_default = txtDiscoutType == "0" ? "show" : "hide";
@@ -971,7 +974,8 @@ class Form extends Component {
                       type="checkbox"
                       checked={ladder_reward}
                       onChange={() =>
-                        this.setState({ ladder_reward: !ladder_reward })
+                        // this.setState({ ladder_reward: !ladder_reward })
+                        this.props.onSetLadderReward()
                       }
                       class="form-check-input"
                       id="gridCheckLadder"

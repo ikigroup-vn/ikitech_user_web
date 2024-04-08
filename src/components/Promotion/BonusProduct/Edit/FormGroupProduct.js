@@ -713,7 +713,7 @@ class FormGroupProduct extends Component {
                     </>
                   ) : (
                     <>
-                      <i class="fas fa-save"></i> Lưu
+                      <i class="fas fa-save"></i> Lưu nhóm
                     </>
                   )}
                 </button>

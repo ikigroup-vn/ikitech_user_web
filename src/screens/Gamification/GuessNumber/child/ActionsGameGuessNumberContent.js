@@ -965,7 +965,7 @@ class ActionsGameGuessNumberContent extends Component {
                             class="form-control"
                           >
                             <option value={-1}>--- Chọn cấp đại lý ---</option>
-                            <option value={0}>Tất cả</option>
+                            {/* <option value={0}>Tất cả</option> */}
                             {types.map((v) => {
                               return (
                                 <option value={v.id} key={v.id}>

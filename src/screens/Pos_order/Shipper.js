@@ -1050,15 +1050,16 @@ class PanelBottom extends Component {
               <AsyncPaginate
                 placeholder="Tìm khách hàng"
                 value={select_customer}
-                loadOptions={this.loadCustomers}
+                // loadOptions={this.loadCustomers}
                 name="recipientReferences1"
-                onChange={this.onChangeSelect4}
+                // onChange={this.onChangeSelect4}
                 additional={{
                   page: 1,
                 }}
                 debounceTimeout={500}
-                isClearable
-                isSearchable
+                // isClearable
+                // isSearchable
+                isDisabled={true}
               />
             </div>
             <div class="form-group wrap-address-pickup">

@@ -39,6 +39,7 @@ class Edit extends Component {
       tabSelected: 0,
       groupId: null,
       indexgroupRemove: null,
+      ladder_reward: false,
     };
   }
 
@@ -195,6 +196,12 @@ class Edit extends Component {
     this.setState({ groupId: null, indexgroupRemove: null });
   };
 
+  onSetLadderReward = () => {
+    var {ladder_reward} = this.state
+
+    this.setState({ ladder_reward: !ladder_reward });
+  };
+
   render() {
     var { bonusProduct, products, history, combos } = this.props;
     var { store_code, bonusProductId, bonusProductItem } = this.props;
@@ -234,6 +241,8 @@ class Edit extends Component {
                         products={products}
                         bonusProduct={bonusProduct}
                         combos={combos}
+                        onSetLadderReward={this.onSetLadderReward}
+                        ladder_reward={this.state.ladder_reward}
                       />
                     </div>
                   </div>
@@ -242,165 +251,169 @@ class Edit extends Component {
             </div>
           </div>
         </div>
-        <div class="container-fluid">
-          <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <h4 className="h4 title_content mb-0 text-gray-800">
-              Các nhóm sản phẩm mua tặng thưởng
-            </h4>{" "}
-          </div>
-          <br></br>
-          <div class="card shadow mb-4">
-            <div class="card-body">
-              <SectionStyles class="content">
-                <div
-                  style={{
-                    marginBottom: "20px",
-                  }}
-                >
-                  <ul
-                    class="nav nav-tabs"
-                    id="myTab"
-                    role="tablist"
+        {!this.state.ladder_reward && (
+          <div class="container-fluid">
+            <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <h4 className="h4 title_content mb-0 text-gray-800">
+                Các nhóm sản phẩm mua tặng thưởng
+              </h4>{" "}
+            </div>
+            <br></br>
+            <div class="card shadow mb-4">
+              <div class="card-body">
+                <SectionStyles class="content">
+                  <div
                     style={{
-                      flexWrap: "nowrap",
-                      display: "-webkit-box",
-                      overflowY: "hidden",
-                      paddingBottom: "10px",
-                      borderBottom: "none",
+                      marginBottom: "20px",
                     }}
                   >
-                    {bonusProduct.group_products?.length > 0
-                      ? bonusProduct.group_products.map((group, index) => (
-                          <li
-                            class="nav-item"
-                            key={group}
-                            onClick={(e) =>
-                              this.handleSelectedGroup(e, group, index)
-                            }
-                            style={{
-                              borderBottom:
-                                index === tabSelected
-                                  ? "1px solid transparent"
-                                  : "1px solid #dddfeb",
-                            }}
-                          >
-                            <a
-                              class={`group__nav-link nav-link ${
-                                index === tabSelected ? "active" : ""
-                              }`}
-                              id={`${group}-tab`}
-                              dataToggle="tab"
-                              // href={`#${group}`}
-                              role="tab"
-                              ariaControls={group}
-                              ariaSelected="true"
-                              style={{
-                                color: index === tabSelected ? "" : "#5e72e4",
-                              }}
-                            >
-                              <span>Nhóm {index + 1}</span>
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                data-toggle="modal"
-                                data-target="#removeBonusProductItemModal"
-                                className="removeBonusProductItemModal"
-                                onClick={() =>
-                                  this.handleRemoveBonusProductItem(
-                                    group,
-                                    index
-                                  )
-                                }
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                              </svg>
-                            </a>
-                          </li>
-                        ))
-                      : null}
-                    <li
-                      class="nav-item"
-                      onClick={() => this.handleCreateGroup()}
+                    <ul
+                      class="nav nav-tabs"
+                      id="myTab"
+                      role="tablist"
                       style={{
-                        borderBottom:
-                          tabSelected === -1 ||
-                          bonusProduct.group_products?.length === 0
-                            ? "1px solid transparent"
-                            : "1px solid #dddfeb",
-                        display: "flex",
-                        alignItems: "center",
+                        flexWrap: "nowrap",
+                        display: "-webkit-box",
+                        overflowY: "hidden",
+                        paddingBottom: "10px",
+                        borderBottom: "none",
                       }}
                     >
-                      <a
-                        class={`nav-link ${tabSelected === -1 ? "active" : ""}`}
-                        id={`create-tab`}
-                        dataToggle="tab"
-                        role="tab"
-                        aria-controls="create"
-                        aria-selected="true"
+                      {bonusProduct.group_products?.length > 0
+                        ? bonusProduct.group_products.map((group, index) => (
+                            <li
+                              class="nav-item"
+                              key={group}
+                              onClick={(e) =>
+                                this.handleSelectedGroup(e, group, index)
+                              }
+                              style={{
+                                borderBottom:
+                                  index === tabSelected
+                                    ? "1px solid transparent"
+                                    : "1px solid #dddfeb",
+                              }}
+                            >
+                              <a
+                                class={`group__nav-link nav-link ${
+                                  index === tabSelected ? "active" : ""
+                                }`}
+                                id={`${group}-tab`}
+                                dataToggle="tab"
+                                // href={`#${group}`}
+                                role="tab"
+                                ariaControls={group}
+                                ariaSelected="true"
+                                style={{
+                                  color: index === tabSelected ? "" : "#5e72e4",
+                                }}
+                              >
+                                <span>Nhóm {index + 1}</span>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  strokeWidth="1.5"
+                                  stroke="currentColor"
+                                  data-toggle="modal"
+                                  data-target="#removeBonusProductItemModal"
+                                  className="removeBonusProductItemModal"
+                                  onClick={() =>
+                                    this.handleRemoveBonusProductItem(
+                                      group,
+                                      index
+                                    )
+                                  }
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                  />
+                                </svg>
+                              </a>
+                            </li>
+                          ))
+                        : null}
+                      <li
+                        class="nav-item"
+                        onClick={() => this.handleCreateGroup()}
                         style={{
+                          borderBottom:
+                            tabSelected === -1 ||
+                            bonusProduct.group_products?.length === 0
+                              ? "1px solid transparent"
+                              : "1px solid #dddfeb",
                           display: "flex",
                           alignItems: "center",
-                          color: tabSelected === -1 ? "" : "#5e72e4",
                         }}
                       >
-                        <span>Thêm nhóm</span>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
+                        <a
+                          class={`nav-link ${
+                            tabSelected === -1 ? "active" : ""
+                          }`}
+                          id={`create-tab`}
+                          dataToggle="tab"
+                          role="tab"
+                          aria-controls="create"
+                          aria-selected="true"
                           style={{
-                            width: "18px",
-                            height: "18px",
-                            paddingLeft: "4px",
+                            display: "flex",
+                            alignItems: "center",
+                            color: tabSelected === -1 ? "" : "#5e72e4",
                           }}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M12 6v12m6-6H6"
-                          />
-                        </svg>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-                <div class="row">
-                  <div class="col-md-12 col-xs-12">
-                    <div id="messages"></div>
-                    <div class="box">
-                      <FormGroupProduct
-                        store_code={store_code}
-                        history={history}
-                        bonusProductId={bonusProductId}
-                        products={products}
-                        bonusProduct={bonusProductItem}
-                        combos={combos}
-                        setTabSelected={this.setTabSelected}
-                        isFormCreate={
-                          tabSelected !== -1 &&
-                          bonusProduct.group_products?.length > 0
-                            ? false
-                            : true
-                        }
-                      />
+                          <span>Thêm nhóm</span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="currentColor"
+                            style={{
+                              width: "18px",
+                              height: "18px",
+                              paddingLeft: "4px",
+                            }}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M12 6v12m6-6H6"
+                            />
+                          </svg>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 col-xs-12">
+                      <div id="messages"></div>
+                      <div class="box">
+                        <FormGroupProduct
+                          store_code={store_code}
+                          history={history}
+                          bonusProductId={bonusProductId}
+                          products={products}
+                          bonusProduct={bonusProductItem}
+                          combos={combos}
+                          setTabSelected={this.setTabSelected}
+                          isFormCreate={
+                            tabSelected !== -1 &&
+                            bonusProduct.group_products?.length > 0
+                              ? false
+                              : true
+                          }
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </SectionStyles>
+                </SectionStyles>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </>
     );
   }
