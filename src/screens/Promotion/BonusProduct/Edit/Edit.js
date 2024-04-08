@@ -134,10 +134,14 @@ class Edit extends Component {
         saveListProducts: listProducts || [],
         listProductsBonus: listProductsBonus || [],
         saveListProductsBonus: listProductsBonus || [],
-
         isLoading: true,
         loadCript: true,
         form: {},
+      });
+    }
+    if (!shallowEqual(nextProps.bonusProduct, this.props.bonusProduct)) {
+      this.setState({
+        ladder_reward: nextProps.bonusProduct.ladder_reward,
       });
     }
     return true;
@@ -197,7 +201,7 @@ class Edit extends Component {
   };
 
   onSetLadderReward = () => {
-    var {ladder_reward} = this.state
+    var { ladder_reward } = this.state;
 
     this.setState({ ladder_reward: !ladder_reward });
   };

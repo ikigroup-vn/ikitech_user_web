@@ -569,6 +569,15 @@ class InfoProduct extends Component {
     // this.setState({ listCategory: option });
   };
   handleChangeTypeShareCollab = (type) => {
+    if (type === '%') {
+      this.setState({
+        money_amount_collaborator: "",
+      });
+    } else {
+      this.setState({
+        txtPercentC: "",
+      });
+    }
     this.setState({
       type_share_collaborator_number:
         type === "%"

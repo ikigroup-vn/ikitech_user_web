@@ -36,6 +36,7 @@ class ModalUpdateCommission extends Component {
         this.setPercenCollaborator("");
         resetSelected();
         window.$(".modal").modal("hide");
+        this.props.handleFetchAllProduct();
       }
     );
   };

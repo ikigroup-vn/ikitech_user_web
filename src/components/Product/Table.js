@@ -275,6 +275,7 @@ class Table extends Component {
           store_code={store_code}
           resetSelected={this.resetSelected}
           arrayCheckBox={selected}
+          handleFetchAllProduct={this.props.handleFetchAllProduct}
         />
 
         <div
@@ -324,7 +325,7 @@ class Table extends Component {
               <th>Tên sản phẩm</th>
 
               <th style={{ width: "20%" }}>Giá bán lẻ</th>
-              <th >Hoa hồng (%)</th>
+              <th >Hoa hồng CTV</th>
 
               {getChannel() == IKITECH && <th>Trạng thái </th>}
 
