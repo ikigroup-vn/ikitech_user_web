@@ -6,7 +6,8 @@ export const listPosOrder = (store_code, branch_id) => {
 
 export const addProductInCart = (store_code, branch_id, id, data) => {
   return callApi(
-    `/store/${store_code}/carts/${branch_id}/list/${id}/items`,
+    // `/store/${store_code}/carts/${branch_id}/list/${id}/items`,
+    `/store/${store_code}/carts/${branch_id}/list/${id}/items/v1`,
     "post",
     data
   );
@@ -22,7 +23,8 @@ export const updateNameInCart = (store_code, branch_id, id, data) => {
 
 export const addComboInCart = (store_code, branch_id, id, data) => {
   return callApi(
-    `/store/${store_code}/carts/${branch_id}/list/${id}/use_combo`,
+    // `/store/${store_code}/carts/${branch_id}/list/${id}/use_combo`,
+    `/store/${store_code}/carts/${branch_id}/list/${id}/use_combo/v1`,
     "post",
     data
   );
@@ -42,7 +44,8 @@ export const createOneTab = (store_code, branch_id, data) => {
 
 export const fetchInfoOneCart = (store_code, branch_id, id) => {
   return callApi(
-    `/store/${store_code}/carts/${branch_id}/list/${id}`,
+    // `/store/${store_code}/carts/${branch_id}/list/${id}`,
+    `/store/${store_code}/carts/${branch_id}/list/${id}/v1`,
     "get",
     null
   );
@@ -55,14 +58,15 @@ export const updateQuantityLineItem = (
   data
 ) => {
   return callApi(
-    `/store/${store_code}/carts/${branch_id}/list/${id_cart}/items`,
+    // `/store/${store_code}/carts/${branch_id}/list/${id_cart}/items`,
+    `/store/${store_code}/carts/${branch_id}/list/${id_cart}/items/v1`,
     "put",
     data
   );
 };
 export const subQuantityProduct = (store_code, branch_id, id_cart, data) => {
   return callApi(
-    `/store/${store_code}/carts/${branch_id}/list/${id_cart}/items`,
+    `/store/${store_code}/carts/${branch_id}/list/${id_cart}/items/v1`,
     "put",
     data
   );
@@ -70,7 +74,7 @@ export const subQuantityProduct = (store_code, branch_id, id_cart, data) => {
 
 export const destroyOneProduct = (store_code, branch_id, id_cart, data) => {
   return callApi(
-    `/store/${store_code}/carts/${branch_id}/list/${id_cart}/items`,
+    `/store/${store_code}/carts/${branch_id}/list/${id_cart}/items/v1`,
     "put",
     data
   );
@@ -85,7 +89,8 @@ export const updateInfoCart = (store_code, branch_id, id_cart, data) => {
 };
 export const updateInfoCarts = (store_code, branch_id, id_cart, data) => {
   return callApi(
-    `/store/${store_code}/carts/${branch_id}/list/${id_cart}`,
+    // `/store/${store_code}/carts/${branch_id}/list/${id_cart}`,
+    `/store/${store_code}/carts/${branch_id}/list/${id_cart}/v1`,
     "put",
     data
   );
@@ -101,7 +106,8 @@ export const paymentOrderPos = (store_code, branch_id, id_cart, data) => {
 
 export const fetchVoucher = (store_code, branch_id, id_cart, data) => {
   return callApi(
-    `/store/${store_code}/carts/${branch_id}/list/${id_cart}/use_voucher`,
+    // `/store/${store_code}/carts/${branch_id}/list/${id_cart}/use_voucher`,
+    `/store/${store_code}/carts/${branch_id}/list/${id_cart}/use_voucher/v1`,
     "post",
     data
   );
