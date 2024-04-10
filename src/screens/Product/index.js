@@ -998,6 +998,7 @@ class Product extends Component {
                             pageProduct={true}
                             getParams={this.getParams}
                             categorySelected={this.state.categorySelected}
+                            categoryChildSelected={this.state.categoryChildSelected}
                           />
                         </div>
                       </div>
