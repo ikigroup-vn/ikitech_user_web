@@ -93,7 +93,7 @@ class Table extends Component {
               {typeof data.sum_share_collaborator != "undefined" ? format(Number(data.sum_share_collaborator)) : null  }
                 </td>
                 <td>
-              {typeof data.sum_total_after_discount != "undefined" ? format(Number(data.sum_total_after_discount)) : null  }
+              {typeof data.sum_total_final != "undefined" ? format(Number(data.sum_total_final)) : null  }
                 </td>
         
            
