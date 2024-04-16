@@ -143,8 +143,8 @@ class Footer extends Component {
   render() {
     var { store_code, theme } = this.props;
     var { carousel_app_images } = this.state;
-    var banner = bannerImg.filter((v) => v.index === theme.banner_type)[0];
-
+    var banner = bannerImg.filter((v) => v?.index === theme?.banner_type)?.at(0) || {};
+    
     return (
       <div className="support">
         <button
@@ -168,10 +168,10 @@ class Footer extends Component {
             ></div>
 
             <div className="form-group">
-              <label htmlFor="name">
-                Bạn đang chọn Banner {banner.index} với tỷ lệ kích thước là:{" "}
-                {banner.width} x {banner.height} (px){" "}
-              </label>
+              {/* <label htmlFor="name">
+                Bạn đang chọn Banner {banner?.index} với tỷ lệ kích thước là:{" "}
+                {banner?.width} x {banner?.height} (px){" "}
+              </label> */}
 
               <div class="table-responsive">
                 <table class="table table-hover table-border">
