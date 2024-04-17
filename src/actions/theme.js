@@ -214,9 +214,8 @@ export const createBanner = function (store_code, data, banner, form) {
 
     if (typeof data.file != "undefined" && data.file != "") {
       const fd = new FormData();
-
       fd.append(`image`, data.file);
-      fd.append("image_type", "HOME");
+      fd.append("image_type", "PRODUCT");
       try {
         res = await uploadApi.upload(fd);
       } catch (error) {
