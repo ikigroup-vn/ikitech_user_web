@@ -7,6 +7,7 @@ import { Redirect } from "react-router-dom";
 import { connect, shallowEqual } from "react-redux";
 import Loading from "../Loading";
 import * as billAction from "../../actions/bill";
+import * as staffAction from "../../actions/staff";
 import Chat from "../../components/Chat";
 import Pagination from "../../components/Bill/Pagination";
 import NotAccess from "../../components/Partials/NotAccess";
@@ -19,6 +20,7 @@ import history from "../../history";
 import { getQueryParams, insertParam } from "../../ultis/helpers";
 import styled from "styled-components";
 import Flatpickr from "react-flatpickr";
+import Select from "react-select";
 
 const BillStyles = styled.div`
   .total-item-custom {
@@ -74,6 +76,8 @@ class Bill extends Component {
       paginate: 1,
       statusTime: "",
       date: new Date(),
+      selectedSale: null,
+      listSale: [{ label: "Tất cả", value: null }],
     };
   }
   closeChatBox = (status) => {
@@ -99,6 +103,8 @@ class Bill extends Component {
       collaborator_by_customer_id,
       statusTime,
     } = this.state;
+    var sale_staff_id = getQueryParams("sale_staff_id");
+
     var numPage = e.target.value;
     this.setState({
       numPage,
@@ -120,7 +126,9 @@ class Bill extends Component {
         numPage,
         orderFrom,
         collaborator_by_customer_id,
-        statusTime
+        statusTime,
+        null,
+        sale_staff_id
       );
     insertParam({
       limit: numPage,
@@ -156,6 +164,8 @@ class Bill extends Component {
       var statusTime = getQueryParams("type_query_time");
       var statusOrder = getQueryParams("order_status_code");
       var statusPayment = getQueryParams("payment_status_code");
+      var sale_staff_id = getQueryParams("sale_staff_id");
+      console.log("sale_staff_id", sale_staff_id);
       var paginate = getQueryParams("page");
       var { collaborator_by_customer_id, numPage } = this.state;
 
@@ -246,7 +256,8 @@ class Bill extends Component {
           orderFrom,
           collaborator_by_customer_id,
           statusTime,
-          nextProps.user
+          nextProps.user,
+          sale_staff_id
         );
       const branch_id = getBranchId();
       const branch_ids = getBranchIds();
@@ -262,6 +273,126 @@ class Bill extends Component {
       );
       this.setState({ loadingShipment: helper.randomString(10) });
     }
+    if (!shallowEqual(this.props.staffs, nextProps.staffs)) {
+      var sale_staff_id = getQueryParams("sale_staff_id");
+
+      this.setState({
+        listSale: [
+          ...this.state.listSale,
+          ...nextProps.staffs.map((staff) => ({
+            label: staff.name,
+            value: staff.id,
+          })),
+        ],
+      });
+      if (sale_staff_id) {
+        this.setState({
+          selectedSale: {
+            label: nextProps.staffs.find((staff) => staff.id == sale_staff_id)
+              ?.name,
+            value: sale_staff_id,
+          },
+        });
+      }
+    }
+    if (!shallowEqual(this.state.selectedSale, nextState.selectedSale)) {
+      var { store_code, status_code } = this.props.match.params;
+      var orderFrom = getQueryParams("order_from_list");
+      var limit = getQueryParams("limit");
+      var search = getQueryParams("search");
+      var from = getQueryParams("from");
+      var to = getQueryParams("to");
+      var statusTime = getQueryParams("type_query_time");
+      var statusOrder = getQueryParams("order_status_code");
+      var statusPayment = getQueryParams("payment_status_code");
+      var sale_staff_id = getQueryParams("sale_staff_id");
+      var paginate = getQueryParams("page");
+
+      var params_agency =
+        this.state.agency_by_customer_id != null
+          ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
+          : null;
+
+      if (from) {
+        this.setState({
+          time_from: from,
+        });
+      }
+      if (to) {
+        this.setState({
+          time_to: to,
+        });
+      }
+      if (statusTime) {
+        this.setState({
+          statusTime: statusTime,
+        });
+      }
+      if (search) {
+        this.setState({
+          searchValue: search,
+        });
+      }
+      if (limit) {
+        this.setState({
+          numPage: limit,
+        });
+      }
+      if (orderFrom) {
+        this.setState({
+          orderFrom: orderFrom,
+        });
+      }
+      if (statusOrder) {
+        this.setState({
+          statusOrder: statusOrder,
+        });
+      }
+      if (statusPayment) {
+        this.setState({
+          statusPayment: statusPayment,
+        });
+      }
+      if (paginate) {
+        this.setPaginate(paginate);
+      }
+
+      var params = "";
+      params =
+        params +
+        this.getParams(
+          from,
+          to,
+          search,
+          statusOrder,
+          statusPayment,
+          limit || numPage,
+          orderFrom,
+          collaborator_by_customer_id,
+          statusTime,
+          nextProps.user
+        );
+      params += nextState.selectedSale.value
+        ? `&sale_staff_id=${nextState.selectedSale.value}`
+        : "";
+      if (nextState.selectedSale.value) {
+        history.push(`/order/${store_code}?page=1${params ? `${params}` : ""}`);
+      }
+
+      const branch_id = getBranchId();
+      const branch_ids = getBranchIds();
+      const branchIds = branch_ids ? branch_ids : branch_id;
+
+      var page = getQueryParams("page") ?? 1;
+      this.props.fetchAllBill(
+        store_code,
+        page,
+        branchIds,
+        params,
+        params_agency
+      );
+    }
+
     return true;
   }
 
@@ -275,6 +406,7 @@ class Bill extends Component {
     var statusTime = getQueryParams("type_query_time");
     var statusOrder = getQueryParams("order_status_code");
     var statusPayment = getQueryParams("payment_status_code");
+    var sale_staff_id = getQueryParams("sale_staff_id");
     var paginate = getQueryParams("page");
     var { collaborator_by_customer_id, numPage } = this.state;
 
@@ -362,9 +494,11 @@ class Bill extends Component {
         limit || numPage,
         orderFrom,
         collaborator_by_customer_id,
-        statusTime
+        statusTime,
+        null,
+        sale_staff_id
       );
-
+    console.log("params", params);
     // var status_order = status == "PAID" ? null : status;
     // var status_payment = status == "PAID" ? status : null;
     // if (status_order != null) this.setState({ statusOrder: status_order });
@@ -379,6 +513,7 @@ class Bill extends Component {
 
     var page = getQueryParams("page") ?? 1;
     this.props.fetchAllBill(store_code, page, branchIds, params, params_agency);
+    this.props.fetchAllStaff(store_code, page, "is_sale=true&", branchIds);
     this.setState({ loadingShipment: helper.randomString(10) });
   }
   isSale = () => {
@@ -513,9 +648,13 @@ class Bill extends Component {
     orderFrom,
     collaborator_by_customer_id,
     statusTime,
-    user
+    user,
+    sale_staff_id
   ) => {
     var params = ``;
+    if (sale_staff_id != "" && sale_staff_id != null) {
+      params = params + `&sale_staff_id=${sale_staff_id}`;
+    }
     if (to != "" && to != null) {
       const toYYYYMMDD = to?.split("-").reverse().join("-");
       params = params + `&time_to=${toYYYYMMDD}`;
@@ -649,7 +788,10 @@ class Bill extends Component {
       collaborator_by_customer_id,
       statusTime,
       time_to,
+      selectedSale,
     } = this.state;
+    var sale_staff_id = getQueryParams("sale_staff_id");
+
     from = date ? moment(date, "DD-MM-YYYY").format("DD-MM-YYYY") : "";
     var params_agency =
       this.state.agency_by_customer_id != null
@@ -665,7 +807,9 @@ class Bill extends Component {
       numPage,
       orderFrom,
       collaborator_by_customer_id,
-      statusTime
+      statusTime,
+      null,
+      sale_staff_id
     );
 
     const branch_id = getBranchId();
@@ -681,6 +825,8 @@ class Bill extends Component {
   onchangeDateTo = (date) => {
     var to = "";
     var { store_code } = this.props.match.params;
+    var sale_staff_id = getQueryParams("sale_staff_id");
+
     var {
       searchValue,
       statusOrder,
@@ -690,6 +836,7 @@ class Bill extends Component {
       collaborator_by_customer_id,
       statusTime,
       time_from,
+      selectedSale,
     } = this.state;
     to = date ? moment(date, "DD-MM-YYYY").format("DD-MM-YYYY") : "";
 
@@ -707,7 +854,9 @@ class Bill extends Component {
       numPage,
       orderFrom,
       collaborator_by_customer_id,
-      statusTime
+      statusTime,
+      null,
+      sale_staff_id
     );
 
     const branch_id = getBranchId();
@@ -723,6 +872,8 @@ class Bill extends Component {
 
   onChangeStatusTime = (e) => {
     const statusTimeValue = e.target.value;
+    var sale_staff_id = getQueryParams("sale_staff_id");
+    console.log("onChangeStatusTime", sale_staff_id);
     var {
       time_from,
       time_to,
@@ -732,6 +883,7 @@ class Bill extends Component {
       numPage,
       orderFrom,
       collaborator_by_customer_id,
+      selectedSale,
     } = this.state;
     var { store_code } = this.props.match.params;
 
@@ -744,7 +896,9 @@ class Bill extends Component {
       numPage,
       orderFrom,
       collaborator_by_customer_id,
-      statusTimeValue
+      statusTimeValue,
+      null,
+      sale_staff_id
     );
     this.setState({
       statusTime: statusTimeValue,
@@ -759,6 +913,12 @@ class Bill extends Component {
     const branch_ids = getBranchIds();
     const branchIds = branch_ids ? branch_ids : branch_id;
     this.props.fetchAllBill(store_code, 1, branchIds, params, params_agency);
+  };
+
+  onChangeSelectedSale = (value) => {
+    this.setState({
+      selectedSale: value,
+    });
   };
 
   render() {
@@ -786,6 +946,8 @@ class Bill extends Component {
       statusTime,
       order_export_to_excel,
     } = this.state;
+    var sale_staff_id = getQueryParams("sale_staff_id");
+
     var listBill = typeof bills.data == "undefined" ? [] : bills.data;
 
     if (this.props.auth) {
@@ -1007,6 +1169,18 @@ class Bill extends Component {
                                   }}
                                 />
                               </div>
+                              <div style={{ marginLeft: "8px" }}>
+                                <Select
+                                  closeMenuOnSelect={false}
+                                  options={this.state.listSale}
+                                  placeholder={"Chọn nhân viên sale"}
+                                  value={this.state.selectedSale}
+                                  onChange={this.onChangeSelectedSale}
+                                  noOptionsMessage={() =>
+                                    "Không tìm thấy kết quả"
+                                  }
+                                ></Select>
+                              </div>
                             </div>
                           </p>
                         </div>
@@ -1086,6 +1260,9 @@ class Bill extends Component {
                           handleShowChatBox={this.handleShowChatBox}
                           store_code={store_code}
                           bills={bills}
+                          sale_staff_id={
+                            this.state.selectedSale?.id ?? sale_staff_id
+                          }
                         />
                         <div style={{ display: "flex", justifyContent: "end" }}>
                           <div style={{ display: "flex" }}>
@@ -1133,6 +1310,9 @@ class Bill extends Component {
                             agency_by_customer_id={agency_by_customer_id}
                             statusTime={statusTime}
                             setPaginate={this.setPaginate}
+                            sale_staff_id={
+                              this.state.selectedSale?.id ?? sale_staff_id
+                            }
                           />
                         </div>
                       </div>
@@ -1173,6 +1353,7 @@ const mapStateToProps = (state) => {
     permission: state.authReducers.permission.data,
     customer: state.customerReducers.customer.customerID,
     user: state.userReducers.user.userID,
+    staffs: state.staffReducers.staff.allStaff,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -1181,6 +1362,9 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(
         billAction.fetchAllBill(id, page, branch_id, params, params_agency)
       );
+    },
+    fetchAllStaff: (storeCode, page, params, branch_id) => {
+      dispatch(staffAction.fetchAllStaff(storeCode, page, params, branch_id));
     },
     fetchChatId: (store_code, customerId) => {
       dispatch(billAction.fetchChatId(store_code, customerId));

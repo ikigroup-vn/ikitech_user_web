@@ -59,7 +59,6 @@ class Form extends Component {
     this.props.fetchBlogId(this.props.store_code, this.props.blogId);
     var options = [];
     var categories = [...this.props.categories];
-    console.log("categories", categories);
     if (categories.length > 0) {
       options = categories?.map((category, index) => {
         return {
@@ -96,8 +95,6 @@ class Form extends Component {
         this.setState({ listCategory: options });
       }
     }
-    console.log("nextProps1", nextProps);
-    console.log("nextProps1", this.props.blog);
 
     if (!shallowEqual(nextProps.blog, this.props.blog)) {
       var txtCategories = {};
@@ -108,8 +105,6 @@ class Form extends Component {
 
       var categories = [];
       var listcategorynew = [];
-      console.log("nextProps", nextProps);
-      console.log("nextProps", this.props.blog);
       categories = this.props.blog?.categories?.map((category, index) => {
         if (listcategorynew?.map((e) => e.id).indexOf(category.id) === -1) {
           listcategorynew.push(category);
@@ -126,7 +121,6 @@ class Form extends Component {
 
       var published = nextProps.blog.published == true ? 1 : 0;
 
-      console.log(nextProps.blog.content);
 
       this.setState({
         txtContent: nextProps.blog.content,
@@ -161,6 +155,7 @@ class Form extends Component {
   };
 
   handleEditorChange = (editorState) => {
+    console.log("editorState: ", editorState);
     this.setState({
       txtContent: editorState,
     });
@@ -604,8 +599,8 @@ class Form extends Component {
                   toolbar: {
                     codeView: "Code view",
                     tag_pre: "Code",
-                    tag_blockquote: 'Quote',
-                    showBlocks: 'Show blocks',
+                    tag_blockquote: "Quote",
+                    showBlocks: "Show blocks",
                   },
                   menu: {
                     code: "Code",

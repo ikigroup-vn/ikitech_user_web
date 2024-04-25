@@ -325,7 +325,7 @@ class Table extends Component {
               <th>Tên sản phẩm</th>
 
               <th style={{ width: "20%" }}>Giá bán lẻ</th>
-              <th >Hoa hồng CTV</th>
+              {/* <th >Hoa hồng CTV</th> */}
 
               {getChannel() == IKITECH && <th>Trạng thái </th>}
 

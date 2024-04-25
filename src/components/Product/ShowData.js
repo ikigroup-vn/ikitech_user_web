@@ -402,9 +402,9 @@ class ShowData extends Component {
           </span>
         </td>
 
-        <td>
+        {/* <td>
           <span>{data?.percent_collaborator != 0 ? `${data?.percent_collaborator}%` : data?.money_amount_collaborator.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
-        </td>
+        </td> */}
 
         {getChannel() == IKITECH && (
           <td>

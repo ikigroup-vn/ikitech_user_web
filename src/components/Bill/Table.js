@@ -186,6 +186,7 @@ class Table extends Component {
       searchValue,
       collaborator_by_customer_id,
       statusTime,
+      sale_staff_id
     } = this.props;
     const branch_id = getBranchId();
     const branch_ids = getBranchIds();
@@ -199,7 +200,8 @@ class Table extends Component {
       numPage,
       orderFrom,
       collaborator_by_customer_id,
-      statusTime
+      statusTime,
+      null, sale_staff_id
     );
     insertParam({
       order_status_code: value,
@@ -224,6 +226,7 @@ class Table extends Component {
       searchValue,
       collaborator_by_customer_id,
       statusTime,
+      sale_staff_id
     } = this.props;
     const branch_id = getBranchId();
     const branch_ids = getBranchIds();
@@ -238,7 +241,9 @@ class Table extends Component {
       numPage,
       orderFrom,
       collaborator_by_customer_id,
-      statusTime
+      statusTime,
+      null,
+      sale_staff_id
     );
     insertParam({
       payment_status_code: value,
@@ -264,6 +269,7 @@ class Table extends Component {
       searchValue,
       collaborator_by_customer_id,
       statusTime,
+      sale_staff_id
     } = this.props;
     const branch_id = getBranchId();
     const branch_ids = getBranchIds();
@@ -277,7 +283,9 @@ class Table extends Component {
       numPage,
       value,
       collaborator_by_customer_id,
-      statusTime
+      statusTime,
+      null,
+      sale_staff_id
     );
     insertParam({
       order_from_list: value,

@@ -122,7 +122,7 @@ class ContentDetail extends Component {
                   "italic",
                   "fontColor",
                   "textStyle",
-                  // "outdent",
+                  "outdent",
                   "align",
                   "horizontalRule",
                   "list",
@@ -135,10 +135,11 @@ class ContentDetail extends Component {
                   "imageGallery",
                   "fullScreen",
                   "preview",
-                  // "codeView",
+                  "codeView",
                   "removeFormat",
                 ],
               ],
+              imageResizing: true,
             }}
           />
         </div>

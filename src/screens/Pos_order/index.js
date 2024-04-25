@@ -154,7 +154,6 @@ class PostOrder extends Component {
   }
 
   handleNewState = (newState) => {
-    console.log(newState);
     var customer = {};
     var customer_name = {};
     var customer_phone = {};
@@ -224,6 +223,7 @@ class PostOrder extends Component {
       console.log(newState.customerNote, customer_name);
 
       this.setState({
+        ...this.state,
         modalUpdateCart: {
           cartId: newState.cartId ?? newState.idCart,
           ...customer_name,
@@ -258,8 +258,8 @@ class PostOrder extends Component {
 
   handleChange = (e) => {
     const val = e.target.value;
-
     this.setState({
+      ...this.state,
       customerNote: val,
     });
     this.changeNewState({
@@ -291,7 +291,8 @@ class PostOrder extends Component {
     });
   };
   handlePaymentMethod = (e) => {
-    console.log({
+    console.log("e", e);
+    console.log("1", {
       ...this.state,
       payment_method_id: e,
       modalUpdateCart: {
@@ -1014,8 +1015,8 @@ class PostOrder extends Component {
 
   onNewChange = (state) => {
     this.changeNewState({
-      ...this.state,
       ...state,
+      ...this.state,
     });
   };
 
