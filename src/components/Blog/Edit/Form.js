@@ -53,6 +53,7 @@ class Form extends Component {
       txtSeoTitle: "",
       txtSeoDescription: "",
     };
+    this.myRef = React.createRef();
   }
 
   componentDidMount() {
@@ -155,9 +156,8 @@ class Form extends Component {
   };
 
   handleEditorChange = (editorState) => {
-    console.log("editorState: ", editorState);
     this.setState({
-      txtContent: editorState,
+      txtContent: editorState.srcElement.innerHTML,
     });
   };
 
@@ -567,10 +567,11 @@ class Form extends Component {
             <div class="form-group">
               <label for="product_name">Nội dung bài viết</label>
               <SunEditor
+                ref={this.myRef}
                 onImageUploadBefore={handleImageUploadBefore}
                 setContents={txtContent}
                 showToolbar={true}
-                onChange={this.handleEditorChange}
+                // onChange={this.handleEditorChange}
                 setDefaultStyle="height: auto;font-family: Arial;font-size: 14px;"
                 setOptions={{
                   requestHeaders: {
@@ -637,6 +638,20 @@ class Form extends Component {
                       "removeFormat",
                     ],
                   ],
+                }}
+                onSave={(e, g) => {
+                  console.log("e", e);
+                  console.log("g", g);
+                  this.setState({
+                    txtContent: e,
+                  });
+                }}
+                onInput={this.handleEditorChange}
+                onPaste={this.handleEditorChange}
+                onFocus={(e) => {
+                  this.setState({
+                    txtContent: e.target.innerHTML,
+                  });
                 }}
               />
             </div>

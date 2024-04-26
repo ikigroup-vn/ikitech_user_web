@@ -35,7 +35,7 @@ class ContentDetail extends Component {
 
   handleEditorChange = (editorState) => {
     this.setState({
-      txtContent: editorState,
+      txtContent: editorState.srcElement.innerHTML,
     });
   };
   onChange = (e) => {
@@ -67,7 +67,7 @@ class ContentDetail extends Component {
           <SunEditor
             onImageUploadBefore={handleImageUploadBefore}
             showToolbar={true}
-            onChange={this.handleEditorChange}
+            // onChange={this.handleEditorChange}
             setDefaultStyle="height: auto"
             setOptions={{
               requestHeaders: {
@@ -125,6 +125,18 @@ class ContentDetail extends Component {
                   "removeFormat",
                 ],
               ],
+            }}
+            onSave={(e, g) => {
+              this.setState({
+                txtContent: e,
+              });
+            }}
+            onInput={this.handleEditorChange}
+            onPaste={this.handleEditorChange}
+            onFocus={(e) => {
+              this.setState({
+                txtContent: e.target.innerHTML,
+              });
             }}
           />
         </div>

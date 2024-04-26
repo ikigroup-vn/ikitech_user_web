@@ -38,7 +38,7 @@ class ContentDetail extends Component {
   };
   handleEditorChange = (editorState) => {
     this.setState({
-      txtContent: editorState,
+      txtContent: editorState.srcElement.innerHTML,
     });
   };
 
@@ -81,7 +81,7 @@ class ContentDetail extends Component {
             onImageUploadBefore={handleImageUploadBefore}
             setContents={txtContentUpdate}
             showToolbar={true}
-            onChange={this.handleEditorChange}
+            // onChange={this.handleEditorChange}
             setDefaultStyle="height: auto"
             setOptions={{
               requestHeaders: {
@@ -140,6 +140,18 @@ class ContentDetail extends Component {
                 ],
               ],
               imageResizing: true,
+            }}
+            onSave={(e, g) => {
+              this.setState({
+                txtContent: e,
+              });
+            }}
+            onInput={this.handleEditorChange}
+            onPaste={this.handleEditorChange}
+            onFocus={(e) => {
+              this.setState({
+                txtContent: e.target.innerHTML,
+              });
             }}
           />
         </div>

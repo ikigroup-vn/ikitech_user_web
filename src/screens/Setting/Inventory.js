@@ -25,8 +25,14 @@ class Setting extends Component {
       allow_branch_payment_order: false,
       auto_choose_default_branch_payment_order: true,
       required_agency_ctv_has_referral_code: false,
+      is_export_invoices: true,
     };
   }
+
+  handleSwitchExportInvoices = () => {
+    this.setState({ is_export_invoices: !this.state.is_export_invoices });
+  };
+
   handChangeEnableVat = (e) => {
     this.setState({ enable_vat: !this.state.enable_vat });
   };
@@ -83,6 +89,7 @@ class Setting extends Component {
         this.state.auto_choose_default_branch_payment_order,
       required_agency_ctv_has_referral_code:
         this.state.required_agency_ctv_has_referral_code,
+      is_export_invoices: this.state.is_export_invoices,
     };
     this.props.updateGeneralSetting(store_code, formData);
   };
@@ -99,8 +106,9 @@ class Setting extends Component {
           nextProps.generalSetting.allow_branch_payment_order,
         auto_choose_default_branch_payment_order:
           nextProps.generalSetting.auto_choose_default_branch_payment_order,
-        required_agency_ctv_has_referral_code:
+        required_agency_ctv_has_referral_code:  
           nextProps.generalSetting.required_agency_ctv_has_referral_code,
+        is_export_invoices: nextProps.generalSetting.is_export_invoices,
       });
     }
     if (
@@ -125,6 +133,32 @@ class Setting extends Component {
     return (
       <SettingStyles className="">
         <div className="wrap-card">
+          <div
+            className="wrap-setting"
+            style={{
+              maxWidth: "430px",
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "10px 0",
+            }}
+          >
+            <div>Xuất hoá đơn công ty</div>
+
+            <div class="custom-control custom-switch">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="is_export_invoices"
+                name="is_export_invoices"
+                checked={this.state.is_export_invoices}
+                onChange={this.handleSwitchExportInvoices}
+              />
+              <label
+                class="custom-control-label"
+                for="is_export_invoices"
+              ></label>
+            </div>
+          </div>
           <div
             className="wrap-setting"
             style={{

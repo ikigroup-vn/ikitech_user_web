@@ -10,6 +10,31 @@ import themeData from "../../ultis/theme_data";
 import * as uploadApi from "../../data/remote/upload";
 import "./style.css";
 import Upload from "../Upload";
+import SunEditor from "suneditor-react";
+import "suneditor/dist/css/suneditor.min.css";
+import {
+  image as imagePlugin,
+  font,
+  fontSize,
+  formatBlock,
+  paragraphStyle,
+  blockquote,
+  fontColor,
+  textStyle,
+  list,
+  lineHeight,
+  table as tablePlugin,
+  link as linkPlugin,
+  video,
+  audio,
+  align,
+  template,
+} from "suneditor/src/plugins";
+import { handleImageUploadBefore } from "../../ultis/sun_editor";
+import imageGallery from "../imageGallery";
+import { getApiImageStore } from "../../constants/Config";
+import * as userLocalApi from "../../data/local/user";
+
 class ModalCreate extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +45,7 @@ class ModalCreate extends Component {
       bannerImages: [],
       bannerLinks: ["", ""],
       mainImage: "",
+      txtContent: "",
     };
   }
 
@@ -172,8 +198,17 @@ class ModalCreate extends Component {
     );
   };
 
+  handleEditorChange = (editorState) => {
+    console.log("editorState: ", editorState.srcElement.innerHTML);
+    this.setState({
+      txtContent: editorState.srcElement.innerHTML,
+    });
+  };
+
   render() {
-    var { txtName, isShowHome } = this.state;
+    var { txtName, isShowHome, txtContent } = this.state;
+    var { store_code } = this.props;
+
     return (
       <div
         class="modal fade"
@@ -255,6 +290,97 @@ class ModalCreate extends Component {
                     />
                   </div>
                 </div>
+                <div class="form-group">
+                  <label for="product_name">Nội dung bài viết</label>
+                  <SunEditor
+                    onImageUploadBefore={handleImageUploadBefore}
+                    setContents={txtContent}
+                    showToolbar={true}
+                    // onChange={this.handleEditorChange}
+                    setDefaultStyle="height: auto;font-family: Arial;font-size: 14px;"
+                    setOptions={{
+                      requestHeaders: {
+                        "X-Sample": "sample",
+                        token: userLocalApi.getToken(),
+                      },
+                      imageGalleryLoadURL: getApiImageStore(store_code),
+                      plugins: [
+                        imagePlugin,
+                        imageGallery,
+                        font,
+                        fontSize,
+                        formatBlock,
+                        paragraphStyle,
+                        blockquote,
+                        fontColor,
+                        textStyle,
+                        list,
+                        lineHeight,
+                        tablePlugin,
+                        linkPlugin,
+                        video,
+                        audio,
+                        align,
+                      ],
+                      toolbar: {
+                        codeView: "Code view",
+                        tag_pre: "Code",
+                        tag_blockquote: "Quote",
+                        showBlocks: "Show blocks",
+                      },
+                      menu: {
+                        code: "Code",
+                      },
+
+                      buttonList: [
+                        [
+                          "undo",
+                          "redo",
+                          "font",
+                          "fontSize",
+                          "formatBlock",
+                          "paragraphStyle",
+                          "blockquote",
+                          "bold",
+                          "underline",
+                          "italic",
+                          "fontColor",
+                          "textStyle",
+                          // "outdent",
+                          "align",
+                          "horizontalRule",
+                          "list",
+                          "lineHeight",
+                          "table",
+                          "link",
+                          "image",
+                          "video",
+                          "audio",
+                          "imageGallery",
+                          "fullScreen",
+                          "preview",
+                          "codeView",
+                          "removeFormat",
+                        ],
+                      ],
+                    }}
+                    onSave={(e, g) => {
+                      console.log("e", e);
+                      console.log("g", g);
+                      this.setState({
+                        txtContent: e,
+                      });
+                    }}
+                    onInput={this.handleEditorChange}
+                    onPaste={this.handleEditorChange}
+                    onFocus={(e) => {
+                      this.setState({
+                        txtContent: e.target.innerHTML,
+                      });
+                    }}
+                  />
+                </div>
+
                 {isShowHome && (
                   <div>
                     <p style={{ fontWeight: "600" }}>
