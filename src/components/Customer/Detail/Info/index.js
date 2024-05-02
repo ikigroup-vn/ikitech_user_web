@@ -158,7 +158,15 @@ class Customer extends Component {
         txtProvince: nextProps.customer.province,
         txtDistrict: nextProps.customer.district,
         txtWards: nextProps.customer.wards,
-        txtAddress_detail: nextProps.customer.address_detail,
+        txtAddress_detail:
+          nextProps.customer.address_detail ||
+          nextProps.customer.default_address.address_detail +
+            ", " +
+            nextProps.customer.default_address.wards_name +
+            ", " +
+            nextProps.customer.default_address.district_name +
+            ", " +
+            nextProps.customer.default_address.province_name,
         idCustomer: nextProps.customer.id,
         goFirst: false,
         txtDateOfBirth:
