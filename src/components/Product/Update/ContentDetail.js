@@ -37,7 +37,7 @@ class ContentDetail extends Component {
     this.setState({ txtContentC: e.target.value });
   };
   handleEditorChange = (editorState) => {
-    console.log("editorState", editorState);
+    console.log("editorState", editorState.srcElement.innerHTML);
     this.setState({
       txtContent: editorState.srcElement.innerHTML,
     });
@@ -48,7 +48,7 @@ class ContentDetail extends Component {
       nextState.txtContent !== this.state.txtContent ||
       nextState.txtContentC !== this.state.txtContentC
     ) {
-      console.log("đã vào", nextState);
+      console.log("nextState", nextState.txtContentUpdate);
       this.props.handleDataFromContent({
         txtContent: nextState.txtContent,
         txtContentC: nextState.txtContentC,
@@ -82,11 +82,12 @@ class ContentDetail extends Component {
             onImageUploadBefore={handleImageUploadBefore}
             setContents={txtContentUpdate}
             showToolbar={true}
-            onChange={(e) => {
-              this.setState({
-                txtContent: e,
-              });
-            }}
+            // onChange={(e) => {
+            //   console.log("e", e);
+            //   this.setState({
+            //     txtContent: e,
+            //   });
+            // }}
             setDefaultStyle="height: auto"
             setOptions={{
               requestHeaders: {
@@ -162,6 +163,14 @@ class ContentDetail extends Component {
               this.setState({
                 txtContent: e.target.innerHTML,
               });
+            }}
+            onLoad={(a, b, c) => {
+              console.log("a");
+              console.log(a, b, c);
+            }}
+            onMouseDown={(a, b, c) => {
+              console.log("b");
+              console.log(a, b, c);
             }}
           />
         </div>
