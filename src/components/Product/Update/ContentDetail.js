@@ -37,6 +37,7 @@ class ContentDetail extends Component {
     this.setState({ txtContentC: e.target.value });
   };
   handleEditorChange = (editorState) => {
+    console.log("editorState", editorState);
     this.setState({
       txtContent: editorState.srcElement.innerHTML,
     });
@@ -147,7 +148,12 @@ class ContentDetail extends Component {
               });
             }}
             onInput={this.handleEditorChange}
-            onPaste={this.handleEditorChange}
+            // onPaste={this.handleEditorChange}
+            onPaste={(e, cleanData, maxCharCount) => {
+              this.setState({
+                txtContent: cleanData,
+              });
+            }}
             onFocus={(e) => {
               this.setState({
                 txtContent: e.target.innerHTML,

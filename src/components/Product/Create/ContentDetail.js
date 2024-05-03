@@ -132,7 +132,12 @@ class ContentDetail extends Component {
               });
             }}
             onInput={this.handleEditorChange}
-            onPaste={this.handleEditorChange}
+            // onPaste={this.handleEditorChange}
+            onPaste={(e, cleanData, maxCharCount) => {
+              this.setState({
+                txtContent: cleanData,
+              });
+            }}
             onFocus={(e) => {
               this.setState({
                 txtContent: e.target.innerHTML,
