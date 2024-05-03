@@ -82,7 +82,11 @@ class ContentDetail extends Component {
             onImageUploadBefore={handleImageUploadBefore}
             setContents={txtContentUpdate}
             showToolbar={true}
-            // onChange={this.handleEditorChange}
+            onChange={(e) => {
+              this.setState({
+                txtContent: e,
+              });
+            }}
             setDefaultStyle="height: auto"
             setOptions={{
               requestHeaders: {

@@ -31,7 +31,7 @@ import {
 } from "suneditor/src/plugins";
 import imageGallery from "./../../imageGallery";
 import { getApiImageStore } from "../../../constants/Config";
-import './style.css';
+import "./style.css";
 
 class Form extends Component {
   constructor(props) {
@@ -171,8 +171,10 @@ class Form extends Component {
       published: published,
       seo_title: txtSeoTitle,
       seo_description: txtSeoDescription,
-      category_parent: this.state.categoryParent.map(item => item.id),
-      category_children_ids: this.state.categoryChildrenIds.map(item => item.id),
+      category_parent: this.state.categoryParent.map((item) => item.id),
+      category_children_ids: this.state.categoryChildrenIds.map(
+        (item) => item.id
+      ),
     });
   };
 
@@ -342,7 +344,7 @@ class Form extends Component {
                     name="txtCategory"
                     onChange={this.onChangeSelect}
                     styles={{
-                      zIndex: "99"
+                      zIndex: "99",
                     }}
                   />
                 </div>
@@ -513,7 +515,11 @@ class Form extends Component {
                 <SunEditor
                   onImageUploadBefore={handleImageUploadBefore}
                   showToolbar={true}
-                  // onChange={this.handleEditorChange}
+                  onChange={(e) => {
+                    this.setState({
+                      txtContent: e,
+                    });
+                  }}
                   setDefaultStyle="height: auto"
                   setOptions={{
                     requestHeaders: {

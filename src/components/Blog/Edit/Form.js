@@ -572,6 +572,11 @@ class Form extends Component {
                 setContents={txtContent}
                 showToolbar={true}
                 // onChange={this.handleEditorChange}
+                onChange={(e) => {
+                  this.setState({
+                    txtContent: e,
+                  });
+                }}
                 setDefaultStyle="height: auto;font-family: Arial;font-size: 14px;"
                 setOptions={{
                   requestHeaders: {
