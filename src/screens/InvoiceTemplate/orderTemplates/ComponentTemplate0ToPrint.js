@@ -199,7 +199,7 @@ export default class ComponentTemplate0ToPrint extends Component {
           badges.address_pickup.province_name;
 
     console.log("store.user?.phone_number", store);
-    console.log("bill.user_phone", bill);
+    console.log("bill.user_phone");
     return (
       <div className="parent" style={{ margin: "30px" }}>
         <div
@@ -246,13 +246,17 @@ export default class ComponentTemplate0ToPrint extends Component {
               <p class="" id="sale_user_name">
                 <span style={{ fontWeight: "500" }}>
                   {" "}
-                  Tên: {state.store_name ?? bill.store_name}
+                  Tên: {store.name ?? bill.store_name}
                 </span>
               </p>
               <p class="" id="info">
                 <span>Chi nhánh: </span>
                 {this.props.currentBranch.name}
               </p>
+              <p class="" id="info">
+                <span>Mã số thuế: {currentBranch.txt_code}</span>
+              </p>
+
               <p class="" id="info">
                 <span>Địa chỉ: </span>
                 {store.address}
@@ -261,6 +265,14 @@ export default class ComponentTemplate0ToPrint extends Component {
                 <span>Số điện thoại:</span>{" "}
                 {/* {store.user?.phone_number ?? bill.user_phone} */}
                 {currentBranch?.phone || ""}
+              </p>
+              <p class="" id="info">
+                <span>STK:</span> {currentBranch.account_number ?? ""}
+                {" - "}
+                {currentBranch.bank ?? ""} - {currentBranch.account_name ?? ""}
+              </p>
+              <p class="" id="info">
+                <span>Website:</span> {badges.domain_customer ?? ""}
               </p>
             </div>
           </div>

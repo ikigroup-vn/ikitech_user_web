@@ -220,7 +220,6 @@ class PostOrder extends Component {
       } else {
         customer_note = {};
       }
-      console.log(newState.customerNote, customer_name);
 
       this.setState({
         ...this.state,
@@ -291,15 +290,6 @@ class PostOrder extends Component {
     });
   };
   handlePaymentMethod = (e) => {
-    console.log("e", e);
-    console.log("1", {
-      ...this.state,
-      payment_method_id: e,
-      modalUpdateCart: {
-        ...this.state.modalUpdateCart,
-        payment_method_id: e,
-      },
-    });
     this.setState({
       ...this.state,
       payment_method_id: e,
@@ -439,7 +429,6 @@ class PostOrder extends Component {
   };
 
   handleCallbackProduct = (modal) => {
-    console.log("hehe", modal);
     this.setState({
       infoProduct: modal,
       isScan: randomString(10),
@@ -470,7 +459,6 @@ class PostOrder extends Component {
   };
 
   handleCallbackPushProduct = (modal) => {
-    console.log("haha", modal);
     this.setState({ listPosItem: modal, isScan: randomString(10) });
   };
 
@@ -757,7 +745,6 @@ class PostOrder extends Component {
   componentDidUpdate(prevProps, prevState) {
     window.$("link[rel=stylesheet]").prop("disabled", false);
     if (this.state.isPopoverOpen == true) {
-      console.log(document.getElementById("input-discount-pos"));
       if (document.getElementById("input-discount-pos")) {
         document.getElementById("input-discount-pos").focus();
       }
@@ -786,9 +773,9 @@ class PostOrder extends Component {
     }
     if (
       (!shallowEqual(nextState.listPosItem, this.state.listPosItem) &&
-        nextState.listPosItem.product_id != null) ||
-      (nextState.listPosItem.product_id != null &&
-        this.state.isScan != nextState.isScan)
+        nextState.listPosItem.product_id != null) 
+      // (nextState.listPosItem.product_id != null &&
+      //   this.state.isScan != nextState.isScan)
     ) {
       const formData = {
         product_id: nextState.listPosItem.product_id,
@@ -884,7 +871,6 @@ class PostOrder extends Component {
   };
 
   handleKeyboard = (key, event) => {
-    console.log(key, event);
     switch (key) {
       case "f3":
       case "F3":
@@ -957,7 +943,6 @@ class PostOrder extends Component {
       fee: chooseTab == 2 ? 0 : null,
       payment_method_id: this.state.openShipment ? 0 : 2,
     });
-    console.log("vao ne");
     var total_shipping_fee = {};
     if (this.state.openShipment === true) {
       total_shipping_fee = { total_shipping_fee: 0 };

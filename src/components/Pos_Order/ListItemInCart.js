@@ -41,9 +41,12 @@ class ListItemInCart extends Component {
     document.addEventListener("mousedown", this.handleClickOutside, true);
   };
 
+  componentWillUnmount() {
+    document.addEventListener("mousedown", this.handleClickOutside);
+  }
+
   handleClickOutside = (event) => {
     try {
-      console.log(event);
       const domNode = ReactDOM.findDOMNode(this);
 
       if (!domNode || !domNode.contains(event.target)) {

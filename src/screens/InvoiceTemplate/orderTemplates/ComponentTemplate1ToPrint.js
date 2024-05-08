@@ -256,52 +256,40 @@ export default class ComponentTemplate1ToPrint extends Component {
           </div>
 
           <div className="col-8">
-            <div
-              style={{
-                lineHeight: "0px",
-              }}
-            >
+            <div>
               <p class="" id="sale_user_name">
                 <span
                   style={{
                     fontWeight: "bold",
                     textTransform: "uppercase",
-                    fontSize: 25,
+                    fontSize: 20,
                     margin: 0,
                     padding: 0,
                   }}
                 >
-                  {" "}
                   {store.name ?? bill.store_name}
                 </span>
               </p>
-              <p
-                class=""
-                id="info"
-                style={{
-                  margin: 0,
-                  padding: 0,
-                  fontSize: 20,
-                }}
-              >
-                <span>
-                  <b>Địa chỉ:</b>{" "}
+              <p class="" id="info">
+                <span
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    fontSize: 20,
+                  }}
+                >
+                  Chi nhánh: {this.props.currentBranch.name}
                 </span>
-                {store.address}
               </p>
-
-              <p
-                class=""
-                id="info"
-                style={{
-                  margin: 0,
-                  padding: 0,
-                  fontSize: 20,
-                }}
-              >
-                <span>
-                  <b>SĐT/Zalo:</b> {store.user?.phone_number ?? bill.user_phone}{" "}
-                  <b> - Mã số thuế:</b> {currentBranch.txt_code ?? ""}
+              <p class="" id="info">
+                <span
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    fontSize: 20,
+                  }}
+                >
+                  Mã số thuế: {currentBranch.txt_code}
                 </span>
               </p>
               <p
@@ -313,10 +301,7 @@ export default class ComponentTemplate1ToPrint extends Component {
                   fontSize: 20,
                 }}
               >
-                <span>
-                  <b>Website:</b>
-                </span>{" "}
-                {badges.domain_customer ?? ""}
+                <span>Địa chỉ:</span> {store.address}
               </p>
 
               <p
@@ -328,11 +313,31 @@ export default class ComponentTemplate1ToPrint extends Component {
                   fontSize: 20,
                 }}
               >
-                <span>
-                  <b>STK:</b>
-                </span>{" "}
-                {currentBranch.account_number ?? ""} {currentBranch.bank ?? ""}{" "}
-                {currentBranch.account_name ?? ""}
+                <span>SĐT:</span> {currentBranch?.phone || ""}{" "}
+              </p>
+              <p
+                class=""
+                id="info"
+                style={{
+                  margin: 0,
+                  padding: 0,
+                  fontSize: 20,
+                }}
+              >
+                <span>Website:</span> {badges.domain_customer ?? ""}
+              </p>
+
+              <p
+                class=""
+                id="info"
+                style={{
+                  margin: 0,
+                  padding: 0,
+                  fontSize: 20,
+                }}
+              >
+                <span>STK:</span> {currentBranch.account_number ?? ""}{" "}
+                {currentBranch.bank ?? ""} {currentBranch.account_name ?? ""}
               </p>
             </div>
 
@@ -341,7 +346,6 @@ export default class ComponentTemplate1ToPrint extends Component {
                 fontSize: 25,
                 fontWeight: "bold",
                 textAlign: "left",
-
                 margin: 0,
                 padding: 0,
                 marginTop: 8,
