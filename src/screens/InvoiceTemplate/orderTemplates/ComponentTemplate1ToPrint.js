@@ -138,6 +138,7 @@ export default class ComponentTemplate1ToPrint extends Component {
 
             <td style={{ textAlign: "start" }}>Phí vận chuyển</td>
             <td></td>
+            <td></td>
 
             <td style={{ textAlign: "end" }} colSpan="3">
               + {format(bill.total_shipping_fee || 0)}
@@ -173,11 +174,14 @@ export default class ComponentTemplate1ToPrint extends Component {
         <tr>
           <td></td>
 
-          <td style={{ textAlign: "start" }}>Tổng</td>
+          <td style={{ textAlign: "start" }}>Xu</td>
+          <td></td>
           <td></td>
 
           <td style={{ textAlign: "end" }} colSpan="3">
-            {format(bill.total_final || 0)}
+            {bill.bonus_points_amount_used > 0
+              ? `- ${format(bill.bonus_points_amount_used)}`
+              : 0}
           </td>
         </tr>
       </React.Fragment>
@@ -187,11 +191,11 @@ export default class ComponentTemplate1ToPrint extends Component {
         <tr>
           <td></td>
 
-          <td style={{ textAlign: "start" }}>Điểm/Xu</td>
+          <td style={{ textAlign: "start" }}>Tổng</td>
           <td></td>
 
           <td style={{ textAlign: "end" }} colSpan="3">
-            {bill.points_awarded_to_customer || 0}
+            {format(bill.total_final || 0)}
           </td>
         </tr>
       </React.Fragment>
@@ -270,27 +274,16 @@ export default class ComponentTemplate1ToPrint extends Component {
                   {store.name ?? bill.store_name}
                 </span>
               </p>
-              <p class="" id="info">
-                <span
-                  style={{
-                    margin: 0,
-                    padding: 0,
-                    fontSize: 20,
-                  }}
-                >
-                  Chi nhánh: {this.props.currentBranch.name}
-                </span>
-              </p>
-              <p class="" id="info">
-                <span
-                  style={{
-                    margin: 0,
-                    padding: 0,
-                    fontSize: 20,
-                  }}
-                >
-                  Mã số thuế: {currentBranch.txt_code}
-                </span>
+              <p
+                class=""
+                id="info"
+                style={{
+                  margin: 0,
+                  padding: 0,
+                  fontSize: 20,
+                }}
+              >
+                <span>Chi nhánh:</span> {this.props.currentBranch.name}
               </p>
               <p
                 class=""
@@ -301,7 +294,20 @@ export default class ComponentTemplate1ToPrint extends Component {
                   fontSize: 20,
                 }}
               >
-                <span>Địa chỉ:</span> {store.address}
+                <span>Mã số thuế:</span> {currentBranch.txt_code}
+              </p>
+              <p
+                class=""
+                id="info"
+                style={{
+                  margin: 0,
+                  padding: 0,
+                  fontSize: 20,
+                }}
+              >
+                <span>Địa chỉ:</span>{" "}
+                {`${currentBranch.address_detail} - ${currentBranch?.wards_name} - ${currentBranch?.district_name} - ${currentBranch?.province_name}` ||
+                  store.address}
               </p>
 
               <p
@@ -336,8 +342,10 @@ export default class ComponentTemplate1ToPrint extends Component {
                   fontSize: 20,
                 }}
               >
-                <span>STK:</span> {currentBranch.account_number ?? ""}{" "}
-                {currentBranch.bank ?? ""} {currentBranch.account_name ?? ""}
+                <span>STK:</span>{" "}
+                {currentBranch.account_number ?? ""}
+                {" - "}
+                {currentBranch.bank ?? ""} - {currentBranch.account_name ?? ""}
               </p>
             </div>
 
@@ -439,12 +447,12 @@ export default class ComponentTemplate1ToPrint extends Component {
                     bill?.customer?.phone_number ??
                     ""}
                 </p>
-                <p class="" id="info" style={{ fontSize: "20px" }}>
+                {/* <p class="" id="info" style={{ fontSize: "20px" }}>
                   <span>
                     <b>Điểm/Xu: </b>
                   </span>{" "}
                   {bill?.customer?.point ?? "0"}
-                </p>
+                </p> */}
               </div>
 
               <table class="table table-hover">

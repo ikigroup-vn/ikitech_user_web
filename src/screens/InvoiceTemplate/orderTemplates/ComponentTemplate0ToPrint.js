@@ -128,6 +128,7 @@ export default class ComponentTemplate0ToPrint extends Component {
 
             <td style={{ textAlign: "start" }}>Phí vận chuyển</td>
             <td></td>
+            <td></td>
 
             <td style={{ textAlign: "end" }} colSpan="3">
               + {format(bill.total_shipping_fee || 0)}
@@ -154,8 +155,23 @@ export default class ComponentTemplate0ToPrint extends Component {
               )}
             </td>
           ) : (
-            <td></td>
+            <td style={{ textAlign: "end" }} colSpan="3">
+              0
+            </td>
           )}
+        </tr>
+        <tr>
+          <td></td>
+
+          <td style={{ textAlign: "start" }}>Xu</td>
+          <td></td>
+          <td></td>
+
+          <td style={{ textAlign: "end" }} colSpan="3">
+            {bill.bonus_points_amount_used > 0
+              ? `- ${format(bill.bonus_points_amount_used)}`
+              : 0}
+          </td>
         </tr>
       </React.Fragment>
     );
@@ -259,7 +275,8 @@ export default class ComponentTemplate0ToPrint extends Component {
 
               <p class="" id="info">
                 <span>Địa chỉ: </span>
-                {store.address}
+                {`${currentBranch.address_detail} - ${currentBranch?.wards_name} - ${currentBranch?.district_name} - ${currentBranch?.province_name}` ||
+                  store.address}
               </p>
               <p class="" id="info">
                 <span>Số điện thoại:</span>{" "}
