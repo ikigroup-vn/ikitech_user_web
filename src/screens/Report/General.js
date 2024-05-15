@@ -18,7 +18,6 @@ class General extends Component {
     } = this.props;
     const { total_value_stock, total_stock } = reportInventory;
     const { import_total_amount, export_total_amount } = reportImportExport;
-    console.log(time_from, time_to);
     var params = ``;
 
     if (time_from && time_to) {

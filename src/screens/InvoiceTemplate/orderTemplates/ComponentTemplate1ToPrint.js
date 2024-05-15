@@ -160,7 +160,8 @@ export default class ComponentTemplate1ToPrint extends Component {
               {format(
                 (bill.product_discount_amount || 0) +
                   (bill.voucher_discount_amount || 0) +
-                  (bill.combo_discount_amount || 0)
+                  (bill.combo_discount_amount || 0) +
+                  bill.discount ?? 0
               )}
             </td>
           ) : (
@@ -342,8 +343,7 @@ export default class ComponentTemplate1ToPrint extends Component {
                   fontSize: 20,
                 }}
               >
-                <span>STK:</span>{" "}
-                {currentBranch.account_number ?? ""}
+                <span>STK:</span> {currentBranch.account_number ?? ""}
                 {" - "}
                 {currentBranch.bank ?? ""} - {currentBranch.account_name ?? ""}
               </p>

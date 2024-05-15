@@ -151,7 +151,7 @@ export default class ComponentTemplate0ToPrint extends Component {
               {format(
                 (bill.product_discount_amount || 0) +
                   (bill.voucher_discount_amount || 0) +
-                  (bill.combo_discount_amount || 0)
+                  (bill.combo_discount_amount || 0) + bill.discount ?? 0
               )}
             </td>
           ) : (
@@ -197,6 +197,7 @@ export default class ComponentTemplate0ToPrint extends Component {
   render() {
     var state = this.state;
     var { bill, badges, store, currentBranch } = this.props;
+    console.log("Linh", bill);
     var total_product =
       Array.isArray(bill.line_items_at_time) == true
         ? bill.line_items_at_time.length

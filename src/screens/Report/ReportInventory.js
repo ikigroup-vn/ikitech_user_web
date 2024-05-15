@@ -24,6 +24,8 @@ class ReportInventory extends Component {
     super(props);
     this.state = {
       txtStart: "",
+      reportInventory: {},
+      reportImportExport: {},
     };
   }
   componentDidMount() {
@@ -32,13 +34,13 @@ class ReportInventory extends Component {
     const branch_ids = getBranchIds();
     const branchIds = branch_ids ? branch_ids : branch_id;
     const params = `branch_id=${branch_id}`;
-    this.props.fetchAllReportInventory(
+    this.props.fetchImportExportStock(
       store_code,
       branchIds,
       1,
       branch_ids ? "" : params
     );
-    this.props.fetchImportExportStock(
+    this.props.fetchAllReportInventory(
       store_code,
       branchIds,
       1,
@@ -74,6 +76,16 @@ class ReportInventory extends Component {
 
       var isShow = permissions.report_inventory;
       this.setState({ isLoading: true, isShow });
+    }
+    if (this.props.reportImportExport != nextProps.reportImportExport) {
+      this.setState({
+        reportImportExport: nextProps.reportImportExport,
+      });
+    }
+    if (this.props.reportInventory != nextProps.reportInventory) {
+      this.setState({
+        reportInventory: nextProps.reportInventory,
+      });
     }
   }
 
@@ -345,7 +357,8 @@ class ReportInventory extends Component {
                           </thead>
 
                           <tbody>
-                            {typeof reportInventory.data != "undefined" ? (
+                            {reportInventory.data &&
+                            reportInventory.data.length > 0 ? (
                               this.showData(
                                 reportInventory.data,
                                 reportInventory.per_page,

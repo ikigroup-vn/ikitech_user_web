@@ -240,7 +240,8 @@ class ShowData extends Component {
                   : 0}
               </td>
 
-              <td>{formatNoD(data.main_stock.stock)}</td>
+              {/* <td>{formatNoD(data.main_stock.stock)}</td> */}
+              <td>{formatNoD(data.inventory.main_stock)}</td>
 
               <td>
                 {data.main_stock.cost_of_capital
