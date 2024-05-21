@@ -95,6 +95,7 @@ export const exportAllListOrder = (
 
                     total_before_discount: item.total_before_discount,
                     total_after_discount: item.total_after_discount,
+                    discount: item.discount,
 
                     balance_collaborator_used: item.balance_collaborator_used,
                     bonus_points_amount_used: item.bonus_points_amount_used,
@@ -221,6 +222,10 @@ export const exportAllListOrder = (
                         newItem["Giảm giá voucher"] = value;
                       }
 
+                      if (key == "discount") {
+                        newItem["Chiết khấu"] = value;
+                      }
+
                       if (key == "total_before_discount") {
                         newItem["Trước khi giảm giá"] = value;
                       }
@@ -268,8 +273,8 @@ export const exportReportProductSold = (
   params_agency = null
 ) => {
   return (dispatch) => {
-    const timeFrom = getQueryParams('time_from') || "";
-    const timeTo = getQueryParams('time_to') || "";
+    const timeFrom = getQueryParams("time_from") || "";
+    const timeTo = getQueryParams("time_to") || "";
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
@@ -332,7 +337,9 @@ export const exportReportProductSold = (
                   const sheetData = getSheetData(data, data_header);
 
                   const totalColumns = sheetData[0].length;
-                  sheet1.range("A1:" + String.fromCharCode(64 + totalColumns) + "1").merged(true);
+                  sheet1
+                    .range("A1:" + String.fromCharCode(64 + totalColumns) + "1")
+                    .merged(true);
                   sheet1.cell("A1").value(`Từ ${timeFrom} đến ${timeTo}`);
                   sheet1.cell("A2").value(sheetData);
                   sheet1.column("B").width(100);
@@ -360,7 +367,6 @@ export const exportReportProductSold = (
   };
 };
 
-
 export const exportAllBillByMethodPayment = (
   store_code,
   page = 1,
@@ -370,8 +376,8 @@ export const exportAllBillByMethodPayment = (
   methodPaymentId
 ) => {
   return (dispatch) => {
-    const timeFrom = getQueryParams('time_from') || "";
-    const timeTo = getQueryParams('time_to') || "";
+    const timeFrom = getQueryParams("time_from") || "";
+    const timeTo = getQueryParams("time_to") || "";
 
     dispatch({
       type: Types.SHOW_LOADING,
@@ -394,11 +400,11 @@ export const exportAllBillByMethodPayment = (
         });
         const handleGetPaymentMethodName = (paymentMethodId) => {
           const payment = [
-            {id: 0, name: "Thanh toán khi nhận hàng"},
-            {id: 1, name: "Chuyển khoản đến tài khoản ngân hàng"},
-            {id: 2, name: "Thanh toán bằng VNPay"},
-            {id: 3, name: "Thanh toán bằng OnePay"},
-            {id: 4, name: "Thanh toán bằng Momo"},
+            { id: 0, name: "Thanh toán khi nhận hàng" },
+            { id: 1, name: "Chuyển khoản đến tài khoản ngân hàng" },
+            { id: 2, name: "Thanh toán bằng VNPay" },
+            { id: 3, name: "Thanh toán bằng OnePay" },
+            { id: 4, name: "Thanh toán bằng Momo" },
           ];
           return payment.find((item) => item.id === paymentMethodId)?.name;
         };
@@ -416,7 +422,9 @@ export const exportAllBillByMethodPayment = (
                     code: item.order_code ?? "",
                     customer: item.customer_name ?? "",
                     totalPrice: item.total_final,
-                    methodPayment: handleGetPaymentMethodName(item.payment_method_id),
+                    methodPayment: handleGetPaymentMethodName(
+                      item.payment_method_id
+                    ),
                     createAt: item.created_at,
                   };
                   Object.entries(arangeKeyItem).forEach(
@@ -460,7 +468,9 @@ export const exportAllBillByMethodPayment = (
                   const sheetData = getSheetData(data, data_header);
 
                   const totalColumns = sheetData[0].length;
-                  sheet1.range("A1:" + String.fromCharCode(64 + totalColumns) + "1").merged(true);
+                  sheet1
+                    .range("A1:" + String.fromCharCode(64 + totalColumns) + "1")
+                    .merged(true);
                   sheet1.cell("A1").value(`Từ ${timeFrom} đến ${timeTo}`);
                   sheet1.cell("A2").value(sheetData);
                   sheet1.column("B").width(30);
