@@ -6,6 +6,8 @@ import * as customerAction from "../../../actions/customer";
 import TableCustomerOfSale from "./TableCustomerOfSale";
 import Pagination from "./Pagination";
 import moment from "moment";
+import * as helper from "../../../ultis/helpers";
+
 import DateRangePickerCustom from "../../DatePicker/DateRangePickerCustom";
 
 const SidebarShowCustomerOfSaleStyles = styled.div`
@@ -26,12 +28,20 @@ class SidebarShowCustomerOfSale extends Component {
       page: 1,
     };
   }
+
   shouldComponentUpdate(nextProps, nextState) {
     const { saleInfo, fetchAllCustomer, store_code } = this.props;
     const { page, date_from, date_to } = this.state;
     if (!shallowEqual(saleInfo, nextProps.saleInfo)) {
-      const params = `&sale_staff_id=${nextProps.saleInfo.id}`;
+      let date = helper.getDateForChartHour();
+
+      const params = `&sale_staff_id=${nextProps.saleInfo.id}&date_from=${date.from}&date_to=${date.to}`;
       fetchAllCustomer(store_code, nextState.page, params);
+      this.setState({
+        date_from: date.from,
+        date_to: date.to,
+        page: 1,
+      });
     }
     return true;
   }
@@ -68,18 +78,19 @@ class SidebarShowCustomerOfSale extends Component {
         setShowSidebar={this.handleShowSidebar}
       >
         <SidebarShowCustomerOfSaleStyles>
-          {customers?.data?.length > 0 && (
+          <div
+            style={{
+              marginBottom: "10px",
+            }}
+          >
+            <DateRangePickerCustom
+              row={true}
+              onChangeDate={this.onChangeDateFromComponent}
+              saleInfo={saleInfo}
+            />
+          </div>
+          {customers?.data?.length > 0 ? (
             <div>
-              <div
-                style={{
-                  marginBottom: "10px",
-                }}
-              >
-                <DateRangePickerCustom
-                  row={true}
-                  onChangeDate={this.onChangeDateFromComponent}
-                />
-              </div>
               <TableCustomerOfSale
                 store_code={store_code}
                 data={customers.data}
@@ -105,7 +116,7 @@ class SidebarShowCustomerOfSale extends Component {
                 />
               </div>
             </div>
-          )}
+          ) : <h6>Không có dữ liệu</h6>}
         </SidebarShowCustomerOfSaleStyles>
       </SidebarFilter>
     );

@@ -96,6 +96,7 @@ export const exportAllListOrder = (
                     total_before_discount: item.total_before_discount,
                     total_after_discount: item.total_after_discount,
                     discount: item.discount,
+                    total_commission_order_for_customer: item.total_commission_order_for_customer,
 
                     balance_collaborator_used: item.balance_collaborator_used,
                     bonus_points_amount_used: item.bonus_points_amount_used,
@@ -224,6 +225,10 @@ export const exportAllListOrder = (
 
                       if (key == "discount") {
                         newItem["Chiết khấu"] = value;
+                      }
+
+                      if (key == "total_commission_order_for_customer") {
+                        newItem["Hoa hồng cho đại lý"] = value;
                       }
 
                       if (key == "total_before_discount") {

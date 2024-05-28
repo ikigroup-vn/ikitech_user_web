@@ -37,9 +37,9 @@ class TableCustomerOfSale extends Component {
                     data.total_final_without_refund
                   )} đ`
                 : "0 đ"} */}
-              {data.total_after_discount_no_bonus
+              {data?.total_after_discount_no_use_bonus_with_date
                 ? `${new Intl.NumberFormat().format(
-                    data.total_after_discount_no_bonus
+                    data?.total_after_discount_no_use_bonus_with_date
                   )} đ`
                 : "0 đ"}
             </td>

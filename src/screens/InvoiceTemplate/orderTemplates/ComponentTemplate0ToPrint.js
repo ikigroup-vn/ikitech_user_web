@@ -138,7 +138,7 @@ export default class ComponentTemplate0ToPrint extends Component {
         <tr>
           <td></td>
 
-          <td style={{ textAlign: "start" }}>Giảm giá, Voucher, Combo</td>
+          <td style={{ textAlign: "start" }}>Giảm giá, Voucher, Combo, Chiết khấu</td>
           <td></td>
 
           <td></td>
@@ -158,6 +158,26 @@ export default class ComponentTemplate0ToPrint extends Component {
             <td style={{ textAlign: "end" }} colSpan="3">
               0
             </td>
+          )}
+        </tr>
+        <tr>
+          <td></td>
+
+          <td style={{ textAlign: "start" }}>Ví CTV (Đại lý)</td>
+          <td></td>
+          <td></td>
+          {(bill?.balance_agency_used || 0) +
+            (bill.balance_collaborator_used || 0) >
+          0 ? (
+            <td style={{ textAlign: "end" }} colSpan="3">
+              -{" "}
+              {format(
+                (bill?.balance_agency_used || 0) +
+                  (bill?.balance_collaborator_used || 0) ?? 0
+              )}
+            </td>
+          ) : (
+            <td style={{ textAlign: "end" }}>0</td>
           )}
         </tr>
         <tr>

@@ -5,6 +5,7 @@ import {
 } from "@syncfusion/ej2-react-calendars";
 import * as helper from "../../ultis/helpers";
 import moment from "moment";
+import { shallowEqual } from "react-redux";
 
 class DateRangePickerCustom extends Component {
   constructor() {
@@ -43,6 +44,8 @@ class DateRangePickerCustom extends Component {
         this.setState({ nameTypeChart: "", showDateTime: "show" });
         return;
       default:
+        this.setState({ nameTypeChart: "HÔM NAY" });
+        date = helper.getDateForChartHour();
         break;
     }
     if (this.state.showDateTime == "hide") {
@@ -98,6 +101,7 @@ class DateRangePickerCustom extends Component {
           id="input"
           className="form-control"
           required="required"
+          defaultValue="HOM-NAY"
         >
           <option value="" selected disabled hidden>
             --Chọn thời gian--
