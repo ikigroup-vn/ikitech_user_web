@@ -437,8 +437,8 @@ class Form extends Component {
                   style={{ marginTop: "10px" }}
                 >
                   <option value={-1}>--- Chọn nhóm khách hàng ---</option>
-                  {groupCustomer.length > 0 &&
-                    groupCustomer.map((group) => {
+                  {groupCustomer?.length > 0 &&
+                    groupCustomer?.map((group) => {
                       return (
                         <option value={group.id} key={group.id}>
                           {group.name}

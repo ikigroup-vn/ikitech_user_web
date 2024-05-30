@@ -113,6 +113,8 @@ class SidebarShowCustomerOfSale extends Component {
                   customers={customers}
                   fetchAllCustomer={fetchAllCustomer}
                   saleInfo={saleInfo}
+                  date_from={this.state.date_from}
+                  date_to={this.state.date_to}
                 />
               </div>
             </div>
