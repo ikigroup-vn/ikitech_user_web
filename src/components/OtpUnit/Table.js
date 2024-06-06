@@ -21,6 +21,8 @@ class Table extends Component {
       image_url: data.image_url,
       is_order: data.is_order,
       content_order: data.content_order,
+      brand_name: data.brand_name,
+      username: data.username,
     });
     e.preventDefault();
   };

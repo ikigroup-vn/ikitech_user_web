@@ -312,13 +312,13 @@ class FormChat extends Component {
     }
 
     if (
-      this.state.isLoading != true &&
+      this.state.loading != true &&
       typeof this.props.permission.product_list != "undefined"
     ) {
       var permissions = this.props.permission;
       var chat_allow = permissions.chat_allow;
 
-      this.setState({ isLoading: true, chat_allow });
+      this.setState({ loading: true, chat_allow });
     }
   }
 
@@ -385,9 +385,10 @@ class FormChat extends Component {
           <div className="col-12">
             <form onSubmit={this.sendMessage}>
               <div
-                className={`chat-box-tray ${showInputChat}  ${
-                  chat_allow == true ? "show" : "hide"
-                }`}
+                // className={`chat-box-tray ${showInputChat}  ${
+                //   chat_allow == true ? "show" : "hide"
+                // }`}
+                className={`chat-box-tray ${showInputChat}`}
               >
                 {/* <input
                   value={message}

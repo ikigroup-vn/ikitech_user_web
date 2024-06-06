@@ -16,6 +16,8 @@ class ModalUpdate extends Component {
       image_url: "",
       is_order: false,
       content_order: "",
+      username: "",
+      from: ""
     };
   }
 
@@ -30,6 +32,8 @@ class ModalUpdate extends Component {
         image_url: otpUnit.image_url,
         is_order: otpUnit.is_order,
         content_order: otpUnit.content_order,
+        username: otpUnit.username,
+        brand_name: otpUnit.brand_name,
       });
     }
   }
@@ -83,6 +87,8 @@ class ModalUpdate extends Component {
         is_order: otpUnit.is_order,
         image_url: otpUnit.image_url,
         content_order: otpUnit.content_order,
+        username: otpUnit.username,
+        brand_name: otpUnit.brand_name,
       },
       () => {
         window.$(".modal").modal("hide");
@@ -90,7 +96,7 @@ class ModalUpdate extends Component {
     );
   };
   render() {
-    var { token, sender, content, image_url, is_order, content_order } =
+    var { token, sender, content, image_url, is_order, content_order, username, brand_name } =
       this.state;
     return (
       <div
@@ -166,6 +172,36 @@ class ModalUpdate extends Component {
                     name="token"
                   />
                 </div>
+                {sender === "VIETGUYS SMS" && (
+                  <>
+                    <div class="form-group">
+                      <label for="product_name">Tên tài khoản (Username)</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="username"
+                        placeholder="Nhập mã Token nhà vận chuyển"
+                        autoComplete="off"
+                        value={username}
+                        onChange={this.onChange}
+                        name="username"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="product_name">Brandname</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="brand_name"
+                        placeholder="Nhập mã Token nhà vận chuyển"
+                        autoComplete="off"
+                        value={brand_name}
+                        onChange={this.onChange}
+                        name="brand_name"
+                      />
+                    </div>
+                  </>
+                )}
                 <div class="form-group">
                   <label for="product_name">
                     Nội dung ( {`{otp}`} là bắt buộc trong nội dung )
