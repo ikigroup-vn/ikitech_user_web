@@ -60,6 +60,7 @@ class Form extends Component {
       group_customers: [Types.GROUP_CUSTOMER_ALL],
       agency_types: [],
       group_types: [],
+      is_buy_for_combo: false,
     };
   }
 
@@ -288,7 +289,7 @@ class Form extends Component {
         saveListProductsLadder: listProductsLadder,
         listProductsBonus: listProductsBonus || [],
         saveListProductsBonus: listProductsBonus || [],
-
+        is_buy_for_combo: bonusProduct.is_buy_for_combo,
         isLoading: true,
         loadCript: true,
         form: {},
@@ -463,7 +464,7 @@ class Form extends Component {
       return;
     }
     // if (state.ladder_reward === true) {
-    if(this.props.ladder_reward) {
+    if (this.props.ladder_reward) {
       var data_ladder = {};
       var list = [];
       listProductsLadder.forEach((element, index) => {
@@ -578,6 +579,7 @@ class Form extends Component {
       group_customers,
       agency_types: agency_types_convert,
       group_types: group_types_convert,
+      is_buy_for_combo: this.state.is_buy_for_combo,
     };
     var amount = form.amount;
     if (typeof amount == "undefined" || amount == null || !isEmpty(amount))
@@ -955,8 +957,9 @@ class Form extends Component {
       group_customers,
       agency_types,
       group_types,
+      is_buy_for_combo,
     } = this.state;
-    var {ladder_reward} = this.props
+    var { ladder_reward } = this.props;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
     var { products, store_code, combos, types, groupCustomer } = this.props;
     var type_discount_default = txtDiscoutType == "0" ? "show" : "hide";
@@ -1211,25 +1214,46 @@ class Form extends Component {
                   </div>
                 </div>
                 {ladder_reward !== true && (
-                  <div class="form-group">
-                    <div class="form-check">
-                      <input
-                        type="checkbox"
-                        checked={multiply_by_number}
-                        onChange={() =>
-                          this.setState({
-                            multiply_by_number: !multiply_by_number,
-                          })
-                        }
-                        class="form-check-input"
-                        id="gridCheck"
-                      />
-                      {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
-                      <label class="form-check-label" for="gridCheck">
-                        Hàng tặng nhân theo số lượng mua{" "}
-                      </label>
+                  <>
+                    <div class="form-group">
+                      <div class="form-check">
+                        <input
+                          type="checkbox"
+                          checked={multiply_by_number}
+                          onChange={() =>
+                            this.setState({
+                              multiply_by_number: !multiply_by_number,
+                            })
+                          }
+                          class="form-check-input"
+                          id="gridCheck"
+                        />
+                        {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
+                        <label class="form-check-label" for="gridCheck">
+                          Hàng tặng nhân theo số lượng mua{" "}
+                        </label>
+                      </div>
                     </div>
-                  </div>
+                    <div class="form-group">
+                      <div class="form-check">
+                        <input
+                          type="checkbox"
+                          checked={is_buy_for_combo}
+                          onChange={() =>
+                            this.setState({
+                              is_buy_for_combo: !is_buy_for_combo,
+                            })
+                          }
+                          class="form-check-input"
+                          id="gridCheck"
+                        />
+                        {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
+                        <label class="form-check-label" for="gridCheck">
+                          Mua theo combo
+                        </label>
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
