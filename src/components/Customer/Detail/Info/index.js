@@ -55,10 +55,16 @@ class Customer extends Component {
         txtPhone_branch: this.props.customer.phone_number,
         txtReferralPhone_branch: this.props.customer.referral_phone_number,
         txtEmail_branch: this.props.customer.email,
-        txtProvince: this.props.customer.province ?? this.props.customer.default_address?.province,
-        txtDistrict: this.props.customer.district ?? this.props.customer.default_address?.district,
-        txtWards: this.props.customer.wards ?? this.props.customer.default_address?.wards,
-        txtAddress_detail: this.props.customer.address_detail,
+        txtProvince:
+          this.props.customer.province ??
+          this.props.customer.default_address?.province,
+        txtDistrict:
+          this.props.customer.district ??
+          this.props.customer.default_address?.district,
+        txtWards:
+          this.props.customer.wards ??
+          this.props.customer.default_address?.wards,
+        txtAddress_detail: this.props.customer?.default_address?.address_detail,
         idCustomer: this.props.customer.id,
         goFirst: false,
         txtDateOfBirth:
@@ -148,8 +154,14 @@ class Customer extends Component {
 
   componentWillReceiveProps(nextProps, nextState) {
     if (!shallowEqual(nextProps.customer, this.props.customer)) {
-      this.props.fetchPlaceDistrict(nextProps.customer.province ?? nextProps.customer.default_address?.province);
-      this.props.fetchPlaceWards(nextProps.customer.district ?? nextProps.customer.default_address?.district);
+      this.props.fetchPlaceDistrict(
+        nextProps.customer.province ??
+          nextProps.customer.default_address?.province
+      );
+      this.props.fetchPlaceWards(
+        nextProps.customer.district ??
+          nextProps.customer.default_address?.district
+      );
       this.setState({
         txtName_branch: nextProps.customer.name,
         txtPhone_branch: nextProps.customer.phone_number,
@@ -172,6 +184,19 @@ class Customer extends Component {
         //     nextProps.customer.default_address.district_name +
         //     ", " +
         //     nextProps.customer.default_address.province_name,
+        txtAddress_detail: nextProps.customer.default_address?.address_detail,
+        idCustomer: nextProps.customer.id,
+        goFirst: false,
+        txtDateOfBirth:
+          nextProps.customer.date_of_birth != null &&
+          nextProps.customer.date_of_birth != "" &&
+          nextProps.customer.date_of_birth != "0000-00-00 00:00:00"
+            ? moment(
+                nextProps.customer.date_of_birth,
+                "YYYY-MM-DD HH:mm:ss"
+              ).format("DD-MM-YYYY")
+            : null,
+        txtSex: nextProps.customer.sex,
         idCustomer: nextProps.customer.id,
         goFirst: false,
         txtDateOfBirth:
@@ -467,7 +492,7 @@ class Customer extends Component {
             />
           </div>
         </div>
-        {/* <div class="form-group">
+        <div class="form-group">
           <label for="txtAddress_detail">Địa chỉ chi tiết</label>
           <input
             type="text"
@@ -479,7 +504,7 @@ class Customer extends Component {
             onChange={this.onChange}
             name="txtAddress_detail"
           />
-        </div> */}
+        </div>
         <div class="form-group">
           <label for="product_name">Tỉnh/thành phố </label>
 
