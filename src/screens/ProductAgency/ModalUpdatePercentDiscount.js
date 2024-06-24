@@ -78,7 +78,7 @@ class ModalUpdatePercentDiscount extends Component {
             </div>
             <div className="modal-body">
               <div class="form-group">
-                <label for="product_name">% Chiếu khấu sản phẩm</label>
+                <label for="product_name">% Chiết khấu sản phẩm</label>
                 <input
                   required
                   type="text"
