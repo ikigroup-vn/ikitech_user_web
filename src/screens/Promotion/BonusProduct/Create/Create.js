@@ -17,7 +17,7 @@ class Create extends Component {
   componentDidMount() {
     var { store_code } = this.props;
     const branch_id = localStorage.getItem("branch_id");
-    this.props.fetchAllProductV2(store_code, branch_id, 1, null);
+    this.props.fetchAllProductV2(store_code, branch_id, 1, "&is_selected=true");
     this.props.fetchAllBonusProduct(store_code);
     this.props.fetchAllCategoryP(store_code);
   }
