@@ -50,6 +50,7 @@ class Customer extends Component {
 
   componentWillMount() {
     if (typeof this.props.customer.id != "undefined") {
+      console.log("this.props.customer?", this.props.customer);
       this.setState({
         txtName_branch: this.props.customer.name,
         txtPhone_branch: this.props.customer.phone_number,
@@ -64,7 +65,9 @@ class Customer extends Component {
         txtWards:
           this.props.customer.wards ??
           this.props.customer.default_address?.wards,
-        txtAddress_detail: this.props.customer?.default_address?.address_detail,
+        txtAddress_detail: this.props.customer.address_detail
+          ? this.props.customer.address_detail
+          : this.props.customer?.default_address?.address_detail,
         idCustomer: this.props.customer.id,
         goFirst: false,
         txtDateOfBirth:
@@ -184,7 +187,9 @@ class Customer extends Component {
         //     nextProps.customer.default_address.district_name +
         //     ", " +
         //     nextProps.customer.default_address.province_name,
-        txtAddress_detail: nextProps.customer.default_address?.address_detail,
+        txtAddress_detail: nextProps.customer?.address_detail
+          ? nextProps.customer?.address_detail
+          : nextProps.customer.default_address?.address_detail,
         idCustomer: nextProps.customer.id,
         goFirst: false,
         txtDateOfBirth:
