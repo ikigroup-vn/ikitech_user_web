@@ -431,7 +431,7 @@ class ListProduct extends Component {
     var { store_code } = this.props;
     var { searchValue } = this.state;
     const branch_id = localStorage.getItem("branch_id");
-    var params = `&search=${searchValue}`;
+    var params = `&search=${searchValue}&is_selected=true`;
     this.props.fetchAllProductV2(store_code, branch_id, 1, params);
   };
 

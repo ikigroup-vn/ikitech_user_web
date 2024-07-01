@@ -25,11 +25,11 @@ class Pagination extends Component {
     
     const params = getParams(searchValue, limit, categorySelected, categoryChildSelected);
     passNumPage(page);
-    history.push(`/product/index/${store_code}?page=${page}${params}`);
+    history.push(`/product/index/${store_code}?page=${page}${params}&is_selected=true`);
     const branch_id = getBranchId();
     const branch_ids = getBranchIds();
     const branchIds = branch_ids ? branch_ids : branch_id;
-    this.props.fetchAllProductV2(store_code, branchIds, page, params);
+    this.props.fetchAllProductV2(store_code, branchIds, page, params + "&is_selected=true");
   };
   passPagination = (page) => {
     var {
@@ -86,7 +86,7 @@ class Pagination extends Component {
     const branch_id = getBranchId();
     const branch_ids = getBranchIds();
     const branchIds = branch_ids ? branch_ids : branch_id;
-    this.props.fetchAllProductV2(store_code, branchIds, page, params);
+    this.props.fetchAllProductV2(store_code, branchIds, page, params + "&is_selected=true");
     this.props.passNumPage(page);
   };
 

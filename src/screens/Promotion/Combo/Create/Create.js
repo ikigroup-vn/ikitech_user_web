@@ -16,7 +16,7 @@ class Create extends Component {
 
   componentDidMount() {
     var { store_code } = this.props;
-    this.props.fetchAllProduct(store_code);
+    this.props.fetchAllProduct(store_code, 1, "&is_selected=true");
     this.props.fetchAllCombo(store_code);
     this.props.fetchAllCategoryP(store_code);
   }
@@ -70,8 +70,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllProduct: (store_code) => {
-      dispatch(productAction.fetchAllProduct(store_code));
+    fetchAllProduct: (store_code, page, params) => {
+      dispatch(productAction.fetchAllProduct(store_code, page, params));
     },
     fetchAllCombo: (store_code) => {
       dispatch(comboAction.fetchAllCombo(store_code));

@@ -48,7 +48,7 @@ class Edit extends Component {
     this.props.fetchBonusProductId(store_code, bonusProductId);
     this.props.fetchBonusProductItem(store_code, bonusProductId);
     const branch_id = localStorage.getItem("branch_id");
-    this.props.fetchAllProductV2(store_code, branch_id, 1, null);
+    this.props.fetchAllProductV2(store_code, branch_id, 1, "&is_selected=true");
     this.props.fetchAllCombo(store_code);
   }
 

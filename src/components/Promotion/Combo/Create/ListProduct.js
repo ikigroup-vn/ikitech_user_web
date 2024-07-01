@@ -205,7 +205,7 @@ class ListProduct extends Component {
     const branch_id = localStorage.getItem("branch_id");
     this.setState({ page: 1 });
     var params = this.getParams(searchValue, numPage, categorySelected);
-    this.props.fetchAllProductV2(store_code, branch_id, 1, params);
+    this.props.fetchAllProductV2(store_code, branch_id, 1, params + '&is_selected=true');
   };
 
   checkExsit = (list, id) => {
@@ -289,7 +289,7 @@ class ListProduct extends Component {
       page: 1,
       searchValue: "",
     });
-    this.props.fetchAllProductV2(store_code, branch_id, 1, params);
+    this.props.fetchAllProductV2(store_code, branch_id, 1, params + '&is_selected=true');
   };
   onChangeNumPage = (e) => {
     const { categorySelected, searchValue } = this.state;
@@ -301,7 +301,7 @@ class ListProduct extends Component {
       page: 1,
     });
     const params = this.getParams(searchValue, numPage, categorySelected);
-    this.props.fetchAllProductV2(store_code, branch_id, 1, params);
+    this.props.fetchAllProductV2(store_code, branch_id, 1, params + '&is_selected=true');
   };
   getParams = (search, limit, categories) => {
     document.querySelector("#inputCheckAll").checked = false;
