@@ -606,6 +606,10 @@ class PostOrder extends Component {
             getChannel() == IKITECH
               ? OrderFrom.ORDER_FROM_POS_DELIVERY
               : OrderFrom.ORDER_FROM_POS_IN_STORE,
+          package_weight: Number(weight),
+          package_length: Number(length),
+          package_width: Number(width),
+          package_height: Number(height),
         };
       } else {
         data = {
@@ -618,6 +622,10 @@ class PostOrder extends Component {
             getChannel() == IKITECH
               ? OrderFrom.ORDER_FROM_POS_DELIVERY
               : OrderFrom.ORDER_FROM_POS_IN_STORE,
+          package_weight: Number(weight),
+          package_length: Number(length),
+          package_width: Number(width),
+          package_height: Number(height),
         };
       }
     } else {
@@ -631,6 +639,10 @@ class PostOrder extends Component {
           getChannel() == IKITECH
             ? OrderFrom.ORDER_FROM_POS_DELIVERY
             : OrderFrom.ORDER_FROM_POS_IN_STORE,
+        package_weight: Number(weight),
+        package_length: Number(length),
+        package_width: Number(width),
+        package_height: Number(height),
       };
     }
 
@@ -772,8 +784,8 @@ class PostOrder extends Component {
       this.setState({ idCart: nextProps.oneCart.id });
     }
     if (
-      (!shallowEqual(nextState.listPosItem, this.state.listPosItem) &&
-        nextState.listPosItem.product_id != null) 
+      !shallowEqual(nextState.listPosItem, this.state.listPosItem) &&
+      nextState.listPosItem.product_id != null
       // (nextState.listPosItem.product_id != null &&
       //   this.state.isScan != nextState.isScan)
     ) {
@@ -1000,8 +1012,8 @@ class PostOrder extends Component {
 
   onNewChange = (state) => {
     this.changeNewState({
-      ...state,
       ...this.state,
+      ...state,
     });
   };
 
