@@ -116,6 +116,7 @@ class SidebarFilterCustomer extends Component {
     });
   };
   componentWillUnmount = () => {
+    localStorage.removeItem("optionsFilter");
     window.removeEventListener("click", this.handleClickOutsideDropdown);
   };
 
