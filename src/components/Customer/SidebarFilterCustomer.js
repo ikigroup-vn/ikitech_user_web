@@ -143,7 +143,8 @@ class SidebarFilterCustomer extends Component {
         type_compare === Types.TYPE_COMPARE_PROVINCE ||
         type_compare === Types.TYPE_COMPARE_CUSTOMER_NORMAL ||
         type_compare === Types.TYPE_COMPARE_CTV ||
-        type_compare === Types.TYPE_COMPARE_AGENCY
+        type_compare === Types.TYPE_COMPARE_AGENCY ||
+        type_compare === Types.TYPE_COMPARE_SALE
           ? 2
           : 0)
     ).value;
@@ -226,9 +227,9 @@ class SidebarFilterCustomer extends Component {
         value_compare: option.value_compare.toString().replace(/\./g, ""),
       });
     });
-    var params = `&search=${searchValue}&json_list_filter=${JSON.stringify(
+    var params = `&search=${searchValue}&json_list_filter=${encodeURIComponent(JSON.stringify(
       newOptionFilter
-    )}`;
+    ))}`;
     if (isSale()) {
       fetchListCustomerOfSale(store_code, 1, params);
     } else {
@@ -288,6 +289,7 @@ class SidebarFilterCustomer extends Component {
                     handleChangeInputFilterSearch={
                       this.handleChangeInputFilterSearch
                     }
+                    staffSales={this.props.staffSales}
                   ></ConditionFilterCustomer>
                   <span
                     className="sidebar__conditions__item__btnDelete"

@@ -63,8 +63,8 @@ class ConditionFilterCustomer extends Component {
     this.state = {};
   }
   render() {
-    const { types, indexOption, province, optionsFilter } = this.props;
-
+    const { types, indexOption, province, optionsFilter, staffSales } =
+      this.props;
     return (
       <ConditionFilterCustomerStyles className="sidebar__conditions__dropdown__content">
         <div className="sidebar__conditions__dropdown__expression">
@@ -85,7 +85,9 @@ class ConditionFilterCustomer extends Component {
               Number(optionsFilter[indexOption].type_compare) ===
                 Types.TYPE_COMPARE_CUSTOMER_NORMAL ||
               Number(optionsFilter[indexOption].type_compare) ===
-                Types.TYPE_COMPARE_AGENCY
+                Types.TYPE_COMPARE_AGENCY ||
+              Number(optionsFilter[indexOption].type_compare) ===
+                Types.TYPE_COMPARE_SALE
             }
             style={{
               opacity:
@@ -228,6 +230,26 @@ class ConditionFilterCustomer extends Component {
                 name="value_compare"
               />
             </div>
+          ) : Number(optionsFilter[indexOption].type_compare) ===
+            Types.TYPE_COMPARE_SALE ? (
+            <select
+              className="sidebar__conditions__dropdown__select"
+              value={optionsFilter[indexOption].value_compare}
+              name="value_compare"
+              onChange={(e) =>
+                this.props.handleChangeInputFilterSearch(e, indexOption)
+              }
+            >
+              <option value="0" disabled>
+                Chọn nhân viên sale
+              </option>
+              {staffSales.length > 0 &&
+                staffSales.map((staff) => (
+                  <option key={staff.value} value={staff.value}>
+                    {staff.label}
+                  </option>
+                ))}
+            </select>
           ) : (
             <select
               className="sidebar__conditions__dropdown__select"

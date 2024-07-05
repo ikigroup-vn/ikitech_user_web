@@ -49,4 +49,8 @@ export const options = [
     id: Types.TYPE_COMPARE_AGENCY,
     title: "Đại lý",
   },
+  {
+    id: Types.TYPE_COMPARE_SALE,
+    title: "Sale",
+  },
 ];

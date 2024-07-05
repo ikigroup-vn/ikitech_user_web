@@ -37,6 +37,8 @@ import * as saleAction from "../../actions/sale";
 import Chat from "../../components/Chat";
 import DateRangePickerCustom from "../../components/DatePicker/DateRangePickerCustom";
 import Select from "react-select";
+import { getBranchId } from "../../ultis/branchUtils";
+import * as staffAction from "../../actions/staff";
 
 const CustomerStyles = styled.div`
   .filter-search-customer {
@@ -327,6 +329,13 @@ class Customer extends Component {
     }
     this.props.fetchPlaceProvince();
     this.props.fetchAllAgencyType(this.props.match.params.store_code);
+    const paramsStaff = `branch_id=${getBranchId()}`;
+    this.props.fetchAllStaff(
+      this.props.match.params.store_code,
+      null,
+      paramsStaff,
+      null
+    );
   }
 
   setShowFilterSearch = (isShowed) => {
@@ -511,8 +520,8 @@ class Customer extends Component {
       let isCheckedValidField = true;
       const lengthXlsxFields = Object.keys(xlsxFields).length;
       if (fields.length > lengthXlsxFields.length) {
-        isCheckedValidField = false
-      } else {  
+        isCheckedValidField = false;
+      } else {
         const arraysXlsxFields = Object.keys(xlsxFields);
         fields.forEach((element) => {
           if (!arraysXlsxFields.includes(element)) {
@@ -537,7 +546,7 @@ class Customer extends Component {
       //Filter Data
       const newListCustomers = [];
       for (var item of data) {
-        if(item["Số điện thoại"] == item["SĐT người giới thiệu"]) {
+        if (item["Số điện thoại"] == item["SĐT người giới thiệu"]) {
           showError({
             type: Types.ALERT_UID_STATUS,
             alert: {
@@ -726,6 +735,20 @@ class Customer extends Component {
       false,
       customerInfo.phone_number
     );
+  };
+
+  handleChangeStaffSelect = (staffs) => {
+    const newStaffs = staffs.filter((staff) => staff.is_sale === true);
+    const options = newStaffs.reduce((prevData, currentData) => {
+      return [
+        ...prevData,
+        {
+          value: currentData.id,
+          label: currentData.name,
+        },
+      ];
+    }, []);
+    return [...options];
   };
   render() {
     var { customer, customers, customersSale, chat } = this.props;
@@ -1110,6 +1133,7 @@ class Customer extends Component {
             fetchAllCustomer={this.fetchAllCustomer}
             fetchListCustomerOfSale={this.fetchListCustomerOfSale}
             isSale={this.isSale}
+            staffSales={this.handleChangeStaffSelect(this.props.staffs)}
           ></SidebarFilterCustomer>
         </CustomerStyles>
       );
@@ -1123,6 +1147,7 @@ class Customer extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    staffs: state.staffReducers.staff.allStaff,
     customers: state.customerReducers.customer.allCustomer,
     customersByInferralPhone:
       state.customerReducers.customer.allCustomerByInferralPhone,
@@ -1141,6 +1166,9 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
+    fetchAllStaff: (id, page, params, branch_id) => {
+      dispatch(staffAction.fetchAllStaff(id, page, params, branch_id));
+    },
     fetchAllCustomer: (id, page, params) => {
       dispatch(customerAction.fetchAllCustomer(id, page, params));
     },
