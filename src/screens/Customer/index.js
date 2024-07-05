@@ -312,6 +312,7 @@ class Customer extends Component {
   componentDidMount() {
     const page = getQueryParams("page") || 1;
     const search = getQueryParams("search") || "";
+    localStorage.removeItem("optionsFilter");
 
     const params = `&search=${search}`;
     this.setState({
