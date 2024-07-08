@@ -82,6 +82,7 @@ export default class ComponentTemplate1ToPrint extends Component {
     ) {
       return null;
     }
+    console.log("bill111", bill);
     bill.line_items_at_time.forEach((element, index) => {
       var valueDistribute = "";
       if (
@@ -130,6 +131,9 @@ export default class ComponentTemplate1ToPrint extends Component {
         </tr>
       );
     });
+    console.log("@@", (bill.product_discount_amount || 0) +
+    (bill.voucher_discount_amount || 0) +
+    (bill.combo_discount_amount || 0));
     arr.push(
       <React.Fragment>
         {bill.total_shipping_fee > 0 && (
@@ -155,7 +159,7 @@ export default class ComponentTemplate1ToPrint extends Component {
           <td></td>
           {(bill.product_discount_amount || 0) +
             (bill.voucher_discount_amount || 0) +
-            (bill.combo_discount_amount || 0) >
+            (bill.combo_discount_amount || 0) + bill.discount >
           0 ? (
             <td style={{ textAlign: "end" }} colSpan="3">
               -{" "}

@@ -135,20 +135,22 @@ export default class ComponentTemplate0ToPrint extends Component {
         <tr>
           <td></td>
 
-          <td style={{ textAlign: "start" }}>Giảm giá, Voucher, Combo</td>
+          <td style={{ textAlign: "start" }}>Giảm giá, Voucher, Combo, Chiết khấu</td>
           <td></td>
 
           <td></td>
           {(bill.product_discount_amount || 0) +
             (bill.voucher_discount_amount || 0) +
-            (bill.combo_discount_amount || 0) >
+            (bill.combo_discount_amount || 0) +
+            bill.discount >
           0 ? (
             <td style={{ textAlign: "end" }} colSpan="3">
               -{" "}
               {format(
                 (bill.product_discount_amount || 0) +
                   (bill.voucher_discount_amount || 0) +
-                  (bill.combo_discount_amount || 0)
+                  (bill.combo_discount_amount || 0) +
+                  bill.discount
               )}
             </td>
           ) : (
