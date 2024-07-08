@@ -219,13 +219,13 @@ class Chat extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (
-      this.state.isLoading != true &&
+      this.state.loading != true &&
       typeof nextProps.permission.product_list != "undefined"
     ) {
       var permissions = nextProps.permission;
-      var chat_allow = permissions.chat_allow;
+      var chat_allow = permissions.chat_list;
 
-      this.setState({ isLoading: true, chat_allow });
+      this.setState({ loading: true, chat_allow });
     }
 
     if (
