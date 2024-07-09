@@ -69,9 +69,9 @@ export const exportAllListCustomer = (
                   district_name: item.district_name ?? "",
                   province_name: item.province_name ?? "",
                   sex:
-                    item.sex == 1
+                    item.sex == 2
                       ? "Nữ"
-                      : item.sex == 2
+                      : item.sex == 1
                       ? "Nam"
                       : "Không xác định",
                   date_of_birth:
@@ -188,9 +188,9 @@ export const exportAllListCustomer = (
                   district_name: item.district_name ?? "",
                   province_name: item.province_name ?? "",
                   sex:
-                    item.sex == 1
+                    item.sex == 2
                       ? "Nữ"
-                      : item.sex == 2
+                      : item.sex == 1
                       ? "Nam"
                       : "Không xác định",
                   date_of_birth:
