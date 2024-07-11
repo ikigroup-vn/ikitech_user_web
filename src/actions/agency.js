@@ -75,7 +75,7 @@ export const exportTopten = (store_code, page, params, report_type) => {
                     balance: item.balance,
                     orders_count: item.orders_count,
                     sum_share_agency: item.sum_share_agency,
-                    sum_total_after_discount: item.sum_total_after_discount,
+                    total_after_discount_no_bonus: item.total_after_discount_no_bonus,
                   };
                 }
                 Object.entries(arangeKeyItem).forEach(([key, value], index) => {
@@ -105,7 +105,7 @@ export const exportTopten = (store_code, page, params, report_type) => {
                     if (key == "sum_share_agency") {
                       newItem["Tổng hoa hồng"] = value;
                     }
-                    if (key == "sum_total_after_discount") {
+                    if (key == "total_after_discount_no_bonus") {
                       newItem["Tổng doanh số"] = value;
                     }
                   }

@@ -51,35 +51,36 @@ class Customer extends Component {
   componentWillMount() {
     if (typeof this.props.customer.id != "undefined") {
       console.log("this.props.customer?", this.props.customer);
-      this.setState({
-        txtName_branch: this.props.customer.name,
-        txtPhone_branch: this.props.customer.phone_number,
-        txtReferralPhone_branch: this.props.customer.referral_phone_number,
-        txtEmail_branch: this.props.customer.email,
-        txtProvince:
-          this.props.customer.province ??
-          this.props.customer.default_address?.province,
-        txtDistrict:
-          this.props.customer.district ??
-          this.props.customer.default_address?.district,
-        txtWards:
-          this.props.customer.wards ??
-          this.props.customer.default_address?.wards,
-        txtAddress_detail: this.props.customer.address_detail
-          ? this.props.customer.address_detail
-          : this.props.customer?.default_address?.address_detail,
-        idCustomer: this.props.customer.id,
-        goFirst: false,
-        txtDateOfBirth:
-          this.props.customer.date_of_birth != null &&
-          this.props.customer.date_of_birth != ""
-            ? moment(
-                this.props.customer.date_of_birth,
-                "YYYY-MM-DD HH:mm:ss"
-              ).format("DD-MM-YYYY")
-            : null,
-        txtSex: this.props.customer.sex,
-      });
+      // this.setState({
+      //   txtName_branch: this.props.customer.name,
+      //   txtPhone_branch: this.props.customer.phone_number,
+      //   txtReferralPhone_branch: this.props.customer.referral_phone_number,
+      //   txtEmail_branch: this.props.customer.email,
+      //   txtProvince:
+      //     this.props.customer.province ??
+      //     this.props.customer.default_address?.province,
+      //   txtDistrict:
+      //     this.props.customer.district ??
+      //     this.props.customer.default_address?.district,
+      //   txtWards:
+      //     this.props.customer.wards ??
+      //     this.props.customer.default_address?.wards,
+      //   txtAddress_detail: this.props.customer.address_detail
+      //     ? this.props.customer.address_detail
+      //     : this.props.customer?.default_address?.address_detail,
+      //   idCustomer: this.props.customer.id,
+      //   goFirst: false,
+      //   txtDateOfBirth:
+      //     this.props.customer.date_of_birth != null &&
+      //     this.props.customer.date_of_birth != "" &&
+      //     this.props.customer.date_of_birth != "0000-00-00 00:00:00"
+      //       ? moment(
+      //           this.props.customer.date_of_birth,
+      //           "YYYY-MM-DD HH:mm:ss"
+      //         ).format("DD-MM-YYYY")
+      //       : null,
+      //   txtSex: this.props.customer.sex,
+      // });
     }
 
     if (this.state.isLoaded === true) {
@@ -157,6 +158,7 @@ class Customer extends Component {
 
   componentWillReceiveProps(nextProps, nextState) {
     if (!shallowEqual(nextProps.customer, this.props.customer)) {
+      console.log("nextProps.customer", nextProps.customer);
       this.props.fetchPlaceDistrict(
         nextProps.customer.province ??
           nextProps.customer.default_address?.province
@@ -202,19 +204,8 @@ class Customer extends Component {
               ).format("DD-MM-YYYY")
             : null,
         txtSex: nextProps.customer.sex,
-        idCustomer: nextProps.customer.id,
-        goFirst: false,
-        txtDateOfBirth:
-          nextProps.customer.date_of_birth != null &&
-          nextProps.customer.date_of_birth != "" &&
-          nextProps.customer.date_of_birth != "0000-00-00 00:00:00"
-            ? moment(
-                nextProps.customer.date_of_birth,
-                "YYYY-MM-DD HH:mm:ss"
-              ).format("DD-MM-YYYY")
-            : null,
-        txtSex: nextProps.customer.sex,
       });
+      console.log("111");
     }
 
     if (nextState.isLoaded === true) {
