@@ -94,7 +94,7 @@ class Dashboard extends Component {
       store_code == null ||
       store_code == ""
     ) {
-      return <Redirect to="/home" />;
+      return <Redirect to="/" />;
     }
 
     var { badges, collaborators, overview, topten } = this.props;

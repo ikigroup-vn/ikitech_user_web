@@ -1265,12 +1265,12 @@ const routes = [
     main: () => <Index />,
   },
 
-  {
-    path: "/home",
-    exact: true,
+  // {
+  //   path: "/home",
+  //   exact: true,
 
-    main: () => <Home />,
-  },
+  //   main: () => <Home />,
+  // },
 
   {
     path: "/notifications/schedule/:store_code",

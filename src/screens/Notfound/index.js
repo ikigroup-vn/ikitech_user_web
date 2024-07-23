@@ -24,7 +24,7 @@ class Notfound extends Component {
     <div class="error mx-auto" data-text="404">404</div>
     <p class="lead text-gray-800 mb-5">Không tìm thấy trang</p>
     <p class="text-gray-500 mb-0">Trang truy cập không tồn tại hoặc đang có lỗi xãy ra !!!</p>
-    <Link to="/home">&larr; Trở về trang chủ</Link>
+    <Link to="/">&larr; Trở về trang chủ</Link>
 </div>
 
 </div>
