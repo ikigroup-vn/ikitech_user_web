@@ -491,7 +491,7 @@ class Chart extends Component {
 
     var totalFinal =
       typeof overview.data_prime_time != "undefined"
-        ? format(Number(overview.data_prime_time.total_after_discount_no_bonus))
+        ? format(Number(overview.data_prime_time.total_final))
         : 0;
     var total_order_count =
       typeof overview.data_prime_time != "undefined"
