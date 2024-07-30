@@ -185,6 +185,8 @@ import PublicApiHook from "./screens/PublicApiHook/index.js";
 import HistoryQuiz from "./screens/Train/HistoryQuiz/index.js";
 import HistoryDetailQuizForCustomer from "./screens/Train/HistoryQuiz/historyDetail/HistoryDetailQuizForCustomer.js";
 import ReportProduct from "./screens/Report/report_product";
+import Expired from "./screens/Expired/index.js";
+import Community from "./screens/Community/index.js";
 
 const routes = [
   {
@@ -1270,6 +1272,20 @@ const routes = [
     exact: true,
 
     main: () => <Home />,
+  },
+
+  {
+    path: "/expired",
+    exact: true,
+
+    main: ({ match }) => <Expired match={match}/>,
+  },
+
+  {
+    path: "/community/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Community match={match}/>,
   },
 
   {

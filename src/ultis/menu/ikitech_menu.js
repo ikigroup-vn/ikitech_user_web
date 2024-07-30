@@ -559,6 +559,22 @@ export const ikitech_menu = [
       //   exact: true,
       //   to: "/train/course",
       // },
+      {
+        name: "Cộng đồng",
+        icon: "fas fa-book-open",
+        open: "community",
+        exact: true,
+        to: "/community",
+        // children: [
+        //   {
+        //     name: "Bài đăng",
+        //     class: "community",
+        //     display: "hide",
+        //     exact: true,
+        //     to: "/community",
+        //   },
+        // ],
+      },
 
       {
         name: "Đào tạo",

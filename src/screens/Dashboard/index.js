@@ -85,6 +85,12 @@ class Dashboard extends Component {
       }
     }
   }
+  isExpired = (dateString) => {
+    const now = new Date();
+    const dateToCheck = new Date(dateString);
+
+    return dateToCheck < now;
+  }
 
   render() {
     var { store_code } = this.props.match.params;
@@ -97,11 +103,14 @@ class Dashboard extends Component {
       return <Redirect to="/home" />;
     }
 
-    var { badges, collaborators, overview, topten } = this.props;
-    console.log();
+    var { badges, collaborators, overview, topten, store } = this.props;
     var numDiscount = badges?.products_discount || 0;
     var { isShow } = this.state;
-    console.log(badges);
+
+    if(!store || this.isExpired(store.date_expried)) {
+      return <Redirect to="/expired" />;
+    }
+
     if (this.props.auth) {
       return (
         <div id="wrapper">
@@ -211,6 +220,7 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = (state) => {
+  console.log("State", state);
   return {
     store: state.storeReducers.store.storeID,
     auth: state.authReducers.login.authentication,
