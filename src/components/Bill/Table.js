@@ -667,6 +667,7 @@ class Table extends Component {
           <option value="CUSTOMER_CANCELLED">Khách đã hủy</option>
           <option value="SHIPPING">Đang giao hàng</option>
           <option value="DELIVERY_ERROR">Lỗi giao hàng</option>
+          <option value="RECEIVED_PRODUCT">Đã nhận hàng</option>
           <option value="COMPLETED">Đã hoàn thành</option>
           <option value="CUSTOMER_RETURNING">Chờ trả hàng</option>
           <option value="CUSTOMER_HAS_RETURNS">Đã trả hàng</option>
