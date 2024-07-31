@@ -94,7 +94,22 @@ class Posts extends Component {
                 height="100px"
               />
             </td>
-            <td>{post.content}</td>
+            <td>
+              <div
+                style={{
+                  display: "-webkit-box",
+                  wordBreak: "break-word",
+                  overflow: "hidden",
+                  lineClamp: 3,
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: "vertical",
+                  padding: "0 0.75rem",
+                  verticalAlign: "middle",
+                }}
+              >
+                {post.content}
+              </div>
+            </td>
             <td>
               <h5>
                 <span class={`badge badge-${publishedStatus}`}>

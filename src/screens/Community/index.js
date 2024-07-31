@@ -290,7 +290,7 @@ class Community extends Component {
               <div className="container-fluid">
                 <div>
                   <h4 className="h4 title_content mb-0 text-gray-800">
-                    Tin tức - Bài viết
+                    Bài đăng
                   </h4>
                   <br />
 
