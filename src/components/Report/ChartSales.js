@@ -34,11 +34,15 @@ class Chart extends Component {
       isCompare: false,
       actionChart: "total_final",
       typeSelect: "Hôm nay",
+      overview: {},
     };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    console.log("this.nextState.overview", this.state.overview);
+    console.log("nextState.overview", nextState.overview);
     if (
+      !shallowEqual(nextState.overview, this.state.overview) ||
       !shallowEqual(nextProps.overview, this.props.overview) ||
       this.state.actionChart != nextState.actionChart
     ) {
@@ -187,6 +191,7 @@ class Chart extends Component {
         chartDataCompare: chartDataState_compare,
         chartData: chartData,
         typeChartShow: typeChartShow,
+        overview: this.props.overview,
       });
     }
     return true;
@@ -221,6 +226,7 @@ class Chart extends Component {
           to: moment().format("DD-MM-YYYY"),
         },
       },
+      overview: this.props.overview,
     });
   }
   onchangeDate = (value) => {

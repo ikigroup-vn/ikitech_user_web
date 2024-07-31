@@ -3,7 +3,7 @@ import * as Types from "../constants/ActionType";
 
 var initialState = {
   topten: [],
-  overview: [],
+  overview: {},
   reportInventory: [],
   reportHistory: [],
   reportImportExport: [],
