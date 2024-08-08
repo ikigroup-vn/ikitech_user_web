@@ -1,7 +1,7 @@
 import getChannel, { IKIPOS } from "./channel";
 
 const posTheme = {
-  loginTitle: "IKIPOS",
+  loginTitle: "GODA",
   backgroundColor: "#E56F25",
   modalNoti: "#E56F25",
   buttonYes: "#F7C23E",
@@ -9,12 +9,12 @@ const posTheme = {
   //   logo: "/images/logo/ikipos_logo.png",
   //   logoLogin: "/images/logo/ikipos_login.jpg",
   logo: "/images/logo/ikitech_logo.jpg",
-  logoLogin: "/images/logo/ikitech_login.jpg",
-  favicon: "/images/logo/ikipos_logo_tab.png",
+  logoLogin: "/images/logo/gtot_login.jpg",
+  favicon: "/images/logo/gtot_logo.ico",
 };
 
 const ikitechTheme = {
-  loginTitle: "IKITECH",
+  loginTitle: "GODA",
   backgroundColor: "#C12026",
   modalNoti: "#E56F25",
   buttonYes: "#F7C23E",
@@ -22,8 +22,8 @@ const ikitechTheme = {
   // logo: "/images/logo/ikitech_logo.jpg",
   // logoLogin: "/images/logo/ikitech_login.jpg",
   logo: "/images/logo/ikitech_logo.jpg",
-  logoLogin: "/images/logo/ikitech_login.jpg",
-  favicon: "/images/logo/ikitech_favicon.png",
+  logoLogin: "/images/logo/gtot_login.jpg",
+  favicon: "/images/logo/gtot_logo.ico",
 };
 
 export default function themeData() {
