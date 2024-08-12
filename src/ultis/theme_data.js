@@ -1,7 +1,7 @@
 import getChannel, { IKIPOS } from "./channel";
 
 const posTheme = {
-  loginTitle: "GODA",
+  loginTitle: "GBIZ",
   backgroundColor: "#E56F25",
   modalNoti: "#E56F25",
   buttonYes: "#F7C23E",
@@ -14,7 +14,7 @@ const posTheme = {
 };
 
 const ikitechTheme = {
-  loginTitle: "GODA",
+  loginTitle: "GBIZ",
   backgroundColor: "#C12026",
   modalNoti: "#E56F25",
   buttonYes: "#F7C23E",
