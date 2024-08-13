@@ -12,15 +12,25 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    const { storeCode, limit, searchValue = "" } = this.props;
-    if (!limit) limit = 20;
+    const {
+      storeCode,
+      limit,
+      searchValue = "",
+      onSetPosts,
+      onSetLinks,
+      onSetCurrentPage,
+    } = this.props;
 
-    const params = `&page=${page}&limit=${limit}&search=${searchValue}`;
+    const params = `?page=${page || 20}&limit=${limit}&search=${searchValue}`;
     communityApi
       .fetchAllPosts(storeCode, params)
       .then((results) => {
-        const posts = results.data.data;
-        this.setState({ posts });
+        const posts = results.data.data.data;
+        const links = results.data.data.links;
+        const currentPage = results.data.data.current_page;
+        onSetCurrentPage(currentPage);
+        onSetPosts(posts);
+        onSetLinks(links);
       })
       .catch((err) => {
         console.log("error", err);

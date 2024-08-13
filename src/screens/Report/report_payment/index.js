@@ -252,6 +252,7 @@ class ReportPayment extends Component {
       orderFrom,
       collaborator_by_customer_id,
       statusTime,
+      null,
       methodPaymentId
     );
 
@@ -321,13 +322,38 @@ class ReportPayment extends Component {
     const branch = branchIds ? branchIds : branchId;
     var { store_code } = this.props.match.params;
     const { methodPaymentId } = this.state;
-    const params = `&time_from=${moment()
-      .startOf("month")
-      .format("YYYY-MM-DD")}&time_to=${moment().format("YYYY-MM-DD")}`;
+    // const params = `&time_from=${moment()
+    //   .startOf("month")
+    //   .format("YYYY-MM-DD")}&time_to=${moment().format("YYYY-MM-DD")}`;
     history.push(
       `?time_from=${moment()
         .startOf("month")
         .format("YYYY-MM-DD")}&time_to=${moment().format("YYYY-MM-DD")}`
+    );
+
+    var {
+      searchValue,
+      statusOrder,
+      statusPayment,
+      numPage,
+      orderFrom,
+      collaborator_by_customer_id,
+      statusTime,
+      time_from,
+      time_to,
+    } = this.state;
+    var params = this.getParams(
+      time_from,
+      time_to,
+      searchValue,
+      statusOrder,
+      statusPayment,
+      null,
+      orderFrom,
+      collaborator_by_customer_id,
+      statusTime,
+      null,
+      methodPaymentId
     );
 
     // this.props.fetchAllBill(store_code, 1, branch, null, null);

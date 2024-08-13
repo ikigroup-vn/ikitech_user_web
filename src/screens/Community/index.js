@@ -23,6 +23,7 @@ class Community extends Component {
     this.state = {
       posts: [],
       links: [],
+      currentPage: 1,
       isLoading: false,
       permissions: {},
       modal: {
@@ -45,6 +46,14 @@ class Community extends Component {
   handleSetPosts = (posts) => {
     console.log("posts", posts);
     this.setState({ posts });
+  };
+
+  handleSetLinks = (links) => {
+    this.setState({ links });
+  };
+
+  handleSetCurrentPage = (page) => {
+    this.setState({ currentPage: page });
   };
 
   handleSetLoading = (isLoading) => {
@@ -363,10 +372,14 @@ class Community extends Component {
                             onApproveCallback={this.handleApproveCallback}
                             onReupCallbacks={this.handleReupCallback}
                             onGetDataUpdate={this.handleGetDataUpdate}
+                            currentPage={this.state.currentPage}
                           />
                           <Pagination
                             storeCode={store_code}
                             links={this.state.links}
+                            onSetPosts={this.handleSetPosts}
+                            onSetLinks={this.handleSetLinks}
+                            onSetCurrentPage={this.handleSetCurrentPage}
                           />
                           <DeleteModal
                             storeCode={store_code}
