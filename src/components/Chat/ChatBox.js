@@ -6,6 +6,9 @@ import { shallowEqual } from "../../ultis/shallowEqual";
 import { AsyncPaginate } from "react-select-async-paginate";
 import { connect } from "react-redux";
 import * as customerAction from "../../actions/customer";
+import * as Types from "../../constants/ActionType";
+import * as customerApi from "../../data/remote/customer";
+
 class ChatBox extends Component {
   constructor(props) {
     super(props);
@@ -82,21 +85,61 @@ class ChatBox extends Component {
     this.props.handleFetchAllChat(pag);
   };
   loadOptions1 = async (search, loadedOptions, { page }) => {
+    const { dispatch } = this.props;
     const { store_code } = this.props;
     const params = `&search=${search}`;
-    const res = await this.props.fetchAllCustomer(store_code, page, params);
-
-    return {
-      options: this.props.customers.data.map((i) => {
-        return { value: i.id, label: `${i.name}  (${i.phone_number})` };
-      }),
-
-      hasMore:
-        this.props.customers.current_page !== this.props.customers.last_page,
-      additional: {
-        page: page + 1,
-      },
-    };
+    // const res = await this.props.fetchAllCustomer(store_code, page, params);
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+  
+    try {
+      const res = await customerApi.fetchAllCustomer(store_code, page, params);
+  
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+  
+      if (res.data.code !== 401) {
+        const data = res.data.data;
+  
+        return {
+          options: data.data.map((i) => ({
+            value: i.id,
+            label: `${i.name}  (${i.phone_number})`,
+          })),
+          hasMore: data.current_page !== data.last_page,
+          additional: {
+            page: page + 1,
+          },
+        };
+      } else {
+        return {
+          options: [],
+          hasMore: false,
+          additional: {
+            page: page + 1,
+          },
+        };
+      }
+    } catch (error) {
+      console.error("Error fetching customers:", error);
+  
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+  
+      return {
+        options: [],
+        hasMore: false,
+        additional: {
+          page: page + 1,
+        },
+      };
+    }
   };
 
   onChangeSelect4 = (selectValue) => {
@@ -289,6 +332,7 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllCustomer: (id, page, params) => {
       dispatch(customerAction.fetchAllCustomer(id, page, params));
     },
+    dispatch,
   };
 };
 
