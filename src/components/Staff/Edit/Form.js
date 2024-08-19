@@ -100,6 +100,9 @@ class Form extends Component {
             salary_one_hour == ""
               ? ""
               : new Intl.NumberFormat().format(salary_one_hour);
+          const branches = this.props.branchs.filter((branch) =>
+            item.branch_ids?.includes(branch.id)
+          );
           this.setState({
             username: item.username.replace(`${store_code}_`, ""),
             phone_number: item.phone_number,
@@ -114,6 +117,7 @@ class Form extends Component {
               item.decentralization != null
                 ? item.decentralization.id
                 : null,
+            selectedBranchs: branches,
           });
         }
       }
