@@ -73,7 +73,52 @@ class InfoProduct extends Component {
       point_for_agency: 0,
       txtPosition: "",
       is_medicine: false,
+      productBranchs: [],
+      selectedBranchs: [],
     };
+  }
+
+  getNameSelectedBranchs() {
+    let name = "";
+    const branchs = this.props.branchs;
+    if (this.state.selectedBranchs !== null) {
+      branchs.forEach((branch) => {
+        if (
+          this.state.selectedBranchs.map((e) => e.id).indexOf(branch.id) > -1
+        ) {
+          name = name + branch.name + ", ";
+        }
+      });
+    }
+    if (name.length > 0) {
+      name = name.substring(0, name.length - 2);
+    }
+    return name;
+  }
+
+  handleChangeCheckBranchs(id) {
+    return (
+      this.state.selectedBranchs.map((branch) => branch.id).indexOf(id) > -1
+    );
+  }
+
+  handleChangeBranchs(branch) {
+    const indexHas = this.state.selectedBranchs
+      .map((branch) => branch.id)
+      .indexOf(branch.id);
+
+    if (indexHas !== -1) {
+      const newListBranchs = this.state.selectedBranchs;
+      newListBranchs.splice(indexHas, 1);
+      this.setState({
+        selectedBranchs: newListBranchs,
+      });
+    } else {
+      this.setState({
+        selectedBranchs: [...this.state.selectedBranchs, branch],
+      });
+    }
+    this.props.handleDataFromInfo(this.state);
   }
   handleChangeCheckParent(id) {
     return this.state.category_parent.map((e) => e.id).indexOf(id) > -1;
@@ -357,7 +402,7 @@ class InfoProduct extends Component {
       if (product.distributes != null && product.distributes.length > 0) {
         checkHasDistribute = true;
       }
-
+      console.log("@@", product);
       this.setState({
         txtName: product.name,
         txtPrice: _price,
@@ -382,6 +427,7 @@ class InfoProduct extends Component {
         txtWeight: _weight,
         txtPosition: product.shelf_position,
         is_medicine: product.is_medicine,
+        selectedBranchs: product.branches
       });
 
       this.props.checkDistribute(checkHasDistribute, product.check_inventory);
@@ -569,7 +615,7 @@ class InfoProduct extends Component {
     // this.setState({ listCategory: option });
   };
   handleChangeTypeShareCollab = (type) => {
-    if (type === '%') {
+    if (type === "%") {
       this.setState({
         money_amount_collaborator: "",
       });
@@ -1200,6 +1246,97 @@ class InfoProduct extends Component {
             </div>
           </div>
         </div>
+        <div class="form-group">
+          <label for="product_name">Chi nhánh</label>
+          <div className="Choose-category-product">
+            <div id="accordionBranchs">
+              <div
+                className="wrap_category btn-collapse btn-accordion-collapse collapsed"
+                style={{ display: "flex" }}
+                onClick={this.onChangeIcon}
+                data-toggle="collapse"
+                data-target="#collapseBranchs"
+                aria-expanded="false"
+                aria-controls="collapseBranchs"
+                id="headingOneBranchs"
+              >
+                <input
+                  // disabled
+                  type="text"
+                  class="form-control"
+                  placeholder="--Chọn chi nhánh--"
+                  style={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    paddingRight: "55px",
+                    position: "relative",
+                  }}
+                  value={this.getNameSelectedBranchs()}
+                ></input>
+                <button
+                  class="btn btn-link"
+                  id="headingOneBranchs"
+                  style={{
+                    position: "absolute",
+                    right: "27px",
+                  }}
+                >
+                  <i
+                    class={
+                      this.state.icon ? "fa fa-caret-down" : "fa fa-caret-down"
+                    }
+                  ></i>
+                </button>
+              </div>
+              <div
+                id="collapseBranchs"
+                class="collapse"
+                aria-labelledby="headingOneBranchs"
+                data-parent="#accordionBranchs"
+              >
+                <ul
+                  style={{
+                    listStyle: "none",
+                    margin: "5px 0",
+                    display: "flex",
+                    flexDirection: "column",
+                    rowGap: "10px",
+                  }}
+                  class="list-group"
+                >
+                  {this.props.branchs && this.props.branchs.length ? (
+                    this.props.branchs.map((branch, index) => (
+                      <li
+                        class=""
+                        style={{
+                          cursor: "pointer",
+                          paddingTop: "5px",
+                          paddingLeft: "5px",
+                        }}
+                        key={index}
+                      >
+                        <input
+                          type="checkbox"
+                          style={{
+                            marginRight: "10px",
+                            width: "30px",
+                            height: "15px",
+                          }}
+                          checked={this.handleChangeCheckBranchs(branch.id)}
+                          onChange={() => this.handleChangeBranchs(branch)}
+                        />
+                        {branch.name}
+                      </li>
+                    ))
+                  ) : (
+                    <div>Không có kết quả</div>
+                  )}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </InfoProductStyles>
     );
   }
@@ -1208,6 +1345,7 @@ const mapStateToProps = (state) => {
   return {
     allAttributeProduct:
       state.attributeSearchReducers.attribute_search.allAttributeProduct,
+    branchs: state.storeReducers.store.branchStore,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

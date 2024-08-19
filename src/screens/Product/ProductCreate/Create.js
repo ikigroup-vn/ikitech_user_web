@@ -114,6 +114,8 @@ class ProductCreate extends Component {
           }
         );
       }
+      const branchs = data.selectedBranchs.map((branch, _) => branch.id);
+      formdata.branchs = branchs;
       formdata.categories = categories;
       formdata.category_children_ids = category_children_ids;
 
@@ -346,6 +348,19 @@ class ProductCreate extends Component {
           title: "Lỗi",
           disable: "show",
           content: "Barcode không thể trùng với mã SKU",
+        },
+      });
+      return;
+    }
+
+    if (!form.branchs.length) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng chọn chi nhánh",
         },
       });
       return;
@@ -683,7 +698,7 @@ class ProductCreate extends Component {
     } = this.props;
     var { total, disableInventory, disableDistribute, discountList } =
       this.state;
-    console.log("data::: ", this.state.form);
+
     return (
       <div class="container-fluid">
         <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />

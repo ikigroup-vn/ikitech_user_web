@@ -443,6 +443,24 @@ class Table extends Component {
 
     return [];
   };
+  handleChangeStatusCustomer(e, customer) {
+    const {
+      fetchListCustomerOfSale,
+      fetchAllCustomer,
+      isSale,
+      currentParams,
+      paginate,
+      store_code,
+    } = this.props;
+    this.props.changeVisibility(store_code, customer.id, {
+      status: customer.status === 0 ? 1 : 0,
+    });
+    if (isSale()) {
+      fetchListCustomerOfSale(store_code, paginate, currentParams);
+    } else {
+      fetchAllCustomer(store_code, paginate, currentParams);
+    }
+  }
 
   optionTypeRoles = (types) => {
     return types.map((type) => ({
@@ -515,6 +533,21 @@ class Table extends Component {
                     )
                   : 0}
               </td>
+              {getChannel() == IKITECH && (
+                <td>
+                  {" "}
+                  <label
+                    className="status-product"
+                    onClick={(e) => this.handleChangeStatusCustomer(e, data)}
+                    style={{
+                      marginBottom: "0",
+                    }}
+                  >
+                    <input type="checkbox" hidden checked={data.status === 1} />
+                    <div></div>
+                  </label>
+                </td>
+              )}
               {getChannel() == IKITECH && (
                 <td
                   className={`${
@@ -868,7 +901,9 @@ class Table extends Component {
                 onClick={this.handleChangeManyRoleCustomer}
                 disabled={
                   !roleCustomerChange ||
-                  (roleCustomerChange?.value == 2 && !typeAgencyChange && this.props.types.length > 0)
+                  (roleCustomerChange?.value == 2 &&
+                    !typeAgencyChange &&
+                    this.props.types.length > 0)
                 }
               >
                 Xác nhận
@@ -907,6 +942,7 @@ class Table extends Component {
               <th>Giới thiệu</th>
               <th>Xu</th>
               <th>Tổng mua</th>
+              {getChannel() == IKITECH && <th>Trạng thái </th>}
 
               {getChannel() == IKITECH && <th>Vai trò</th>}
 
@@ -979,6 +1015,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     resetUpdateRoleMessage: () => {
       dispatch({ type: Types.UPDATE_ROLE_CUSTOMER_FOR_INTERFACE, data: false });
+    },
+    changeVisibility: (store_code, customer_id, data) => {
+      dispatch(customerAction.changeVisibility(store_code, customer_id, data));
     },
   };
 };

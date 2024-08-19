@@ -12,6 +12,7 @@ import history from "../../../../history";
 import MomentInput from "react-moment-input";
 import * as Types from "../../../../constants/ActionType";
 import Datetime from "react-datetime";
+import getChannel, { IKITECH } from "../../../../ultis/channel";
 
 class Customer extends Component {
   constructor(props) {
@@ -36,6 +37,7 @@ class Customer extends Component {
       idCustomer: "",
       txtDateOfBirth: "null",
       txtSex: "",
+      txtStatus: 1
     };
   }
   onChange = (e) => {
@@ -204,6 +206,7 @@ class Customer extends Component {
               ).format("DD-MM-YYYY")
             : null,
         txtSex: nextProps.customer.sex,
+        txtStatus: nextProps.customer.status
       });
       console.log("111");
     }
@@ -273,6 +276,7 @@ class Customer extends Component {
       idCustomer,
       txtDateOfBirth,
       txtSex,
+      txtStatus,
     } = this.state;
     const { store_code } = this.props;
     const Formdata = {
@@ -286,6 +290,7 @@ class Customer extends Component {
       address_detail: txtAddress_detail,
       sex: txtSex,
       date_of_birth: moment(txtDateOfBirth, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      status: txtStatus
     };
     console.log("Formdata", Formdata);
     this.props.editCustomer(store_code, idCustomer, Formdata);
@@ -363,6 +368,7 @@ class Customer extends Component {
       txtSex,
       isShow,
       customer_change_referral,
+      txtStatus
     } = this.state;
     var {
       txtName_branch,
@@ -501,6 +507,24 @@ class Customer extends Component {
             name="txtAddress_detail"
           />
         </div>
+
+        {getChannel() == IKITECH && (
+          <div class="form-group">
+            <label for="product_name">Trạng thái</label>
+
+            <select
+              id="input"
+              class="form-control"
+              value={txtStatus}
+              onChange={this.onChange}
+              name="txtStatus"
+            >
+              <option value="1">Hoạt động</option>
+              <option value="0">Chặn</option>
+            </select>
+          </div>
+        )}
+
         <div class="form-group">
           <label for="product_name">Tỉnh/thành phố </label>
 

@@ -62,3 +62,11 @@ export const changePointForCustomer = (store_code, id, data) => {
     data
   );
 };
+
+export const changeVisibility = (store_code, id, data) => {
+  return callApi(
+    `/store/${store_code}/customers/${id}/change_visibility`,
+    "put",
+    data
+  );
+};

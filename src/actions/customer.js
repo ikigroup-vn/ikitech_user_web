@@ -7,6 +7,24 @@ import XlsxPopulate from "xlsx-populate";
 import { saveAs } from "file-saver";
 import { formatDDMMYYYY } from "../ultis/date";
 
+export const changeVisibility = (store_code, customer_id, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    customerApi
+      .changeVisibility(store_code, customer_id, data)
+      .then((res) => {})
+      .finally(() => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+      });
+  };
+};
+
 export const fetchAllCustomer = (
   store_code,
   page,

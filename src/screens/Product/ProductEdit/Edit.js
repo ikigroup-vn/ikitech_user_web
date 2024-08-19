@@ -92,7 +92,8 @@ class ProductEdit extends Component {
       formdata.sku = data.sku;
       formdata.is_medicine = data.is_medicine;
       formdata.check_inventory = data.check_inventory;
-
+      const branchs = data.selectedBranchs.map((branch, _) => branch.id);
+      formdata.branchs = branchs;
       var categories = [];
       var category_children_ids = [];
       if (data.category_parent.length > 0) {
@@ -356,6 +357,18 @@ class ProductEdit extends Component {
           title: "Lỗi",
           disable: "show",
           content: "Barcode không thể trùng với mã SKU",
+        },
+      });
+      return;
+    }
+    if (!form.branchs.length) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng chọn chi nhánh",
         },
       });
       return;
