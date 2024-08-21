@@ -64,8 +64,10 @@ class PanelBottom extends Component {
   }
 
   componentDidMount() {
+    const branch_id = getBranchId();
+    console.log("branch_id", branch_id);
     this.props.fetchPlaceProvince();
-    this.props.fetchAllCombo(this.props.store_code);
+    this.props.fetchAllCombo(this.props.store_code, branch_id);
   }
   showProvince = (places) => {
     var result = null;
@@ -1728,8 +1730,8 @@ const mapDispatchToProps = (dispatch, props) => {
     createCustomer: (store_code, form, funcModal) => {
       dispatch(dashboardAction.createCustomer(store_code, form, funcModal));
     },
-    fetchAllCombo: (store_code) => {
-      dispatch(OrderAction.fetchAllCombo(store_code));
+    fetchAllCombo: (store_code, branch_id) => {
+      dispatch(OrderAction.fetchAllComboByBranch(store_code, branch_id));
     },
     fetchAllVoucher: (store_code, branch_id, params) => {
       dispatch(

@@ -156,6 +156,26 @@ export const fetchAllCombo = (store_code) => {
   };
 };
 
+export const fetchAllComboByBranch = (store_code, fetchAllComboByBranch) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    orderApi.fetchAllComboByBranch(store_code, fetchAllComboByBranch).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_COMBO_PRODUCT,
+          data: res.data.data,
+        });
+    });
+  };
+};
+
 export const findAddress = (store_code, id) => {
   return (dispatch) => {
     dispatch({

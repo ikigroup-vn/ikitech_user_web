@@ -585,6 +585,7 @@ class Form extends Component {
       agency_types: agency_types_convert,
       group_types: group_types_convert,
       is_buy_for_combo: this.state.is_buy_for_combo,
+      branches: this.state.selectedBranchs.map(branch => branch.id)
     };
     var amount = form.amount;
     if (typeof amount == "undefined" || amount == null || !isEmpty(amount))

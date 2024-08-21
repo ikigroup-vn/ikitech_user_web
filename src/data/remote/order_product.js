@@ -43,3 +43,7 @@ export const findAddress = (store_code, id) => {
 export const fetchAllCombo = (store_code) => {
   return callApi(`/customer/${store_code}/combos`, "get");
 };
+
+export const fetchAllComboByBranch = (store_code, branch_id) => {
+  return callApi(`/store/${store_code}/${branch_id}/combos/available`, "get");
+};
