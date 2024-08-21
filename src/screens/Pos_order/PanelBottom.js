@@ -263,8 +263,8 @@ class PanelBottom extends Component {
       if (oneCart?.customer?.id) {
         params = `customer_id=${oneCart?.customer?.id}`;
       }
-
-      fetchAllVoucher(store_code, params);
+      const branch_id = getBranchId();
+      fetchAllVoucher(store_code, branch_id, params);
 
       this.setState({
         ...this.state,
@@ -1731,8 +1731,10 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllCombo: (store_code) => {
       dispatch(OrderAction.fetchAllCombo(store_code));
     },
-    fetchAllVoucher: (store_code, params) => {
-      dispatch(OrderAction.fetchAllVoucher(store_code, params));
+    fetchAllVoucher: (store_code, branch_id, params) => {
+      dispatch(
+        OrderAction.fetchAllVoucherByBranch(store_code, branch_id, params)
+      );
     },
     fetchAllCustomer: (id, page, params) => {
       dispatch(customerAction.fetchAllCustomer(id, page, params));

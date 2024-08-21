@@ -21,6 +21,13 @@ export const fetchAllVoucher = (store_code, params) => {
     "get"
   );
 };
+export const fetchAllByBranch = (store_code, branch_id, params) => {
+  return callApi(
+    `/store/${store_code}/${branch_id}/vouchers/available${params ? `?${params}` : ""}`,
+    "get"
+  );
+};
+
 export const fetchAllPertion = (store_code) => {
   return callApi(`/store/${store_code}/customers`, "get");
 };

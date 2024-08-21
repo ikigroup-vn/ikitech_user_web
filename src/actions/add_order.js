@@ -448,6 +448,37 @@ export const fetchAllVoucher = (store_code, params) => {
       });
   };
 };
+export const fetchAllVoucherByBranch = (store_code, branch_id, params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    orderApi
+      .fetchAllByBranch(store_code, branch_id, params)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.FETCH_ALL_VOUCHER_PRODUCT,
+          data: res.data.data,
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response?.data?.msg ?? "",
+          },
+        });
+      });
+  };
+};
 export const showAlertMaxQuantity = () => {
   return (dispatch) => {
     dispatch({
