@@ -305,7 +305,7 @@ class Form extends Component {
       id: group.value,
       name: group.label,
     }));
-
+    const branches = selectedBranchs.map((branch) => branch.id);
     var form = {
       group_customer,
       agency_type_id,
@@ -326,7 +326,7 @@ class Form extends Component {
       group_customers,
       agency_types: agency_types_convert,
       group_types: group_types_convert,
-      branches: selectedBranchs,
+      branches,
     };
     if (form.product_ids == "") {
       delete form.product_ids;

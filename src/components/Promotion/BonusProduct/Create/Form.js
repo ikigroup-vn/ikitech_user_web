@@ -375,7 +375,7 @@ class Form extends Component {
       id: group.value,
       name: group.label,
     }));
-
+    const branches = selectedBranchs.map((branch) => branch.id);
     var form = {
       group_customer,
       agency_type_id,
@@ -399,7 +399,7 @@ class Form extends Component {
       agency_types: agency_types_convert,
       group_types: group_types_convert,
       is_buy_for_combo: this.state.is_buy_for_combo,
-      branches: selectedBranchs,
+      branches,
     };
     var amount = form.amount;
     if (typeof amount == "undefined" || amount == null || !isEmpty(amount))

@@ -61,6 +61,7 @@ class Form extends Component {
       agency_types: [],
       group_types: [],
       is_buy_for_combo: false,
+      selectedBranchs: [],
     };
   }
 
@@ -261,7 +262,9 @@ class Form extends Component {
           });
         }
       }
-
+      const branches = this.props.branchs.filter((branch) =>
+      bonusProduct.branches?.includes(branch.id)
+    );
       this.setState({
         txtContent: bonusProduct.description,
         txtName: bonusProduct.name,
@@ -293,6 +296,7 @@ class Form extends Component {
         isLoading: true,
         loadCript: true,
         form: {},
+        selectedBranchs: branches
       });
     }
     if (this.props.image !== nextProps.image) {
@@ -543,6 +547,7 @@ class Form extends Component {
       group_customers,
       agency_types,
       group_types,
+      selectedBranches
     } = this.state;
     var agency_type_name =
       this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]
@@ -930,6 +935,48 @@ class Form extends Component {
     this.setState({ group_types: [...group] });
   };
 
+  handleChangeCheckBranchs(id) {
+    return (
+      this.state.selectedBranchs.map((branch) => branch.id).indexOf(id) > -1
+    );
+  }
+
+  getNameSelectedBranchs() {
+    let name = "";
+    const branchs = this.props.branchs;
+    if (this.state.selectedBranchs !== null) {
+      branchs.forEach((branch) => {
+        if (
+          this.state.selectedBranchs.map((e) => e.id).indexOf(branch.id) > -1
+        ) {
+          name = name + branch.name + ", ";
+        }
+      });
+    }
+    if (name.length > 0) {
+      name = name.substring(0, name.length - 2);
+    }
+    return name;
+  }
+
+  handleChangeBranchs(branch) {
+    const indexHas = this.state.selectedBranchs
+      .map((branch) => branch.id)
+      .indexOf(branch.id);
+
+    if (indexHas !== -1) {
+      const newListBranchs = this.state.selectedBranchs;
+      newListBranchs.splice(indexHas, 1);
+      this.setState({
+        selectedBranchs: newListBranchs,
+      });
+    } else {
+      this.setState({
+        selectedBranchs: [...this.state.selectedBranchs, branch],
+      });
+    }
+  }
+
   render() {
     var {
       txtName,
@@ -1213,6 +1260,99 @@ class Form extends Component {
                     ) : null}
                   </div>
                 </div>
+                <div class="form-group">
+              <label for="product_name">Chi nhánh</label>
+              <div className="Choose-category-product">
+                <div id="accordionBranchs">
+                  <div
+                    className="wrap_category btn-collapse btn-accordion-collapse collapsed"
+                    style={{ display: "flex" }}
+                    onClick={this.onChangeIcon}
+                    data-toggle="collapse"
+                    data-target="#collapseBranchs"
+                    aria-expanded="false"
+                    aria-controls="collapseBranchs"
+                    id="headingOneBranchs"
+                  >
+                    <input
+                      // disabled
+                      type="text"
+                      class="form-control"
+                      placeholder="--Chọn chi nhánh--"
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        paddingRight: "55px",
+                        position: "relative",
+                      }}
+                      value={this.getNameSelectedBranchs()}
+                    ></input>
+                    <button
+                      class="btn btn-link"
+                      id="headingOneBranchs"
+                      style={{
+                        position: "absolute",
+                        right: "27px",
+                      }}
+                    >
+                      <i
+                        class={
+                          this.state.icon
+                            ? "fa fa-caret-down"
+                            : "fa fa-caret-down"
+                        }
+                      ></i>
+                    </button>
+                  </div>
+                  <div
+                    id="collapseBranchs"
+                    class="collapse"
+                    aria-labelledby="headingOneBranchs"
+                    data-parent="#accordionBranchs"
+                  >
+                    <ul
+                      style={{
+                        listStyle: "none",
+                        margin: "5px 0",
+                        display: "flex",
+                        flexDirection: "column",
+                        rowGap: "10px",
+                      }}
+                      class="list-group"
+                    >
+                      {this.props.branchs && this.props.branchs.length ? (
+                        this.props.branchs.map((branch, index) => (
+                          <li
+                            class=""
+                            style={{
+                              cursor: "pointer",
+                              paddingTop: "5px",
+                              paddingLeft: "5px",
+                            }}
+                            key={index}
+                          >
+                            <input
+                              type="checkbox"
+                              style={{
+                                marginRight: "10px",
+                                width: "30px",
+                                height: "15px",
+                              }}
+                              checked={this.handleChangeCheckBranchs(branch.id)}
+                              onChange={() => this.handleChangeBranchs(branch)}
+                            />
+                            {branch.name}
+                          </li>
+                        ))
+                      ) : (
+                        <div>Không có kết quả</div>
+                      )}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
                 {ladder_reward !== true && (
                   <>
                     <div class="form-group">
@@ -1352,6 +1492,7 @@ const mapStateToProps = (state) => {
     types: state.agencyReducers.agency.allAgencyType,
     groupCustomer:
       state.groupCustomerReducers.group_customer.groupCustomer.data,
+    branchs: state.storeReducers.store.branchStore,
   };
 };
 
