@@ -472,6 +472,12 @@ class ShowData extends Component {
                 }}
               ></i>
             </button>
+            <Link
+              to={`/prize_codes/index/${store_code}?product_id=${data.id}`}
+              class={`btn btn-outline-primary btn-sm show`}
+            >
+              <i class="fa fa-qrcode"></i>
+            </Link>
           </div>
         </td>
       </tr>

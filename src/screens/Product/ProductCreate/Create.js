@@ -91,6 +91,8 @@ class ProductCreate extends Component {
         .toString()
         .replace(/,/g, "")
         .replace(/\./g, "");
+      formdata.start_prize_code = data.start_prize_code;
+      formdata.end_prize_code = data.end_prize_code;
       var attribute_search_children_ids = [];
       if (data?.attribute_search_children_ids?.length > 0) {
         attribute_search_children_ids = data.attribute_search_children_ids.map(

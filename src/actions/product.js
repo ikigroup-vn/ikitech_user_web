@@ -7,6 +7,102 @@ import { compressed, formatStringCharactor } from "../ultis/helpers";
 import { saveAs } from "file-saver";
 import XlsxPopulate, { RichText } from "xlsx-populate";
 import { getBranchId, getBranchIds } from "../ultis/branchUtils";
+import QRCode from "qrcode";
+import * as prizeCodeApi from "../data/remote/prize_code";
+import ExcelJS from "exceljs";
+export const exportAllPrizeCodes = (store_code) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+
+    prizeCodeApi.fetchAllPrizeCode(store_code).then(async (res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401) {
+        if (
+          res.data.data &&
+          res.data.data.data &&
+          res.data.data.data.length > 0
+        ) {
+          const newArray = [];
+          let i = 1;
+
+          for (const item of res.data.data.data) {
+            try {
+              // const qrcode = await QRCode.toDataURL(item.code);
+              const newItem = {
+                STT: i,
+                "Mã dự thưởng": item.code ?? "",
+                "Số điện thoại": item.phone_number ?? "",
+                "Sản phẩm": item.product.name ?? "",
+                "Sản phẩm trúng": item.product_prize.name ?? "",
+                // "Mã QR": qrcode,
+              };
+              newArray.push(newItem);
+              i++;
+            } catch (err) {
+              console.error(err);
+            }
+          }
+
+          const header = Object.keys(newArray[0] || {});
+          const workbook = new ExcelJS.Workbook();
+          const sheet = workbook.addWorksheet("Sheet1");
+
+          // Add header row
+          sheet.addRow(header);
+
+          // Add data rows
+          newArray.forEach((item) => {
+            const row = header.map((key) => item[key]);
+            sheet.addRow(row);
+          });
+
+          // Adjust column widths
+          sheet.columns.forEach((column) => {
+            column.width = 30;
+          });
+
+          // Add images
+          // for (let rowIndex = 0; rowIndex < newArray.length; rowIndex++) {
+          //   const imageBuffer = Buffer.from(
+          //     newArray[rowIndex]["Mã QR"].split(",")[1],
+          //     "base64"
+          //   );
+          //   const imageId = workbook.addImage({
+          //     buffer: imageBuffer,
+          //     extension: "png",
+          //   });
+          //   sheet.addImage(imageId, {
+          //     tl: { col: header.length, row: rowIndex + 1 },
+          //     ext: { width: 100, height: 100 },
+          //   });
+
+          //   sheet.getRow(rowIndex + 2).height = 80;
+          // }
+
+          sheet.getRow(1).font = { bold: true };
+          sheet.eachRow({ includeEmpty: true }, (row) => {
+            row.border = {
+              top: { style: "thin" },
+              left: { style: "thin" },
+              bottom: { style: "thin" },
+              right: { style: "thin" },
+            };
+          });
+
+          workbook.xlsx.writeBuffer().then((buffer) => {
+            saveAs(new Blob([buffer]), "Qrcode.xlsx");
+          });
+        }
+      }
+    });
+  };
+};
 
 export const fetchAllProduct = (
   store_code,

@@ -71,6 +71,14 @@ export const ikitech_menu = [
           // },
         ],
       },
+      {
+        name: "Mã dự thưởng",
+        setOpenKey: ["/prize_code/"],
+        isShowWhenManyBranch: false,
+        icon: "fas fa-th-large",
+        open: "prize",
+        to: "/prize_codes/index",
+      },
       // {
       //   name: "Sàn TMĐT",
       //   class: "ecommerce_list",

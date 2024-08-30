@@ -187,8 +187,22 @@ import HistoryDetailQuizForCustomer from "./screens/Train/HistoryQuiz/historyDet
 import ReportProduct from "./screens/Report/report_product";
 import Expired from "./screens/Expired/index.js";
 import Community from "./screens/Community/index.js";
+import PrizeCode from "./screens/PrizeCode/index.js";
+import CreatePrizeCode from "./screens/PrizeCode/Create.js";
 
 const routes = [
+  {
+    path: "/prize_codes/index/:store_code",
+    exact: true,
+    main: ({ match, history }) => <PrizeCode match={match} history={history} />,
+  },
+
+  {
+    path: "/prize_codes/create/:store_code",
+    exact: true,
+    main: ({ match, history }) => <CreatePrizeCode match={match} history={history} />,
+  },
+
   {
     path: "/invoice_template/index/:store_code",
     exact: true,

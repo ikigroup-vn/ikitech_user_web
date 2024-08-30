@@ -9,6 +9,8 @@ import { formatNumber, formatNoD } from "../../../ultis/helpers";
 import getChannel, { IKITECH } from "../../../ultis/channel";
 import * as Types from "../../../constants/ActionType";
 import styled from "styled-components";
+import { MomentInput } from "react-moment-input";
+import moment from "moment";
 
 const InfoProductStyles = styled.div`
   .status-product {
@@ -73,6 +75,8 @@ class InfoProduct extends Component {
       point_for_agency: 0,
       txtPosition: "",
       is_medicine: false,
+      start_prize_code: null,
+      end_prize_code: null,
     };
   }
   handleChangeCheckParent(id) {
@@ -190,7 +194,6 @@ class InfoProduct extends Component {
                 indexChild,
                 1
               );
-              console.log("newChild", newChild);
             }
           });
         }
@@ -245,6 +248,12 @@ class InfoProduct extends Component {
     this.props.handleDataFromInfo(this.state);
   };
   componentDidMount() {
+    try {
+      document.getElementsByClassName("r-input")[0].placeholder =
+        "Chọn ngày và thời gian";
+      document.getElementsByClassName("r-input")[1].placeholder =
+        "Chọn ngày và thời gian";
+    } catch (error) {}
     var option = [];
     this.setState({ attribute_search_parent: [] });
     var attribute_search = [...this.props.attribute_search];
@@ -332,7 +341,6 @@ class InfoProduct extends Component {
 
         return { id: category.id, label: category.name };
       });
-      console.log("eeeee");
       const price = formatNumber(product.price ?? 0);
       var _price = formatNoD(price);
 
@@ -382,6 +390,8 @@ class InfoProduct extends Component {
         txtWeight: _weight,
         txtPosition: product.shelf_position,
         is_medicine: product.is_medicine,
+        start_prize_code: product.start_prize_code,
+        end_prize_code: product.end_prize_code,
       });
 
       this.props.checkDistribute(checkHasDistribute, product.check_inventory);
@@ -468,7 +478,6 @@ class InfoProduct extends Component {
                 indexChild,
                 1
               );
-              console.log("newChild", newChild);
             }
           });
         }
@@ -569,7 +578,7 @@ class InfoProduct extends Component {
     // this.setState({ listCategory: option });
   };
   handleChangeTypeShareCollab = (type) => {
-    if (type === '%') {
+    if (type === "%") {
       this.setState({
         money_amount_collaborator: "",
       });
@@ -583,6 +592,24 @@ class InfoProduct extends Component {
         type === "%"
           ? Types.TYPE_SHARE_COLLABORATOR_PERCENT
           : Types.TYPE_SHARE_COLLABORATOR_NUMBER,
+    });
+  };
+
+  onChangeStartTime = (e) => {
+    const time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
+
+    this.setState({
+      ...this.state,
+      start_prize_code: time,
+    });
+  };
+
+  onChangeEndTime = (e) => {
+    const time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
+
+    this.setState({
+      ...this.state,
+      end_prize_code: time,
     });
   };
   render() {
@@ -611,11 +638,11 @@ class InfoProduct extends Component {
       point_for_agency,
       txtPosition,
       is_medicine,
+      start_prize_code,
+      end_prize_code,
     } = this.state;
-    console.log(
-      "🚀 ~ file: InfoProduct.js:591 ~ render ~ listAttributeSearch:",
-      listAttributeSearch
-    );
+    
+    console.log("222", start_prize_code, end_prize_code);
 
     var txtQuantityInStock = txtQuantityInStock == -1 ? "" : txtQuantityInStock;
     var { isCopy } = this.props;
@@ -1199,6 +1226,54 @@ class InfoProduct extends Component {
               </div>
             </div>
           </div>
+        </div>
+        <div class="form-group">
+          <label for="product_name">Ngày bắt đầu mã dự thưởng</label>
+          <MomentInput
+            defaultValue={
+              !start_prize_code
+                ? ""
+                : moment(start_prize_code, "DD-MM-YYYY HH:mm")
+            }
+            min={moment()}
+            format="DD-MM-YYYY HH:mm"
+            options={true}
+            enableInputClick={true}
+            monthSelect={true}
+            readOnly={true}
+            translations={{
+              DATE: "Ngày",
+              TIME: "Giờ",
+              SAVE: "Đóng",
+              HOURS: "Giờ",
+              MINUTES: "Phút",
+            }}
+            onSave={() => {}}
+            onChange={this.onChangeStartTime}
+          />
+        </div>
+        <div class="form-group">
+          <label for="product_name">Ngày kết thúc mã dự thưởng</label>
+          <MomentInput
+            min={moment()}
+            format="DD-MM-YYYY HH:mm"
+            options={true}
+            enableInputClick={true}
+            monthSelect={true}
+            readOnly={true}
+            translations={{
+              DATE: "Ngày",
+              TIME: "Giờ",
+              SAVE: "Đóng",
+              HOURS: "Giờ",
+              MINUTES: "Phút",
+            }}
+            onSave={() => {}}
+            onChange={this.onChangeEndTime}
+            defaultValue={
+              !end_prize_code ? "" : moment(end_prize_code, "DD-MM-YYYY HH:mm")
+            }
+          />
         </div>
       </InfoProductStyles>
     );

@@ -92,6 +92,8 @@ class ProductEdit extends Component {
       formdata.sku = data.sku;
       formdata.is_medicine = data.is_medicine;
       formdata.check_inventory = data.check_inventory;
+      formdata.start_prize_code = data.start_prize_code;
+      formdata.end_prize_code = data.end_prize_code;
 
       var categories = [];
       var category_children_ids = [];

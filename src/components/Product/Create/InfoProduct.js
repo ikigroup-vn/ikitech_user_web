@@ -14,6 +14,8 @@ import {
 import getChannel, { IKITECH } from "../../../ultis/channel";
 import * as Types from "../../../constants/ActionType";
 import styled from "styled-components";
+import { MomentInput } from "react-moment-input";
+import moment from "moment";
 
 const InfoProductStyles = styled.div`
   .status-product {
@@ -77,10 +79,18 @@ class InfoProduct extends Component {
       point_for_agency: null,
       icon_for_point: false,
       is_medicine: false,
+      start_prize_code: null,
+      end_prize_code: null,
     };
   }
 
   componentDidMount() {
+    try {
+      document.getElementsByClassName("r-input")[0].placeholder =
+        "Chọn ngày và thời gian";
+      document.getElementsByClassName("r-input")[1].placeholder =
+        "Chọn ngày và thời gian";
+    } catch (error) {}
     var option = [];
     this.setState({ category_parent: [], attribute_search_parent: [] });
     var categories_child = [];
@@ -531,6 +541,24 @@ class InfoProduct extends Component {
         type === "%"
           ? Types.TYPE_SHARE_COLLABORATOR_PERCENT
           : Types.TYPE_SHARE_COLLABORATOR_NUMBER,
+    });
+  };
+
+  onChangeStartTime = (e) => {
+    const time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
+
+    this.setState({
+      ...this.state,
+      start_prize_code: time,
+    });
+  };
+
+  onChangeEndTime = (e) => {
+    const time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
+
+    this.setState({
+      ...this.state,
+      end_prize_code: time,
     });
   };
 
@@ -1174,6 +1202,46 @@ class InfoProduct extends Component {
               </div>
             </div>
           </div>
+        </div>
+        <div class="form-group">
+          <label for="product_name">Ngày bắt đầu mã dự thưởng</label>
+          <MomentInput
+            min={moment()}
+            format="DD-MM-YYYY HH:mm"
+            options={true}
+            enableInputClick={true}
+            monthSelect={true}
+            readOnly={true}
+            translations={{
+              DATE: "Ngày",
+              TIME: "Giờ",
+              SAVE: "Đóng",
+              HOURS: "Giờ",
+              MINUTES: "Phút",
+            }}
+            onSave={() => {}}
+            onChange={this.onChangeStartTime}
+          />
+        </div>
+        <div class="form-group">
+          <label for="product_name">Ngày kết thúc mã dự thưởng</label>
+          <MomentInput
+            min={moment()}
+            format="DD-MM-YYYY HH:mm"
+            options={true}
+            enableInputClick={true}
+            monthSelect={true}
+            readOnly={true}
+            translations={{
+              DATE: "Ngày",
+              TIME: "Giờ",
+              SAVE: "Đóng",
+              HOURS: "Giờ",
+              MINUTES: "Phút",
+            }}
+            onSave={() => {}}
+            onChange={this.onChangeEndTime}
+          />
         </div>
         {/* <button
           onClick={()=>{this.setState({icon_for_point : !this.state.icon_for_point})}}
