@@ -14,13 +14,14 @@ class Table extends Component {
     };
   }
 
-  passEditFunc = (e, id, name, image, isShowHome, banner_ads) => {
+  passEditFunc = (e, id, name, image, isShowHome, banner_ads, isShow) => {
     this.props.handleUpdateCallBack({
       id: id,
       name: name,
       image_url: image,
       is_show_home: isShowHome,
       banner_ads: banner_ads,
+      is_show: isShow
     });
     e.preventDefault();
   };
@@ -187,7 +188,8 @@ class Table extends Component {
                             data.name,
                             data.image_url,
                             data.is_show_home,
-                            data.banner_ads
+                            data.banner_ads,
+                            data.is_show
                           )
                         }
                         data-toggle="modal"
