@@ -22,7 +22,7 @@ class Pagination extends Component {
     } = this.props;
     const product_id = getQueryParams("product_id");
 
-    const params = `?page=${page || 20}&limit=${limit}&search=${searchValue}&product_id=${product_id ?? ""}`;
+    const params = `?page=${page || 1}&limit=${limit || 20}&search=${searchValue}&product_id=${product_id ?? ""}`;
     prizeCodeApi
       .fetchAllPrizeCode(storeCode, params)
       .then((results) => {
