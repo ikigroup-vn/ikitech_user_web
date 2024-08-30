@@ -56,14 +56,14 @@ class ProductInventory extends Component {
     this.setState({
       numPage,
     });
-    var params = `&search=${searchValue ?? ""}&limit=${numPage}`;
+    var params = `&search=${searchValue ?? ""}&limit=${numPage}&get_by_branch=true`;
     if (is_near_out_of_stock) params = params + `&is_near_out_of_stock=true`;
     if (listType == 1) params = params + `&check_inventory=true`;
 
     const branch_id = getBranchId();
     const branch_ids = getBranchIds();
     const branchIds = branch_ids ? branch_ids : branch_id;
-    console.log(params);
+
     this.props.fetchAllProductV2(
       this.props.match.params.store_code,
       branchIds,
@@ -92,7 +92,7 @@ class ProductInventory extends Component {
     var is_near_out_of_stock = getQueryParams("is_near_out_of_stock");
     var status = getQueryParams("status");
     this.setState({ is_near_out_of_stock });
-    var params = null;
+    var params = `&get_by_branch=true`;
     if (is_near_out_of_stock) {
       params = params + `&is_near_out_of_stock=true`;
     }
@@ -197,7 +197,12 @@ class ProductInventory extends Component {
           this.state.numPage
         );
 
-        this.props.fetchAllProductV2(store_code, branchIds, 1, params);
+        this.props.fetchAllProductV2(
+          store_code,
+          branchIds,
+          1,
+          params + `&get_by_branch=true`
+        );
       } else if (nextState.listType == 2) {
         const { store_code } = this.props.match.params;
         const branch_id = getBranchId();
@@ -209,7 +214,12 @@ class ProductInventory extends Component {
           this.state.searchValue,
           this.state.numPage
         );
-        this.props.fetchAllProductV2(store_code, branchIds, 1, params);
+        this.props.fetchAllProductV2(
+          store_code,
+          branchIds,
+          1,
+          params + `&get_by_branch=true`
+        );
       } else {
         // this.setState({listProduct:this.props.products.data})
         const { store_code } = this.props.match.params;
@@ -222,7 +232,12 @@ class ProductInventory extends Component {
           this.state.searchValue,
           this.state.numPage
         );
-        this.props.fetchAllProductV2(store_code, branchIds, 1, params);
+        this.props.fetchAllProductV2(
+          store_code,
+          branchIds,
+          1,
+          params + `&get_by_branch=true`
+        );
       }
     }
     return true;
@@ -255,8 +270,7 @@ class ProductInventory extends Component {
     const branch_id = getBranchId();
     const branch_ids = getBranchIds();
     const branchIds = branch_ids ? branch_ids : branch_id;
-    var params = `&search=${searchValue ?? ""}`;
-    console.log("params", params);
+    var params = `&search=${searchValue ?? ""}&get_by_branch=true`;
     this.setState({ numPage: 20 });
     this.props.fetchAllProductV2(store_code, branchIds, 1, params);
   };
@@ -265,7 +279,8 @@ class ProductInventory extends Component {
     const branch_id = getBranchId();
     const branch_ids = getBranchIds();
     const branchIds = branch_ids ? branch_ids : branch_id;
-    this.props.fetchAllProductV2(store_code, branchIds, 1);
+    var params = `&get_by_branch=true&get_by_branch=true`;
+    this.props.fetchAllProductV2(store_code, branchIds, 1, params);
   };
   showDialogImportExcel = () => {
     $("#file-excel-import").trigger("click");
@@ -489,7 +504,11 @@ class ProductInventory extends Component {
     const branch_id = getBranchId();
     const branch_ids = getBranchIds();
     const branchIds = branch_ids ? branch_ids : branch_id;
-    this.props.fetchProductInventory(store_code, branchIds, `&is_get_all=true`);
+    this.props.fetchProductInventory(
+      store_code,
+      branchIds,
+      `&is_get_all=true&get_by_branch=true`
+    );
   };
 
   passNumPage = (page) => {

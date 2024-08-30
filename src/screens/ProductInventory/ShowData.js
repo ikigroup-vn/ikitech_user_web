@@ -455,7 +455,6 @@ class ShowData extends Component {
     }
 
     var { formData, isChecked } = this.props;
-    console.log("datadata:::: ", data);
 
     return (
       <>
