@@ -46,6 +46,7 @@ class ModalCreate extends Component {
       bannerLinks: ["", ""],
       mainImage: "",
       txtContent: "",
+      isShow: false,
     };
   }
 
@@ -120,6 +121,7 @@ class ModalCreate extends Component {
       is_show_home: this.state.isShowHome,
       banner_ads: BannerAds,
       image_url: this.state.mainImage,
+      is_show: this.state.isShow,
     };
     this.props.createCategoryP(this.props.store_code, { ...params });
     this.setState({ fileUpload: null });
@@ -206,7 +208,7 @@ class ModalCreate extends Component {
   };
 
   render() {
-    var { txtName, isShowHome, txtContent } = this.state;
+    var { txtName, isShowHome, txtContent, isShow } = this.state;
     var { store_code } = this.props;
 
     return (
@@ -271,7 +273,21 @@ class ModalCreate extends Component {
                         }
                         checked={isShowHome}
                       />{" "}
-                      Hiển thị danh mục sản phẩm
+                      Hiển thị sản phẩm ở trang chủ
+                    </label>
+                  </div>
+                  <div
+                    class="form-check"
+                    style={{ marginTop: "10px", padding: "0" }}
+                  >
+                    <label class="form-check-label">
+                      <input
+                        type="checkbox"
+                        name="even"
+                        onChange={() => this.setState({ isShow: !isShow })}
+                        checked={isShow}
+                      />{" "}
+                      Hiển thị danh mục ở trang chủ
                     </label>
                   </div>
                 </div>

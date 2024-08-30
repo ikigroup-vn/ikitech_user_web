@@ -112,6 +112,7 @@ class ModalUpdate extends Component {
       bannerImages: [],
       mainImage: "",
       bannerLinks: ["", ""],
+      isShow: false,
     };
   }
 
@@ -123,6 +124,7 @@ class ModalUpdate extends Component {
         id: category.id,
         image: category.image_url,
         isShowHome: category.is_show_home,
+        isShow: category.is_show,
         bannerImages:
           category.banner_ads && category.banner_ads.length
             ? category.banner_ads.map((item) => item.image)
@@ -186,6 +188,7 @@ class ModalUpdate extends Component {
     const params = {
       name: this.state.txtName,
       is_show_home: this.state.isShowHome,
+      is_show: this.state.isShow,
       banner_ads: bannerAds,
       image_url: this.state.mainImage,
     };
@@ -443,7 +446,7 @@ class ModalUpdate extends Component {
   };
 
   render() {
-    var { txtName, image, isShowHome } = this.state;
+    var { txtName, image, isShowHome, isShow } = this.state;
     var image = image == null || image == "" ? Env.IMG_NOT_FOUND : image;
     return (
       <div
@@ -505,6 +508,20 @@ class ModalUpdate extends Component {
                         checked={isShowHome}
                       />{" "}
                       Hiển thị sản phẩm ở trang chủ
+                    </label>
+                  </div>
+                  <div
+                    class="form-check"
+                    style={{ marginTop: "10px", padding: "0" }}
+                  >
+                    <label class="form-check-label">
+                      <input
+                        type="checkbox"
+                        name="even"
+                        onChange={() => this.setState({ isShow: !isShow })}
+                        checked={isShow}
+                      />{" "}
+                      Hiển thị danh mục ở trang chủ
                     </label>
                   </div>
                 </div>
