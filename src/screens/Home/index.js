@@ -134,7 +134,7 @@ const mapDispatchToProps = (dispatch, props) => {
     hideLoading: () => {
       dispatch({
         type: Types.SHOW_LOADING,
-        loading: "hide"
+        loading: "show"
       })
     },
     hideLoading_lazy: () => {

@@ -220,7 +220,6 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("State", state);
   return {
     store: state.storeReducers.store.storeID,
     auth: state.authReducers.login.authentication,

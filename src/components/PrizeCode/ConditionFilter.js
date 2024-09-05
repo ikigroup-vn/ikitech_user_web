@@ -7,6 +7,9 @@ import moment from "moment";
 import { AsyncPaginate } from "react-select-async-paginate";
 import * as productAction from "../../data/remote/product";
 import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
+import { getQueryParams } from "../../ultis/helpers";
+import { connect } from "react-redux";
+import { shallowEqual } from "../../ultis/shallowEqual";
 
 const ConditionFilterStyles = styled.div`
   display: flex;
@@ -72,8 +75,22 @@ class ConditionFilter extends Component {
     };
   }
 
+  componentDidUpdate(nextProps, prevState) {
+    if (!shallowEqual(nextProps.product, this.props.product)) {
+      const product_id = getQueryParams("product_id");
+      if (product_id) {
+        this.setState({
+          selectedProduct: {
+            label: this.props.product.name,
+            value: Number(product_id),
+            product: this.props.product,
+          },
+        });
+      }
+    }
+  }
+
   loadProducts = async (search, loadedOptions, { page }) => {
-    console.log("111");
     const branch_id = getBranchId();
     const branch_ids = getBranchIds();
     const branchIds = branch_ids ? branch_ids : branch_id;
@@ -85,7 +102,6 @@ class ConditionFilter extends Component {
       page,
       params
     );
-    console.log("res", res);
     if (res.status != 200) {
       return {
         options: [],
@@ -231,11 +247,8 @@ class ConditionFilter extends Component {
                   page: 1,
                 }}
                 debounceTimeout={500}
-                isClearable
-                isSearchable
-                styles={{
-                  
-                }}
+                isSearchable={true}
+                styles={{}}
               />
             </>
           )}
@@ -245,4 +258,17 @@ class ConditionFilter extends Component {
   }
 }
 
-export default ConditionFilter;
+const mapStateToProps = (state) => {
+  return {
+    province: state.placeReducers.province,
+    auth: state.authReducers.login.authentication,
+    products: state.productReducers.product.allProduct,
+    alert: state.discountReducers.alert.alert_uid,
+    discounts: state.discountReducers.discount.allDiscount,
+    product: state.productReducers.product.productId,
+    badge: state.badgeReducers.allBadge,
+    loading: state.loadingReducers.disable,
+  };
+};
+
+export default connect(mapStateToProps, null)(ConditionFilter);

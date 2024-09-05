@@ -62,8 +62,6 @@ export const agency = (state = initialState, action) => {
       newState.allAgencyRegisterRequest = action.data;
       return newState;
     case Types.FETCH_ALL_AGENCY_REQUEST_PAYMENT:
-      console.log("state", state);
-      console.log("action", action);
       newState.allRequestPayment = action.data;
       return newState;
     case Types.FETCH_ALL_AGENCY_HISTORY_PAYMENT:

@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import * as prizeCodeApi from "../../data/remote/prize_code";
 import getChannel from "../../ultis/channel";
 import { getQueryParams } from "../../ultis/helpers";
+import * as Types from "../../constants/ActionType";
+
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -22,7 +24,10 @@ class Pagination extends Component {
     } = this.props;
     const product_id = getQueryParams("product_id");
 
-    const params = `?page=${page || 1}&limit=${limit || 20}&search=${searchValue}&product_id=${product_id ?? ""}`;
+    const params = `?page=${page || 1}&limit=${
+      limit || 20
+    }&search=${searchValue}&product_id=${product_id ?? ""}`;
+    this.props.showLoading();
     prizeCodeApi
       .fetchAllPrizeCode(storeCode, params)
       .then((results) => {
@@ -36,7 +41,9 @@ class Pagination extends Component {
       .catch((err) => {
         console.log("error", err);
       })
-      .finally(() => {});
+      .finally(() => {
+        this.props.hideLoading();
+      });
   };
 
   showData = (links) => {
@@ -95,6 +102,19 @@ class Pagination extends Component {
 }
 
 const mapDispatchToProps = (dispatch, props) => {
-  return {};
+  return {
+    showLoading: (res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "show",
+      });
+    },
+    hideLoading: (res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+    },
+  };
 };
 export default connect(null, mapDispatchToProps)(Pagination);

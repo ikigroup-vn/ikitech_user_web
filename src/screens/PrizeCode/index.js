@@ -17,6 +17,9 @@ import { getQueryParams } from "../../ultis/helpers";
 import QRCode from "qrcode";
 import * as Types from "../../constants/ActionType";
 import Loading from "../Loading";
+import ModalMultipleDelete from "../../components/PrizeCode/ModalMultipleDelete";
+import ListProductPrizeMultiModal from "../../components/PrizeCode/ListProductPrizeMultiModal";
+import BackgroundModal from "../../components/PrizeCode/BackgroundModal";
 
 class PrizeCode extends Component {
   constructor(props) {
@@ -27,12 +30,21 @@ class PrizeCode extends Component {
       links: [],
       perPage: 20,
       currentPage: 1,
+      total: null,
       showFilter: false,
       searchValue: "",
       listProductPrize: [],
       saveListProductPrize: [],
       rowItem: {},
       isLoading: false,
+      numPage: getQueryParams("limit") || 20,
+      multi: {
+        title: "",
+        data: [],
+        store_code: "",
+      },
+      selected: [],
+      productId: null,
     };
   }
 
@@ -43,13 +55,14 @@ class PrizeCode extends Component {
     if (product_id) {
       this.props.fetchProductId(store_code, product_id);
       params = `?product_id=${product_id}`;
+      this.setState({ productId: product_id });
     }
-    this.setState({ isLoading: true });
 
     this.props.fetchPlaceProvince();
     this.props.fetchAllProduct(store_code);
     this.props.fetchAllDiscount(store_code);
     this.props.fetchAllCategoryP(store_code);
+    this.props.showLoading();
     prizeCodeApi
       .fetchAllPrizeCode(store_code, params)
       .then((res) => {
@@ -57,15 +70,26 @@ class PrizeCode extends Component {
         const links = res.data.data.links;
         const currentPage = res.data.data.current_page;
         const perPage = res.data.data.per_page;
-        this.setState({ prizeCodes: data, links: links, currentPage, perPage });
+        const total = res.data.data.total;
+        this.setState({
+          prizeCodes: data,
+          links: links,
+          currentPage,
+          perPage,
+          total,
+        });
       })
       .catch(() => {
         this.props.showError("Đã có lỗi xảy ra");
       })
       .finally(() => {
-        this.setState({ isLoading: false });
+        this.props.hideLoading();
       });
   }
+
+  handleSetSelected = (ids) => {
+    this.setState({ selected: ids });
+  };
 
   removeItemPrize = (id) => {
     this.handleAddProductPrize(null, id, "remove", true);
@@ -169,9 +193,42 @@ class PrizeCode extends Component {
     const product_id = getQueryParams("product_id");
     const params = `?search=${this.state.searchValue}&product_id=${
       product_id ?? ""
-    }`;
-    this.setState({ isLoading: true });
+    }&page=1&limit=${this.state.numPage}`;
+    this.props.showLoading();
 
+    prizeCodeApi
+      .fetchAllPrizeCode(store_code, params)
+      .then((res) => {
+        const data = res.data.data.data;
+        const links = res.data.data.links;
+        const currentPage = res.data.data.current_page;
+        const perPage = res.data.data.per_page;
+        const total = res.data.data.total;
+        this.setState({
+          prizeCodes: data,
+          links: links,
+          currentPage,
+          perPage,
+          total,
+        });
+      })
+      .catch(() => {})
+      .finally(() => {
+        this.props.hideLoading();
+      });
+  };
+
+  onChangeNumPage = (e) => {
+    var { store_code } = this.props.match.params;
+    var { searchValue, currentPage } = this.state;
+    var numPage = e.target.value;
+    this.setState({
+      numPage,
+      currentPage: 1,
+    });
+
+    this.props.showLoading();
+    const params = `?page=${currentPage}&search=${searchValue}&limit=${numPage}`;
     prizeCodeApi
       .fetchAllPrizeCode(store_code, params)
       .then((res) => {
@@ -183,7 +240,7 @@ class PrizeCode extends Component {
       })
       .catch(() => {})
       .finally(() => {
-        this.setState({ isLoading: false });
+        this.props.hideLoading();
       });
   };
 
@@ -197,6 +254,14 @@ class PrizeCode extends Component {
 
   handleSetCurrentPage = (page) => {
     this.setState({ currentPage: page });
+  };
+
+  handleSetTotal = (total) => {
+    this.setState({ total });
+  };
+
+  handleMultiDelCallBack = (multi) => {
+    this.setState({ multi: multi });
   };
 
   handleExportExcel = () => {
@@ -264,6 +329,33 @@ class PrizeCode extends Component {
                         }}
                       >
                         <button
+                          style={{
+                            border: "0px",
+                            color: "white",
+                            background: "cadetblue",
+                          }}
+                          class="btn btn-secondary btn-sm"
+                          data-toggle="modal"
+                          data-target="#backgroundModal"
+                        >
+                          <span class="icon text-white-50">
+                            <i class="fas fa-edit"></i>
+                          </span>
+                          Cập nhật backgroud
+                        </button>
+                        <button
+                          style={{ margin: "auto 0px" }}
+                          class={`btn btn-primary btn-icon-split btn-sm `}
+                          onClick={this.handleExportQr}
+                        >
+                          <span class="icon text-white-50">
+                            <i class="fas fa-download"></i>
+                          </span>
+                          <span style={{ color: "white" }} class="text">
+                            Tải xuống mã QR
+                          </span>
+                        </button>
+                        <button
                           style={{ margin: "auto 0px" }}
                           class={`btn btn-success btn-icon-split btn-sm `}
                           onClick={this.handleExportExcel}
@@ -286,46 +378,48 @@ class PrizeCode extends Component {
                         </Link>
                       </div>
                     </div>
-                    {product && Object.keys(product).length > 0 && (
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "16px",
-                          justifyContent: "space-between",
-                          marginBottom: "16px",
-                        }}
-                      >
+                    {/* {this.state.productId &&
+                      product &&
+                      Object.keys(product).length > 0 && (
                         <div
                           style={{
                             display: "flex",
                             alignItems: "center",
                             gap: "16px",
+                            justifyContent: "space-between",
+                            marginBottom: "16px",
                           }}
                         >
-                          <img
-                            src={product.images?.[0]?.image_url}
-                            width={50}
-                            height={50}
-                          />
-                          <h6>{product.name}</h6>
-                        </div>
-                        <div>
-                          <button
-                            style={{ margin: "auto 0px" }}
-                            class={`btn btn-primary btn-icon-split btn-sm `}
-                            onClick={this.handleExportQr}
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "16px",
+                            }}
                           >
-                            <span class="icon text-white-50">
-                              <i class="fas fa-file-export"></i>
-                            </span>
-                            <span style={{ color: "white" }} class="text">
-                              Tải xuống mã QR
-                            </span>
-                          </button>
+                            <img
+                              src={product.images?.[0]?.image_url}
+                              width={50}
+                              height={50}
+                            />
+                            <h6>{product.name}</h6>
+                          </div>
+                          <div>
+                            <button
+                              style={{ margin: "auto 0px" }}
+                              class={`btn btn-primary btn-icon-split btn-sm `}
+                              onClick={this.handleExportQr}
+                            >
+                              <span class="icon text-white-50">
+                                <i class="fas fa-file-export"></i>
+                              </span>
+                              <span style={{ color: "white" }} class="text">
+                                Tải xuống mã QR
+                              </span>
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )} */}
                     <div
                       style={{
                         minHeight: "600px",
@@ -357,6 +451,7 @@ class PrizeCode extends Component {
                             </div>
                           </div>
                         </form>
+
                         <div
                           className="btn-filter-search btn-primary"
                           style={{
@@ -375,17 +470,55 @@ class PrizeCode extends Component {
                           Bộ lọc
                         </div>
                       </div>
+                      <p class="total-item" id="sale_user_name">
+                        <span className="num-total_item">
+                          {this.state.total ?? "_"}&nbsp;
+                        </span>
+                        <span className="text-total_item" id="user_name">
+                          mã dự thưởng
+                        </span>
+                      </p>
 
-                      {this.state.isLoading ? (
-                        <Loading />
-                      ) : (
-                        <div>
-                          <Table
-                            prizeCodes={this.state.prizeCodes}
-                            currentPage={this.state.currentPage}
-                            perPage={this.state.perPage}
-                            handleGetRowItem={this.handleGetRowItem}
-                          />
+                      <div>
+                        <Table
+                          prizeCodes={this.state.prizeCodes}
+                          currentPage={this.state.currentPage}
+                          perPage={this.state.perPage}
+                          handleGetRowItem={this.handleGetRowItem}
+                          handleMultiDelCallBack={this.handleMultiDelCallBack}
+                          handleSetSelected={this.handleSetSelected}
+                          store_code={store_code}
+                          selected={this.state.selected}
+                          resetSelected={this.resetSelected}
+                        />
+                        <div style={{ display: "flex", justifyContent: "end" }}>
+                          <div style={{ display: "flex" }}>
+                            <span
+                              style={{
+                                margin: "20px 10px auto auto",
+                              }}
+                            >
+                              Hiển thị
+                            </span>
+                            <select
+                              style={{
+                                margin: "auto",
+                                marginTop: "10px",
+                                marginRight: "20px",
+                                width: "70px",
+                              }}
+                              onChange={this.onChangeNumPage}
+                              value={this.state.numPage}
+                              name="numPage"
+                              class="form-control"
+                            >
+                              <option value="10">10</option>
+                              <option value="20" selected>
+                                20
+                              </option>
+                              <option value="50">50</option>
+                            </select>
+                          </div>
                           <Pagination
                             storeCode={store_code}
                             links={this.state.links}
@@ -394,7 +527,7 @@ class PrizeCode extends Component {
                             onSetCurrentPage={this.handleSetCurrentPage}
                           />
                         </div>
-                      )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -403,6 +536,7 @@ class PrizeCode extends Component {
           </div>
         </div>
         {/* <CreateModal /> */}
+        {this.props.loading === "show" && <Loading />}
         <SidebarFilterPrizeCode
           showFilterSearch={this.state.showFilter}
           setShowFilterSearch={() => {
@@ -414,6 +548,11 @@ class PrizeCode extends Component {
           onSetPrizeCode={this.handleSetPrizeCodes}
           onSetCurrentPage={this.handleSetCurrentPage}
           searchValue={this.state.searchValue}
+          product={this.props.product}
+          showMsg={this.props.showMsg}
+          showError={this.props.showError}
+          showLoading={this.props.showLoading}
+          hideLoading={this.props.hideLoading}
         ></SidebarFilterPrizeCode>
         <ListProductPrizeModal
           onSaveProduct={this.handleSaveListProductPrize}
@@ -434,6 +573,47 @@ class PrizeCode extends Component {
             this.setState({ isLoading: loading });
           }}
         />
+        <ListProductPrizeMultiModal
+          onSaveProduct={this.handleSaveListProductPrize}
+          discounts={this.props.discounts}
+          handleAddProduct={this.handleAddProductPrize}
+          listProducts={this.state.listProductPrize}
+          store_code={store_code}
+          products={this.props.products}
+          setListProducts={this.handleListProductPrize}
+          rowItem={this.state.rowItem}
+          onSetLinks={this.handleSetLinks}
+          onSetPrizeCode={this.handleSetPrizeCodes}
+          onSetCurrentPage={this.handleSetCurrentPage}
+          prizeCodes={this.state.prizeCodes}
+          showMsg={this.props.showMsg}
+          showError={this.props.showError}
+          setLoading={(loading) => {
+            this.setState({ isLoading: loading });
+          }}
+          selected={this.state.selected}
+          handleSetSelected={this.handleSetSelected}
+          page={this.state.currentPage}
+          limit={this.state.numPage}
+          searchValue={this.state.searchValue}
+        />
+        <ModalMultipleDelete
+          multi={this.state.multi}
+          page={this.state.currentPage}
+          limit={this.state.numPage}
+          searchValue={this.state.searchValue}
+          showMsg={this.props.showMsg}
+          showError={this.props.showError}
+          showLoading={this.props.showLoading}
+          hideLoading={this.props.hideLoading}
+          selected={this.state.selected}
+          onSetLinks={this.handleSetLinks}
+          onSetPrizeCode={this.handleSetPrizeCodes}
+          onSetCurrentPage={this.handleSetCurrentPage}
+          prizeCodes={this.state.prizeCodes}
+          handleSetSelected={this.handleSetSelected}
+        />
+        <BackgroundModal store_code={store_code} />
       </div>
     );
   }
@@ -448,6 +628,7 @@ const mapStateToProps = (state) => {
     discounts: state.discountReducers.discount.allDiscount,
     product: state.productReducers.product.productId,
     badge: state.badgeReducers.allBadge,
+    loading: state.loadingReducers.disable,
   };
 };
 
@@ -501,7 +682,7 @@ const mapDispatchToProps = (dispatch, props) => {
           type: "success",
           title: "Thành công ",
           disable: "show",
-          content: res.data.msg,
+          content: res?.data?.msg || "Thành công",
         },
       });
     },

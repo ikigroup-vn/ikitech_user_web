@@ -18,7 +18,7 @@ const SearchDataStyles = styled.div`
     margin-right: 20px;
   }
 `;
-class ListProductPrizeModal extends Component {
+class ListProductPrizeMultiModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -253,6 +253,7 @@ class ListProductPrizeModal extends Component {
         });
         this.props.onSetPrizeCode(updatedPrizeCode);
         this.props.showMsg(res);
+        window.$(".modal").modal("hide");
       })
       .catch(() => {
         this.props.showMsg("Cập nhật thất bại");
@@ -260,7 +261,6 @@ class ListProductPrizeModal extends Component {
       .finally(() => {
         this.props.hideLoading();
       });
-    window.$(".modal").modal("hide");
   };
 
   getNameSelected() {
@@ -367,24 +367,37 @@ class ListProductPrizeModal extends Component {
 
   handleProduct = (id, checked) => {
     const { store_code } = this.props;
-
+    const {
+      storeCode,
+      limit,
+      searchValue = "",
+      page,
+      onSetPrizeCode,
+      onSetLinks,
+      onSetCurrentPage,
+    } = this.props;
     const newData = {
-      ...this.props.rowItem,
+      // ...this.props.rowItem,
       prize_product_id: checked ? null : id,
+      prize_code_ids: this.props.selected,
+      page,
+      searchValue,
+      limit,
     };
     this.props.showLoading();
+
     prizeCodeApi
-      .updatePrizeCode(store_code, newData, this.props.rowItem.id)
-      .then((res) => {
-        const data = res.data.data;
-        const updatedPrizeCode = this.props.prizeCodes.map((prizeCode) => {
-          if (prizeCode.id === this.props?.rowItem?.id) {
-            return data;
-          }
-          return prizeCode;
-        });
-        this.props.showMsg(res);
-        this.props.onSetPrizeCode(updatedPrizeCode);
+      .updateMultiProductPrizeCode(store_code, newData)
+      .then((results) => {
+        const data = results.data.data.data;
+        const links = results.data.data.links;
+        const currentPage = results.data.data.current_page;
+        onSetCurrentPage(currentPage);
+        onSetPrizeCode(data);
+        onSetLinks(links);
+        this.props.handleSetSelected([]);
+        this.props.showMsg(results);
+        // this.props.onSetPrizeCode(updatedPrizeCode);
       })
       .catch(() => {
         this.props.showMsg("Cập nhật thất bại");
@@ -602,7 +615,7 @@ class ListProductPrizeModal extends Component {
         class="modal fade"
         tabindex="-1"
         role="dialog"
-        id="listProductPrizeModal"
+        id="listProductPrizeMultiModal"
         data-keyboard="false"
         data-backdrop="static"
       >
@@ -908,4 +921,4 @@ const mapDispatchToProps = (dispatch, props) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ListProductPrizeModal);
+)(ListProductPrizeMultiModal);

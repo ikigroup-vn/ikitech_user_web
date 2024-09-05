@@ -7,8 +7,10 @@ import * as Types from "../../constants/ActionType";
 import { expressions } from "../../ultis/groupCustomer/expressions";
 import { genders } from "../../ultis/groupCustomer/genders";
 import moment from "moment";
-import { formatNumberV2 } from "../../ultis/helpers";
+import { formatNumberV2, getQueryParams } from "../../ultis/helpers";
 import * as prizeCodeApi from "../../data/remote/prize_code";
+import * as productAction from "../../data/remote/product";
+import history from "../../history";
 
 const options = [
   {
@@ -107,11 +109,11 @@ class SidebarFilterPrizeCode extends Component {
     super(props);
     this.state = {
       optionsFilter: [
-        {
-          type_compare: "0",
-          comparison_expression: expressions[2].value,
-          value_compare: "Mã trắng",
-        },
+        // {
+        //   type_compare: "0",
+        //   comparison_expression: expressions[2].value,
+        //   value_compare: "Mã trắng",
+        // },
       ],
       showDropdownOptions: false,
     };
@@ -119,7 +121,31 @@ class SidebarFilterPrizeCode extends Component {
 
   componentDidMount = () => {
     window.addEventListener("click", this.handleClickOutsideDropdown);
-
+    const product_id = getQueryParams("product_id");
+    if (product_id) {
+      const filter = {
+        type_compare: 2,
+        comparison_expression: expressions[2].value,
+        value_compare: Number(product_id),
+      };
+      const newOptionsFilter = JSON.parse(
+        localStorage.getItem("optionsFilterPrizeCode")
+      )
+        ? JSON.parse(localStorage.getItem("optionsFilterPrizeCode"))
+        : this.state.optionsFilter;
+      const isFilterExist = newOptionsFilter.some(
+        (item) =>
+          item.type_compare == filter.type_compare &&
+          item.comparison_expression == filter.comparison_expression &&
+          item.value_compare == filter.value_compare
+      );
+      if (!isFilterExist) {
+        this.setState({
+          optionsFilter: [...newOptionsFilter, filter],
+        });
+      }
+      return;
+    }
     const newOptionsFilter = JSON.parse(
       localStorage.getItem("optionsFilterPrizeCode")
     )
@@ -146,12 +172,8 @@ class SidebarFilterPrizeCode extends Component {
     this.setState({ showDropdownOptions });
   }
   handleChangeInputFilterSearch = (e, indexCondition) => {
-    console.log("e", e);
-    console.log("indexCondition", indexCondition);
     const name = e.target.name;
     const value = e.target.value;
-    console.log("name", name);
-    console.log("value", value);
 
     const type_compare = Number(value);
     const comparison_expression = expressions.find(
@@ -216,6 +238,18 @@ class SidebarFilterPrizeCode extends Component {
     var params = `?search=${searchValue}&json_list_filter=${encodeURIComponent(
       JSON.stringify(newOptionFilter)
     )}`;
+
+    const objectWithTypeCompareTwo = newOptionFilter.find(
+      (option) => option.type_compare == 2
+    );
+    if (!objectWithTypeCompareTwo) {
+      history.push("/prize_codes/index/hqgano");
+    } else {
+      history.push(
+        `/prize_codes/index/hqgano?product_id=${objectWithTypeCompareTwo.value_compare}`
+      );
+    }
+    this.props.showLoading();
     // Call api
     prizeCodeApi
       .fetchAllPrizeCode(store_code, params)
@@ -226,6 +260,7 @@ class SidebarFilterPrizeCode extends Component {
         onSetCurrentPage(currentPage);
         onSetPrizeCode(data);
         onSetLinks(links);
+        this.props.hideLoading();
       })
       .catch(() => {});
     localStorage.setItem(

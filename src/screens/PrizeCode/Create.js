@@ -63,7 +63,7 @@ class CreatePrizeCode extends Component {
   };
 
   removeItem = (id) => {
-    this.handleAddProduct(null, id, "remove", true);
+    this.handleAddProduct(this.state.listProduct, id, "remove", true);
   };
 
   handleListProduct = (products) => {
@@ -85,8 +85,21 @@ class CreatePrizeCode extends Component {
   handleAddProduct = (product, id, type, onSave = null) => {
     var products = [...this.state.listProduct];
     products = [product];
+    console.log("product", product);
+    console.log("id", id);
+    console.log("type", type);
+    console.log("onSave", onSave);
+    if (type == "remove") {
+      if (products.length > 0) {
+        products.forEach((item, index) => {
+          if (item.id === id) {
+            products.splice(index, 1);
+          }
+        });
+      }
+    }
 
-    if (onSave == true)
+    if (onSave == true && type !== "remove")
       this.setState({
         listProduct: products,
         saveListProduct: products,
@@ -95,7 +108,7 @@ class CreatePrizeCode extends Component {
           product_id: products[0].id,
         },
       });
-    else this.setState({ listProduct: products });
+    else this.setState({ listProduct: products, saveListProduct: [] });
   };
 
   showListProduct = (products) => {
@@ -117,7 +130,7 @@ class CreatePrizeCode extends Component {
                 type="button"
                 class="btn btn-danger btn-sm"
                 onClick={() => {
-                  document.querySelector("#inputCheckAll").checked = false;
+                  // document.querySelector("#inputCheckAll").checked = false;
                   this.removeItem(data.id);
                 }}
               >
@@ -145,7 +158,9 @@ class CreatePrizeCode extends Component {
 
     prizeCodeApi
       .createPrizeCode(store_code, form)
-      .then((res) => {})
+      .then((res) => {
+        this.props.history.goBack();
+      })
       .catch(() => {});
   };
 
