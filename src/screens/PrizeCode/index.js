@@ -525,6 +525,7 @@ class PrizeCode extends Component {
                             onSetLinks={this.handleSetLinks}
                             onSetPrizeCode={this.handleSetPrizeCodes}
                             onSetCurrentPage={this.handleSetCurrentPage}
+                            numPage={this.state.numPage}
                           />
                         </div>
                       </div>

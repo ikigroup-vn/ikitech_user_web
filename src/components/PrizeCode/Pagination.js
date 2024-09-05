@@ -21,11 +21,12 @@ class Pagination extends Component {
       onSetPrizeCode,
       onSetLinks,
       onSetCurrentPage,
+      numPage,
     } = this.props;
     const product_id = getQueryParams("product_id");
 
     const params = `?page=${page || 1}&limit=${
-      limit || 20
+      numPage || 20
     }&search=${searchValue}&product_id=${product_id ?? ""}`;
     this.props.showLoading();
     prizeCodeApi

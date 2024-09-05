@@ -77,6 +77,7 @@ class InfoProduct extends Component {
       is_medicine: false,
       start_prize_code: null,
       end_prize_code: null,
+      isLoading: false,
     };
   }
   handleChangeCheckParent(id) {
@@ -392,6 +393,7 @@ class InfoProduct extends Component {
         is_medicine: product.is_medicine,
         start_prize_code: product.start_prize_code,
         end_prize_code: product.end_prize_code,
+        isLoading: true,
       });
 
       this.props.checkDistribute(checkHasDistribute, product.check_inventory);
@@ -641,9 +643,13 @@ class InfoProduct extends Component {
       start_prize_code,
       end_prize_code,
     } = this.state;
-    
-    console.log("222", start_prize_code, end_prize_code);
 
+    console.log("222", start_prize_code, end_prize_code);
+    console.log(
+      "333",
+      !start_prize_code ? "" : moment(start_prize_code, "DD-MM-YYYY HH:mm")
+    );
+    console.log("this.state.isLoading", this.state.isLoading);
     var txtQuantityInStock = txtQuantityInStock == -1 ? "" : txtQuantityInStock;
     var { isCopy } = this.props;
     return (
@@ -1229,51 +1235,57 @@ class InfoProduct extends Component {
         </div>
         <div class="form-group">
           <label for="product_name">Ngày bắt đầu mã dự thưởng</label>
-          <MomentInput
-            defaultValue={
-              !start_prize_code
-                ? ""
-                : moment(start_prize_code, "DD-MM-YYYY HH:mm")
-            }
-            min={moment()}
-            format="DD-MM-YYYY HH:mm"
-            options={true}
-            enableInputClick={true}
-            monthSelect={true}
-            readOnly={true}
-            translations={{
-              DATE: "Ngày",
-              TIME: "Giờ",
-              SAVE: "Đóng",
-              HOURS: "Giờ",
-              MINUTES: "Phút",
-            }}
-            onSave={() => {}}
-            onChange={this.onChangeStartTime}
-          />
+          {this.state.isLoading ? (
+            <MomentInput
+              defaultValue={
+                !start_prize_code
+                  ? ""
+                  : moment(start_prize_code, "DD-MM-YYYY HH:mm")
+              }
+              min={moment()}
+              format="DD-MM-YYYY HH:mm"
+              options={true}
+              enableInputClick={true}
+              monthSelect={true}
+              readOnly={true}
+              translations={{
+                DATE: "Ngày",
+                TIME: "Giờ",
+                SAVE: "Đóng",
+                HOURS: "Giờ",
+                MINUTES: "Phút",
+              }}
+              onSave={() => {}}
+              onChange={this.onChangeStartTime}
+            />
+          ) : null}
         </div>
         <div class="form-group">
           <label for="product_name">Ngày kết thúc mã dự thưởng</label>
-          <MomentInput
-            min={moment()}
-            format="DD-MM-YYYY HH:mm"
-            options={true}
-            enableInputClick={true}
-            monthSelect={true}
-            readOnly={true}
-            translations={{
-              DATE: "Ngày",
-              TIME: "Giờ",
-              SAVE: "Đóng",
-              HOURS: "Giờ",
-              MINUTES: "Phút",
-            }}
-            onSave={() => {}}
-            onChange={this.onChangeEndTime}
-            defaultValue={
-              !end_prize_code ? "" : moment(end_prize_code, "DD-MM-YYYY HH:mm")
-            }
-          />
+          {this.state.isLoading ? (
+            <MomentInput
+              min={moment()}
+              format="DD-MM-YYYY HH:mm"
+              options={true}
+              enableInputClick={true}
+              monthSelect={true}
+              readOnly={true}
+              translations={{
+                DATE: "Ngày",
+                TIME: "Giờ",
+                SAVE: "Đóng",
+                HOURS: "Giờ",
+                MINUTES: "Phút",
+              }}
+              onSave={() => {}}
+              onChange={this.onChangeEndTime}
+              defaultValue={
+                !end_prize_code
+                  ? ""
+                  : moment(end_prize_code, "DD-MM-YYYY HH:mm")
+              }
+            />
+          ) : null}
         </div>
       </InfoProductStyles>
     );
