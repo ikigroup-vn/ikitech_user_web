@@ -78,7 +78,7 @@ class Pagination extends Component {
       categorySelected,
       categoryChildSelected
     );
-    this.props.fetchAllProductV2(store_code, branch_id, page, params);
+    this.props.fetchAllProductV2(store_code, branch_id, page, params + `&check_inventory=true`);
   };
 
   showData = (links) => {
