@@ -1,7 +1,7 @@
 import { Component } from "react";
 import styled from "styled-components";
 import themeData from "../../ultis/theme_data";
-import SidebarFilter from "../Partials/SidebarFilter";
+import SidebarFilter from "./SidebarFilter";
 import ConditionFilter from "./ConditionFilter";
 import * as Types from "../../constants/ActionType";
 import { expressions } from "../../ultis/groupCustomer/expressions";
