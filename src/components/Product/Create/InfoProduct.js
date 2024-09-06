@@ -545,7 +545,7 @@ class InfoProduct extends Component {
   };
 
   onChangeStartTime = (e) => {
-    const time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
+    const time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm:ss");
 
     this.setState({
       ...this.state,
@@ -554,7 +554,7 @@ class InfoProduct extends Component {
   };
 
   onChangeEndTime = (e) => {
-    const time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
+    const time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm:ss");
 
     this.setState({
       ...this.state,
