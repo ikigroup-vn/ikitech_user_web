@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 import * as productAction from "../../actions/product";
 import { getBranchId } from "../../ultis/branchUtils";
+import { getQueryParams } from "../../ultis/helpers";
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +12,56 @@ class Pagination extends Component {
     };
   }
 
+  getParams = (search, limit, categories, categories_child) => {
+    var params = ``;
+    if (search != "" && search != null) {
+      params = params + `&search=${search}`;
+    }
+    if (limit != "" && limit != null) {
+      params = params + `&limit=${limit}`;
+    }
+    if (categories !== "" && categories !== null && categories?.length > 0) {
+      const newCategorySelected = categories.reduce(
+        (prevCategory, currentCategory, index) => {
+          return (
+            prevCategory +
+            `${
+              index === categories.length - 1
+                ? currentCategory?.id
+                : `${currentCategory?.id},`
+            }`
+          );
+        },
+        "&category_ids="
+      );
+
+      params += newCategorySelected;
+    }
+    if (
+      categories_child !== "" &&
+      categories_child !== null &&
+      categories_child?.length > 0
+    ) {
+      const newCategoryChildSelected = categories_child.reduce(
+        (prevCategory, currentCategory, index) => {
+          return (
+            prevCategory +
+            `${
+              index === categories_child.length - 1
+                ? currentCategory?.id
+                : `${currentCategory?.id},`
+            }`
+          );
+        },
+        "&category_children_ids="
+      );
+
+      params += newCategoryChildSelected;
+    }
+
+    return params;
+  };
+
   passPagination = (page) => {
     var {
       store_code,
@@ -18,10 +69,10 @@ class Pagination extends Component {
       searchValue,
       categorySelected,
       categoryChildSelected,
-      getParams,
+      // getParams,
     } = this.props;
     const branch_id = getBranchId();
-    const params = getParams(
+    const params = this.getParams(
       searchValue,
       numPage,
       categorySelected,
