@@ -11,6 +11,7 @@ import { formatNumberV2, getQueryParams } from "../../ultis/helpers";
 import * as prizeCodeApi from "../../data/remote/prize_code";
 import * as productAction from "../../data/remote/product";
 import history from "../../history";
+import './style.css';
 
 const options = [
   {

@@ -47,9 +47,9 @@ class SidebarFilter extends Component {
       <SidebarFilterStyles
         className="sidebar-filter"
         style={{
-          transform: !this.props.showSidebar
-            ? "translateX(100%)"
-            : "translateX(0)",
+          display: !this.props.showSidebar
+            ? "none"
+            : "block",
           width: widthSideBar !== undefined ? widthSideBar : "500px",
         }}
       >

@@ -69,7 +69,8 @@ const OverviewStyles = styled.div`
     border: 1px solid red;
     border-radius: 8px;
     align-items: center;
-    padding: 40px img {
+    padding: 40px;
+    img {
       width: 100%;
       height: 100%;
       border-radius: 6px;

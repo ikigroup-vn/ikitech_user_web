@@ -10,6 +10,7 @@ import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 import { getQueryParams } from "../../ultis/helpers";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../ultis/shallowEqual";
+import './style.css';
 
 const ConditionFilterStyles = styled.div`
   display: flex;

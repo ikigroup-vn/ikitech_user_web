@@ -694,7 +694,7 @@ class ProductCreate extends Component {
         </div>
         <br></br>
         <div class="card mb-4">
-          <div class="card-header title_content">Nhập thông tin sản phẩm</div>
+          <div class="card-header title_content">Nhập thông tin sản phẩm111</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-lg-8">

@@ -75,8 +75,8 @@ class InfoProduct extends Component {
       point_for_agency: 0,
       txtPosition: "",
       is_medicine: false,
-      start_prize_code: null,
-      end_prize_code: null,
+      start_prize_code: "",
+      end_prize_code: "",
       isLoading: false,
     };
   }
@@ -598,7 +598,7 @@ class InfoProduct extends Component {
   };
 
   onChangeStartTime = (e) => {
-    const time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
+    const time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm:ss");
 
     this.setState({
       ...this.state,
@@ -607,7 +607,7 @@ class InfoProduct extends Component {
   };
 
   onChangeEndTime = (e) => {
-    const time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
+    const time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm:ss");
 
     this.setState({
       ...this.state,
@@ -1238,9 +1238,9 @@ class InfoProduct extends Component {
           {this.state.isLoading ? (
             <MomentInput
               defaultValue={
-                !start_prize_code
+                start_prize_code == "" || start_prize_code == null
                   ? ""
-                  : moment(start_prize_code, "DD-MM-YYYY HH:mm")
+                  : moment(start_prize_code)
               }
               min={moment()}
               format="DD-MM-YYYY HH:mm"
@@ -1280,9 +1280,9 @@ class InfoProduct extends Component {
               onSave={() => {}}
               onChange={this.onChangeEndTime}
               defaultValue={
-                !end_prize_code
+                end_prize_code == "" || end_prize_code == null
                   ? ""
-                  : moment(end_prize_code, "DD-MM-YYYY HH:mm")
+                  : moment(end_prize_code)
               }
             />
           ) : null}
