@@ -270,3 +270,50 @@
   font-size: 24px;
   color: #2d3436;
 }
+
+.sidebar__conditions__add {
+  position: relative;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.sidebar__conditions__add > div {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid rgb(218, 218, 225);
+  color: #2d3436;
+  cursor: pointer;
+}
+
+.sidebar__conditions__add > div span {
+  transition: all 0.5s;
+}
+
+.sidebar__conditions__add > div span:hover {
+  color: rgb(127, 140, 141);
+}
+
+.sidebar__conditions__add span:last-child {
+  margin-left: 5px;
+}
+
+.sidebar__conditions__btn {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.sidebar__conditions__btn button {
+  width: 120px;
+  padding: 6px 0;
+  border-radius: 6px;
+  outline: none;
+  border: 1px solid transparent;
+  color: white;
+  font-weight: 600;
+  transition: all 0.5s;
+}
+
+.sidebar__conditions__btn button:hover {
+  transform: scale(1.05);
+}
