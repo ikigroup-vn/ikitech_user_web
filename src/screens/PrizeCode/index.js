@@ -551,6 +551,7 @@ class PrizeCode extends Component {
             showError={this.props.showError}
             showLoading={this.props.showLoading}
             hideLoading={this.props.hideLoading}
+            handleSetTotal={this.handleSetTotal}
           ></SidebarFilterPrizeCode>
         </div>
         {/* <CreateModal /> */}

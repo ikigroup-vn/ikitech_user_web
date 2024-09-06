@@ -317,3 +317,14 @@
 .sidebar__conditions__btn button:hover {
   transform: scale(1.05);
 }
+
+.search-data-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.categories__content {
+  margin-right: 20px;
+}

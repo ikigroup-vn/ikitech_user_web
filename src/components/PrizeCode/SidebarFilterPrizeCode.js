@@ -179,9 +179,9 @@ class SidebarFilterPrizeCode extends Component {
     const type_compare = Number(value);
     const comparison_expression = expressions.find(
       (expression) =>
-        expression.id === (type_compare === 0 || type_compare === 2 ? 2 : 0)
+        expression.id === (type_compare === 0 || type_compare === 2 || type_compare === 3 ? 2 : 0)
     ).value;
-
+    console.log("comparison_expression", comparison_expression);
     //Handle change condition input,select
     const newOptionsFilter = this.state.optionsFilter.map((option, index) => {
       if (index === indexCondition) {
@@ -226,6 +226,7 @@ class SidebarFilterPrizeCode extends Component {
       onSetLinks,
       onSetPrizeCode,
       onSetCurrentPage,
+      handleSetTotal
     } = this.props;
 
     const newOptionFilter = [];
@@ -261,6 +262,7 @@ class SidebarFilterPrizeCode extends Component {
         onSetCurrentPage(currentPage);
         onSetPrizeCode(data);
         onSetLinks(links);
+        handleSetTotal(res.data.data.total)
         this.props.hideLoading();
       })
       .catch(() => {});

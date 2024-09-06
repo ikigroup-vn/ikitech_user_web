@@ -124,6 +124,7 @@ class ConditionFilter extends Component {
 
   render() {
     const { indexOption, province, optionsFilter } = this.props;
+    console.log("optionsFilter", optionsFilter);
     return (
       <ConditionFilterStyles className="sidebar__conditions__dropdown__content">
         <div className="sidebar__conditions__dropdown__expression">
@@ -219,7 +220,7 @@ class ConditionFilter extends Component {
             >
               {province.length > 0 &&
                 province.map((province, index) => (
-                  <option key={province.id} value={province.id}>
+                  <option key={province.id} value={province.name}>
                     {province.name}
                   </option>
                 ))}

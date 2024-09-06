@@ -8,15 +8,16 @@ import { contactOrNumber, format } from "../../ultis/helpers";
 import themeData from "../../ultis/theme_data";
 import * as prizeCodeApi from "../../data/remote/prize_code";
 import * as Types from "../../constants/ActionType";
+import './style.css';
 
 const ListProductStyles = styled.tr``;
 const SearchDataStyles = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  .categories__content {
-    margin-right: 20px;
-  }
+  // display: flex;
+  // justify-content: space-between;
+  // align-items: center;
+  // .categories__content {
+  //   margin-right: 20px;
+  // }
 `;
 class ListProductPrizeMultiModal extends Component {
   constructor(props) {
@@ -639,8 +640,8 @@ class ListProductPrizeMultiModal extends Component {
               </button>
             </div>
 
-            <SearchDataStyles>
-              <form style={{ marginTop: "10px" }} onSubmit={this.searchData}>
+            <SearchDataStyles  className="search-data-wrapper">
+              <form  onSubmit={this.searchData}>
                 <div class="input-group mb-6" style={{ padding: "0 20px" }}>
                   <input
                     style={{ maxWidth: "280px", minWidth: "150px" }}
