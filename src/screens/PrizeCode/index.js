@@ -535,26 +535,27 @@ class PrizeCode extends Component {
               ) : null}
             </div>
           </div>
+          <SidebarFilterPrizeCode
+            showFilterSearch={this.state.showFilter}
+            setShowFilterSearch={() => {
+              this.setState({ showFilter: !this.state.showFilter });
+            }}
+            store_code={store_code}
+            province={this.props.province}
+            onSetLinks={this.handleSetLinks}
+            onSetPrizeCode={this.handleSetPrizeCodes}
+            onSetCurrentPage={this.handleSetCurrentPage}
+            searchValue={this.state.searchValue}
+            product={this.props.product}
+            showMsg={this.props.showMsg}
+            showError={this.props.showError}
+            showLoading={this.props.showLoading}
+            hideLoading={this.props.hideLoading}
+          ></SidebarFilterPrizeCode>
         </div>
         {/* <CreateModal /> */}
         {this.props.loading === "show" && <Loading />}
-        <SidebarFilterPrizeCode
-          showFilterSearch={this.state.showFilter}
-          setShowFilterSearch={() => {
-            this.setState({ showFilter: !this.state.showFilter });
-          }}
-          store_code={store_code}
-          province={this.props.province}
-          onSetLinks={this.handleSetLinks}
-          onSetPrizeCode={this.handleSetPrizeCodes}
-          onSetCurrentPage={this.handleSetCurrentPage}
-          searchValue={this.state.searchValue}
-          product={this.props.product}
-          showMsg={this.props.showMsg}
-          showError={this.props.showError}
-          showLoading={this.props.showLoading}
-          hideLoading={this.props.hideLoading}
-        ></SidebarFilterPrizeCode>
+
         <ListProductPrizeModal
           onSaveProduct={this.handleSaveListProductPrize}
           discounts={this.props.discounts}
