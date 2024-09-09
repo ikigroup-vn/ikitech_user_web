@@ -878,13 +878,13 @@ class ListProductPrizeMultiModal extends Component {
                 >
                   Hủy
                 </button>
-                <button
+                {/* <button
                   style={{ backgroundColor: themeData().backgroundColor }}
                   onClick={this.onSaveProduct}
                   class="btn btn-info"
                 >
                   Xác nhận
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

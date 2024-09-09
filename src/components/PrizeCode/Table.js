@@ -73,6 +73,8 @@ class Table extends Component {
   };
 
   showData = (data, perPage, currentPage) => {
+    var { store_code } = this.props;
+    
     return data.map((item, index) => {
       var checked = this.checkSelected(item.id);
       return (
@@ -90,6 +92,7 @@ class Table extends Component {
           <td>{perPage * (currentPage - 1) + (index + 1)}</td>
           <td>{item.code}</td>
           <td>{item.phone_number}</td>
+          <td>{item.name ?? ""}</td>
           <td>{item.province}</td>
           <td>
             {item.latitude && item.longitude && (
@@ -103,7 +106,15 @@ class Table extends Component {
           </td>
           <td>{item?.product?.name}</td>
           <td>{item?.product_prize?.name}</td>
-          <td>{item?.customer?.name ?? ""}</td>
+          <td>
+            {item.customer && (
+              <a
+                href={`/customer/detail/${store_code}/${item?.customer_id}?page=1&search=`}
+              >
+                {item?.customer?.name ?? ""}
+              </a>
+            )}
+          </td>
           <td>
             <button
               class="btn btn-primary"
@@ -210,6 +221,7 @@ class Table extends Component {
               <th>STT</th>
               <th>Mã dự thưởng</th>
               <th>SĐT</th>
+              <th>Tên</th>
               <th>Tỉnh</th>
               <th>Vị trí</th>
               <th>Sản phẩm</th>

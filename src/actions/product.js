@@ -10,7 +10,7 @@ import { getBranchId, getBranchIds } from "../ultis/branchUtils";
 import * as prizeCodeApi from "../data/remote/prize_code";
 import ExcelJS from "exceljs";
 
-export const exportAllPrizeCodes = (store_code) => {
+export const exportAllPrizeCodes = (store_code, params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -18,7 +18,7 @@ export const exportAllPrizeCodes = (store_code) => {
     });
 
     prizeCodeApi
-      .fetchAllPrizeCode(store_code, `?limit=10000000`)
+      .fetchAllPrizeCode(store_code, params)
       .then(async (res) => {
         dispatch({
           type: Types.SHOW_LOADING,

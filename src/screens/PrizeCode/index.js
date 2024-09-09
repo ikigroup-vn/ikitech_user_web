@@ -265,8 +265,27 @@ class PrizeCode extends Component {
   };
 
   handleExportExcel = () => {
+    const optionsFilter = JSON.parse(
+      localStorage.getItem("optionsFilterPrizeCode")
+    )
+      ? JSON.parse(localStorage.getItem("optionsFilterPrizeCode"))
+      : [];
+
+    const newOptionFilter = [];
+    optionsFilter.forEach((option) => {
+      newOptionFilter.push({
+        type_compare: option.type_compare,
+        comparison_expression: option.comparison_expression,
+        value_compare: option.value_compare.toString().replace(/\./g, ""),
+      });
+    });
+    const params = `?search=${
+      this.state.searchValue
+    }&limit=10000000&json_list_filter=${encodeURIComponent(
+      JSON.stringify(newOptionFilter)
+    )}`;
     const { store_code } = this.props.match.params;
-    this.props.exportAllPrizeCodes(store_code);
+    this.props.exportAllPrizeCodes(store_code, params);
   };
 
   handleGetRowItem = (data) => {
@@ -274,21 +293,14 @@ class PrizeCode extends Component {
   };
 
   handleExportQr = () => {
-    const qrUrl = `${this.props.badge.domain_customer}/prize-code`;
+    const qrUrl = `${process.env.PUBLIC_URL}/images/qrcode-hqgano.jpg`;
 
-    QRCode.toDataURL(qrUrl, { type: "image/jpeg", width: 300 }, (err, url) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "qrcode.jpg";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
+    const link = document.createElement("a");
+    link.href = qrUrl;
+    link.download = "qrcode.jpg";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   render() {
@@ -333,15 +345,18 @@ class PrizeCode extends Component {
                             border: "0px",
                             color: "white",
                             background: "cadetblue",
+                            margin: "auto 0px",
                           }}
-                          class="btn btn-secondary btn-sm"
+                          class="btn btn-secondary btn-sm btn-icon-split"
                           data-toggle="modal"
                           data-target="#backgroundModal"
                         >
                           <span class="icon text-white-50">
                             <i class="fas fa-edit"></i>
                           </span>
-                          Cập nhật backgroud
+                          <span style={{ color: "white" }} class="text">
+                            Cập nhật backgroud
+                          </span>
                         </button>
                         <button
                           style={{ margin: "auto 0px" }}
@@ -640,8 +655,8 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchPlaceProvince: () => {
       dispatch(placeAction.fetchPlaceProvince());
     },
-    exportAllPrizeCodes: (store_code) => {
-      dispatch(productAction.exportAllPrizeCodes(store_code));
+    exportAllPrizeCodes: (store_code, params) => {
+      dispatch(productAction.exportAllPrizeCodes(store_code, params));
     },
     fetchAllProduct: (store_code) => {
       dispatch(productAction.fetchAllProduct(store_code));
