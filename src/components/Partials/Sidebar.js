@@ -569,6 +569,9 @@ class Sidebar extends Component {
             <div class="sidebar-brand-icon ">
               <img
                 width="80%"
+                style={{
+                  borderRadius: "13%",
+                }}
                 src={
                   badges?.config_user_vip?.url_logo_small_image != null
                     ? badges?.config_user_vip?.url_logo_small_image
