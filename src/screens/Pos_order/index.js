@@ -573,6 +573,18 @@ class PostOrder extends Component {
     var { oneCart } = this.props;
     var { allowAutoPrint } = this.props;
     const { weight, length, width, height } = this.state;
+    if(!oneCart?.address_detail && !this.state?.oneCart?.address_detail) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập địa chỉ chi tiết",
+        },
+      });
+      return;
+    }
     if (getChannel() == IKITECH) {
       if (
         this.state.oneCart?.total_shipping_fee > 0 ||
