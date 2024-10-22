@@ -75,7 +75,8 @@ export const exportTopten = (store_code, page, params, report_type) => {
                     balance: item.balance,
                     orders_count: item.orders_count,
                     sum_share_agency: item.sum_share_agency,
-                    total_after_discount_no_bonus: item.total_after_discount_no_bonus,
+                    total_after_discount_no_bonus:
+                      item.total_after_discount_no_bonus,
                   };
                 }
                 Object.entries(arangeKeyItem).forEach(([key, value], index) => {
@@ -149,11 +150,13 @@ export const exportListAgency = (store_code, page = 1, params = "") => {
                 var index = 0;
                 for (const item of res.data.data.data) {
                   index = index + 1;
+
                   var newItem = {};
                   var arangeKeyItem = {
                     order: index,
                     name: item.customer?.name,
                     phone_number: item.customer?.phone_number,
+                    balance: item?.balance,
                     email: item.customer.email,
                     status:
                       item.status == 1 ? "Đã kích hoạt" : "Chưa kích hoạt",
@@ -166,8 +169,13 @@ export const exportListAgency = (store_code, page = 1, params = "") => {
                       if (key == "name") {
                         newItem["Tên"] = value;
                       }
+
                       if (key == "phone_number") {
                         newItem["Số điện thoại"] = value;
+                        // newItem["Tên sản phẩm"] = value
+                      }
+                      if (key == "balance") {
+                        newItem["Số dư hoa hồng"] = value;
                         // newItem["Tên sản phẩm"] = value
                       }
                       if (key == "email") {

@@ -251,6 +251,12 @@ export default class ComponentTemplate0ToPrint extends Component {
           }}
         >
           <p className="order_code" style={{ fontSize: 16 }}>
+            <div>
+              <BarcodeComponent
+                number={state.order_code ?? bill.order_code}
+                displayValue={false}
+              />
+            </div>
             Mã đơn hàng : {state.order_code ?? bill.order_code}
           </p>
 

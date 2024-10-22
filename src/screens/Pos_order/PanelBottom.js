@@ -19,7 +19,7 @@ import Autocomplete from "react-autocomplete";
 import AutoCompleteText from "./AutoCompleteText";
 import * as customerAction from "../../actions/customer";
 import Select, { OnChangeValue, StylesConfig } from "react-select";
-import { debounce } from "lodash";
+import { debounce, isEqual } from "lodash";
 import moment from "moment";
 import ModalFilter from "./component/Filter";
 import { getBranchId } from "../../ultis/branchUtils";
@@ -50,12 +50,14 @@ class PanelBottom extends Component {
       params: "",
       openIconFilter: false,
       chooseTab: 2,
+      customerId: null,
     };
 
     this.onChangeNum = debounce(this.handleChangeNum, 0);
     this.onSearchCustomer = debounce(this.handleSearchCustomer, 500);
     this.loadFirst = true;
   }
+
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.chooseTab != this.props.chooseTab) {
       this.setState({ chooseTab: nextProps.chooseTab });
@@ -217,6 +219,8 @@ class PanelBottom extends Component {
   }
 
   componentWillReceiveProps(nextProps, nextState) {
+    // console.log(111, nextProps, this.props, isEqual(nextProps, this.props));
+    // return;
     if (
       this.props.openShipment != nextProps.openShipment &&
       nextProps.openShipment == true
@@ -258,13 +262,25 @@ class PanelBottom extends Component {
       const oneCart = nextProps.oneCart;
       console.log("nextProps.oneCart:: ", nextProps.oneCart);
       var { store_code, listVoucher, fetchAllVoucher } = this.props;
-
+      const oneCartCusId = oneCart?.customer?.id;
       let params = "";
       if (oneCart?.customer?.id) {
         params = `customer_id=${oneCart?.customer?.id}`;
+        // fetchAllVoucher(store_code, params);
       }
-
-      fetchAllVoucher(store_code, params);
+      // if (oneCartCusId !== this.state.customerId) {
+      //   console.log("test=====");
+      //   this.setState({
+      //     ...this.state,
+      //     customerId: oneCartCusId, // Cập nhật state chỉ khi có sự thay đổi
+      //   });
+      // }
+      // console.log("oneCart?.customer?.id====", oneCart?.customer?.id);
+      // console.log("customerId====", oneCartCusId);
+      // setTimeout(() => {
+      //   fetchAllVoucher(store_code, params);
+      // }, 2000);
+      // fetchAllVoucher(store_code, params);
 
       this.setState({
         ...this.state,
@@ -339,7 +355,25 @@ class PanelBottom extends Component {
       // this.onSelectChangeWardsById(customer.wards)
     }
   }
+  componentDidUpdate(prevProps) {
+    let params = "";
+    var { store_code, fetchAllVoucher } = this.props;
+    // Kiểm tra nếu oneCart đã thay đổi
+    if (!shallowEqual(prevProps.oneCart, this.props.oneCart)) {
+      const oneCart = this.props.oneCart;
+      const oneCartCusId = oneCart?.customer?.id;
 
+      // Cập nhật customerId chỉ khi giá trị mới khác với giá trị cũ
+      if (oneCartCusId !== this.state.customerId) {
+        console.log("Customer ID đã thay đổi:", oneCartCusId); // Log giá trị mới
+        this.setState({ customerId: oneCartCusId });
+        params = `customer_id=${oneCartCusId}`;
+        fetchAllVoucher(store_code, params);
+      }
+
+      // Các phần khác của logic cập nhật state của bạn
+    }
+  }
   onChange = (e) => {
     var target = e.target;
     var name = target.name;

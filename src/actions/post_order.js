@@ -390,6 +390,10 @@ export const updateInfoCart = (store_code, branch_id, id, data) => {
 
 export const updateInfoCarts = (store_code, branch_id, id, data) => {
   return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
     PosApi.updateInfoCarts(store_code, branch_id, id, data)
       .then((res) => {
         var data2 = res.data.data;
@@ -418,6 +422,13 @@ export const updateInfoCarts = (store_code, branch_id, id, data) => {
             disable: "show",
             content: error?.response?.data?.msg,
           },
+        });
+      })
+      .finally(() => {
+        // Ẩn loading sau khi hoàn tất
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
         });
       });
   };

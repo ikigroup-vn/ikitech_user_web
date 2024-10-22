@@ -111,7 +111,14 @@ class Edit extends Component {
   };
 
   render() {
-    var { voucher, products, history, vouchers, listVoucherCodes, listProductsByVoucherId } = this.props;
+    var {
+      voucher,
+      products,
+      history,
+      vouchers,
+      listVoucherCodes,
+      listProductsByVoucherId,
+    } = this.props;
     var { store_code, voucherId } = this.props;
 
     return (
@@ -132,8 +139,10 @@ class Edit extends Component {
 
                   <div class="box">
                     <Form
-                      setPage={this.setPageProductsTable} 
-                      per_page_products_table={this.state.per_page_products_table}
+                      setPage={this.setPageProductsTable}
+                      per_page_products_table={
+                        this.state.per_page_products_table
+                      }
                       page_table={this.state.page_table}
                       fetchListProductsById={this.props.fetchListProductsById}
                       listProductsByVoucherId={listProductsByVoucherId}
@@ -329,7 +338,8 @@ const mapStateToProps = (state) => {
     listVoucherCodes: state.voucherReducers.voucher.listVoucherCodes,
     linkExportFile: state.voucherReducers.voucher.linkExport,
     alert: state.voucherReducers.alert.alert_uid,
-    listProductsByVoucherId: state.voucherReducers.voucher.listProductsByVoucherId,
+    listProductsByVoucherId:
+      state.voucherReducers.voucher.listProductsByVoucherId,
   };
 };
 
@@ -380,8 +390,22 @@ const mapDispatchToProps = (dispatch, props) => {
         )
       );
     },
-    fetchListProductsById: (store_code, vourcher_id, page, perpage, onSuccess) => {
-      dispatch(voucherAction.fetchAllListProductsByVoucherId(store_code, vourcher_id, page, perpage, onSuccess));
+    fetchListProductsById: (
+      store_code,
+      vourcher_id,
+      page,
+      perpage,
+      onSuccess
+    ) => {
+      dispatch(
+        voucherAction.fetchAllListProductsByVoucherId(
+          store_code,
+          vourcher_id,
+          page,
+          perpage,
+          onSuccess
+        )
+      );
     },
   };
 };

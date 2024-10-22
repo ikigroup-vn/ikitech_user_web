@@ -185,13 +185,13 @@ class Distribute extends Component {
                 for (let index = 0; index < count; index++) {
                   if (
                     distributes[0].element_distributes[index]
-                      .sub_element_distributes[_key].name != "" &&
+                      .sub_element_distributes[_key]?.name != "" &&
                     distributes[0].element_distributes[index]
-                      .sub_element_distributes[_key].name
+                      .sub_element_distributes[_key]?.name
                   )
                     value =
                       distributes[0].element_distributes[index]
-                        .sub_element_distributes[_key].name;
+                        .sub_element_distributes[_key]?.name;
                 }
                 element.sub_element_distributes[_key].name = value;
               }
@@ -1096,7 +1096,6 @@ class Distribute extends Component {
               }
             );
           } else {
-
             try {
               var { sku } = element;
               var barcode = element.barcode;

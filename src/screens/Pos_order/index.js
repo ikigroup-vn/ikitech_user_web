@@ -573,7 +573,7 @@ class PostOrder extends Component {
     var { oneCart } = this.props;
     var { allowAutoPrint } = this.props;
     const { weight, length, width, height } = this.state;
-    if(!oneCart?.address_detail && !this.state?.oneCart?.address_detail) {
+    if (!oneCart?.address_detail && !this.state?.oneCart?.address_detail) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
