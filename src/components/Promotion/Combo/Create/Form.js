@@ -7,6 +7,7 @@ import { shallowEqual } from "../../../../ultis/shallowEqual";
 import moment from "moment";
 import Datetime from "react-datetime";
 import ModalListProduct from "./ListProduct";
+import ModalListProduct2 from "./ListProduct2";
 import CKEditor from "ckeditor4-react";
 import ModalUpload from "../ModalUpload";
 import * as Env from "../../../../ultis/default";
@@ -18,6 +19,7 @@ import * as AgencyAction from "../../../../actions/agency";
 import * as groupCustomerAction from "../../../../actions/group_customer";
 import { typeGroupCustomer } from "../../../../ultis/groupCustomer/typeGroupCustomer";
 import Select from "react-select";
+import Table2 from "./Table2";
 
 class Form extends Component {
   constructor(props) {
@@ -31,8 +33,10 @@ class Form extends Component {
       txtDiscoutType: 0,
       txtValueDiscount: "",
       listProducts: [],
+      listProducts2: [],
       image: "",
       saveListProducts: [],
+      saveListProducts2: [],
       displayError: "hide",
       group_customer: 0,
       agency_type_id: null,
@@ -57,8 +61,14 @@ class Form extends Component {
   setListProducts = (listProducts) => {
     this.setState({ listProducts });
   };
+  setListProducts2 = (listProducts2) => {
+    this.setState({ listProducts2 });
+  };
   onSaveProduct = () => {
     this.setState({ saveListProducts: [...this.state.listProducts] });
+  };
+  onSaveProduct2 = () => {
+    this.setState({ saveListProducts2: [...this.state.listProducts2] });
   };
   componentWillReceiveProps(nextProps) {
     const { group_type_id } = this.state;
@@ -177,6 +187,13 @@ class Form extends Component {
   };
 
   onSave = (e) => {
+    console.log("listProducts=====", this.state.listProducts);
+    console.log("listProducts2=====", this.state.listProducts2);
+    const mergedList = [
+      ...this.state.listProducts,
+      ...this.state.listProducts2,
+    ];
+
     e.preventDefault();
     if (this.state.displayError == "show") {
       return;
@@ -199,10 +216,11 @@ class Form extends Component {
 
     var listProducts = state.saveListProducts;
     var combo_products = [];
-    listProducts.forEach((element, index) => {
+    mergedList.forEach((element, index) => {
       combo_products.push({
         quantity: element.quantity,
         product_id: element.product.id,
+        type: element.type,
       });
     });
     var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm").format(
@@ -290,13 +308,43 @@ class Form extends Component {
         }
       });
       if (checkExsit == true) {
-        var product = { quantity: 1, product: product };
+        var product = { quantity: 1, product: product, type: 1 };
         products.push(product);
       }
     }
     if (onSave == true)
       this.setState({ listProducts: products, saveListProducts: products });
     else this.setState({ listProducts: products });
+  };
+
+  handleAddProduct2 = (product, id, type, onSave) => {
+    var products = [...this.state.listProducts2];
+    console.log(products);
+
+    if (type == "remove") {
+      if (products.length > 0) {
+        products.forEach((item, index) => {
+          if (item.product.id === id) {
+            products.splice(index, 1);
+          }
+        });
+      }
+    } else {
+      var checkExsit = true;
+      products.forEach((item, index) => {
+        if (item.product.id === product.id) {
+          checkExsit = false;
+          return;
+        }
+      });
+      if (checkExsit == true) {
+        var product = { quantity: 1, product: product, type: 2 };
+        products.push(product);
+      }
+    }
+    if (onSave == true)
+      this.setState({ listProducts2: products, saveListProducts2: products });
+    else this.setState({ listProducts2: products });
   };
 
   handleChangeQuantity = (id, quantity, setIncrement = null) => {
@@ -311,6 +359,19 @@ class Form extends Component {
       }
     });
     this.setState({ listProducts: products, saveListProducts: products });
+  };
+  handleChangeQuantity2 = (id, quantity, setIncrement = null) => {
+    var products = [...this.state.listProducts2];
+    products.forEach((product, index) => {
+      if (product.product.id == id) {
+        if (setIncrement == 1) products[index].quantity = product.quantity + 1;
+        else if (setIncrement == -1) {
+          if (product.quantity == 1) {
+          } else products[index].quantity = product.quantity - 1;
+        } else products[index].quantity = quantity;
+      }
+    });
+    this.setState({ listProducts2: products, saveListProducts2: products });
   };
 
   convertOptions = (opts) => {
@@ -344,12 +405,14 @@ class Form extends Component {
       txtEnd,
       txtAmount,
       listProducts,
+      listProducts2,
       txtContent,
       txtDiscoutType,
       txtValueDiscount,
       image,
       displayError,
       saveListProducts,
+      saveListProducts2,
       group_customer,
       agency_type_id,
       group_type_id,
@@ -666,6 +729,11 @@ class Form extends Component {
                   handleAddProduct={this.handleAddProduct}
                   products={saveListProducts}
                 ></Table>
+                <Table2
+                  handleChangeQuantity={this.handleChangeQuantity2}
+                  handleAddProduct={this.handleAddProduct2}
+                  products={saveListProducts2}
+                ></Table2>
               </div>
               {/* {getChannel() == IKITECH &&
                 <div class="form-group">
@@ -705,6 +773,15 @@ class Form extends Component {
           store_code={store_code}
           products={products}
           setListProducts={this.setListProducts}
+        />
+        <ModalListProduct2
+          onSaveProduct={this.onSaveProduct2}
+          discounts={combos}
+          handleAddProduct={this.handleAddProduct2}
+          listProducts={listProducts2}
+          store_code={store_code}
+          products={products}
+          setListProducts={this.setListProducts2}
         />
       </React.Fragment>
     );

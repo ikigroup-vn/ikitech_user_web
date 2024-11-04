@@ -21,7 +21,7 @@ const SearchDataStyles = styled.div`
     margin-right: 20px;
   }
 `;
-class ListProduct extends Component {
+class ListProduct3 extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -89,44 +89,44 @@ class ListProduct extends Component {
   onChange = (e) => {
     var { value, checked } = e.target;
     const { products, discounts, listProducts, discountId } = this.props;
-    console.log("discounts", discounts);
-    console.log(" listProducts", listProducts);
-    console.log("  products", products);
-    return;
-    // if (!checked) {
-    //   document.querySelector("#inputCheckAll").checked = false;
-    // } else {
-    //   var newDiscountProduct = [];
-    //   discounts?.forEach((element) => {
-    //     if (discountId) {
-    //       if (element.products?.length > 0 && discountId != element?.id) {
-    //         element.products?.forEach((product) => {
-    //           if (products?.data?.map((p) => p.id).includes(product.id)) {
-    //             newDiscountProduct.push(product);
-    //           }
-    //         });
-    //       }
-    //     } else {
-    //       if (element.products?.length > 0) {
-    //         element.products?.forEach((product) => {
-    //           if (products?.data?.map((p) => p.id).includes(product.id)) {
-    //             newDiscountProduct.push(product);
-    //           }
-    //         });
-    //       }
-    //     }
-    //   });
-    //   if (
-    //     listProducts?.length ===
-    //     products?.data?.length - newDiscountProduct?.length - 1
-    //   ) {
-    //     document.querySelector("#inputCheckAll").checked = true;
-    //   }
-    // }
-    // var data = JSON.parse(value);
-    // console.log("ListProduct ~ data:", data);
-    // if (checked == true) this.props.handleAddProduct(data, null, "add");
-    // else this.props.handleAddProduct(null, data.id, "remove");
+    // console.log("discounts", discounts);
+    // console.log(" listProducts", listProducts);
+    // console.log("  products", products);
+
+    if (!checked) {
+      document.querySelector("#inputCheckAll").checked = false;
+    } else {
+      var newDiscountProduct = [];
+      discounts?.forEach((element) => {
+        if (discountId) {
+          if (element.products?.length > 0 && discountId != element?.id) {
+            element.products?.forEach((product) => {
+              if (products?.data?.map((p) => p.id).includes(product.id)) {
+                newDiscountProduct.push(product);
+              }
+            });
+          }
+        } else {
+          if (element.products?.length > 0) {
+            element.products?.forEach((product) => {
+              if (products?.data?.map((p) => p.id).includes(product.id)) {
+                newDiscountProduct.push(product);
+              }
+            });
+          }
+        }
+      });
+      if (
+        listProducts?.length ===
+        products?.data?.length - newDiscountProduct?.length - 1
+      ) {
+        document.querySelector("#inputCheckAll").checked = true;
+      }
+    }
+    var data = JSON.parse(value);
+    console.log("ListProduct ~ data:", data);
+    if (checked == true) this.props.handleAddProduct(data, null, "add", true);
+    else this.props.handleAddProduct(null, data.id, "remove");
   };
   onChangeAll = (e) => {
     const { value, checked } = e.target;
@@ -353,7 +353,7 @@ class ListProduct extends Component {
 
   showData = (products, list, discounts) => {
     // console.log("products=====", products);
-    console.log("list=====", list);
+    // console.log("list=====", list);
     var result = null;
     if (typeof products === "undefined") {
       return result;
@@ -537,7 +537,7 @@ class ListProduct extends Component {
         class="modal fade"
         tabindex="-1"
         role="dialog"
-        id="showListProduct"
+        id="showListProduct3"
         data-keyboard="false"
         data-backdrop="static"
       >
@@ -842,4 +842,4 @@ const mapDispatchToProps = (dispatch, props) => {
     },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(ListProduct);
+export default connect(mapStateToProps, mapDispatchToProps)(ListProduct3);

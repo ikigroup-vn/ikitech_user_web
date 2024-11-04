@@ -56,6 +56,7 @@ class Form extends Component {
       txtStart: "",
       txtEnd: "",
       txtAmount: "",
+      txtNumbers: "",
       txt_amount_use_once: "",
       txt_voucher_length: "",
       txt_starting_character: "",
@@ -136,6 +137,7 @@ class Form extends Component {
     } else if (
       name == "txtValueLimitTotal" ||
       name == "txtAmount" ||
+      name == "txtNumbers" ||
       name == "txtValueDiscount" ||
       name == "txtMaxValueDiscount" ||
       name == "ship_discount_value" ||
@@ -381,6 +383,8 @@ class Form extends Component {
         state.txtAmount == null
           ? state.txtAmount
           : formatNumber(state.txtAmount),
+      limit_per_user:
+        state.txtNumbers == "" ? null : formatNumber(state.txtNumbers),
       amount_use_once:
         state.txt_amount_use_once == null
           ? state.txt_amount_use_once
@@ -557,6 +561,7 @@ class Form extends Component {
       txtStart,
       txtEnd,
       txtAmount,
+      txtNumbers,
       txt_amount_use_once,
       txtValueDiscount,
       txtCode,
@@ -795,7 +800,7 @@ class Form extends Component {
                           <div></div>
                         </label>
                       </div>
-                      <div className="form-group status col-6">
+                      {/* <div className="form-group status col-6">
                         <label for="txtMaxAmountCoin">
                           Khách hàng chỉ được áp dụng 1 lần
                         </label>
@@ -811,7 +816,7 @@ class Form extends Component {
                           />
                           <div></div>
                         </label>
-                      </div>
+                      </div> */}
                     </div>
                     <div class="form-group">
                       <label htmlFor="product_name">Số mã có thể sử dụng</label>
@@ -822,6 +827,21 @@ class Form extends Component {
                         name="txtAmount"
                         value={txtAmount}
                         placeholder="Số lượng mã phiểu có thể sử dụng"
+                        autoComplete="off"
+                        onChange={this.onChange}
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label htmlFor="product_name">
+                        Số lượt khách hàng được áp dụng
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="txtNumbers"
+                        name="txtNumbers"
+                        value={txtNumbers}
+                        placeholder="Số lượt khách hàng được áp dụng"
                         autoComplete="off"
                         onChange={this.onChange}
                       />

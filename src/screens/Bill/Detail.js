@@ -20,6 +20,8 @@ import * as posAction from "../../actions/post_order";
 import history from "../../history";
 import ModalDeleteOrder from "../../components/Bill/ModalDeleteOrder";
 import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
+import ModalShipAddress from "../../components/Bill/ModalShipAddress";
+import { getDetailAdress } from "../../ultis/helpers";
 class Detail extends Component {
   constructor(props) {
     super(props);
@@ -31,9 +33,12 @@ class Detail extends Component {
   }
   componentDidMount() {
     var { store_code, order_code, billId } = this.props.match.params;
+    var customer = this.props.bill.customer;
+
     this.props.fetchBillId(store_code, order_code);
     this.props.fetchHistoryPay(store_code, order_code);
     this.props.fetchAllShipment(store_code);
+
     this.props.refreshEditOrder(false);
   }
 
@@ -75,6 +80,40 @@ class Detail extends Component {
     }
   }
 
+  showData = (stores) => {
+    var result = null;
+    var store_code =
+      typeof this.props.store_code != "undefined"
+        ? this.props.store_code
+        : null;
+    if (stores.length > 0) {
+      result = stores.map((data, index) => {
+        var selected = data.store_code === store_code ? true : false;
+        return (
+          // <option value={data.id} key={index} selected={selected}>
+          //     {data.name}
+          // </option>
+          <option
+            value={data.id}
+            key={index}
+            selected={selected}
+            data-branch-type="(CN mặc định)"
+            className={
+              data.is_default_order_online == true
+                ? "active-branch-default"
+                : ""
+            }
+          >
+            {data.name}{" "}
+            {data.is_default_order_online == true ? "(Mặc định)" : ""}
+          </option>
+        );
+      });
+    } else {
+      return result;
+    }
+    return result;
+  };
   goBack = () => {
     history.goBack();
   };
@@ -241,6 +280,7 @@ class Detail extends Component {
                   setShowModalDeleteOrder={this.setShowModalDeleteOrder}
                 ></ModalDeleteOrder>
               )}
+
               <Footer />
             </div>
           </div>
@@ -269,6 +309,7 @@ const mapStateToProps = (state) => {
     stores: state.storeReducers.store.allStore,
     badges: state.badgeReducers.allBadge,
     currentBranch: state.branchReducers.branch.currentBranch,
+    listShipmentAddress: state.shipmentReducers.shipment.listShipmentAddress,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -292,6 +333,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllShipment: (store_code) => {
       dispatch(shipmentAction.fetchAllShipment(store_code));
+    },
+    fetchAllShipAddress: (store_code, address) => {
+      dispatch(shipmentAction.fetchAllShipAddress(store_code, address));
     },
     refreshEditOrder: (data) => {
       dispatch(posAction.refreshEditOrder(data));

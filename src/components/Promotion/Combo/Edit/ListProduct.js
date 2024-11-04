@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Pagination from "../../../../components/Product/Pagination"
-import { filter_arr , format } from "../../../../ultis/helpers";
+import Pagination from "../../../../components/Product/Pagination";
+import { filter_arr, format } from "../../../../ultis/helpers";
 
 class ListProduct extends Component {
   constructor(props) {
@@ -14,56 +14,50 @@ class ListProduct extends Component {
   }
 
   onChange = (e) => {
-    var { value, checked } = e.target
-    console.log(checked)
+    var { value, checked } = e.target;
+    console.log(checked);
     var data = JSON.parse(value);
-    if (checked == true)
-      this.props.handleAddProduct(data, null, "add")
-    else
-      this.props.handleAddProduct(null, data.id, "remove")
+    if (checked == true) this.props.handleAddProduct(data, null, "add");
+    else this.props.handleAddProduct(null, data.id, "remove");
+  };
 
-  }
-  
   passNumPage = (page) => {
-    this.setState({ page: page })
-  }
+    this.setState({ page: page });
+  };
 
   checkExsit = (list, id) => {
-    console.log(list)
+    console.log(list);
     if (list.length > 0) {
       for (const element of list) {
         if (element.product.id == id) {
-          return true
+          return true;
         }
       }
     }
-    return false
-  }
+    return false;
+  };
 
   checkDisable = (combos, id) => {
     if (combos.length > 0) {
       for (const element of combos) {
         for (const item of element.products_combo) {
           if (item.product.id == id) {
-            var products_combo = filter_arr(this.props.combo.products_combo)
-            if(products_combo.length > 0)
-            {
+            var products_combo = filter_arr(this.props.combo.products_combo);
+            if (products_combo.length > 0) {
               for (const _item of products_combo) {
                 if (_item.product.id == id) {
-                  return false
+                  return false;
                 }
               }
             }
-      
-            return true
+
+            return true;
           }
-
         }
-
       }
     }
-    return false
-  }
+    return false;
+  };
 
   showData = (products, list, combos) => {
     var result = null;
@@ -72,26 +66,42 @@ class ListProduct extends Component {
     }
     if (products.length > 0) {
       result = products.map((data, index) => {
-
-        var status_name = data.status == 0 ? "Còn hàng" : data.status == 1 ? "Đã ẩn" : data.status == 2 ? "Hết hàng" : null
-        var status = data.status == 0 ? "success" : data.status == 1 ? "secondary" : data.status == 2 ? "danger" : null
-        var checked = this.checkExsit(list, data.id)
+        var status_name =
+          data.status == 0
+            ? "Còn hàng"
+            : data.status == 1
+            ? "Đã ẩn"
+            : data.status == 2
+            ? "Hết hàng"
+            : null;
+        var status =
+          data.status == 0
+            ? "success"
+            : data.status == 1
+            ? "secondary"
+            : data.status == 2
+            ? "danger"
+            : null;
+        var checked = this.checkExsit(list, data.id);
         var disaled = this.checkDisable(combos, data.id, list);
-        var background_disable = disaled == true ? "#55b8c3" : "white"
+        var background_disable = disaled == true ? "#55b8c3" : "white";
         return (
-          <tr className={disaled == true ? "" : "hover-product"} style = {{background : background_disable}}>
+          <tr
+            className={disaled == true ? "" : "hover-product"}
+            style={{ background: background_disable }}
+          >
             <td>
-
               <div class="checkbox">
                 <label>
-                  <input type="checkbox"
+                  <input
+                    type="checkbox"
                     disabled={disaled}
                     checked={checked}
                     onChange={this.onChange}
-                    value={JSON.stringify(data)} />
+                    value={JSON.stringify(data)}
+                  />
                 </label>
               </div>
-
             </td>
 
             <td>{data.id}</td>
@@ -99,12 +109,8 @@ class ListProduct extends Component {
             <td>{data.name}</td>
 
             <td>{format(data.price)}</td>
-      
-
 
             <td>{data.has_in_combo}</td>
-
-
           </tr>
         );
       });
@@ -115,7 +121,7 @@ class ListProduct extends Component {
   };
 
   render() {
-    var { products, store_code, listProducts, combos } = this.props
+    var { products, store_code, listProducts, combos } = this.props;
     console.log(products, store_code, listProducts, combos);
     return (
       <div
@@ -128,10 +134,21 @@ class ListProduct extends Component {
       >
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content" style={{ maxHeight: "630px" }}>
-          <div class="modal-header" style ={{background : "white"}}>
-              <i style = {{color : "red"}}> Những sản phẩm được tô đậm là những sản phẩm đang nằm trong các chương trình khuyến mại khác! Vui lòng xóa nếu muốn thêm vào chương trình này</i>
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+            <div class="modal-header" style={{ background: "white" }}>
+              <i style={{ color: "red" }}>
+                {" "}
+                Những sản phẩm được tô đậm là những sản phẩm đang nằm trong các
+                chương trình khuyến mại khác! Vui lòng xóa nếu muốn thêm vào
+                chương trình này
+              </i>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
 
             <div class="table-responsive">
@@ -147,23 +164,28 @@ class ListProduct extends Component {
                   </tr>
                 </thead>
 
-                <tbody>{this.showData(products.data, listProducts, combos)}</tbody>
+                <tbody>
+                  {this.showData(products.data, listProducts, combos)}
+                </tbody>
               </table>
             </div>
 
-            <div  class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-<Pagination style = "float-fix" store_code={store_code} products={products} passNumPage={this.passNumPage} limit={this.state.numPage} />
-<button
-
-    type="button"
-    class="btn btn-primary pagination-btn"
-    data-dismiss="modal"
-  >
-    Đóng
-  </button>
-</div>
-
+            <div class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <Pagination
+                style="float-fix"
+                store_code={store_code}
+                products={products}
+                passNumPage={this.passNumPage}
+                limit={this.state.numPage}
+              />
+              <button
+                type="button"
+                class="btn btn-primary pagination-btn"
+                data-dismiss="modal"
+              >
+                Đóng
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -171,11 +193,7 @@ class ListProduct extends Component {
   }
 }
 
-
-
 const mapDispatchToProps = (dispatch, props) => {
-  return {
-
-  };
+  return {};
 };
 export default connect(null, mapDispatchToProps)(ListProduct);

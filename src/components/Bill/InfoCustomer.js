@@ -37,13 +37,12 @@ class InfoCustomer extends Component {
   // componentDidUpdate(prevProps, prevState) {
   //   if (prevState.payment !== this.state.payment) {
   //     this.setState({
-  //       payment: this.state.payment, 
+  //       payment: this.state.payment,
   //     })
   //   }
   // }
 
   render() {
-
     var { bill, store_code } = this.props;
     var { payment_method_id, payment_method_name, payment_partner_name } = bill;
 
@@ -68,6 +67,8 @@ class InfoCustomer extends Component {
       typeof customer_address == "undefined"
         ? null
         : customer_address.address_detail;
+    var delivery_address_expected = bill.expect_pickup_address;
+    var delivery_address_realy = bill.reality_pickup_address;
     var wards_name =
       typeof customer_address == "undefined"
         ? null
@@ -139,6 +140,18 @@ class InfoCustomer extends Component {
                     )}
                   </span>
                 </p>
+                <p class="sale_user_label">
+                  Địa chỉ giao hàng dự kiến:{" "}
+                  <span id="delivery_address_expected">
+                    {delivery_address_expected}
+                  </span>
+                </p>
+                <p class="sale_user_label">
+                  Địa chỉ giao hàng thực tế:{" "}
+                  <span id="delivery_address_realy">
+                    {delivery_address_realy}
+                  </span>
+                </p>
               </div>
             )}
 
@@ -151,7 +164,9 @@ class InfoCustomer extends Component {
             <p class="sale_user_label" id="booking_time">
               Phương thức thanh toán:{" "}
               <span id="booking_time_txt">
-                {this.handleGetPaymentMethodName(this.props.bill.payment_partner_id) || ""} 
+                {this.handleGetPaymentMethodName(
+                  this.props.bill.payment_partner_id
+                ) || ""}
                 {/* {payment_method_name || ""} */}
                 {/* {payment_partner_name} */}
               </span>

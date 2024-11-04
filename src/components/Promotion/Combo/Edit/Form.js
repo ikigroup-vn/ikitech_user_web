@@ -742,12 +742,12 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div>
-                <Table
+                {/* <Table
                   handleChangeQuantity={this.handleChangeQuantity}
                   handleAddProduct={this.handleAddProduct}
                   products={saveListProducts}
                   setDefaultListProducts={this.setDefaultListProducts}
-                ></Table>
+                ></Table> */}
               </div>
               {/* {getChannel() == IKITECH &&
 

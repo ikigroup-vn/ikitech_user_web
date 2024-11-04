@@ -37,6 +37,17 @@ class ImportStock extends Component {
   onChangeSearch = (e) => {
     this.setState({ searchValue: e.target.value });
   };
+
+  exportExcel = () => {
+    const { store_code } = this.props.match.params;
+    const branch_id = localStorage.getItem("branch_id");
+    var { filterStatus, page, searchValue } = this.state;
+    var params = "";
+    if (filterStatus) params = params + `&status_list=${filterStatus}`;
+
+    params = params + `&search=${searchValue}`;
+    this.props.ExportAllImportStock(store_code, branch_id, page, params);
+  };
   componentWillReceiveProps(nextProps, nextState) {
     // if (this.state.paramDate != this.getParamDate() && this.state.paramDate.from != null) {
     //   this.setState({
@@ -156,14 +167,28 @@ class ImportStock extends Component {
                       Nhập hàng
                     </h4>
 
-                    <Link to={`/import_stock/create/${store_code}`}>
-                      <div class="btn btn-info btn-icon-split btn-sm show">
+                    <div>
+                      <Link to={`/import_stock/create/${store_code}`}>
+                        <div class="btn btn-info btn-icon-split btn-sm show">
+                          <span class="icon text-white-50">
+                            <i class="fas fa-plus"></i>
+                          </span>
+                          <span class="text ">Tạo đơn nhập hàng</span>
+                        </div>
+                      </Link>
+                      <button
+                        style={{ marginLeft: "10px" }}
+                        onClick={this.exportExcel}
+                        className={`btn btn-success btn-icon-split btn-sm`}
+                      >
                         <span class="icon text-white-50">
-                          <i class="fas fa-plus"></i>
+                          <i class="fas fa-file-export"></i>
                         </span>
-                        <span class="text ">Tạo đơn nhập hàng</span>
-                      </div>
-                    </Link>
+                        <span style={{ color: "white" }} class="text">
+                          Export Excel
+                        </span>
+                      </button>
+                    </div>
                   </div>
 
                   <br></br>
@@ -255,6 +280,11 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllImportStock: (store_code, branch_id, page, params) => {
       dispatch(
         ImportAction.fetchAllImportStock(store_code, branch_id, page, params)
+      );
+    },
+    ExportAllImportStock: (store_code, branch_id, page, params) => {
+      dispatch(
+        ImportAction.ExportAllImportStock(store_code, branch_id, page, params)
       );
     },
   };

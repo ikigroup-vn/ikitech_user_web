@@ -25,6 +25,10 @@ class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      txtMinCost: "",
+      txtMaxCost: "",
+      txtDiscountTopPrice: "",
+      txtLimitPerUser: "",
       txtName: "",
       txtStart: "",
       txtEnd: "",
@@ -91,6 +95,10 @@ class Form extends Component {
         : [];
 
       this.setState({
+        txtMinCost: discount.min_cost_order,
+        txtMaxCost: discount.max_cost_order,
+        txtDiscountTopPrice: discount.discount_to_price,
+        txtLimitPerUser: discount.limit_per_user,
         txtName: discount.name,
         txtStart: startTime,
         txtEnd: endTime,
@@ -241,18 +249,18 @@ class Form extends Component {
       return;
     }
     var state = this.state;
-    if (state.txtValue == null || !isEmpty(state.txtValue)) {
-      this.props.showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Vui lòng chọn giá trị giảm giá",
-        },
-      });
-      return;
-    }
+    // if (state.txtValue == null || !isEmpty(state.txtValue)) {
+    //   this.props.showError({
+    //     type: Types.ALERT_UID_STATUS,
+    //     alert: {
+    //       type: "danger",
+    //       title: "Lỗi",
+    //       disable: "show",
+    //       content: "Vui lòng chọn giá trị giảm giá",
+    //     },
+    //   });
+    //   return;
+    // }
     var { store_code, discountId } = this.props;
     var listProducts = state.saveListProducts;
     var product_ids = "";
@@ -293,6 +301,12 @@ class Form extends Component {
       group_type_id,
       agency_type_name,
       name: state.txtName,
+      min_cost_order: state.txtMinCost == "" ? null : state.txtMinCost,
+      max_cost_order: state.txtMaxCost == "" ? null : state.txtMaxCost,
+      discount_to_price:
+        state.txtDiscountTopPrice == "" ? null : state.txtDiscountTopPrice,
+      limit_per_user:
+        state.txtLimitPerUser == "" ? null : state.txtLimitPerUser,
       start_time: startTime == "Invalid date" ? null : startTime,
       end_time: endTime == "Invalid date" ? null : endTime,
       value:
@@ -409,6 +423,10 @@ class Form extends Component {
 
   render() {
     var {
+      txtMinCost,
+      txtMaxCost,
+      txtDiscountTopPrice,
+      txtLimitPerUser,
       txtName,
       txtStart,
       txtEnd,
@@ -540,6 +558,66 @@ class Form extends Component {
             </div>
             <div class={`alert alert-danger ${displayError}`} role="alert">
               Thời gian kết thúc phải sau thời gian bắt đầu
+            </div>
+            <div class="form-group">
+              <label for="product_name">
+                Giá trị nhỏ nhất của hóa đơn để áp dụng giảm giá
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="txtMinCost"
+                value={txtMinCost}
+                placeholder="Nhập giá trị"
+                autoComplete="off"
+                onChange={this.onChange}
+                name="txtMinCost"
+              />
+            </div>
+            <div class="form-group">
+              <label for="product_name">
+                Giá trị lớn nhất của hóa đơn để áp dụng giảm giá
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="txtMaxCost"
+                value={txtMaxCost}
+                placeholder="Nhập giá trị"
+                autoComplete="off"
+                onChange={this.onChange}
+                name="txtMaxCost"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="product_name">Giá sản phẩm sẽ giảm về mốc này</label>
+              <input
+                type="text"
+                class="form-control"
+                id="txtDiscountTopPrice"
+                value={txtDiscountTopPrice}
+                placeholder="Nhập giá sản phẩm"
+                autoComplete="off"
+                onChange={this.onChange}
+                name="txtDiscountTopPrice"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="product_name">
+                Giới hạn lượt giảm giá cho từng khách hàng
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="txtLimitPerUser"
+                value={txtLimitPerUser}
+                placeholder="Nhập số lượng"
+                autoComplete="off"
+                onChange={this.onChange}
+                name="txtLimitPerUser"
+              />
             </div>
             <div class="form-group">
               <label for="product_name">Giảm giá (%)</label>

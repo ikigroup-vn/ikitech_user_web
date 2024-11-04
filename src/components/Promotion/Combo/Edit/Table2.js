@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-class Table extends Component {
+class Table2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -66,18 +66,18 @@ class Table extends Component {
               </span>
             </td>
 
-            <td>
+            {/* <td>
               <button
                 type="button"
                 class="btn btn-danger btn-sm"
                 onClick={() => {
-                  this.removeItem(data.product.id);
                   document.querySelector("#inputCheckAll").checked = false;
+                  this.removeItem(data.product.id);
                 }}
               >
                 <i class="fa fa-trash"></i>
               </button>
-            </td>
+            </td> */}
           </tr>
         );
       });
@@ -88,19 +88,20 @@ class Table extends Component {
   };
 
   render() {
-    var { products } = this.props;
+    var { products, setDefaultListProducts } = this.props;
     console.log(products);
     return (
       <React.Fragment>
         <div class="form-group">
-          <label for="product_name">Sản phẩm được áp dụng nhóm 1</label>
+          <label for="product_name"> được áp dụng</label>
 
           <button
             type="button"
             class="btn btn-primary-no-background btn-sm"
             style={{ marginLeft: "10px" }}
             data-toggle="modal"
-            data-target="#showListProduct"
+            data-target="#showListProduct3"
+            onClick={() => setDefaultListProducts()}
           >
             <i class="fas fa-plus"></i>
             <span class="text">&nbsp;Chọn sản phẩm</span>
@@ -119,7 +120,7 @@ class Table extends Component {
                     <th>Tên sản phẩm</th>
                     <th>Số lượng</th>
 
-                    <th>Hành động</th>
+                    {/* <th>Hành động</th> */}
                   </tr>
                 </thead>
                 <tbody>{this.showData(products)}</tbody>
@@ -135,4 +136,4 @@ class Table extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {};
 };
-export default connect(null, mapDispatchToProps)(Table);
+export default connect(null, mapDispatchToProps)(Table2);

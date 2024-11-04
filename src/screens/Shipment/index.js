@@ -15,11 +15,14 @@ import Loading from "../Loading";
 import * as shipmentAction from "../../actions/shipment";
 import config from "../../ultis/datatable";
 import ShipConfig from "./ShipConfig";
+import Discount from "../../components/Product/Update/Discount";
+import ConfigShip from "../../components/Shipment/ConfigShip";
 
 class Store extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      shipList: [],
       modalremove: {
         title: "",
         id: "",
@@ -30,6 +33,9 @@ class Store extends Component {
       },
     };
   }
+  setShipList = (shipList) => {
+    this.setState({ shipList });
+  };
 
   handleDelCallBack = (modal) => {
     this.setState({ modalremove: modal });
@@ -63,7 +69,7 @@ class Store extends Component {
   render() {
     var { store_code } = this.props.match.params;
     var { alert, shipment } = this.props;
-    var { update, isShow } = this.state;
+    var { update, isShow, shipList } = this.state;
 
     if (this.props.auth) {
       return (

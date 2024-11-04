@@ -4,6 +4,103 @@ import * as comboApi from "../data/remote/combo";
 import * as uploadApi from "../data/remote/upload";
 import { getQueryParams } from "../ultis/helpers";
 
+export const addDetailCombo = (store_code, combo_id, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    comboApi
+      .addDetailCombo(store_code, combo_id, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+export const updateDetailCombo = (store_code, combo_id, group, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    comboApi
+      .updateDetailCombo(store_code, combo_id, group, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+export const destroyComboGroup = (store_code, combo_id, group) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    comboApi.destroyComboGroup(store_code, combo_id, group).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+    });
+  };
+};
+
 export const fetchAllCombo = (store_id) => {
   return (dispatch) => {
     dispatch({

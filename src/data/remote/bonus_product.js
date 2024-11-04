@@ -44,7 +44,7 @@ export const fetchBonusProductItem = (store_code, id, params) => {
 
 export const createBonusProductItem = (store_code, id, data) => {
   return callApi(
-    `/store/${store_code}/bonus_product/${id}/bonus_product_item`,
+    `/store/${store_code}/bonus_product/${id}/bonus_product_item_v2`,
     "post",
     data
   );

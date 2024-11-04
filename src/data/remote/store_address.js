@@ -2,13 +2,13 @@ import callApi from "../../ultis/apiCaller";
 
 export const fetchAllData = (store_code, branch_id) => {
   return callApi(
-    `/store/${store_code}/store_address?branch_id=${branch_id??""}`,
+    `/store/${store_code}/store_address?branch_id=${branch_id ?? ""}`,
     "get",
     null
   );
 };
 export const fetchShipConfig = (id) => {
-  return callApi(`/store/${id}/config_ship`, "get", null);
+  return callApi(`/store/${id}/shipment/config`, "get", null);
 };
 
 export const updateShipConfig = (store_code, data) => {

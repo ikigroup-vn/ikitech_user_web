@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-class Table extends Component {
+class Table2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -93,14 +93,14 @@ class Table extends Component {
     return (
       <React.Fragment>
         <div class="form-group">
-          <label for="product_name">Sản phẩm được áp dụng nhóm 1</label>
+          <label for="product_name">Sản phẩm được áp dụng nhóm 2</label>
 
           <button
             type="button"
             class="btn btn-primary-no-background btn-sm"
             style={{ marginLeft: "10px" }}
             data-toggle="modal"
-            data-target="#showListProduct"
+            data-target="#showListProduct2"
           >
             <i class="fas fa-plus"></i>
             <span class="text">&nbsp;Chọn sản phẩm</span>
@@ -135,4 +135,4 @@ class Table extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {};
 };
-export default connect(null, mapDispatchToProps)(Table);
+export default connect(null, mapDispatchToProps)(Table2);

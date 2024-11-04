@@ -1,16 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Alert from "../../components/Partials/Alert";
-import Footer from "../../components/Partials/Footer";
-import Sidebar from "../../components/Partials/Sidebar";
-import Topbar from "../../components/Partials/Topbar";
-import * as Types from "../../constants/ActionType";
+
 import * as StoreAAction from "../../actions/store_address";
-import NotAccess from "../../components/Partials/NotAccess";
+import * as shipmentAction from "../../actions/shipment";
 import * as placeAction from "../../actions/place";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import Select from "react-select";
 import { formatNoDWithEmpty, formatNumber } from "../../ultis/helpers";
+import ConfigShip from "../../components/Shipment/ConfigShip";
 class Setting extends Component {
   constructor(props) {
     super(props);
@@ -24,8 +21,12 @@ class Setting extends Component {
       urban_list_id_province: [],
       provices: [],
       proviceOptions: [],
+      shipList: [],
     };
   }
+  setShipList = (shipList) => {
+    this.setState({ shipList });
+  };
   handChangeCheckbox2 = (e) => {
     this.setState({ checked_switch2: !this.state.checked_switch2 });
   };
@@ -61,6 +62,7 @@ class Setting extends Component {
       provices,
       fee_default_description,
       proviceOptions,
+      shipList,
     } = this.state;
     var urban_list_id_province = [];
     if (proviceOptions?.length > 0) {
@@ -69,6 +71,7 @@ class Setting extends Component {
       }
     }
 
+    console.log(" shipList====", shipList);
     const formData = {
       is_calculate_ship,
       use_fee_from_partnership,
@@ -78,12 +81,34 @@ class Setting extends Component {
       fee_default_description,
       use_fee_from_default,
     };
+    const updatedShipData = shipList.map(({ errors, ...rest }) => ({
+      ...rest,
+      fee: rest.fee.replace(/\./g, ""), // Loại bỏ tất cả dấu chấm
+    }));
+    const configShipData = {
+      distance: updatedShipData,
+    };
+
+    this.props.createFeeShipment(store_code, configShipData);
     this.props.updateShipConfig(store_code, formData);
   };
 
   componentWillReceiveProps = (nextProps) => {
     if (!shallowEqual(nextProps.shipConfig, this.props.shipConfig)) {
       var { shipConfig } = nextProps;
+
+      const formattedData = shipConfig?.ship_distance.map((item) => ({
+        min_distance: item.min_distance,
+        max_distance: item.max_distance,
+        fee: item.fee.toLocaleString("vi-VN"),
+        errors: {
+          min_distance: "",
+          max_distance: "",
+          fee: "",
+        },
+      }));
+      this.setState({ shipList: formattedData });
+
       var { urban_list_name_province } = shipConfig;
       this.setState({
         is_calculate_ship: shipConfig.is_calculate_ship,
@@ -143,6 +168,7 @@ class Setting extends Component {
       proviceOptions,
       fee_default_description,
       use_fee_from_default,
+      shipList,
     } = this.state;
     // var {isShow} = this.state
     var isShow = true;
@@ -287,6 +313,13 @@ class Setting extends Component {
             </React.Fragment>
           )}
         </div>
+        <ConfigShip
+          priceDefault={100}
+          list_distribute={10}
+          shipList={shipList}
+          setShipList={this.setShipList}
+          isShow={true}
+        ></ConfigShip>
         <button class="btn btn-primary btn-sm" onClick={this.handleUpdate}>
           <i class="fa fa-save"></i> Lưu
         </button>
@@ -312,6 +345,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     updateShipConfig: (store_code, data) => {
       dispatch(StoreAAction.updateShipConfig(store_code, data));
+    },
+    createFeeShipment: (store_code, data) => {
+      dispatch(shipmentAction.createFeeShipment(store_code, data));
     },
   };
 };

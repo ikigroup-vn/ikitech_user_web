@@ -1,14 +1,13 @@
 import React, { Component } from "react";
-import * as helper from "../../../ultis/helpers";
-import ModalUploadDis from "./Distribute/ModalUpload";
+
 import { connect } from "react-redux";
-import * as Types from "../../../constants/ActionType";
-import Alert from "../../Partials/Alert";
-import * as productAction from "../../../actions/product";
-import { shallowEqual } from "../../../ultis/shallowEqual";
-import { formatNumberV2 } from "../../../ultis/helpers";
-import { isEmpty } from "../../../ultis/helpers";
+import * as Types from "../../constants/ActionType";
+// import Alert from "../../Partials/Alert";
+
+import { formatNumberV2 } from "../../ultis/helpers";
+
 import styled from "styled-components";
+import Alert from "../Partials/Alert";
 
 const CardStyles = styled.div`
   .discount {
@@ -98,17 +97,17 @@ const CardStyles = styled.div`
 `;
 
 const initPriceRange = {
-  from: "",
-  to: "",
-  price: "",
+  min_distance: "",
+  max_distance: "",
+  fee: "",
   errors: {
-    from: "",
-    to: "",
-    price: "",
+    min_distance: "",
+    max_distance: "",
+    fee: "",
   },
 };
 
-class Discount extends Component {
+class ConfigShip extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -118,15 +117,15 @@ class Discount extends Component {
   validate = (e, index) => {
     const value = e.target.value;
     const name = e.target.name;
-    const { discountList, setDiscountList } = this.props;
+    const { setShipList, setShipListsss } = this.props;
     let textError = "";
     if (!value) {
       textError = "Không được để trống trường này!";
-    } else if (index === 0 && parseInt(value) < 2) {
-      textError = "Số lượng ít nhất cho giá bán sỉ phải lớn hơn 1";
+    } else if (index === 0 && parseInt(value) < 0) {
+      textError = "Khoảng cách ít nhất phải lớn hơn 1";
     } else if (
-      parseInt(value) < parseInt(discountList[index]?.from) &&
-      name === "to"
+      parseInt(value) < parseInt(setShipList[index]?.min_distance) &&
+      name === ""
     ) {
       textError = "Giá trị không được nhỏ hơn số lượng bắt đầu";
     } else {
@@ -140,28 +139,28 @@ class Discount extends Component {
   validateList = (updatedDiscountList, name, value, index) => {
     const messageErrorDefault = "Giá trị nhập không hợp lệ";
     const newDiscountList = [...updatedDiscountList];
-    if (value && name !== "price") {
+    if (value && name !== "fee") {
       updatedDiscountList.forEach((element, i) => {
         if (i < index) return;
         if (i === index) {
-          newDiscountList[i].errors.to =
-            name === "from" &&
-            parseInt(value) >= parseInt(newDiscountList[i].to)
+          newDiscountList[i].errors.max_distance =
+            name === "min_distance" &&
+            parseInt(value) >= parseInt(newDiscountList[i].max_distance)
               ? messageErrorDefault
               : "";
           if (
-            name === "to" &&
-            parseInt(value) < parseInt(newDiscountList[i].from)
+            name === "max_distance" &&
+            parseInt(value) < parseInt(newDiscountList[i].min_distance)
           ) {
-            newDiscountList[i].errors.to = messageErrorDefault;
+            newDiscountList[i].errors.max_distance = messageErrorDefault;
           }
         } else {
-          newDiscountList[i].errors.to =
-            parseInt(value) >= parseInt(newDiscountList[i].to)
+          newDiscountList[i].errors.max_distance =
+            parseInt(value) >= parseInt(newDiscountList[i].max_distance)
               ? messageErrorDefault
               : "";
           newDiscountList[i].errors.from =
-            parseInt(value) >= parseInt(newDiscountList[i].from)
+            parseInt(value) >= parseInt(newDiscountList[i].min_distance)
               ? messageErrorDefault
               : "";
         }
@@ -173,27 +172,28 @@ class Discount extends Component {
 
   // validate giá nhập
   validatePriceRange = (e, index) => {
-    const value = e.target.value;
-    const { discountList } = this.props;
-    let textError = "";
+    // const value = e.target.value;
+    // const { shipList } = this.props;
+    // let textError = "";
 
-    if (!value) {
-      textError = "Không được để trống trường này!";
-    } else if (
-      index === 0 &&
-      parseInt(value.toString()?.replace(/[.,]/g, "")) >=
-        parseInt(this.getRetailPrice()?.toString()?.replace(/[.,]/g, ""))
-    ) {
-      textError = "Giá trị phải nhỏ hơn giá bán lẻ";
-    } else if (
-      parseInt(value.toString()?.replace(/[.,]/g, "")) >=
-      parseInt(discountList[index - 1]?.price?.toString()?.replace(/[.,]/g, ""))
-    ) {
-      textError = "Giá trị phải nhỏ hơn khoảng giá trước";
-    } else {
-      textError = "";
-    }
-    return textError;
+    // if (!value) {
+    //   textError = "Không được để trống trường này!";
+    // } else if (
+    //   index === 0 &&
+    //   parseInt(value.toString()?.replace(/[.,]/g, "")) >=
+    //     parseInt(this.getRetailPrice()?.toString()?.replace(/[.,]/g, ""))
+    // ) {
+    //   textError = "Giá trị phải nhỏ hơn giá bán lẻ";
+    // } else if (
+    //   parseInt(value.toString()?.replace(/[.,]/g, "")) >=
+    //   parseInt(shipList[index - 1]?.price?.toString()?.replace(/[.,]/g, ""))
+    // ) {
+    //   textError = "Giá trị phải nhỏ hơn khoảng giá trước";
+    // } else {
+    //   textError = "";
+    // }
+    // return textError;
+    console.log("đã vào");
   };
 
   getRetailPrice = () => {
@@ -231,33 +231,32 @@ class Discount extends Component {
   };
 
   addInitPriceRange = (item) => {
-    const { discountList, setDiscountList, list_distribute } = this.props;
-    console.log("list_distribute======", list_distribute);
-    if (!item) setDiscountList([initPriceRange]);
+    const { shipList, setShipList } = this.props;
+    if (!item) setShipList([initPriceRange]);
     else {
-      const { from, to } = item;
+      const { min_distance, max_distance } = item;
       const newPrice = {
-        from: to
-          ? (parseInt(to) + 1).toString()
-          : from
-          ? parseInt(from) + 1
+        min_distance: max_distance
+          ? (parseInt(max_distance) + 1).toString()
+          : min_distance
+          ? parseInt(min_distance) + 1
           : "",
-        to: "",
-        price: "",
+        max_distance: "",
+        fee: "",
         errors: {
-          from: "",
-          to: "",
-          price: "",
+          min_distance: "",
+          max_distance: "",
+          fee: "",
         },
       };
-      const newDiscountList = [...discountList, newPrice];
-      setDiscountList(newDiscountList);
+      const newDiscountList = [...shipList, newPrice];
+      setShipList(newDiscountList);
     }
   };
 
   onDeleteItem = (index) => {
-    const { discountList, setDiscountList } = this.props;
-    const updatedDiscountList = JSON.parse(JSON.stringify(discountList));
+    const { shipList, setShipList } = this.props;
+    const updatedDiscountList = JSON.parse(JSON.stringify(shipList));
     updatedDiscountList.splice(index, 1);
     if (index < updatedDiscountList.length) {
       updatedDiscountList[index].from = updatedDiscountList[index - 1]?.to
@@ -277,21 +276,21 @@ class Discount extends Component {
       nextIndex += 1;
     }
 
-    setDiscountList(updatedDiscountList);
+    setShipList(updatedDiscountList);
   };
 
   onChangeInput = (e, index) => {
     const name = e.target.name;
     const value = e.target.value;
-    const { discountList, setDiscountList } = this.props;
+    const { shipList, setShipList } = this.props;
 
-    const updatedDiscountList = JSON.parse(JSON.stringify(discountList));
+    const updatedDiscountList = JSON.parse(JSON.stringify(shipList));
     updatedDiscountList[index] = {
       ...updatedDiscountList[index],
-      [name]: name === "price" ? formatNumberV2(value) : value,
+      [name]: name === "fee" ? formatNumberV2(value) : value,
     };
 
-    if (name === "price") {
+    if (name === "fee") {
       updatedDiscountList[index].errors[name] = this.validatePriceRange(
         e,
         index
@@ -300,10 +299,10 @@ class Discount extends Component {
       updatedDiscountList[index].errors[name] = this.validate(e, index);
     }
 
-    if (name === "to") {
+    if (name === "max_distance") {
       let nextIndex = index + 1;
       if (nextIndex === updatedDiscountList.length && !value) {
-        setDiscountList(updatedDiscountList);
+        setShipList(updatedDiscountList);
         return;
       }
 
@@ -345,27 +344,26 @@ class Discount extends Component {
       index
     );
 
-    setDiscountList(newDiscountList);
+    setShipList(newDiscountList);
   };
 
   render() {
-    const { discountList, isShow } = this.props;
+    const { shipList, isShow } = this.props;
     console.log(
       "🚀 ~ file: Discount.js:272 ~ Discount ~ render ~ discountList:",
-      discountList
+      shipList
     );
     return (
       <CardStyles>
         <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
         <div class="card mb-4">
-          <div class="card-header title_content">Mua nhiều giảm giá</div>
-          <div class="card-body" style={{ padding: "0.8rem" }}>
+          <div class="card-body" style={{ padding: "0.0rem" }}>
             <div class="row">
               <div class="col-lg-12">
                 <div>
                   <div class="card-body" style={{ padding: "0.8rem" }}>
                     <div>
-                      <div
+                      {/* <div
                         style={{
                           color: "red",
                           fontStyle: "italic",
@@ -373,22 +371,18 @@ class Discount extends Component {
                       >
                         *Giá sỉ chỉ có thể được thiết lập khi sản phẩm không có
                         phân loại hoặc các phân loại đồng giá.
-                      </div>
+                      </div> */}
                       {isShow ? (
                         <div className="discount">
                           <div className="discount__header">
                             <div className="discount__header__title">
-                              Khoảng giá
+                              Khoảng cách
                             </div>
                             <div className="discount__header__from">
-                              Từ (sản phẩm)
+                              Từ (Km)
                             </div>
-                            <div className="discount__header__to">
-                              Đến (sản phẩm)
-                            </div>
-                            <div className="discount__header__price">
-                              Đơn Giá
-                            </div>
+                            <div className="discount__header__to">Đến (Km)</div>
+                            <div className="discount__header__price">Phí</div>
                             <div className="discount__header__action">
                               Thao tác
                             </div>
@@ -397,20 +391,25 @@ class Discount extends Component {
                             <button
                               type="button"
                               className={`btn btn-info btn-sm ${
-                                discountList && discountList.length > 0
+                                shipList && shipList.length > 0
                                   ? "hide"
                                   : "show"
                               }`}
                               onClick={() => this.addInitPriceRange()}
                             >
                               <i className="fa fa-plus"></i>
-                              Thêm khoảng giá
+                              Thêm khoảng cách
                             </button>
                           </div>
                           <div className="discount__main">
-                            {discountList && discountList.length > 0
-                              ? discountList.map((item, index) => {
-                                  const { from, to, price, errors } = item;
+                            {shipList && shipList.length > 0
+                              ? shipList.map((item, index) => {
+                                  const {
+                                    min_distance,
+                                    max_distance,
+                                    fee,
+                                    errors,
+                                  } = item;
                                   return (
                                     <>
                                       <div
@@ -418,13 +417,13 @@ class Discount extends Component {
                                         key={index}
                                       >
                                         <div className="discount__content__title">
-                                          Khoảng giá {index + 1}
+                                          Khoảng cách {index + 1}
                                         </div>
                                         <div className="discount__content__from">
                                           <div className="discount__content__item">
                                             <input
-                                              value={from}
-                                              name="from"
+                                              value={min_distance}
+                                              name="min_distance"
                                               type="text"
                                               placeholder="Từ (sản phẩm)"
                                               className="form-control"
@@ -434,16 +433,16 @@ class Discount extends Component {
                                               }
                                               disabled={index !== 0}
                                             />
-                                            {errors.from ? (
-                                              <div>{errors.from}</div>
+                                            {errors.min_distance ? (
+                                              <div>{errors.min_distance}</div>
                                             ) : null}
                                           </div>
                                         </div>
                                         <div className="discount__content__to">
                                           <div className="discount__content__item">
                                             <input
-                                              value={to}
-                                              name="to"
+                                              value={max_distance}
+                                              name="max_distance"
                                               type="text"
                                               placeholder="Đến (sản phẩm)"
                                               className="form-control"
@@ -452,16 +451,16 @@ class Discount extends Component {
                                                 this.onChangeInput(e, index)
                                               }
                                             />
-                                            {errors.to ? (
-                                              <div>{errors.to}</div>
+                                            {errors.max_distance ? (
+                                              <div>{errors.max_distance}</div>
                                             ) : null}
                                           </div>
                                         </div>
                                         <div className="discount__content__price">
                                           <div className="discount__content__item">
                                             <input
-                                              value={price}
-                                              name="price"
+                                              value={fee}
+                                              name="fee"
                                               type="text"
                                               placeholder="Đơn giá"
                                               className="form-control"
@@ -470,8 +469,8 @@ class Discount extends Component {
                                                 this.onChangeInput(e, index)
                                               }
                                             />
-                                            {errors.price ? (
-                                              <div>{errors.price}</div>
+                                            {errors.fee ? (
+                                              <div>{errors.fee}</div>
                                             ) : null}
                                           </div>
                                         </div>
@@ -494,20 +493,19 @@ class Discount extends Component {
                                           </svg>
                                         </div>
                                       </div>
-                                      {index === discountList.length - 1 && (
+                                      {index === shipList.length - 1 && (
                                         <div
                                           className="discount__end"
                                           key={index + 2}
                                         >
                                           <div className="discount__end__title">
-                                            Khoảng giá {index + 2}
+                                            Khoảng cách {index + 2}
                                           </div>
                                           <div className="discount__end__from">
                                             <button
                                               type="button"
                                               className={`btn btn-info btn-sm ${
-                                                discountList &&
-                                                discountList.length > 0
+                                                shipList && shipList.length > 0
                                                   ? "show"
                                                   : "hide"
                                               }`}
@@ -516,7 +514,7 @@ class Discount extends Component {
                                               }
                                             >
                                               <i className="fa fa-plus"></i>
-                                              Thêm khoảng giá
+                                              Thêm khoảng cách
                                             </button>
                                           </div>
                                         </div>
@@ -549,4 +547,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Discount);
+export default connect(mapStateToProps, mapDispatchToProps)(ConfigShip);

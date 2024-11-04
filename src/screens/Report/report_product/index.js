@@ -286,7 +286,7 @@ class ReportProduct extends Component {
     );
   };
 
-  exportReportProductSold = () => {
+  exportReportProductSoldV2 = () => {
     var { store_code } = this.props.match.params;
     var {
       time_from,
@@ -318,7 +318,7 @@ class ReportProduct extends Component {
       this.state.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
         : null;
-    this.props.exportReportProductSold(
+    this.props.exportReportProductSoldV2(
       store_code,
       1,
       branchIds,
@@ -413,7 +413,7 @@ class ReportProduct extends Component {
 
                     <button
                       style={{ margin: "auto 0px" }}
-                      onClick={this.exportReportProductSold}
+                      onClick={this.exportReportProductSoldV2}
                       class={`btn btn-success btn-icon-split btn-sm `}
                     >
                       <span class="icon text-white-50">
@@ -627,9 +627,9 @@ const mapDispatchToProps = (dispatch, props) => {
         )
       );
     },
-    exportReportProductSold: (id, page, branch_id, params, params_agency) => {
+    exportReportProductSoldV2: (id, page, branch_id, params, params_agency) => {
       dispatch(
-        billAction.exportReportProductSold(
+        billAction.exportReportProductSoldV2(
           id,
           page,
           branch_id,

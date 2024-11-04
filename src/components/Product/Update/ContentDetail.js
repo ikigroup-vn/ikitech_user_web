@@ -30,11 +30,15 @@ class ContentDetail extends Component {
       txtContent: "",
       isLoaded: true,
       txtContentC: "",
+      txtShortContent: "",
     };
   }
 
   onChange = (e) => {
     this.setState({ txtContentC: e.target.value });
+  };
+  onChange2 = (e) => {
+    this.setState({ txtShortContent: e.target.value });
   };
   handleEditorChange = (editorState) => {
     console.log("editorState", editorState.srcElement.innerHTML);
@@ -46,24 +50,29 @@ class ContentDetail extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (
       nextState.txtContent !== this.state.txtContent ||
-      nextState.txtContentC !== this.state.txtContentC
+      nextState.txtContentC !== this.state.txtContentC ||
+      nextState.txtShortContent !== this.state.txtShortContent
     ) {
       console.log("nextState", nextState.txtContentUpdate);
       this.props.handleDataFromContent({
         txtContent: nextState.txtContent,
         txtContentC: nextState.txtContentC,
+        txtShortContent: nextState.txtShortContent,
       });
     }
     if (
       nextProps.product.description !== this.props.product.description ||
       nextProps.product.content_for_collaborator !==
         this.props.product.content_for_collaborator ||
+      nextProps.product.short_description !==
+        this.props.product.short_description ||
       nextState.isLoaded == true
     ) {
       this.setState({
         txtContent: nextProps.product.description,
         txtContentUpdate: nextProps.product.description,
         txtContentC: nextProps.product.content_for_collaborator ?? " ",
+        txtShortContent: nextProps.product.short_description ?? " ",
         isLoaded: false,
       });
     }
@@ -71,13 +80,27 @@ class ContentDetail extends Component {
   }
 
   render() {
-    var { txtContent, txtContentC, txtContentUpdate } = this.state;
+    var { txtContent, txtContentC, txtContentUpdate, txtShortContent } =
+      this.state;
 
     var { store_code } = this.props;
     return (
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="form-group">
-          <label for="product_name">&nbsp;&nbsp;Mô tả sản phẩm</label>
+          <label for="product_name">Mô tả ngắn</label>
+
+          <textarea
+            value={txtShortContent}
+            onChange={this.onChange2}
+            name="txtShortContent"
+            id="input"
+            class="form-control"
+            rows="4"
+            required="required"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="product_name">&nbsp;&nbsp;Mô tả chi tiết</label>
           <SunEditor
             onImageUploadBefore={handleImageUploadBefore}
             setContents={txtContentUpdate}

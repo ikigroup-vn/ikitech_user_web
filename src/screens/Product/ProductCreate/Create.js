@@ -567,6 +567,9 @@ class ProductCreate extends Component {
       var formdata = { ...prevState.form };
       formdata.content_for_collaborator = data.txtContentC;
       formdata.description = data.txtContent;
+      formdata.description = data.txtContent;
+      formdata.short_description = data.txtShortContent;
+
       return { form: formdata };
     });
   };

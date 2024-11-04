@@ -96,7 +96,8 @@ export const exportAllListOrder = (
                     total_before_discount: item.total_before_discount,
                     total_after_discount: item.total_after_discount,
                     discount: item.discount,
-                    total_commission_order_for_customer: item.total_commission_order_for_customer,
+                    total_commission_order_for_customer:
+                      item.total_commission_order_for_customer,
 
                     balance_collaborator_used: item.balance_collaborator_used,
                     bonus_points_amount_used: item.bonus_points_amount_used,
@@ -270,6 +271,227 @@ export const exportAllListOrder = (
       });
   };
 };
+
+export const exportAllListOrderV2 = (
+  store_code,
+  page = 1,
+  branch_id,
+  params = null,
+  params_agency = null
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    billApi
+      .fetchAllBillV2(store_code, page, branch_id, params, params_agency, true)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+
+        exportExcel(res.data.data);
+      });
+  };
+};
+
+// Hàm xuất Excel
+// Hàm xuất Excel
+function exportExcel(data) {
+  XlsxPopulate.fromBlankAsync()
+    .then((workbook) => {
+      const sheet = workbook.sheet(0);
+
+      // Thiết lập tiêu đề
+      const headers = [
+        "Ngày",
+        "Mã đơn hàng",
+        "Tên khách hàng",
+        "Địa chỉ",
+        "Mã sản phẩm",
+        "Tên sản phẩm",
+        "Số lượng",
+        "Giá bán",
+        "Doanh thu",
+        "Giảm giá",
+        "Thành tiền",
+        "Phí vận chuyển",
+        "Tổng thanh toán",
+        "Trạng thái thanh toán",
+        "Trạng thái đơn hàng",
+        "Địa chỉ lấy hàng",
+      ];
+      headers.forEach((header, index) => {
+        sheet.cell(1, index + 1).value(header);
+      });
+      sheet.range("A1:P1").style({ fill: "FFFFF0", bold: true });
+
+      // Điền dữ liệu
+      let currentRow = 2; // Bắt đầu từ dòng 2, sau tiêu đề
+      let totalQuantityOverall = 0; // Tổng số lượng
+      let totalRevenueOverall = 0; // Tổng doanh thu
+      let totalDiscountOverall = 0; // Tổng doanh thu
+
+      data.forEach((order) => {
+        const totalQuantity = order.items.reduce(
+          (sum, item) => sum + item.quantity,
+          0
+        );
+        const totalDoanhThu = order.items.reduce(
+          (sum, item) => sum + item.quantity * item.product?.price,
+          0
+        );
+        const totalDiscount = order.items.reduce(
+          (sum, item) =>
+            sum +
+            (item.quantity * (item.product?.price || 0) - item.discount_price),
+          0
+        );
+        const totalFinal = order.items.reduce(
+          (sum, item) => sum + item.discount_price,
+          0
+        );
+
+        // Cộng dồn vào tổng chung
+        totalQuantityOverall += totalQuantity;
+        totalRevenueOverall += totalDoanhThu;
+        totalDiscountOverall += totalDiscount;
+        // Dòng đầu của mỗi nhóm (thông tin đơn hàng)
+        sheet.cell(currentRow, 1).value(formatDate(order.created_at));
+        sheet.cell(currentRow, 2).value(order.order_code);
+        sheet.cell(currentRow, 3).value(order.customer_name);
+        sheet.cell(currentRow, 4).value(order.branch?.province_name);
+        sheet.cell(currentRow, 6).value(order.branch?.name);
+        sheet.cell(currentRow, 7).value(totalQuantity);
+        sheet.cell(currentRow, 9).value(totalDoanhThu);
+        sheet.cell(currentRow, 10).value(totalDiscount);
+        sheet.cell(currentRow, 11).value(totalFinal);
+        sheet.cell(currentRow, 12).value(order.total_shipping_fee);
+        sheet.cell(currentRow, 13).value(order.total_final);
+        sheet
+          .cell(currentRow, 14)
+          .value(checkStatusPayment(order.payment_status));
+        sheet.cell(currentRow, 15).value(checkStatusOrder(order.order_status));
+        sheet.cell(currentRow, 16).value(order.branch?.branch_code);
+
+        // Tô màu nền cho dòng đầu tiên của nhóm
+        sheet
+          .range(`A${currentRow}:P${currentRow}`)
+          .style({ fill: "FCF5E6", bold: true });
+        currentRow++;
+
+        // Thông tin sản phẩm
+        order.items.forEach((item) => {
+          sheet.cell(currentRow, 5).value(item.product?.id);
+          sheet.cell(currentRow, 6).value(item.product?.name);
+          sheet.cell(currentRow, 7).value(item.quantity);
+          sheet.cell(currentRow, 8).value(item.product?.price);
+          sheet.cell(currentRow, 9).value(item.quantity * item.product?.price);
+          sheet
+            .cell(currentRow, 10)
+            .value(item.quantity * item.product?.price - item.discount_price);
+          sheet.cell(currentRow, 11).value(item.discount_price);
+
+          currentRow++; // Tăng dòng sau khi thêm thông tin sản phẩm
+        });
+      });
+
+      // Thêm dòng tổng cộng
+      sheet.cell(currentRow, 6).value("Tổng cộng"); // Tên sản phẩm
+      sheet.cell(currentRow, 7).value(totalQuantityOverall); // Tổng số lượng
+      sheet.cell(currentRow, 9).value(totalRevenueOverall); // Tổng doanh thu
+      sheet.cell(currentRow, 10).value(totalDiscountOverall); // Tổng doanh thu
+
+      // Tô màu nền cho dòng tổng cộng
+      sheet
+        .range(`A${currentRow}:P${currentRow}`)
+        .style({ fill: "FAFAD2", bold: true });
+
+      // Thiết lập viền đậm cho tất cả các ô có chứa dữ liệu, bao gồm dòng tổng cộng
+      sheet.range(`A1:P${currentRow}`).style({
+        border: true, // Đặt viền cho tất cả các cạnh
+        borderColor: "000000", // Màu đen
+        borderStyle: "thin", // Độ dày viền
+      });
+
+      // Xuất file dưới dạng Blob
+      return workbook.outputAsync();
+    })
+    .then((blob) => {
+      // Sử dụng saveAs để tải xuống file
+      saveAs(blob, "BANG KE DON HANG.xlsx");
+    })
+    .then(() => {
+      console.log("Tệp Excel đã được xuất thành công!");
+    })
+    .catch((error) => {
+      console.error("Đã xảy ra lỗi:", error);
+    });
+}
+
+function checkStatusPayment(status) {
+  if (status == 0) {
+    return "Chưa thanh toán";
+  } else if (status == 1) {
+    return "Chờ xử lý";
+  } else if (status == 2) {
+    return "Đã thanh toán";
+  } else if (status == 3) {
+    return "Đã thanh toán một phần";
+  } else if (status == 5) {
+    return "Hoàn tiền";
+  }
+}
+
+function checkStatusOrder(status) {
+  if (status == 0) {
+    return "Chờ xử lý";
+  } else if (status == 1) {
+    return "Đang chuyển bị hàng";
+  } else if (status == 2) {
+    return "Hết hàng";
+  } else if (status == 3) {
+    return "Shop hủy";
+  } else if (status == 4) {
+    return "Khách hủy";
+  } else if (status == 5) {
+    return "Đang giao hàng";
+  } else if (status == 6) {
+    return "Lỗi giao hàng";
+  } else if (status == 7) {
+    return "Chờ trả hàng";
+  } else if (status == 8) {
+    return "Đã trả hàng";
+  } else if (status == 9) {
+    return "Đợi thanh toán";
+  } else if (status == 10) {
+    return "Hoàn thành";
+  } else if (status == 11) {
+    return "Đã nhận hàng";
+  } else if (status == 12) {
+    return "Đang tìm tài xế";
+  } else if (status == 13) {
+    return "Đã tìm thấy tài xế";
+  } else if (status == 14) {
+    return "Tài xế đã lấy hàng";
+  }
+}
+
+function formatDate(dateString) {
+  // Chuyển đổi chuỗi ngày giờ sang đối tượng Date
+  const date = new Date(dateString);
+
+  // Lấy các thành phần ngày, tháng và năm
+  const day = String(date.getDate()).padStart(2, "0"); // Đảm bảo có 2 chữ số
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0
+  const year = date.getFullYear();
+
+  // Trả về định dạng dd/MM/yyyy
+  return `${day}/${month}/${year}`;
+}
+
 export const exportReportProductSold = (
   store_code,
   page = 1,
@@ -372,6 +594,107 @@ export const exportReportProductSold = (
   };
 };
 
+export const exportReportProductSoldV2 = (
+  store_code,
+  page = 1,
+  branch_id,
+  params = null,
+  params_agency = null
+) => {
+  return (dispatch) => {
+    const timeFrom = getQueryParams("time_from") || "";
+    const timeTo = getQueryParams("time_to") || "";
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    billApi
+      .fetchReportProducSoldV2(
+        store_code,
+        page,
+        branch_id,
+        params,
+        params_agency,
+        true
+      )
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        console.log("res.data.data====", res.data);
+        exportToExcel(res.data, timeFrom, timeTo);
+      });
+  };
+};
+
+function exportToExcel(responseData, startDate, endDate) {
+  const excelData = [];
+  let stt = 1;
+
+  // Duyệt qua từng SKU trong dữ liệu response
+  for (const sku in responseData.data) {
+    if (responseData.data.hasOwnProperty(sku)) {
+      const products = responseData.data[sku];
+
+      // Duyệt qua từng sản phẩm với cùng SKU
+      products.forEach((product, index) => {
+        excelData.push({
+          STT: index === 0 ? stt : "", // Chỉ đặt STT cho dòng đầu tiên
+          "Mã sản phẩm": sku,
+          "Tên sản phẩm": product.name,
+          "Số lượng bán": product.quantity,
+          "Giá bán": product.price,
+          "Thành tiền": product.amount,
+        });
+      });
+      stt++; // Tăng số thứ tự cho nhóm SKU tiếp theo
+    }
+  }
+
+  // Tạo file Excel với XlsxPopulate
+  XlsxPopulate.fromBlankAsync().then((workbook) => {
+    const sheet = workbook.sheet(0);
+
+    // Thêm dòng đầu tiên với nội dung "Từ [ngày bắt đầu] đến [ngày kết thúc]" và bôi vàng
+    sheet.cell("A1").value(`Từ ${startDate} đến ${endDate}`);
+    sheet.range("A1:F1").merged(true).style("fill", "F4D03F");
+    // sheet.range("A1:" + endColumn + "1").style("fill", "F4D03F");
+
+    // Thiết lập tiêu đề cột
+    const headers = [
+      "STT",
+      "Mã sản phẩm",
+      "Tên sản phẩm",
+      "Số lượng bán",
+      "Giá bán",
+      "Thành tiền",
+    ];
+    headers.forEach((header, index) => {
+      sheet
+        .cell(2, index + 1)
+        .value(header)
+        .style("bold", true); // Đặt in đậm cho tiêu đề
+    });
+
+    // Ghi dữ liệu vào các dòng Excel, bắt đầu từ dòng thứ 3
+    excelData.forEach((data, rowIndex) => {
+      Object.values(data).forEach((value, colIndex) => {
+        sheet.cell(rowIndex + 3, colIndex + 1).value(value);
+      });
+    });
+
+    // Xuất file
+    workbook.outputAsync().then((blob) => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "BAO CAO SAN PHAM DA BAN.xlsx";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  });
+}
 export const exportAllBillByMethodPayment = (
   store_code,
   page = 1,

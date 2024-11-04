@@ -1,6 +1,6 @@
 import * as Types from "../constants/ActionType";
 import * as shipmentApi from "../data/remote/shipment";
-
+import * as billApi from "../data/remote/bill";
 export const fetchAllShipment = (store_code) => {
   return (dispatch) => {
     dispatch({
@@ -18,6 +18,136 @@ export const fetchAllShipment = (store_code) => {
           data: res.data.data,
         });
     });
+  };
+};
+
+export const fetchAllShipAddress = (store_code, address) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    shipmentApi.fetchAllShipAddress(store_code, address).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_SHIPMENT_ADDRESS,
+          data: res.data,
+        });
+    });
+  };
+};
+export const cancelShipment = (store_code, order_code, order_codes) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    shipmentApi.cancelShipment(store_code, order_code).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      setTimeout(async () => {
+        const billRes = await billApi.fetchBillId(store_code, order_codes);
+
+        if (billRes.data.code !== 401) {
+          dispatch({
+            type: Types.FETCH_ID_BILL,
+            data: billRes.data.data,
+          });
+        }
+      }, 2000);
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_SHIPMENT_ADDRESS,
+          data: res.data,
+        });
+    });
+  };
+};
+//nghia
+// export const createShipAhamove = (store_code, data) => {
+//   return (dispatch) => {
+//     dispatch({
+//       type: Types.SHOW_LOADING,
+//       loading: "show",
+//     });
+//     shipmentApi
+//       .createShipAhamove(store_code, data)
+//       .then((res) => {
+//         dispatch({
+//           type: Types.SHOW_LOADING,
+//           loading: "hide",
+//         });
+//         return res;
+//       })
+//       .catch(function (error) {
+//         dispatch({
+//           type: Types.ALERT_UID_STATUS,
+//           alert: {
+//             type: "danger",
+//             title: "Lỗi",
+//             disable: "show",
+//             content: error?.response?.data?.msg,
+//           },
+//         });
+//       })
+//       .catch(function (error) {
+//         dispatch({
+//           type: Types.SHOW_LOADING,
+//           loading: "hide",
+//         });
+//         dispatch({
+//           type: Types.ALERT_UID_STATUS,
+//           alert: {
+//             type: "danger",
+//             title: "Lỗi",
+//             disable: "show",
+//             content: error?.response?.data?.msg,
+//           },
+//         });
+//       });
+//   };
+// };
+export const createShipAhamove = (store_code, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+
+    // Trả về Promise từ API
+    return shipmentApi
+      .createShipAhamove(store_code, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        return res; // Trả về kết quả
+      })
+      .catch((error) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+
+        // Ném lỗi ra để có thể xử lý ở nơi gọi hàm
+        throw error;
+      });
   };
 };
 
@@ -216,7 +346,65 @@ export const createShipment = (store_code, data) => {
       });
   };
 };
-
+//nghia thêm
+export const createFeeShipment = (store_code, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    shipmentApi
+      .createFeeShipment(store_code, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        shipmentApi.fetchAllShipment(store_code).then((res) => {
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_ALL_SHIPMENT,
+              data: res.data.data,
+            });
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "success",
+              title: "Thành công ",
+              disable: "show",
+              content: res.data.msg,
+            },
+          });
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
 export const updateShipment = (store_code, id, data) => {
   return (dispatch) => {
     dispatch({

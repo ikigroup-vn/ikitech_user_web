@@ -5,6 +5,7 @@ var initialState = {
   shipmentID: [],
   calculate: [],
   listShipmentV2: [],
+  listShipmentAddress: [],
 };
 
 function getData(state, shipment) {
@@ -36,6 +37,9 @@ export const shipment = (state = initialState, action) => {
   switch (action.type) {
     case Types.FETCH_ALL_SHIPMENT:
       newState.allShipment = action.data;
+      return newState;
+    case Types.FETCH_ALL_SHIPMENT_ADDRESS:
+      newState.listShipmentAddress = action.data;
       return newState;
     case Types.FETCH_ALL_CALCULATE_SHIPMENT:
       newState.calculate =

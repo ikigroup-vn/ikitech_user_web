@@ -694,6 +694,61 @@ class Bill extends Component {
     return params;
   };
 
+  getParamsV2 = (
+    from,
+    to,
+    searchValue,
+    statusOrder,
+    statusPayment,
+    numPage,
+    orderFrom,
+    collaborator_by_customer_id,
+    statusTime,
+    user,
+    sale_staff_id
+  ) => {
+    var params = ``;
+    if (sale_staff_id != "" && sale_staff_id != null) {
+      params = params + `&sale_staff_id=${sale_staff_id}`;
+    }
+    if (to != "" && to != null) {
+      const toYYYYMMDD = to?.split("-").reverse().join("-");
+      params = params + `&date_to=${toYYYYMMDD}`;
+    }
+    if (from != "" && from != null) {
+      const fromYYYYMMDD = from?.split("-").reverse().join("-");
+      params = params + `&date_from=${fromYYYYMMDD}`;
+    }
+    if (statusTime != null && statusTime != "") {
+      params = params + `&type_query_time=${statusTime}`;
+    }
+    if (searchValue != "" && searchValue != null) {
+      params = params + `&search=${searchValue}`;
+    }
+    if (statusOrder != "" && statusOrder != null) {
+      params = params + `&order_status_code=${statusOrder}`;
+    }
+    if (statusPayment != "" && statusPayment != null) {
+      params = params + `&payment_status_code=${statusPayment}`;
+    }
+    if (numPage != "" && numPage != null) {
+      params = params + `&limit=${numPage}`;
+    }
+    if (orderFrom != "" && orderFrom != null) {
+      params = params + `&order_from_list=${orderFrom}`;
+    }
+    if (
+      collaborator_by_customer_id != "" &&
+      collaborator_by_customer_id != null
+    ) {
+      params =
+        params + `&collaborator_by_customer_id=${collaborator_by_customer_id}`;
+    }
+    if (this.isSale()) {
+      params += `&sale_staff_id=${user?.id || this.props.user.id}`;
+    }
+    return params;
+  };
   exportAllListOrder = () => {
     var { store_code } = this.props.match.params;
     var {
@@ -727,6 +782,47 @@ class Bill extends Component {
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
         : null;
     this.props.exportAllListOrder(
+      store_code,
+      1,
+      branchIds,
+      params,
+      params_agency
+    );
+  };
+
+  exportAllListOrderV2 = () => {
+    var { store_code } = this.props.match.params;
+    var {
+      time_from,
+      time_to,
+      searchValue,
+      statusOrder,
+      statusPayment,
+      numPage,
+      orderFrom,
+      collaborator_by_customer_id,
+      statusTime,
+    } = this.state;
+
+    var params = this.getParamsV2(
+      time_from,
+      time_to,
+      searchValue,
+      statusOrder,
+      statusPayment,
+      numPage,
+      orderFrom,
+      collaborator_by_customer_id,
+      statusTime
+    );
+    const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+    var params_agency =
+      this.state.agency_by_customer_id != null
+        ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
+        : null;
+    this.props.exportAllListOrderV2(
       store_code,
       1,
       branchIds,
@@ -1059,6 +1155,22 @@ class Bill extends Component {
                             <button
                               style={{
                                 margin: "auto 0px",
+                                marginRight: 15,
+                              }}
+                              onClick={this.exportAllListOrderV2}
+                              class={`btn btn-success btn-icon-split btn-sm `}
+                            >
+                              <span class="icon text-white-50">
+                                <i class="fas fa-file-export"></i>
+                              </span>
+                              <span style={{ color: "white" }} class="text">
+                                Export Excel Bảng Kê Đơn Hàng
+                              </span>
+                            </button>
+
+                            {/* <button
+                              style={{
+                                margin: "auto 0px",
                               }}
                               class={`btn btn-primary btn-sm`}
                               title="Đồng bộ trạng thái đơn hàng với đơn vị vận chuyển"
@@ -1070,7 +1182,7 @@ class Bill extends Component {
                             >
                               <i class="fa fa-sync"></i> Đồng bộ trạng thái giao
                               hàng
-                            </button>
+                            </button> */}
                           </div>
                         </div>
                         <div
@@ -1376,6 +1488,17 @@ const mapDispatchToProps = (dispatch, props) => {
     exportAllListOrder: (id, page, branch_id, params, params_agency) => {
       dispatch(
         billAction.exportAllListOrder(
+          id,
+          page,
+          branch_id,
+          params,
+          params_agency
+        )
+      );
+    },
+    exportAllListOrderV2: (id, page, branch_id, params, params_agency) => {
+      dispatch(
+        billAction.exportAllListOrderV2(
           id,
           page,
           branch_id,
