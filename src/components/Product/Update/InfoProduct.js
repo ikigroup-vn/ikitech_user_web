@@ -3,6 +3,7 @@ import Select from "react-select";
 import * as helper from "../../../ultis/helpers";
 import { connect } from "react-redux";
 import * as CategoryPAction from "../../../actions/category_product";
+import * as agencyAction from "../../../actions/agency";
 import * as AttributeAction from "../../../actions/attribute_search";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { formatNumber, formatNoD } from "../../../ultis/helpers";
@@ -569,7 +570,7 @@ class InfoProduct extends Component {
     // this.setState({ listCategory: option });
   };
   handleChangeTypeShareCollab = (type) => {
-    if (type === '%') {
+    if (type === "%") {
       this.setState({
         money_amount_collaborator: "",
       });
@@ -986,30 +987,96 @@ class InfoProduct extends Component {
               </button>
             </div>
             <div id="demo2" class="collapse">
-              {/* <form onSubmit={this.searchData}>
-
-                <div
-                  class="input-group mb-6"
-                  style={{
-                    paddingTop: "10px",
-                  }}
-                >
-                  <input
-                    style={{ maxWidth: "200px", minWidth: "200px" }}
-                    type="search"
-                    name="categorySearch"
-                    value={categorySearch}
-                    onChange={this.onChange}
-                    class="form-control"
-                    placeholder="Tìm kiếm danh mục"
-                  />
-                  <div class="input-group-append">
-                    <button class="btn btn-primary" type="button" onClick={this.searchData}>
-                      <i class="fa fa-search"></i>
-                    </button>
-                  </div>
-                </div>
-              </form> */}
+              <ul
+                style={{ listStyle: "none", margin: "5px 0" }}
+                class="list-group"
+              >
+                {listCategory?.length > 0 ? (
+                  listCategory.map((category) => (
+                    <li
+                      class=""
+                      style={{ cursor: "pointer", paddingLeft: "5px" }}
+                    >
+                      <input
+                        type="checkbox"
+                        style={{
+                          marginRight: "10px",
+                          width: "30px",
+                          height: "15px",
+                        }}
+                        checked={this.handleChangeCheckParent(category.id)}
+                        onChange={() => this.handleChangeParent(category)}
+                      />
+                      {category.label}
+                      <ul style={{ listStyle: "none", margin: "0px 45px" }}>
+                        {(category?.categories_child ?? []).map(
+                          (categoryChild) => (
+                            <li style={{ cursor: "pointer" }}>
+                              <input
+                                type="checkbox"
+                                style={{
+                                  marginRight: "10px",
+                                  width: "30px",
+                                  height: "15px",
+                                  marginTop: "3px",
+                                }}
+                                checked={this.handleChangeCheckChild(
+                                  categoryChild.id
+                                )}
+                                onChange={() =>
+                                  this.handleChangeChild(categoryChild)
+                                }
+                              />
+                              {categoryChild.name}
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </li>
+                  ))
+                ) : (
+                  <div>Không có kết quả</div>
+                )}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="product_name">Nhóm đại lý</label>
+          <div className="Choose-category-product">
+            <div
+              className="wrap_category"
+              style={{ display: "flex" }}
+              onClick={this.onChangeIcon}
+              data-toggle="collapse"
+              data-target="#demo3"
+            >
+              <input
+                // disabled
+                type="text"
+                class="form-control"
+                placeholder="--Chọn nhóm đại lý--"
+                style={{
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  paddingRight: "55px",
+                  position: "relative",
+                }}
+                value={this.getNameSelected()}
+              ></input>
+              <button
+                class="btn"
+                style={{ position: "absolute", right: "27px" }}
+              >
+                <i
+                  class={
+                    this.state.icon ? "fa fa-caret-down" : "fa fa-caret-down"
+                  }
+                ></i>
+              </button>
+            </div>
+            <div id="demo3" class="collapse">
               <ul
                 style={{ listStyle: "none", margin: "5px 0" }}
                 class="list-group"

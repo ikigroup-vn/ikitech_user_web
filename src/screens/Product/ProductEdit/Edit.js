@@ -14,6 +14,7 @@ import * as blogAction from "../../../actions/blog";
 import Attribute from "../../../components/Product/Update/Attribute";
 import Distribute from "../../../components/Product/Update/Distribute";
 import * as productAction from "../../../actions/product";
+import * as agencyAction from "../../../actions/agency";
 import * as CategoryPAction from "../../../actions/category_product";
 import * as AttributeAction from "../../../actions/attribute_search";
 import * as Types from "../../../constants/ActionType";
@@ -49,6 +50,7 @@ class ProductEdit extends Component {
     this.props.fetchAllCategoryP(store_code);
     this.props.fetchAllAttributeSearch(store_code);
     this.props.fetchAllBlog(store_code, 1);
+    this.props.fetchAllAgencyType(store_code);
   }
 
   setDiscountList = (discountList) => {
@@ -758,6 +760,7 @@ class ProductEdit extends Component {
   render() {
     var { store_code, productId } = this.props;
     var {
+      types,
       category_product,
       attribute_search,
       attributeP,
@@ -794,6 +797,7 @@ class ProductEdit extends Component {
                     product={product}
                     handleDataFromInfo={this.handleDataFromInfo}
                     category_product={category_product}
+                    types={types}
                     attribute_search={attribute_search}
                     productId={productId}
                   />
@@ -991,6 +995,7 @@ const mapStateToProps = (state) => {
     alert: state.productReducers.alert.alert_uid,
     blogs: state.blogReducers.blog.allBlog,
     currentBranch: state.branchReducers.branch.currentBranch,
+    types: state.agencyReducers.agency.allAgencyType,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -1042,6 +1047,9 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(
         productAction.fetchAllProductV2(store_code, branch_id, page, params)
       );
+    },
+    fetchAllAgencyType: (store_code) => {
+      dispatch(agencyAction.fetchAllAgencyType(store_code));
     },
     fetchAllBlog: (id, page) => {
       dispatch(blogAction.fetchAllBlog(id, page));
