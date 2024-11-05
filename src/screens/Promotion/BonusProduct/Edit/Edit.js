@@ -52,6 +52,15 @@ class Edit extends Component {
     this.props.fetchAllCombo(store_code);
   }
 
+  handleReload() {
+    var { store_code, bonusProductId } = this.props;
+    this.props.fetchBonusProductId(store_code, bonusProductId);
+    this.props.fetchBonusProductItem(store_code, bonusProductId);
+    const branch_id = localStorage.getItem("branch_id");
+    this.props.fetchAllProductV2(store_code, branch_id, 1, "&is_selected=true");
+    this.props.fetchAllCombo(store_code);
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     if (
       !shallowEqual(nextProps.bonusProductItem, this.props.bonusProductItem)
@@ -396,6 +405,7 @@ class Edit extends Component {
                       <div id="messages"></div>
                       <div class="box">
                         <FormGroupProduct
+                          handleReload={this.handleReload}
                           store_code={store_code}
                           history={history}
                           bonusProductId={bonusProductId}

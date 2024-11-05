@@ -361,63 +361,60 @@ export const createBonusProductItem = (
   store_code,
   bonus_product_id,
   data,
-  onSuccess = () => {}
+  onSuccess = () => {
+    // history.replace(
+    //   `/bonus_product/edit/${store_code}/${bonus_product_id}?type=2&search=`
+    // );
+    window.location.reload();
+  }
 ) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
+
     bonusProductApi
       .createBonusProductItem(store_code, bonus_product_id, data)
       .then((res) => {
-        if (res.data.code !== 401)
-          dispatch({
-            type: Types.FETCH_BONUS_PRODUCT_ITEM,
-            data: res.data.data,
-          });
+        // if (res.data.code !== 401) {
+        //   dispatch({
+        //     type: Types.FETCH_BONUS_PRODUCT_ITEM,
+        //     data: res.data.data,
+        //   });
+        // }
+
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
+        window.location.reload();
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
             type: "success",
-            title: "Thành công ",
+            title: "Thành công",
             disable: "show",
             content: res.data.msg,
           },
         });
-        bonusProductApi
-          .fetchBonusProductId(store_code, bonus_product_id)
-          .then((res) => {
-            if (onSuccess) {
-              onSuccess(res.data.data?.group_products?.length - 1);
-            }
-            dispatch({
-              type: Types.SHOW_LOADING,
-              loading: "hide",
-            });
-            if (res.data.code !== 401)
-              dispatch({
-                type: Types.FETCH_ID_BONUS_PRODUCT,
-                data: res.data.data,
-              });
-          });
+
+        // Gọi hàm onSuccess nếu thành công
+        // onSuccess();
       })
-      .catch(function (error) {
+      .catch((error) => {
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
+
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error?.response?.data?.msg,
+            content: error?.response?.data?.msg || "Đã có lỗi xảy ra",
           },
         });
       });

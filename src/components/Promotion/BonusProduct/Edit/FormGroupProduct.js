@@ -317,6 +317,10 @@ class FormGroupProduct extends Component {
           setTabSelected(tabIndexNew);
         }
       );
+
+      // setTimeout(() => {
+      //   this.props.handleReload();
+      // }, 1000);
     } else {
       const form = {
         group_product: this.props.bonusProduct.group_product_current,
