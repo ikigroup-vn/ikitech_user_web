@@ -362,8 +362,28 @@ function exportExcel(data) {
         sheet.cell(currentRow, 1).value(formatDate(order.created_at));
         sheet.cell(currentRow, 2).value(order.order_code);
         sheet.cell(currentRow, 3).value(order.customer_name);
-        sheet.cell(currentRow, 4).value(order.branch?.province_name);
-        sheet.cell(currentRow, 6).value(order.branch?.name);
+        sheet
+          .cell(currentRow, 4)
+          .value(
+            order.customer_address_detail +
+              " ," +
+              order.customer_wards_name +
+              " ," +
+              order.customer_district_name +
+              " ," +
+              order.customer_province_name
+          );
+        sheet
+          .cell(currentRow, 6)
+          .value(
+            order.branch?.address_detail +
+              " ," +
+              order.branch?.wards_name +
+              " ," +
+              order.branch?.district_name +
+              " ," +
+              order.branch?.province_name
+          );
         sheet.cell(currentRow, 7).value(totalQuantity);
         sheet.cell(currentRow, 9).value(totalDoanhThu);
         sheet.cell(currentRow, 10).value(totalDiscount);
@@ -384,7 +404,7 @@ function exportExcel(data) {
 
         // Thông tin sản phẩm
         order.items.forEach((item) => {
-          sheet.cell(currentRow, 5).value(item.product?.id);
+          sheet.cell(currentRow, 5).value(item.product?.sku);
           sheet.cell(currentRow, 6).value(item.product?.name);
           sheet.cell(currentRow, 7).value(item.quantity);
           sheet.cell(currentRow, 8).value(item.product?.price);

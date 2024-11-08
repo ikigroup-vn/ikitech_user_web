@@ -224,7 +224,7 @@ class Setting extends Component {
               </form>
             </div>
           )}
-          {is_calculate_ship && (
+          {/* {is_calculate_ship && (
             <div
               className="wrap-setting"
               style={{
@@ -249,8 +249,8 @@ class Setting extends Component {
                 </div>
               </form>
             </div>
-          )}
-          {is_calculate_ship && use_fee_from_default && (
+          )} */}
+          {/* {is_calculate_ship && use_fee_from_default && (
             <React.Fragment>
               <div class="form-group">
                 <label for="product_name">
@@ -311,7 +311,20 @@ class Setting extends Component {
                 />
               </div>
             </React.Fragment>
-          )}
+          )} */}
+          <div class="form-group">
+            <label for="fee_default_description">Mô tả cho khách hàng</label>
+            <input
+              type="text"
+              class="form-control"
+              id="fee_default_description"
+              value={fee_default_description}
+              name="fee_default_description"
+              placeholder="Nhập mô tả..."
+              autoComplete="off"
+              onChange={this.onChange}
+            />
+          </div>
         </div>
         <ConfigShip
           priceDefault={100}

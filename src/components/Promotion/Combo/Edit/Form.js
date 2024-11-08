@@ -252,12 +252,12 @@ class Form extends Component {
 
     var listProducts = state.saveListProducts;
     var combo_products = [];
-    listProducts.forEach((element, index) => {
-      combo_products.push({
-        quantity: element.quantity,
-        product_id: element.product.id,
-      });
-    });
+    // listProducts.forEach((element, index) => {
+    //   combo_products.push({
+    //     quantity: element.quantity,
+    //     product_id: element.product.id,
+    //   });
+    // });
     var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm").format(
       "YYYY-MM-DD HH:mm:ss"
     );
@@ -301,7 +301,7 @@ class Form extends Component {
       name: state.txtName,
       start_time: startTime == "Invalid date" ? null : startTime,
       end_time: endTime == "Invalid date" ? null : endTime,
-      combo_products: combo_products,
+      combo_products: [],
       description: state.txtContent,
       image_url: state.image,
       discount_type: state.txtDiscoutType,

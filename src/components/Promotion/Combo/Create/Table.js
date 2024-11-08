@@ -100,7 +100,7 @@ class Table extends Component {
             class="btn btn-primary-no-background btn-sm"
             style={{ marginLeft: "10px" }}
             data-toggle="modal"
-            data-target="#showListProduct"
+            data-target="#showListProductBonus"
           >
             <i class="fas fa-plus"></i>
             <span class="text">&nbsp;Chọn sản phẩm</span>

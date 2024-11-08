@@ -546,7 +546,7 @@ class ListProduct3 extends Component {
             <div class="modal-header" style={{ background: "white" }}>
               <div>
                 <h4 style={{ color: "black", display: "block" }}>
-                  Chọn sản phẩmdsfsd
+                  Chọn sản phẩm
                 </h4>
 
                 {/* <i style={{ color: "red" }}>
