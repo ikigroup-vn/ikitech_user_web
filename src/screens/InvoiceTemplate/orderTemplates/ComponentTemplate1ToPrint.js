@@ -1,10 +1,24 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+
 import { shallowEqual } from "../../../ultis/shallowEqual";
-import { filter_arr, format, getDetailAdress } from "../../../ultis/helpers";
+import { format, getDetailAdress } from "../../../ultis/helpers";
+
 import { getDDMMYYYHis } from "../../../ultis/date";
 import BarcodeComponent from "../../../components/Partials/Barcode";
 
+import styled from "styled-components";
+
+const Print1Styles = styled.div`
+  .head {
+    /* border: 1px solid black; */
+    text-align: center;
+    font-weight: bold;
+    font-family: "Courier New", Courier, monospace;
+  }
+  .time {
+    text-align: end;
+  }
+`;
 export default class ComponentTemplate1ToPrint extends Component {
   constructor(props) {
     super(props);
@@ -131,37 +145,41 @@ export default class ComponentTemplate1ToPrint extends Component {
         </tr>
       );
     });
-    console.log("@@", (bill.product_discount_amount || 0) +
-    (bill.voucher_discount_amount || 0) +
-    (bill.combo_discount_amount || 0));
+    console.log(
+      "@@",
+      (bill.product_discount_amount || 0) +
+        (bill.voucher_discount_amount || 0) +
+        (bill.combo_discount_amount || 0)
+    );
     arr.push(
       <React.Fragment>
         {bill.total_shipping_fee > 0 && (
-          <tr>
-            <td></td>
-
-            <td style={{ textAlign: "start" }}>Phí vận chuyển</td>
-            <td></td>
-            <td></td>
-
-            <td style={{ textAlign: "end" }} colSpan="3">
+          <tr style={{ border: "1px solid black" }}>
+            <td colSpan="4" style={{ textAlign: "end" }}>
+              Phí vận chuyển
+            </td>
+            <td
+              style={{ textAlign: "end", border: "1px solid black" }}
+              colSpan="3"
+            >
               + {format(bill.total_shipping_fee || 0)}
             </td>
           </tr>
         )}
-        <tr>
-          <td></td>
-
-          <td style={{ textAlign: "start" }}>
+        <tr style={{ border: "1px solid black" }}>
+          <td colSpan="4" style={{ textAlign: "end" }}>
             Giảm giá, Voucher, Combo, Chiết khấu
           </td>
-          <td></td>
-          <td></td>
+
           {(bill.product_discount_amount || 0) +
             (bill.voucher_discount_amount || 0) +
-            (bill.combo_discount_amount || 0) + bill.discount >
+            (bill.combo_discount_amount || 0) +
+            bill.discount >
           0 ? (
-            <td style={{ textAlign: "end" }} colSpan="3">
+            <td
+              style={{ textAlign: "end", border: "1px solid black" }}
+              colSpan="3"
+            >
               -{" "}
               {format(
                 (bill.product_discount_amount || 0) +
@@ -171,19 +189,21 @@ export default class ComponentTemplate1ToPrint extends Component {
               )}
             </td>
           ) : (
-            <td style={{ textAlign: "end" }}>0</td>
+            <td style={{ textAlign: "end", border: "1px solid black" }}>0</td>
           )}
         </tr>
-        <tr>
-          <td></td>
+        <tr style={{ border: "1px solid black" }}>
+          <td colSpan="4" style={{ textAlign: "end" }}>
+            Ví CTV (Đại lý)
+          </td>
 
-          <td style={{ textAlign: "start" }}>Ví CTV (Đại lý)</td>
-          <td></td>
-          <td></td>
           {(bill?.balance_agency_used || 0) +
             (bill.balance_collaborator_used || 0) >
           0 ? (
-            <td style={{ textAlign: "end" }} colSpan="3">
+            <td
+              style={{ textAlign: "end", border: "1px solid black" }}
+              colSpan="3"
+            >
               -{" "}
               {format(
                 (bill?.balance_agency_used || 0) +
@@ -191,21 +211,22 @@ export default class ComponentTemplate1ToPrint extends Component {
               )}
             </td>
           ) : (
-            <td style={{ textAlign: "end" }}>0</td>
+            <td style={{ textAlign: "end", border: "1px solid black" }}>0</td>
           )}
         </tr>
       </React.Fragment>
     );
     arr.push(
       <React.Fragment>
-        <tr>
-          <td></td>
+        <tr style={{ border: "1px solid black" }}>
+          <td colSpan="4" style={{ textAlign: "end" }}>
+            Xu
+          </td>
 
-          <td style={{ textAlign: "start" }}>Xu</td>
-          <td></td>
-          <td></td>
-
-          <td style={{ textAlign: "end" }} colSpan="3">
+          <td
+            style={{ textAlign: "end", border: "1px solid black" }}
+            colSpan="3"
+          >
             {bill.bonus_points_amount_used > 0
               ? `- ${format(bill.bonus_points_amount_used)}`
               : 0}
@@ -215,13 +236,15 @@ export default class ComponentTemplate1ToPrint extends Component {
     );
     arr.push(
       <React.Fragment>
-        <tr>
-          <td></td>
+        <tr style={{ border: "1px solid black" }}>
+          <td colSpan="4" style={{ textAlign: "end" }}>
+            Tổng tiền phải trả
+          </td>
 
-          <td style={{ textAlign: "start" }}>Tổng</td>
-          <td></td>
-
-          <td style={{ textAlign: "end" }} colSpan="3">
+          <td
+            style={{ textAlign: "end", border: "1px solid black" }}
+            colSpan="3"
+          >
             {format(bill.total_final || 0)}
           </td>
         </tr>
@@ -268,147 +291,139 @@ export default class ComponentTemplate1ToPrint extends Component {
           badges.address_pickup.province_name;
 
     return (
-      <div style={{ margin: "30px", fontSize: "26px" }}>
-        <div className="row">
-          <div className="col-4">
-            <div
-              style={{
-                margin: 20,
-              }}
-            >
-              <img
+      <Print1Styles>
+        <div style={{ margin: "10px", fontSize: "26px" }}>
+          <div className="row">
+            <div className="col-3">
+              <div
                 style={{
-                  width: "100%",
+                  margin: 20,
                 }}
-                src={store.logo_url}
-                alt="Logo"
-              />
-            </div>
-          </div>
-
-          <div className="col-8">
-            <div>
-              <p class="" id="sale_user_name">
-                <span
+              >
+                <img
                   style={{
-                    fontWeight: "bold",
-                    textTransform: "uppercase",
-                    fontSize: 20,
+                    width: "100%",
+                  }}
+                  src={store.logo_url}
+                  alt="Logo"
+                />
+              </div>
+            </div>
+
+            {/* <div className="col-8">
+              <div>
+                <p class="" id="sale_user_name">
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      textTransform: "uppercase",
+                      fontSize: 20,
+                      margin: 0,
+                      padding: 0,
+                    }}
+                  >
+                    Trang Trại Đông Trùng Hạ Thảo{" "}
+                    {store.name ?? bill.store_name}
+                  </span>
+                </p>
+                <p
+                  class=""
+                  id="info"
+                  style={{
                     margin: 0,
                     padding: 0,
+                    fontSize: 20,
                   }}
                 >
-                  {store.name ?? bill.store_name}
-                </span>
-              </p>
-              <p
-                class=""
-                id="info"
-                style={{
-                  margin: 0,
-                  padding: 0,
-                  fontSize: 20,
-                }}
-              >
-                <span>Chi nhánh:</span> {this.props.currentBranch.name}
-              </p>
-              <p
-                class=""
-                id="info"
-                style={{
-                  margin: 0,
-                  padding: 0,
-                  fontSize: 20,
-                }}
-              >
-                <span>Mã số thuế:</span> {currentBranch.txt_code}
-              </p>
-              <p
-                class=""
-                id="info"
-                style={{
-                  margin: 0,
-                  padding: 0,
-                  fontSize: 20,
-                }}
-              >
-                <span>Địa chỉ:</span>{" "}
-                {`${currentBranch.address_detail} - ${currentBranch?.wards_name} - ${currentBranch?.district_name} - ${currentBranch?.province_name}` ||
-                  store.address}
-              </p>
+                  <span>Chi nhánh:</span> {this.props.currentBranch.name}
+                </p>
+                <p
+                  class=""
+                  id="info"
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    fontSize: 20,
+                  }}
+                >
+                  <span>Mã số thuế:</span> {currentBranch.txt_code}
+                </p>
+                <p
+                  class=""
+                  id="info"
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    fontSize: 20,
+                  }}
+                >
+                  <span>Địa chỉ:</span>{" "}
+                  {`${currentBranch.address_detail} - ${currentBranch?.wards_name} - ${currentBranch?.district_name} - ${currentBranch?.province_name}` ||
+                    store.address}
+                </p>
+
+                <p
+                  class=""
+                  id="info"
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    fontSize: 20,
+                  }}
+                >
+                  <span>SĐT:</span> {currentBranch?.phone || ""}{" "}
+                </p>
+                <p
+                  class=""
+                  id="info"
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    fontSize: 20,
+                  }}
+                >
+                  <span>Website:</span> {badges.domain_customer ?? ""}
+                </p>
+
+                <p
+                  class=""
+                  id="info"
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    fontSize: 20,
+                  }}
+                >
+                  <span>STK:</span> {currentBranch.account_number ?? ""}
+                  {" - "}
+                  {currentBranch.bank ?? ""} -{" "}
+                  {currentBranch.account_name ?? ""}
+                </p>
+              </div>
 
               <p
-                class=""
-                id="info"
                 style={{
+                  fontSize: 25,
+                  fontWeight: "bold",
+                  textAlign: "left",
                   margin: 0,
                   padding: 0,
-                  fontSize: 20,
+                  marginTop: 8,
                 }}
               >
-                <span>SĐT:</span> {currentBranch?.phone || ""}{" "}
+                HÓA ĐƠN BÁN HÀNG
               </p>
               <p
-                class=""
-                id="info"
                 style={{
+                  fontSize: 20,
+                  textAlign: "left",
                   margin: 0,
                   padding: 0,
-                  fontSize: 20,
                 }}
+                className="order_code"
               >
-                <span>Website:</span> {badges.domain_customer ?? ""}
+                Mã: {bill.order_code ?? bill.order_code}
               </p>
-
-              <p
-                class=""
-                id="info"
-                style={{
-                  margin: 0,
-                  padding: 0,
-                  fontSize: 20,
-                }}
-              >
-                <span>STK:</span> {currentBranch.account_number ?? ""}
-                {" - "}
-                {currentBranch.bank ?? ""} - {currentBranch.account_name ?? ""}
-              </p>
-            </div>
-
-            <p
-              style={{
-                fontSize: 25,
-                fontWeight: "bold",
-                textAlign: "left",
-                margin: 0,
-                padding: 0,
-                marginTop: 8,
-              }}
-            >
-              HÓA ĐƠN BÁN HÀNG
-            </p>
-            <p
-              style={{
-                fontSize: 20,
-                textAlign: "left",
-                margin: 0,
-                padding: 0,
-              }}
-              className="order_code"
-            >
-              Mã: {bill.order_code ?? bill.order_code}
-            </p>
-            <div
-              style={{
-                fontSize: 20,
-                textAlign: "left",
-                margin: 0,
-                padding: 0,
-              }}
-            >
-              Ngày: {getDDMMYYYHis(bill.created_at)}
-            </div>
-            {bill?.order_ship_code?.from_shipper_code && (
               <div
                 style={{
                   fontSize: 20,
@@ -417,158 +432,216 @@ export default class ComponentTemplate1ToPrint extends Component {
                   padding: 0,
                 }}
               >
-                <p className="order_code">
-                  Mã vận đơn ({bill?.order_ship_code?.from_shipper_code})
-                  <BarcodeComponent
-                    number={bill?.order_ship_code?.from_shipper_code}
-                    displayValue={false}
-                  />
-                </p>
+                Ngày: {getDDMMYYYHis(bill.created_at)}
               </div>
-            )}
+              {bill?.order_ship_code?.from_shipper_code && (
+                <div
+                  style={{
+                    fontSize: 20,
+                    textAlign: "left",
+                    margin: 0,
+                    padding: 0,
+                  }}
+                >
+                  <p className="order_code">
+                    Mã vận đơn ({bill?.order_ship_code?.from_shipper_code})
+                    <BarcodeComponent
+                      number={bill?.order_ship_code?.from_shipper_code}
+                      displayValue={false}
+                    />
+                  </p>
+                </div>
+              )}
+            </div> */}
+            <div className="col-9">
+              <div className="head">
+                <span>Trang Trại Đông Trùng Hạ Thảo HQGANO</span>
+                <br />
+                <span>Phân Phối & Tiếp thị</span>
+                <br />
+                <span>Công Ty Cổ Phần HQ5PRO </span>
+                <br />
+                <span>MST: 0317090965 - STK: 86333 - VPBank </span>
+                <br />
+                <span>
+                  82-84-86 đường 26, KDC Bình Phú, Phường 11, Quận 6, TPHCM{" "}
+                </span>
+                <br />
+                <span>www.hqgano.com - CSKH: 0929.222.555 </span>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div
-          className="parent"
-          style={{
-            border: "none",
-            fontSize: "20px",
-          }}
-        >
-          <div className="row">
-            <div
-              class="col-12-print"
-              style={{
-                fontSize: "20px",
-              }}
-            >
-              <div class="">
-                <p class="" id="sale_user_name">
-                  <span style={{ fontWeight: "500", fontSize: "20px" }}>
-                    <b> Tên khách hàng: </b>
-                    {state?.customer_name ??
-                      bill.customer_name ??
-                      bill?.customer?.name ??
+          <div
+            className="parent"
+            style={{
+              border: "none",
+              fontSize: "20px",
+            }}
+          >
+            <div className="row">
+              <div
+                class="col-12-print"
+                style={{
+                  fontSize: "20px",
+                }}
+              >
+                <div class="">
+                  <div className="head">
+                    <span>---------</span>
+                    <br />
+                    <span style={{ fontSize: 30 }}>THÔNG TIN ĐƠN HÀNG</span>
+                    <br />
+                    <span>
+                      Mã đơn hàng: {bill.order_code ?? bill.order_code}{" "}
+                    </span>
+                    <br />
+                  </div>
+                  <div className="time">
+                    {" "}
+                    Ngày: {getDDMMYYYHis(bill.created_at)}
+                  </div>
+                  <p class="" id="sale_user_name">
+                    <span style={{ fontWeight: "500", fontSize: "20px" }}>
+                      <b> - Tên khách hàng: </b>
+                      {state?.customer_name ??
+                        bill.customer_name ??
+                        bill?.customer?.name ??
+                        ""}
+                    </span>
+                  </p>
+                  <p class="" id="info" style={{ fontSize: "20px" }}>
+                    <span>
+                      <b> - Số điện thoại: </b>
+                    </span>{" "}
+                    {state?.customer_phone ??
+                      bill.customer_phone ??
+                      bill?.customer?.phone_number ??
                       ""}
-                  </span>
-                </p>
-                <p class="" id="info" style={{ fontSize: "20px" }}>
-                  <span>
-                    <b>Địa chỉ: </b>
-                  </span>{" "}
-                  {getDetailAdress(
-                    bill.customer_address?.address_detail,
-                    bill.customer_address?.wards_name,
-                    bill.customer_address?.district_name,
-                    bill.customer_address?.province_name
-                  )}
-                </p>
-                <p class="" id="info" style={{ fontSize: "20px" }}>
-                  <span>
-                    <b>Số điện thoại: </b>
-                  </span>{" "}
-                  {state?.customer_phone ??
-                    bill.customer_phone ??
-                    bill?.customer?.phone_number ??
-                    ""}
-                </p>
-                {/* <p class="" id="info" style={{ fontSize: "20px" }}>
+                  </p>
+                  <p class="" id="info" style={{ fontSize: "20px" }}>
+                    <span>
+                      <b> - Địa chỉ: </b>
+                    </span>{" "}
+                    {getDetailAdress(
+                      bill.customer_address?.address_detail,
+                      bill.customer_address?.wards_name,
+                      bill.customer_address?.district_name,
+                      bill.customer_address?.province_name
+                    )}
+                  </p>
+
+                  {/* <p class="" id="info" style={{ fontSize: "20px" }}>
                   <span>
                     <b>Điểm/Xu: </b>
                   </span>{" "}
                   {bill?.customer?.point ?? "0"}
                 </p> */}
-              </div>
-
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>STT</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Số lượng</th>
-                    <th>Đ.Giá</th>
-                    <th>Thành tiền</th>
-                  </tr>
-                </thead>
-                <tbody>{this.showListProduct()}</tbody>
-              </table>
-
-              <p
-                class=""
-                id="info"
-                style={{
-                  marginTop: 10,
-                }}
-              >
-                <span>Ghi chú: </span> {bill?.customer_note ?? ""}
-              </p>
-            </div>
-          </div>
-
-          {bill.bonus_agency_history != null && (
-            <div className="row">
-              <div class="col-12-print">
-                <p className="order_code">Thưởng cho đại lý</p>
+                </div>
 
                 <table class="table table-hover">
                   <thead>
                     <tr>
-                      <th>Tên phần thưởng</th>
-                      <th>Trị giá</th>
+                      <th>STT</th>
+                      <th>Tên sản phẩm</th>
+                      <th>Số lượng</th>
+                      <th>Đơn giá</th>
+                      <th>Thành tiền</th>
                     </tr>
                   </thead>
-                  <tbody>{this.showBonusAgency()}</tbody>
+                  <tbody>{this.showListProduct()}</tbody>
                 </table>
+
+                <p
+                  class=""
+                  id="info"
+                  style={{
+                    marginTop: 10,
+                  }}
+                >
+                  <span>Ghi chú đơn hàng: </span> {bill?.customer_note ?? ""}
+                </p>
+
+                <p
+                  class=""
+                  id="info"
+                  style={{
+                    marginTop: 10,
+                  }}
+                >
+                  <span>
+                    Nếu bạn có thắc mắc, vui lòng liên hệ chúng tôi qua email:
+                    hqgano@gmail.com hoặc 0929.222.555
+                  </span>{" "}
+                  {bill?.customer_note ?? ""}
+                </p>
               </div>
             </div>
-          )}
-          <div className="row">
-            <div class="col-6-not-border" style={{ position: "relative" }}>
-              <p
-                style={{
-                  fontSize: "20px",
-                  fontWeight: "600",
-                  textAlign: "center",
-                }}
-              >
-                Người mua hàng
-              </p>
 
-              <div>
-                <div
+            {/* {bill.bonus_agency_history != null && (
+              <div className="row">
+                <div class="col-12-print">
+                  <p className="order_code">Thưởng cho đại lý</p>
+
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Tên phần thưởng</th>
+                        <th>Trị giá</th>
+                      </tr>
+                    </thead>
+                    <tbody>{this.showBonusAgency()}</tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+            <div className="row">
+              <div class="col-6-not-border" style={{ position: "relative" }}>
+                <p
                   style={{
                     fontSize: "20px",
-                    position: "absolute",
-                    bottom: "5px",
+                    fontWeight: "600",
+                    textAlign: "center",
                   }}
-                ></div>
-              </div>
-            </div>
-            <div class="col-6-not-border" style={{ position: "relative" }}>
-              <p
-                style={{
-                  fontSize: "20px",
-                  fontWeight: "600",
-                  textAlign: "center",
-                }}
-              >
-                Người bán hàng
-              </p>
+                >
+                  Người mua hàng
+                </p>
 
-              <div>
-                <div
+                <div>
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      position: "absolute",
+                      bottom: "5px",
+                    }}
+                  ></div>
+                </div>
+              </div>
+              <div class="col-6-not-border" style={{ position: "relative" }}>
+                <p
                   style={{
                     fontSize: "20px",
-                    position: "absolute",
-                    bottom: "5px",
+                    fontWeight: "600",
+                    textAlign: "center",
                   }}
-                ></div>
+                >
+                  Người bán hàng
+                </p>
+
+                <div>
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      position: "absolute",
+                      bottom: "5px",
+                    }}
+                  ></div>
+                </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
-      </div>
+      </Print1Styles>
     );
   }
 }

@@ -53,7 +53,7 @@ export default class ListComponentToPrint extends Component {
     }
 
     return (
-      <ComponentTemplate0ToPrint
+      <ComponentTemplate1ToPrint
         currentBranch={currentBranch}
         badges={badges}
         bill={bill}
