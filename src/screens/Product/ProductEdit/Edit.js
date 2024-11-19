@@ -97,6 +97,12 @@ class ProductEdit extends Component {
 
       var categories = [];
       var category_children_ids = [];
+      var list_agency_id = [];
+      if (data.types_parent.length > 0) {
+        list_agency_id = data.types_parent.map((typesParent, index) => {
+          return typesParent.id;
+        });
+      }
       if (data.category_parent.length > 0) {
         categories = data.category_parent.map((categoryParent, index) => {
           return categoryParent.id;
@@ -109,6 +115,7 @@ class ProductEdit extends Component {
           }
         );
       }
+      formdata.list_agency_id = list_agency_id;
       formdata.categories = categories;
       formdata.category_children_ids = category_children_ids;
       return {

@@ -51,9 +51,11 @@ class InfoProduct extends Component {
       txtBarcode: "",
       txtStatus: "",
       category_parent: [],
+      types_parent: [],
       category_children_ids: [],
       txtCategory: [],
       listCategory: [],
+      types: [],
       listAttributeSearch: [],
       attribute_search_parent: [],
       attribute_search_children_ids: [],
@@ -78,6 +80,9 @@ class InfoProduct extends Component {
   }
   handleChangeCheckParent(id) {
     return this.state.category_parent.map((e) => e.id).indexOf(id) > -1;
+  }
+  handleChangeCheckAgencyGroupParent(id) {
+    return this.state.types_parent.map((e) => e.id).indexOf(id) > -1;
   }
   handleChangeCheckChild(id) {
     return this.state.category_children_ids.map((e) => e.id).indexOf(id) > -1;
@@ -265,6 +270,40 @@ class InfoProduct extends Component {
 
     getAttributeSearch(store_code, productId);
   }
+  getAgencyGroupSelected() {
+    var nam = "";
+    console.log("this.state.types===== ", this.state.types_parent);
+    var types = this.state.types;
+    if (this.state.types_parent !== null) {
+      types.forEach((type) => {
+        if (this.state.types_parent.map((e) => e.id).indexOf(type.id) > -1) {
+          nam = nam + type.label + ", ";
+        }
+      });
+    }
+    if (nam.length > 0) {
+      nam = nam.substring(0, nam.length - 2);
+    }
+
+    return nam;
+  }
+
+  handleChangeGroupParent = (category) => {
+    var indexHas = this.state.types_parent
+      .map((e) => e.id)
+      .indexOf(category.id);
+    if (indexHas !== -1) {
+      var newList = this.state.types_parent;
+      newList.splice(indexHas, 1);
+      this.setState({ types_parent: newList });
+    } else {
+      this.setState({
+        types_parent: [...this.state.types_parent, category],
+      });
+    }
+    this.props.handleDataFromInfo(this.state);
+  };
+
   componentWillReceiveProps(nextProps) {
     if (
       nextProps.total != this.props.total &&
@@ -276,6 +315,20 @@ class InfoProduct extends Component {
       if (!isNaN(Number(_value))) {
         value = formatNoD(_value);
         this.setState({ txtQuantityInStock: value });
+      }
+    }
+
+    if (!shallowEqual(nextProps.types, this.props.types)) {
+      var option = [];
+      var types = [...nextProps.types];
+      if (types.length > 0) {
+        option = types.map((type, index) => {
+          return {
+            id: type.id,
+            label: type.name,
+          };
+        });
+        this.setState({ types: option });
       }
     }
 
@@ -322,13 +375,23 @@ class InfoProduct extends Component {
       });
     }
     if (!shallowEqual(nextProps.product, this.props.product)) {
+      // console.log("nghia========", this.props.product);
       var { product } = { ...nextProps };
       var { isCopy } = nextProps;
       var categories = [];
       var listcategorynew = [];
+      var listAgencyGroup = [];
+      var listAgencyGroupNew = [];
       categories = product.categories.map((category, index) => {
         if (listcategorynew.map((e) => e.id).indexOf(category.id) === -1) {
           listcategorynew.push(category);
+        }
+
+        return { id: category.id, label: category.name };
+      });
+      listAgencyGroup = product.agency_types.map((category, index) => {
+        if (listAgencyGroupNew.map((e) => e.id).indexOf(category.id) === -1) {
+          listAgencyGroupNew.push(category);
         }
 
         return { id: category.id, label: category.name };
@@ -373,6 +436,8 @@ class InfoProduct extends Component {
         txtBarcode: product.barcode,
 
         txtStatus: product.status,
+
+        types_parent: listAgencyGroupNew,
         category_parent: listcategorynew,
         category_children_ids: product.category_children,
         txtQuantityInStock: _quantity_stock,
@@ -612,6 +677,7 @@ class InfoProduct extends Component {
       point_for_agency,
       txtPosition,
       is_medicine,
+      types,
     } = this.state;
     console.log(
       "🚀 ~ file: InfoProduct.js:591 ~ render ~ listAttributeSearch:",
@@ -1063,7 +1129,7 @@ class InfoProduct extends Component {
                   paddingRight: "55px",
                   position: "relative",
                 }}
-                value={this.getNameSelected()}
+                value={this.getAgencyGroupSelected()}
               ></input>
               <button
                 class="btn"
@@ -1081,8 +1147,8 @@ class InfoProduct extends Component {
                 style={{ listStyle: "none", margin: "5px 0" }}
                 class="list-group"
               >
-                {listCategory?.length > 0 ? (
-                  listCategory.map((category) => (
+                {types?.length > 0 ? (
+                  types.map((category) => (
                     <li
                       class=""
                       style={{ cursor: "pointer", paddingLeft: "5px" }}
@@ -1094,34 +1160,12 @@ class InfoProduct extends Component {
                           width: "30px",
                           height: "15px",
                         }}
-                        checked={this.handleChangeCheckParent(category.id)}
-                        onChange={() => this.handleChangeParent(category)}
+                        checked={this.handleChangeCheckAgencyGroupParent(
+                          category.id
+                        )}
+                        onChange={() => this.handleChangeGroupParent(category)}
                       />
                       {category.label}
-                      <ul style={{ listStyle: "none", margin: "0px 45px" }}>
-                        {(category?.categories_child ?? []).map(
-                          (categoryChild) => (
-                            <li style={{ cursor: "pointer" }}>
-                              <input
-                                type="checkbox"
-                                style={{
-                                  marginRight: "10px",
-                                  width: "30px",
-                                  height: "15px",
-                                  marginTop: "3px",
-                                }}
-                                checked={this.handleChangeCheckChild(
-                                  categoryChild.id
-                                )}
-                                onChange={() =>
-                                  this.handleChangeChild(categoryChild)
-                                }
-                              />
-                              {categoryChild.name}
-                            </li>
-                          )
-                        )}
-                      </ul>
                     </li>
                   ))
                 ) : (
@@ -1275,6 +1319,7 @@ const mapStateToProps = (state) => {
   return {
     allAttributeProduct:
       state.attributeSearchReducers.attribute_search.allAttributeProduct,
+    types: state.agencyReducers.agency.allAgencyType,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

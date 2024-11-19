@@ -9,6 +9,7 @@ import Distribute from "../../../components/Product/Create/Distribute";
 import Video from "../../../components/Product/Create/Video";
 
 import * as productAction from "../../../actions/product";
+import * as agencyAction from "../../../actions/agency";
 import * as CategoryPAction from "../../../actions/category_product";
 import * as AttributeAction from "../../../actions/attribute_search";
 import * as Types from "../../../constants/ActionType";
@@ -40,6 +41,7 @@ class ProductCreate extends Component {
     this.props.fetchAllCategoryP(this.props.store_code);
     this.props.fetchAllAttributeSearch(this.props.store_code);
     this.props.fetchAllBlog(this.props.store_code, 1);
+    this.props.fetchAllAgencyType(this.props.store_code);
   }
 
   setDiscountList = (discountList) => {
@@ -76,6 +78,7 @@ class ProductCreate extends Component {
         .replace(/,/g, "")
         .replace(/\./g, "");
       formdata.percent_collaborator = data.txtPercentC;
+
       formdata.sku = data.sku;
       formdata.is_medicine = data.is_medicine;
       formdata.check_inventory = data.check_inventory;
@@ -101,7 +104,14 @@ class ProductCreate extends Component {
       }
 
       var categories = [];
+      var list_agency_id = [];
       var category_children_ids = [];
+
+      if (data.types_parent.length > 0) {
+        list_agency_id = data.types_parent.map((typesParent, index) => {
+          return typesParent.id;
+        });
+      }
       if (data.category_parent.length > 0) {
         categories = data.category_parent.map((categoryParent, index) => {
           return categoryParent.id;
@@ -114,6 +124,7 @@ class ProductCreate extends Component {
           }
         );
       }
+      formdata.list_agency_id = list_agency_id;
       formdata.categories = categories;
       formdata.category_children_ids = category_children_ids;
 
@@ -888,12 +899,16 @@ const mapStateToProps = (state) => {
     badges: state.badgeReducers.allBadge,
 
     blogs: state.blogReducers.blog.allBlog,
+    types: state.agencyReducers.agency.allAgencyType,
 
     // state : state
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
+    fetchAllAgencyType: (store_code) => {
+      dispatch(agencyAction.fetchAllAgencyType(store_code));
+    },
     fetchAllAttributeP: (store_code) => {
       dispatch(productAction.fetchAllAttributeP(store_code));
     },

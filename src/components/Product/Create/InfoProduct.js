@@ -66,6 +66,7 @@ class InfoProduct extends Component {
       txtStatus: 0,
       listCategory: [],
       category_parent: [],
+      types_parent: [],
       category_children_ids: [],
       listAttributeSearch: [],
       attribute_search_parent: [],
@@ -77,6 +78,7 @@ class InfoProduct extends Component {
       point_for_agency: null,
       icon_for_point: false,
       is_medicine: false,
+      types: [],
     };
   }
 
@@ -126,6 +128,21 @@ class InfoProduct extends Component {
         this.setState({ txtQuantityInStock: value });
       }
     }
+
+    if (!shallowEqual(nextProps.types, this.props.types)) {
+      var option = [];
+      var types = [...nextProps.types];
+      if (types.length > 0) {
+        option = types.map((type, index) => {
+          return {
+            id: type.id,
+            label: type.name,
+          };
+        });
+        this.setState({ types: option });
+      }
+    }
+
     if (
       !shallowEqual(nextProps.category_product, this.props.category_product)
     ) {
@@ -251,6 +268,7 @@ class InfoProduct extends Component {
   getNameSelected() {
     var nam = "";
     var categories = this.state.listCategory;
+    console.log("this.state.category_parent=====", this.state.category_parent);
     if (this.state.category_parent !== null) {
       categories.forEach((category) => {
         if (
@@ -279,6 +297,55 @@ class InfoProduct extends Component {
     }
     return nam;
   }
+  getAgencyGroupSelected() {
+    var nam = "";
+
+    var types = this.state.types;
+    if (this.state.types_parent !== null) {
+      types.forEach((type) => {
+        if (this.state.types_parent.map((e) => e.id).indexOf(type.id) > -1) {
+          nam = nam + type.label + ", ";
+        }
+      });
+    }
+    if (nam.length > 0) {
+      nam = nam.substring(0, nam.length - 2);
+    }
+
+    return nam;
+  }
+
+  handleChangeGroupParent = (category) => {
+    var indexHas = this.state.types_parent
+      .map((e) => e.id)
+      .indexOf(category.id);
+    if (indexHas !== -1) {
+      var newList = this.state.types_parent;
+      newList.splice(indexHas, 1);
+      this.setState({ types_parent: newList });
+      // this.state.types.forEach((category1) => {
+      //   // if (category1.id === category.id) {
+      //   //   category1.categories_child.forEach((categoryChild1) => {
+      //   //     const indexChild = this.state.category_children_ids
+      //   //       .map((e) => e.id)
+      //   //       .indexOf(categoryChild1.id);
+      //   //     // if (indexChild !== -1) {
+      //   //     //   const newChild = this.state.category_children_ids.splice(
+      //   //     //     indexChild,
+      //   //     //     1
+      //   //     //   );
+      //   //     //   console.log("newChild", newChild);
+      //   //     // }
+      //   //   });
+      //   // }
+      // });
+    } else {
+      this.setState({
+        types_parent: [...this.state.types_parent, category],
+      });
+    }
+    this.props.handleDataFromInfo(this.state);
+  };
 
   handleChangeParent = (category) => {
     var indexHas = this.state.category_parent
@@ -562,6 +629,7 @@ class InfoProduct extends Component {
       point_for_agency,
       txtPosition,
       is_medicine,
+      types,
     } = this.state;
     console.log("ahihi: ", this.state.attribute_search_children_ids);
     console.log("ahihiParent: ", this.state.attribute_search_parent);
@@ -1039,6 +1107,72 @@ class InfoProduct extends Component {
           </div>
         </div>
         <div class="form-group">
+          <label for="product_name">Nhóm đại lý</label>
+          <div className="Choose-category-product">
+            <div
+              className="wrap_category"
+              style={{ display: "flex" }}
+              onClick={this.onChangeIcon}
+              data-toggle="collapse"
+              data-target="#demo3"
+            >
+              <input
+                // disabled
+                type="text"
+                class="form-control"
+                placeholder="--Chọn nhóm đại lý--"
+                style={{
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  paddingRight: "55px",
+                  position: "relative",
+                }}
+                value={this.getAgencyGroupSelected()}
+              ></input>
+              <button
+                class="btn"
+                style={{ position: "absolute", right: "27px" }}
+              >
+                <i
+                  class={
+                    this.state.icon ? "fa fa-caret-down" : "fa fa-caret-down"
+                  }
+                ></i>
+              </button>
+            </div>
+            <div id="demo3" class="collapse">
+              <ul
+                style={{ listStyle: "none", margin: "5px 0" }}
+                class="list-group"
+              >
+                {types?.length > 0 ? (
+                  types.map((category) => (
+                    <li
+                      class=""
+                      style={{ cursor: "pointer", paddingLeft: "5px" }}
+                    >
+                      <input
+                        type="checkbox"
+                        style={{
+                          marginRight: "10px",
+                          width: "30px",
+                          height: "15px",
+                        }}
+                        // checked={this.handleChangeCheckParent(category.id)}
+                        onChange={() => this.handleChangeGroupParent(category)}
+                      />
+                      {category.label}
+                    </li>
+                  ))
+                ) : (
+                  <div>Không có kết quả</div>
+                )}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
           <label for="product_name">Thuộc tính tìm kiếm</label>
           <div className="Choose-category-product">
             <div id="accordionAttribute">
@@ -1215,6 +1349,7 @@ class InfoProduct extends Component {
 const mapStateToProps = (state) => {
   return {
     badges: state.badgeReducers.allBadge,
+    types: state.agencyReducers.agency.allAgencyType,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
