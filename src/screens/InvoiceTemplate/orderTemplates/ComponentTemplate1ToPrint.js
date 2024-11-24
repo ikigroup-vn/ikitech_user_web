@@ -455,19 +455,21 @@ export default class ComponentTemplate1ToPrint extends Component {
             </div> */}
             <div className="col-9">
               <div className="head">
-                <span>Trang Trại Đông Trùng Hạ Thảo HQGANO</span>
-                <br />
-                <span>Phân Phối & Tiếp thị</span>
+                <span>Sâm Đông Trùng HQGANO</span>
                 <br />
                 <span>Công Ty Cổ Phần HQ5PRO </span>
                 <br />
-                <span>MST: 0317090965 - STK: 86333 - VPBank </span>
+                <span>MST: 0317090965</span>
+                <br />
+                <span>STK 86333 - HQ5PRO JSC tại VPbank</span>
                 <br />
                 <span>
-                  82-84-86 đường 26, KDC Bình Phú, Phường 11, Quận 6, TPHCM{" "}
+                  600/12/3 Kinh Dương Vương P.An Lạc Q.Bình Tân TPHCM{" "}
                 </span>
                 <br />
-                <span>www.hqgano.com - CSKH: 0929.222.555 </span>
+                <span>www.hqgano.com</span>
+                <br />
+                <span>CSKH: 0929.222.555 Zalo/Call</span>
               </div>
             </div>
           </div>
@@ -576,6 +578,14 @@ export default class ComponentTemplate1ToPrint extends Component {
                   {bill?.customer_note ?? ""}
                 </p>
               </div>
+
+              <img
+                style={{ marginTop: 10 }}
+                src="https://files.exam24h.com/upload/2024/11/22_1732257395525/66433168c7b6d22d3824e6a4/Screenshot%202024-11-22%20at%2013.33.50.png"
+                alt="bank"
+                width="500"
+                height="auto"
+              ></img>
             </div>
 
             {/* {bill.bonus_agency_history != null && (

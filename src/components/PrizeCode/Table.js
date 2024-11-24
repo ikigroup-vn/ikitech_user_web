@@ -74,7 +74,7 @@ class Table extends Component {
 
   showData = (data, perPage, currentPage) => {
     var { store_code } = this.props;
-    
+
     return data.map((item, index) => {
       var checked = this.checkSelected(item.id);
       return (
@@ -91,6 +91,7 @@ class Table extends Component {
           </td>
           <td>{perPage * (currentPage - 1) + (index + 1)}</td>
           <td>{item.code}</td>
+          <td>HQ_{item.id}</td>
           <td>{item.phone_number}</td>
           <td>{item.name ?? ""}</td>
           <td>{item.province}</td>
@@ -220,6 +221,7 @@ class Table extends Component {
               </th>
               <th>STT</th>
               <th>Mã dự thưởng</th>
+              <th>Seri</th>
               <th>SĐT</th>
               <th>Tên</th>
               <th>Tỉnh</th>
