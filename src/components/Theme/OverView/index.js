@@ -354,7 +354,7 @@ class Overview extends Component {
               />
               <span>
                 (Tên miền cần trỏ vào IP 116.118.50.101, sẽ được tự xác nhận sau
-                5 phút)
+                5 phút...)
               </span>
             </div>
             <div className="form-group">
