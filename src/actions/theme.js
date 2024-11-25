@@ -23,6 +23,32 @@ export const fetchTheme = (store_code) => {
     });
   };
 };
+export const uploadImgTheme_Delivery = (file) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    uploadApi
+      .upload(file)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.UPLOAD_THEME_IMG_DELIVERY,
+          data: res.data.data,
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+      });
+  };
+};
 export const uploadImgTheme_Logo = (file) => {
   return (dispatch) => {
     dispatch({

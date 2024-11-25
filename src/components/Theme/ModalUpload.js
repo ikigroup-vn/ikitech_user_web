@@ -1,54 +1,44 @@
 import React, { Component } from "react";
 import * as helper from "../../ultis/helpers";
 import { connect } from "react-redux";
-import * as themeAction from "../../actions/theme"
-import {compressed} from "../../ultis/helpers"
+import * as themeAction from "../../actions/theme";
+import { compressed } from "../../ultis/helpers";
 
 class ModalUpload extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fileUpload: null
-
+      fileUpload: null,
     };
   }
 
-
-  onSave= async (e) =>{
-    var {typeUpload} = this.props
+  onSave = async (e) => {
+    var { typeUpload } = this.props;
     e.preventDefault();
-    window.$('.modal').modal('hide');
+    window.$(".modal").modal("hide");
 
     var file = this.state.fileUpload;
-    if(typeof file !== "undefined" && file != "" && file != null )
-    {
-      window.$('#file-theme').fileinput('clear');
+    if (typeof file !== "undefined" && file != "" && file != null) {
+      window.$("#file-theme").fileinput("clear");
       const fd = new FormData();
-      fd.append('image' , await compressed(file))
-      if(typeUpload == "LOGO")
-      this.props.uploadImgTheme_Logo(fd)
-      if(typeUpload == "FACE")
-      this.props.uploadImgTheme_Face(fd)
-      if(typeUpload == "FAVICON")
-      this.props.uploadImgTheme_Favicon(fd)    
+      fd.append("image", await compressed(file));
+      if (typeUpload == "LOGO") this.props.uploadImgTheme_Logo(fd);
+      if (typeUpload == "DELIVERY") this.props.uploadImgTheme_Delivery(fd);
+      if (typeUpload == "FACE") this.props.uploadImgTheme_Face(fd);
+      if (typeUpload == "FAVICON") this.props.uploadImgTheme_Favicon(fd);
 
-      this.setState({fileUpload: null})
-
+      this.setState({ fileUpload: null });
     }
-
-
-
-
-  }
+  };
 
   componentDidMount() {
-    var _this = this
+    var _this = this;
 
-    window.$('#file-theme').on('fileloaded', function (event, file) {
-      _this.setState({ fileUpload: file })
+    window.$("#file-theme").on("fileloaded", function (event, file) {
+      _this.setState({ fileUpload: file });
     });
-    window.$('#file-theme').on('fileremoved', function (event, id, index) {
-      _this.setState({ fileUpload: null })
+    window.$("#file-theme").on("fileremoved", function (event, id, index) {
+      _this.setState({ fileUpload: null });
     });
     helper.loadFileInput("file-theme");
   }
@@ -76,12 +66,7 @@ class ModalUpload extends Component {
                 &times;
               </button>
             </div>
-            <form
-              onSubmit={this.onSave}
-              role="form"
-              action="#"
-              method="post"
-            >
+            <form onSubmit={this.onSave} role="form" action="#" method="post">
               <div className="modal-body">
                 <form enctype="multipart/form-data">
                   <div className="form-group">
@@ -116,17 +101,19 @@ class ModalUpload extends Component {
   }
 }
 
-
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    uploadImgTheme_Logo: ( file) => {
+    uploadImgTheme_Logo: (file) => {
       dispatch(themeAction.uploadImgTheme_Logo(file));
     },
-    uploadImgTheme_Favicon: ( file) => {
+    uploadImgTheme_Favicon: (file) => {
       dispatch(themeAction.uploadImgTheme_Favicon(file));
     },
-    uploadImgTheme_Face: ( file) => {
+    uploadImgTheme_Face: (file) => {
       dispatch(themeAction.uploadImgTheme_Face(file));
+    },
+    uploadImgTheme_Delivery: (file) => {
+      dispatch(themeAction.uploadImgTheme_Delivery(file));
     },
   };
 };
