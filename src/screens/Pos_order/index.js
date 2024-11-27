@@ -490,10 +490,11 @@ class PostOrder extends Component {
   };
 
   handleCallbackVoucherInput = (code_voucher) => {
+    console.log("code_voucher=======", code_voucher);
     const branch_id = getBranchId();
     const id = this.state.idCart;
     const data = {
-      code_voucher: [code_voucher],
+      code_voucher: code_voucher,
     };
     this.props.fetchVoucher(
       this.props.match.params.store_code,
@@ -502,7 +503,7 @@ class PostOrder extends Component {
       data
     );
     this.setState({
-      code_voucher: [code_voucher],
+      code_voucher: code_voucher,
     });
   };
 

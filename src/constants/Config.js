@@ -3,7 +3,7 @@ import { getBranch } from "../ultis/branchUtils";
 
 // export const API_URL  = 'https://doshop.sahavi.vn/api';
 // export const API_URL_SOCKET = "https://doshop.sahavi.vn:6441/"
-export const API_URL_DEV = "https://dev.doapp.vn/api";
+export const API_URL_DEV = "http://113.160.225.115:3333/api";
 
 // export const API_URL_DEV = "http://127.0.0.1:8000/api";
 export const API_URL_MAIN = "http://113.160.225.115:3333/api";

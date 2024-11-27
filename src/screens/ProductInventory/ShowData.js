@@ -501,6 +501,9 @@ class ShowData extends Component {
             </div>
             {/* </Link> */}
           </td>
+          <td>{data.opening_stock}</td>
+          <td>{data.sales}</td>
+          <td>{data.closing_stock}</td>
           {data.inventory.distributes.length === 1 ? (
             <>
               <td></td>

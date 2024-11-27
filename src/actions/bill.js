@@ -322,11 +322,12 @@ function exportExcel(data) {
         "Trạng thái thanh toán",
         "Trạng thái đơn hàng",
         "Địa chỉ lấy hàng",
+        "Giá trị voucher",
       ];
       headers.forEach((header, index) => {
         sheet.cell(1, index + 1).value(header);
       });
-      sheet.range("A1:P1").style({ fill: "FFFFF0", bold: true });
+      sheet.range("A1:Q1").style({ fill: "FFFFF0", bold: true });
 
       // Điền dữ liệu
       let currentRow = 2; // Bắt đầu từ dòng 2, sau tiêu đề
@@ -344,13 +345,13 @@ function exportExcel(data) {
           0
         );
         const totalDiscount = order.items.reduce(
-          (sum, item) =>
-            sum +
-            (item.quantity * (item.product?.price || 0) - item.discount_price),
+          (sum, item) => sum + item.discount_price,
+          // (item.quantity * (item.product?.price || 0) - item.discount_price)
           0
         );
         const totalFinal = order.items.reduce(
-          (sum, item) => sum + item.discount_price,
+          (sum, item) =>
+            sum + item.quantity * item.product?.price - item.discount_price,
           0
         );
 
@@ -395,10 +396,10 @@ function exportExcel(data) {
           .value(checkStatusPayment(order.payment_status));
         sheet.cell(currentRow, 15).value(checkStatusOrder(order.order_status));
         sheet.cell(currentRow, 16).value(order.branch?.branch_code);
-
+        sheet.cell(currentRow, 17).value(order.voucher_discount_amount);
         // Tô màu nền cho dòng đầu tiên của nhóm
         sheet
-          .range(`A${currentRow}:P${currentRow}`)
+          .range(`A${currentRow}:Q${currentRow}`)
           .style({ fill: "FCF5E6", bold: true });
         currentRow++;
 
@@ -409,10 +410,10 @@ function exportExcel(data) {
           sheet.cell(currentRow, 7).value(item.quantity);
           sheet.cell(currentRow, 8).value(item.product?.price);
           sheet.cell(currentRow, 9).value(item.quantity * item.product?.price);
+          sheet.cell(currentRow, 10).value(item.discount_price);
           sheet
-            .cell(currentRow, 10)
+            .cell(currentRow, 11)
             .value(item.quantity * item.product?.price - item.discount_price);
-          sheet.cell(currentRow, 11).value(item.discount_price);
 
           currentRow++; // Tăng dòng sau khi thêm thông tin sản phẩm
         });
@@ -426,11 +427,11 @@ function exportExcel(data) {
 
       // Tô màu nền cho dòng tổng cộng
       sheet
-        .range(`A${currentRow}:P${currentRow}`)
+        .range(`A${currentRow}:Q${currentRow}`)
         .style({ fill: "FAFAD2", bold: true });
 
       // Thiết lập viền đậm cho tất cả các ô có chứa dữ liệu, bao gồm dòng tổng cộng
-      sheet.range(`A1:P${currentRow}`).style({
+      sheet.range(`A1:Q${currentRow}`).style({
         border: true, // Đặt viền cho tất cả các cạnh
         borderColor: "000000", // Màu đen
         borderStyle: "thin", // Độ dày viền

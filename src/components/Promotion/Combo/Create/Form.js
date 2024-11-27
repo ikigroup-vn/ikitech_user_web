@@ -212,6 +212,30 @@ class Form extends Component {
       });
       return;
     }
+    if (state.txtStart == null || !isEmpty(state.txtStart)) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng chọn thời gian bắt đầu",
+        },
+      });
+      return;
+    }
+    if (state.txtEnd == null || !isEmpty(state.txtEnd)) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng chọn thời gian kết thúc",
+        },
+      });
+      return;
+    }
     var { store_code, comboId } = this.props;
 
     var listProducts = state.saveListProducts;

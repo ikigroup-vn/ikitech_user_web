@@ -9,20 +9,18 @@ class ModalVoucher extends Component {
       discountType: "",
       code: "",
       arrayCode: [],
+      arrayCode2: [],
     };
   }
   handleOnclicks(code) {
     this.setState(
       (prevState) => {
-        const isArrayCode = prevState.arrayCode.includes(code);
-        if (isArrayCode) {
-          return {
-            arrayCode: prevState.arrayCode.filter((item) => item !== code),
-          };
+        // Nếu đã chọn item, thì bỏ chọn (set null)
+        if (prevState.arrayCode.includes(code)) {
+          return { arrayCode: [] }; // Không có item nào được chọn
         } else {
-          return {
-            arrayCode: [...prevState.arrayCode, code],
-          };
+          // Nếu chưa chọn, thì chọn item đó
+          return { arrayCode: [code] }; // Chỉ lưu duy nhất một mã code
         }
       },
       () => {
@@ -31,6 +29,24 @@ class ModalVoucher extends Component {
       }
     );
   }
+  handleOnclicks2(code) {
+    this.setState(
+      (prevState) => {
+        // Nếu đã chọn item, thì bỏ chọn (set null)
+        if (prevState.arrayCode2.includes(code)) {
+          return { arrayCode2: [] }; // Không có item nào được chọn
+        } else {
+          // Nếu chưa chọn, thì chọn item đó
+          return { arrayCode2: [code] }; // Chỉ lưu duy nhất một mã code
+        }
+      },
+      () => {
+        console.log("arrayCode======", this.state.arrayCode2);
+        // this.props.handleCallbackVoucherInput(this.state.arrayCode);
+      }
+    );
+  }
+
   componentDidMount() {
     var discountType = this.props.listVoucher.discount_type;
     discountType == 0
@@ -46,7 +62,9 @@ class ModalVoucher extends Component {
   };
 
   handleChooseVoucher = () => {
-    this.props.handleCallbackVoucherInput(this.state.arrayCode);
+    const { arrayCode, arrayCode2 } = this.state;
+    const newArray = [...arrayCode, ...arrayCode2];
+    this.props.handleCallbackVoucherInput(newArray);
     // setTimeout(() => {
     //   this.setState({ arrayCode: [] });
     // }, 500);
@@ -387,14 +405,16 @@ class ModalVoucher extends Component {
                                 style={{
                                   borderColor: "#e8e8e8",
                                   backgroundColor:
-                                    this.state.arrayCode.includes(item.code)
+                                    this.state.arrayCode2.includes(item.code)
                                       ? "#70dc70" // Màu khi đã chọn
                                       : "white", // Màu mặc định
                                 }}
                               >
                                 <div
                                   className="RystvV hX0Gca C8GVIk"
-                                  onClick={() => this.handleOnclicks(item.code)}
+                                  onClick={() =>
+                                    this.handleOnclicks2(item.code)
+                                  }
                                 >
                                   <div>
                                     <span className="io0LX9">
@@ -482,7 +502,7 @@ class ModalVoucher extends Component {
                                 <div className="uEtbTV JR-5UM KaAPQW">
                                   <button
                                     onClick={() =>
-                                      this.handleOnclicks(item.code)
+                                      this.handleOnclicks2(item.code)
                                     }
                                     type="button"
                                     style={{

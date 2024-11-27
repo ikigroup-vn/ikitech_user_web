@@ -25,6 +25,7 @@ class Form extends Component {
       txtMaxCost: "",
       txtDiscountTopPrice: "",
       txtLimitPerUser: "",
+      txtLimitOrder: "",
       txtName: "",
       txtStart: "",
       txtEnd: "",
@@ -247,6 +248,8 @@ class Form extends Component {
         state.txtDiscountTopPrice == "" ? null : state.txtDiscountTopPrice,
       limit_per_user:
         state.txtLimitPerUser == "" ? null : state.txtLimitPerUser,
+      limit_order:
+        state.txtLimitOrder == "" ? null : Number(state.txtLimitOrder),
       start_time: startTime == "Invalid date" ? null : startTime,
       end_time: endTime == "Invalid date" ? null : endTime,
       value:
@@ -341,6 +344,7 @@ class Form extends Component {
       txtMaxCost,
       txtDiscountTopPrice,
       txtLimitPerUser,
+      txtLimitOrder,
       txtName,
       txtStart,
       txtEnd,
@@ -481,26 +485,31 @@ class Form extends Component {
               />
             </div>
 
-            <div class="form-group">
-              <label for="product_name">Giá sản phẩm sẽ giảm về mốc này</label>
-              <input
-                type="text"
-                class="form-control"
-                id="txtDiscountTopPrice"
-                value={txtDiscountTopPrice}
-                placeholder="Nhập giá sản phẩm"
-                autoComplete="off"
-                onChange={this.onChange}
-                name="txtDiscountTopPrice"
-              />
-            </div>
+            {txtValue == "" ? (
+              <div class="form-group">
+                <label for="product_name">
+                  Giá sản phẩm sẽ giảm về mốc này
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="txtDiscountTopPrice"
+                  value={txtDiscountTopPrice}
+                  placeholder="Nhập giá sản phẩm"
+                  autoComplete="off"
+                  onChange={this.onChange}
+                  name="txtDiscountTopPrice"
+                />
+              </div>
+            ) : null}
 
             <div class="form-group">
               <label for="product_name">
                 Giới hạn lượt giảm giá cho từng khách hàng
               </label>
               <input
-                type="text"
+                type="number"
+                min={1}
                 class="form-control"
                 id="txtLimitPerUser"
                 value={txtLimitPerUser}
@@ -512,25 +521,41 @@ class Form extends Component {
             </div>
 
             <div class="form-group">
-              <label for="product_name">Giảm giá (%)</label>
-              <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="txtValue"
-                  name="txtValue"
-                  value={txtValue}
-                  placeholder="nhập giảm giá"
-                  autoComplete="off"
-                  onChange={this.onChange}
-                />
-                <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon2">
-                    %
-                  </span>
+              <label for="product_name">Giới hạn số lượng đơn hàng</label>
+              <input
+                type="number"
+                min={1}
+                class="form-control"
+                id="txtLimitOrder"
+                value={txtLimitOrder}
+                placeholder="Nhập số lượng"
+                autoComplete="off"
+                onChange={this.onChange}
+                name="txtLimitOrder"
+              />
+            </div>
+            {txtDiscountTopPrice == "" ? (
+              <div class="form-group">
+                <label for="product_name">Giảm giá (%)</label>
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtValue"
+                    name="txtValue"
+                    value={txtValue}
+                    placeholder="nhập giảm giá"
+                    autoComplete="off"
+                    onChange={this.onChange}
+                  />
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">
+                      %
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : null}
 
             <div className="form-group discount-for">
               <label htmlFor="group_customer">Áp dụng cho</label>

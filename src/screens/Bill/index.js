@@ -822,6 +822,20 @@ class Bill extends Component {
       this.state.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
         : null;
+
+    if (time_from == "" || time_to == "") {
+      this.props.showError({
+        type: "ALERT_UID_STATUS",
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng chọn thời gian",
+        },
+      });
+      return;
+    }
+
     this.props.exportAllListOrderV2(
       store_code,
       1,
@@ -1470,6 +1484,9 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
+    showError: (error) => {
+      dispatch(error);
+    },
     fetchAllBill: (id, page, branch_id, params, params_agency) => {
       dispatch(
         billAction.fetchAllBill(id, page, branch_id, params, params_agency)

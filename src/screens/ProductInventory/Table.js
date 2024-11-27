@@ -314,8 +314,12 @@ class Table extends Component {
               <th>Mã SKU</th>
               <th>Mã Barcode</th>
               <th style={{ width: "36%" }}>Tên sản phẩm</th>
+              <th>Tồn đầu</th>
+              <th>Xuất trong kỳ</th>
+              <th>Tồn cuối</th>
               <th>Giá vốn</th>
               <th>Tồn kho</th>
+
               <th>Hành động</th>
             </tr>
           </thead>
