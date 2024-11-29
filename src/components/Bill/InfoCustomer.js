@@ -152,6 +152,32 @@ class InfoCustomer extends Component {
                     {delivery_address_realy}
                   </span>
                 </p>
+                <p class="sale_user_label">
+                  Khoảng cách giao hàng dự kiến:{" "}
+                  <span id="delivery_address_realy">
+                    {bill?.expect_distance == null ? 0 : bill?.expect_distance}{" "}
+                    km
+                  </span>
+                </p>
+                <p class="sale_user_label">
+                  Khoảng cách giao hàng thực tế:{" "}
+                  <span id="delivery_address_realy">
+                    {bill?.reality_distance == null
+                      ? 0
+                      : bill?.reality_distance}{" "}
+                    km
+                  </span>
+                </p>
+                <p class="sale_user_label">
+                  Số điện thoại chi nhánh:{" "}
+                  <span id="delivery_address_realy">{bill?.branch?.phone}</span>
+                </p>
+                <p class="sale_user_label">
+                  Mã vận đơn:{" "}
+                  <span id="delivery_address_realy">
+                    {bill?.shipment?.from_shipper_code}
+                  </span>
+                </p>
               </div>
             )}
 

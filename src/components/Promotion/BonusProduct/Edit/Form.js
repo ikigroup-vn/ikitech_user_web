@@ -35,6 +35,9 @@ class Form extends Component {
     super(props);
     this.state = {
       txtName: "",
+      txtMinCost: "",
+      txtMaxCost: "",
+      txtLimitPerUser: "",
       txtStart: "",
       txtEnd: "",
       txtAmount: "",
@@ -265,6 +268,9 @@ class Form extends Component {
       this.setState({
         txtContent: bonusProduct.description,
         txtName: bonusProduct.name,
+        txtMinCost: bonusProduct?.min_cost_order,
+        txtMaxCost: bonusProduct?.max_cost_order,
+        txtLimitPerUser: bonusProduct?.limit_per_user,
         txtStart: startTime,
         txtEnd: endTime,
         txtAmount:
@@ -567,6 +573,9 @@ class Form extends Component {
           : formatNumber(state.txtAmount),
 
       name: state.txtName,
+      min_cost_order: state.txtMinCost,
+      max_cost_order: state.txtMaxCost,
+      limit_per_user: state.txtLimitPerUser,
       start_time: startTime == "Invalid date" ? null : startTime,
       end_time: endTime == "Invalid date" ? null : endTime,
       ...productBonus,
@@ -933,6 +942,9 @@ class Form extends Component {
   render() {
     var {
       txtName,
+      txtMinCost,
+      txtMaxCost,
+      txtLimitPerUser,
       txtStart,
       txtEnd,
       txtAmount,
@@ -1084,6 +1096,53 @@ class Form extends Component {
                 </div>
                 <div class={`alert alert-danger ${displayError}`} role="alert">
                   Thời gian kết thúc phải sau thời gian bắt đầu
+                </div>
+
+                <div class="form-group">
+                  <label for="product_name">
+                    Giá trị nhỏ nhất của hóa đơn để áp dụng giảm giá
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtMinCost"
+                    value={txtMinCost}
+                    placeholder="Nhập giá trị"
+                    autoComplete="off"
+                    onChange={this.onChange}
+                    name="txtMinCost"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="product_name">
+                    Giá trị lớn nhất của hóa đơn để áp dụng giảm giá
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtMaxCost"
+                    value={txtMaxCost}
+                    placeholder="Nhập giá trị"
+                    autoComplete="off"
+                    onChange={this.onChange}
+                    name="txtMaxCost"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="product_name">
+                    Giới hạn số lần sử dụng cho từng khách hàng
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    class="form-control"
+                    id="txtLimitPerUser"
+                    value={txtLimitPerUser}
+                    placeholder="Nhập số lượng"
+                    autoComplete="off"
+                    onChange={this.onChange}
+                    name="txtLimitPerUser"
+                  />
                 </div>
               </div>
             </div>
