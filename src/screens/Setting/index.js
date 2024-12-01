@@ -17,6 +17,7 @@ import NotiEmail from "./NotiEmail";
 import * as themeAction from "../../actions/theme";
 import * as helper from "../../ultis/helpers";
 import TermsAgencyCollaborator from "./TermsAgencyCollaborator";
+import ChatGpt from "./chatGpt";
 class Theme extends Component {
   constructor(props) {
     super(props);
@@ -29,6 +30,12 @@ class Theme extends Component {
   fetchDataOnTap = (index) => {
     this.setState({ tabId: index, change: helper.randomString(10) });
   };
+
+  componentDidMount() {
+    var { store_code } = this.props.match.params;
+
+    this.props.fetchTheme(store_code);
+  }
 
   // componentDidUpdate(prevProps, prevState) {
   //   if (
@@ -133,6 +140,12 @@ class Theme extends Component {
                               </span>
                             </Tab>
                           ) : null}
+                          <Tab>
+                            <i class="fa fa-cog"></i>
+                            <span style={{ fontSize: "0.8rem" }}>
+                              Cài đặt ChatGPT
+                            </span>
+                          </Tab>
                         </TabList>
 
                         <TabPanel>
@@ -158,6 +171,9 @@ class Theme extends Component {
                             />
                           </TabPanel>
                         ) : null}
+                        <TabPanel>
+                          <ChatGpt theme={theme} store_code={store_code} />
+                        </TabPanel>
                       </Tabs>
                     </div>
                   </div>

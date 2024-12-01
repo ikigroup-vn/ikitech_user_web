@@ -1,0 +1,107 @@
+/* Styles for the container */
+.container {
+  border: 0.5px solid #ddd; /* Màu sắc nhạt để nhìn mềm mại hơn */
+  display: flex !important;
+  flex-direction: column;
+  justify-content: flex-start; /* Thay 'start' thành 'flex-start' để chuẩn hơn */
+  align-items: center;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 15px; /* Radius lớn hơn để góc mềm mại hơn */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Tăng độ mờ và khoảng cách shadow */
+  text-align: center;
+  width: 400px;
+  max-width: 100%;
+  transition: all 0.3s ease; /* Thêm hiệu ứng khi hover */
+}
+
+.container:hover {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); /* Shadow đậm hơn khi hover */
+  transform: translateY(-5px); /* Làm cho container nâng lên khi hover */
+}
+/* Styles for the title */
+.title {
+  font-family: "Poppins", sans-serif;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* File input wrapper */
+.file-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+/* Hidden file input */
+.file-input-hidden {
+  display: none;
+}
+
+/* Custom label for file input */
+.file-label {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 1rem;
+}
+
+.file-label:hover {
+  background-color: #0056b3;
+}
+
+/* File name display */
+.file-name {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 10px;
+}
+
+/* Styles for the download button */
+.download-button {
+  padding: 15px 30px;
+  background: linear-gradient(90deg, #007bff, #00d2ff);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  width: 100%;
+}
+
+.download-button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #00d2ff, #007bff);
+}
+
+.download-button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Styles for the template download button */
+.template-download-button {
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  background-color: #28a745; /* Xanh lá */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.template-download-button:hover {
+  background-color: #218838; /* Xanh lá đậm hơn */
+  transform: scale(1.05);
+}

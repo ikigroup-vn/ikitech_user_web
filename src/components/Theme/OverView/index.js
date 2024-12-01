@@ -6,75 +6,6 @@ import FontPicker from "font-picker-react";
 import ModalUpload from "../ModalUpload";
 import * as Env from "../../../ultis/default";
 import SketchPicker from "./ModalPickColor";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
-import styled from "styled-components";
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 40px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  width: 400px;
-  max-width: 100%;
-`;
-
-const Title = styled.h1`
-  font-family: "Poppins", sans-serif;
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: #333;
-`;
-
-const FileInput = styled.input`
-  background-color: #f1f1f1;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 1rem;
-  width: 100%;
-  margin-bottom: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-
-  &:hover {
-    background-color: #f7f7f7;
-    border-color: #007bff;
-  }
-
-  &:focus {
-    outline: none;
-    border-color: #007bff;
-  }
-`;
-
-const DownloadButton = styled.button`
-  padding: 15px 30px;
-  background: linear-gradient(90deg, #007bff, #00d2ff);
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: transform 0.3s ease, background-color 0.3s ease;
-  width: 100%;
-
-  &:hover {
-    transform: scale(1.05);
-    background: linear-gradient(90deg, #00d2ff, #007bff);
-  }
-
-  &:disabled {
-    background: #cccccc;
-    cursor: not-allowed;
-  }
-`;
 class Overview extends Component {
   constructor(props) {
     super(props);
@@ -85,42 +16,13 @@ class Overview extends Component {
       image_share_web_url: null,
       home_title: "",
       domain: "",
-      tokengpt: "",
-      modelgpt: "",
       color_main_1: "",
       font_family: "",
       typeUpload: "",
       loadFont: false,
       home_description: "",
-      excelData: [],
     };
   }
-
-  handleFileUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const data = e.target.result;
-        const workbook = XLSX.read(data, { type: "binary" });
-        const firstSheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[firstSheetName];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet);
-        this.setState({ excelData: jsonData });
-      };
-      reader.readAsBinaryString(file);
-    }
-  };
-
-  handleDownloadJsonl = () => {
-    const { excelData } = this.state;
-    const jsonlContent = excelData
-      .map((item) => JSON.stringify(item)) // Chuyển từng đối tượng thành JSON
-      .join("\n"); // Nối các JSON lại bằng ký tự xuống dòng
-
-    const blob = new Blob([jsonlContent], { type: "application/jsonl" });
-    saveAs(blob, "data.jsonl");
-  };
 
   onChange = (e) => {
     var target = e.target;
@@ -143,8 +45,6 @@ class Overview extends Component {
         image_share_web_url: theme.image_share_web_url,
         home_title: theme.home_title,
         domain: theme.domain,
-        tokengpt: theme.gpt_token,
-        modelgpt: theme.gpt_model,
         color_main_1: theme.color_main_1,
         font_family: theme.font_family,
         home_description: theme.home_description,
@@ -166,8 +66,6 @@ class Overview extends Component {
         image_share_web_url: theme.image_share_web_url,
         home_title: theme.home_title,
         domain: theme.domain,
-        tokengpt: theme.gpt_token,
-        modelgpt: theme.gpt_model,
         color_main_1: theme.color_main_1,
         font_family: theme.font_family,
         home_description: theme.home_description,
@@ -206,9 +104,6 @@ class Overview extends Component {
     form.image_share_web_url = theme.image_share_web_url;
     form.home_title = theme.home_title;
     form.domain = theme.domain;
-
-    form.gpt_token = theme.tokengpt;
-    form.gpt_model = theme.modelgpt;
     form.color_main_1 = theme.color_main_1;
     form.font_family = theme.font_family;
     form.home_description = theme.home_description;
@@ -237,13 +132,10 @@ class Overview extends Component {
       image_share_web_url,
       home_title,
       domain,
-      tokengpt,
-      modelgpt,
       color_main_1,
       font_family,
       typeUpload,
       home_description,
-      excelData,
     } = this.state;
 
     var logo_url = logo_url == null ? Env.IMG_NOT_FOUND : logo_url;
@@ -426,47 +318,6 @@ class Overview extends Component {
                 5 phút)
               </span>
             </div>
-            <div className="form-group">
-              <label htmlFor="name">Token chatGPT</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Token chatGPT của bạn"
-                id="txtName"
-                onChange={this.onChange}
-                value={tokengpt || ""}
-                name="tokengpt"
-                autoComplete="off"
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="name">Tên model chatGPT</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Tên model chatGPT của bạn"
-                id="txtName"
-                onChange={this.onChange}
-                value={modelgpt || ""}
-                name="modelgpt"
-                autoComplete="off"
-              />
-            </div>
-
-            <Container>
-              <Title>Excel to JSONL</Title>
-              <FileInput
-                type="file"
-                accept=".xlsx, .xls"
-                onChange={this.handleFileUpload}
-              />
-              <DownloadButton
-                onClick={this.handleDownloadJsonl}
-                disabled={!excelData.length}
-              >
-                Tải xuống JSONL
-              </DownloadButton>
-            </Container>
             {/* <div className="form-group">
                             <label htmlFor="name">Kiểu chữ cho web</label>
                             {this.showFont(_font_family)}

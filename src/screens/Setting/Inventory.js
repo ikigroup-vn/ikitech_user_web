@@ -106,7 +106,7 @@ class Setting extends Component {
           nextProps.generalSetting.allow_branch_payment_order,
         auto_choose_default_branch_payment_order:
           nextProps.generalSetting.auto_choose_default_branch_payment_order,
-        required_agency_ctv_has_referral_code:  
+        required_agency_ctv_has_referral_code:
           nextProps.generalSetting.required_agency_ctv_has_referral_code,
         is_export_invoices: nextProps.generalSetting.is_export_invoices,
       });
