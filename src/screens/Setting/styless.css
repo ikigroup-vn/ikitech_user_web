@@ -1,5 +1,5 @@
 /* Styles for the container */
-.container {
+.containersss {
   border: 0.5px solid #ddd; /* Màu sắc nhạt để nhìn mềm mại hơn */
   display: flex !important;
   flex-direction: column;
@@ -15,7 +15,7 @@
   transition: all 0.3s ease; /* Thêm hiệu ứng khi hover */
 }
 
-.container:hover {
+.containersss:hover {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); /* Shadow đậm hơn khi hover */
   transform: translateY(-5px); /* Làm cho container nâng lên khi hover */
 }

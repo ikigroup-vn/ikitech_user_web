@@ -7,7 +7,7 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import FontPicker from "font-picker-react";
-import styles from "./style.css";
+import "./styless.css";
 const Dontainer = styled.div`
   border: "1px solid black";
   display: flex !important;
@@ -378,7 +378,7 @@ class ChatGPT extends Component {
               />
             </div>
             <div>
-              <div className="container">
+              <div className="containersss">
                 <div className="title">
                   <h4>Chuyển EXCEL Sang JSONL</h4>
                 </div>
