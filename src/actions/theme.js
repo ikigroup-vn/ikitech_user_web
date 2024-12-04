@@ -229,7 +229,12 @@ export const createBanner = function (store_code, data, banner, form) {
     }
     var img = res != null ? res.data.data : null;
     var _banner = [...banner];
-    _banner.push({ image_url: img, title: data.title, link_to: data.link_to });
+    _banner.push({
+      image_url: img,
+      title: data.title,
+      link_to: data.link_to,
+      post_id: data.post_id,
+    });
     var _form = { ...form };
     _form.carousel_app_images = _banner;
     loadBanner(dispatch, store_code, _form);
@@ -296,11 +301,12 @@ export const updateBanner = function (store_code, data, banner, form) {
       image_url: img,
       title: data.title,
       link_to: data.link_to,
+      post_id: data.post_id,
     };
     var _form = { ...form };
     _form.carousel_app_images = _banner;
     loadBanner(dispatch, store_code, _form);
-    console.log("aaaaaaa");
+    console.log("aaaaaaa", _form);
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "hide",

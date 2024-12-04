@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import * as themeAction from "../../../actions/theme";
+import * as blogAction from "../../../actions/blog";
 import { connect } from "react-redux";
 import * as helper from "../../../ultis/helpers";
 import { compressed } from "../../../ultis/helpers";
 import { isEmpty } from "../../../ultis/helpers";
 import * as Types from "../../../constants/ActionType";
+import { shallowEqual } from "../../../ultis/shallowEqual";
 class ModalCreate extends Component {
   constructor(props) {
     super(props);
@@ -12,10 +14,23 @@ class ModalCreate extends Component {
       title: "",
       link: "",
       fileUpload: null,
+      blog: [],
+      blogId: "",
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log("heeeeeeeeeeeeeeeee", nextProps.blogs?.data);
+    this.setState({ blog: nextProps.blogs?.data });
+    // if (!shallowEqual(nextProps._blog, this.props._blog)) {
+    //   var { type_action } = this.state;
+    //   console.log("heeeeeeeeeeeeeeeee", nextProps.blogs);
+    //   this.setState({ blog: nextProps.blogs });
+    // }
+  }
+
   componentDidMount() {
+    var { store_code } = this.props;
     var _this = this;
 
     window.$("#file-banner").on("fileloaded", function (event, file) {
@@ -25,6 +40,7 @@ class ModalCreate extends Component {
       _this.setState({ fileUpload: null });
     });
     helper.loadFileInput("file-banner");
+    this.props.fetchAllBlog(store_code);
   }
   onChange = (e) => {
     var target = e.target;
@@ -38,8 +54,8 @@ class ModalCreate extends Component {
   onSave = async (e) => {
     e.preventDefault();
 
-    var { title, link } = this.state;
-
+    var { title, link, blogId } = this.state;
+    console.log("blogId.id====", blogId);
     var { store_code, carousel_app_images, theme } = this.props;
     var file = this.state.fileUpload;
 
@@ -50,7 +66,12 @@ class ModalCreate extends Component {
 
       this.props.createBanner(
         store_code,
-        { title: title, link_to: link, file: await compressed(file, 0, 0) },
+        {
+          title: title,
+          link_to: link,
+          file: await compressed(file, 0, 0),
+          post_id: blogId,
+        },
         carousel_app_images,
         theme
       );
@@ -69,8 +90,10 @@ class ModalCreate extends Component {
       // this.props.createBanner(store_code, { title: title, file: "" }, carousel_app_images,theme);
     }
   };
+
   render() {
-    var { title, link } = this.state;
+    var { title, link, blog, blogId } = this.state;
+    console.log("blogsssss===", blog);
     return (
       <div
         class="modal fade"
@@ -127,6 +150,26 @@ class ModalCreate extends Component {
                     />
                   </div>
                 </div>
+
+                <div class="form-group">
+                  <label for="product_post">Tin tức</label>
+                  <select
+                    class="form-control"
+                    id="blogId"
+                    value={blogId}
+                    onChange={this.onChange}
+                    name="blogId"
+                  >
+                    <option value="" disabled>
+                      Chọn tin tức
+                    </option>
+                    {blog?.map((option) => (
+                      <option key={option.id} value={option.id}>
+                        {option.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <div class="form-group">
                   <label for="product_link">URL trang đích</label>
                   <input
@@ -161,8 +204,17 @@ class ModalCreate extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    blogs: state.blogReducers.blog.allBlog,
+  };
+};
+
 const mapDispatchToProps = (dispatch, props) => {
   return {
+    fetchAllBlog: (id) => {
+      dispatch(blogAction.fetchAllBlog(id));
+    },
     showError: (error) => {
       dispatch(error);
     },
@@ -171,4 +223,4 @@ const mapDispatchToProps = (dispatch, props) => {
     },
   };
 };
-export default connect(null, mapDispatchToProps)(ModalCreate);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalCreate);

@@ -368,6 +368,7 @@ class EditGiftGameSpinWheel extends Component {
       page,
       params
     );
+    console.log("ressssssss======", res);
 
     if (res.status != 200) {
       return {

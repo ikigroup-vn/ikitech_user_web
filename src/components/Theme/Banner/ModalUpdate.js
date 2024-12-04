@@ -5,6 +5,7 @@ import * as helper from "../../../ultis/helpers";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { compressed } from "../../../ultis/helpers";
 import { isEmpty } from "../../../ultis/helpers";
+import * as blogAction from "../../../actions/blog";
 import * as Types from "../../../constants/ActionType";
 
 class ModalUpdate extends Component {
@@ -16,27 +17,34 @@ class ModalUpdate extends Component {
       id: "",
       image: "",
       fileUpload: null,
+      blog: [],
+      blogId: "",
+      blogTitle: "",
     };
   }
 
   componentWillReceiveProps(nextProps) {
+    this.setState({ blog: nextProps.blogs?.data });
     if (!shallowEqual(nextProps.modal, this.props.modal)) {
       var banner = nextProps.modal;
       console.log(
         "🚀 ~ file: ModalUpdate.js:25 ~ ModalUpdate ~ componentWillReceiveProps ~ banner",
-        banner
+        banner?.post_id
       );
+
       this.setState({
         title: banner._title,
         link: banner.link_to,
         id: banner.id,
         image: banner.image_url,
+        blogId: banner.post_id,
+        blogTitle: banner?.post?.title,
       });
     }
   }
   componentDidMount() {
     var _this = this;
-
+    var { store_code } = this.props;
     window.$("#file-banner-update").on("fileloaded", function (event, file) {
       _this.setState({ fileUpload: file });
     });
@@ -47,6 +55,7 @@ class ModalUpdate extends Component {
       });
 
     helper.loadFileInput("file-banner-update");
+    this.props.fetchAllBlog(store_code);
   }
   onChange = (e) => {
     var target = e.target;
@@ -59,8 +68,8 @@ class ModalUpdate extends Component {
   };
   onSave = async (e) => {
     e.preventDefault();
-    var { title, image, id, link } = this.state;
-
+    var { title, image, id, link, blogId } = this.state;
+    console.log("blogIdádfsdsdfsdgfd==", blogId);
     window.$(".modal").modal("hide");
     var { store_code, carousel_app_images, theme } = this.props;
     var file = this.state.fileUpload;
@@ -75,6 +84,7 @@ class ModalUpdate extends Component {
           link_to: link,
           file: await compressed(file, 0, 0),
           image: image,
+          post_id: blogId,
         },
         carousel_app_images,
         theme
@@ -83,14 +93,22 @@ class ModalUpdate extends Component {
     } else {
       this.props.updateBanner(
         store_code,
-        { id: id, title: title, link_to: link, file: "", image: image },
+        {
+          id: id,
+          title: title,
+          link_to: link,
+          file: "",
+          image: image,
+          post_id: blogId,
+        },
         carousel_app_images,
         theme
       );
     }
   };
   render() {
-    var { title, image, link } = this.state;
+    var { title, image, link, blog, blogId, blogTitle } = this.state;
+    console.log("blogId=======", blogId);
     return (
       <div
         class="modal fade"
@@ -152,6 +170,25 @@ class ModalUpdate extends Component {
                   </div>
                 </div>
                 <div class="form-group">
+                  <label for="product_post">Tin tức</label>
+                  <select
+                    class="form-control"
+                    id="blogId"
+                    value={blogId ?? ""}
+                    onChange={this.onChange}
+                    name="blogId"
+                  >
+                    <option value="" disabled>
+                      Chọn tin tức
+                    </option>
+                    {blog?.map((option) => (
+                      <option key={option.id} value={option.id}>
+                        {option.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div class="form-group">
                   <label for="product_link">URL trang đích</label>
                   <input
                     id="product_link"
@@ -185,8 +222,16 @@ class ModalUpdate extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    blogs: state.blogReducers.blog.allBlog,
+  };
+};
 const mapDispatchToProps = (dispatch, props) => {
   return {
+    fetchAllBlog: (id) => {
+      dispatch(blogAction.fetchAllBlog(id));
+    },
     showError: (error) => {
       dispatch(error);
     },
@@ -195,4 +240,4 @@ const mapDispatchToProps = (dispatch, props) => {
     },
   };
 };
-export default connect(null, mapDispatchToProps)(ModalUpdate);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalUpdate);

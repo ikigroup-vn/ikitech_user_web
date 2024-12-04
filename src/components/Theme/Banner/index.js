@@ -22,6 +22,7 @@ class Footer extends Component {
         link_to: "",
         id: "",
         image_url: "",
+        post_id: "",
       },
     };
   }
@@ -59,7 +60,7 @@ class Footer extends Component {
     this.setState({ modalremove: { title: "banner", id: id, _title: title } });
   };
 
-  updateBanner = (e, id, title, img, link_to) => {
+  updateBanner = (e, id, title, img, link_to, post_id) => {
     this.setState({
       modalupdate: {
         title: "banner",
@@ -67,6 +68,7 @@ class Footer extends Component {
         _title: title,
         image_url: img,
         link_to,
+        post_id: post_id,
       },
     });
   };
@@ -102,7 +104,14 @@ class Footer extends Component {
               <button
                 type="button"
                 onClick={(e) =>
-                  this.updateBanner(e, index, data.title, img, data.link_to)
+                  this.updateBanner(
+                    e,
+                    index,
+                    data.title,
+                    img,
+                    data.link_to,
+                    data.post_id
+                  )
                 }
                 data-toggle="modal"
                 data-target="#updateModal"
@@ -143,8 +152,9 @@ class Footer extends Component {
   render() {
     var { store_code, theme } = this.props;
     var { carousel_app_images } = this.state;
-    var banner = bannerImg.filter((v) => v?.index === theme?.banner_type)?.at(0) || {};
-    
+    var banner =
+      bannerImg.filter((v) => v?.index === theme?.banner_type)?.at(0) || {};
+
     return (
       <div className="support">
         <button

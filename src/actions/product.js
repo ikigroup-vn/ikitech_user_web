@@ -2011,7 +2011,7 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                                 newItem["Hình ảnh"] = "";
                               }
                               newItem["Giá bán lẻ"] = "";
-                              newItem["Giá nhập"] = "";
+                              // newItem["Giá nhập"] = "";
                               newItem["Giá vốn"] = 0;
                               newItem["Tồn kho"] = 0;
                               newItem["Tồn Đầu"] = 0;
@@ -2038,11 +2038,11 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                               newItemEmpty["Giá bán lẻ"] = `${
                                 elementSub.price ? elementSub.price : 0
                               }`;
-                              newItemEmpty["Giá nhập"] = `${
-                                elementSub.import_price
-                                  ? elementSub.import_price
-                                  : 0
-                              }`;
+                              // newItemEmpty["Giá nhập"] = `${
+                              //   elementSub.import_price
+                              //     ? elementSub.import_price
+                              //     : 0
+                              // }`;
                               newItemEmpty["Giá vốn"] = `${
                                 elementSub.cost_of_capital
                                   ? elementSub.cost_of_capital
@@ -2083,11 +2083,11 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                               newItemEmpty["Giá bán lẻ"] = `${
                                 elementSub.price ? elementSub.price : 0
                               }`;
-                              newItemEmpty["Giá nhập"] = `${
-                                elementSub.import_price
-                                  ? elementSub.import_price
-                                  : 0
-                              }`;
+                              // newItemEmpty["Giá nhập"] = `${
+                              //   elementSub.import_price
+                              //     ? elementSub.import_price
+                              //     : 0
+                              // }`;
                               newItemEmpty["Giá vốn"] = `${
                                 elementSub.cost_of_capital
                                   ? elementSub.cost_of_capital
@@ -2122,7 +2122,7 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                             newItem["Hình ảnh"] = "";
 
                             newItem["Giá bán lẻ"] = "";
-                            newItem["Giá nhập"] = "";
+                            // newItem["Giá nhập"] = "";
                             newItem["Giá vốn"] = "";
                             newItem["Tồn kho"] = "";
                             newItem["Tồn Đầu"] = "";
@@ -2145,9 +2145,9 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                             newItemEmpty["Giá bán lẻ"] = `${
                               element.price ? element.price : 0
                             }`;
-                            newItemEmpty["Giá nhập"] = `${
-                              element.import_price ? element.import_price : 0
-                            }`;
+                            // newItemEmpty["Giá nhập"] = `${
+                            //   element.import_price ? element.import_price : 0
+                            // }`;
                             newItemEmpty["Giá vốn"] = `${
                               element.cost_of_capital
                                 ? element.cost_of_capital
@@ -2182,9 +2182,9 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                             newItemEmpty["Giá bán lẻ"] = `${
                               element.price ? element.price : 0
                             }`;
-                            newItemEmpty["Giá nhập"] = `${
-                              element.import_price ? element.import_price : 0
-                            }`;
+                            // newItemEmpty["Giá nhập"] = `${
+                            //   element.import_price ? element.import_price : 0
+                            // }`;
                             newItemEmpty["Giá vốn"] = `${
                               element.cost_of_capital
                                 ? element.cost_of_capital
@@ -2206,9 +2206,9 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                     newItem["Mã sản phẩm"] = "";
                     newItem["Hình ảnh"] = "";
                     newItem["Giá bán lẻ"] = `${item.price ? item.price : 0}`;
-                    newItem["Giá nhập"] = `${
-                      item.import_price ? item.import_price : 0
-                    }`;
+                    // newItem["Giá nhập"] = `${
+                    //   item.import_price ? item.import_price : 0
+                    // }`;
                     newItem["Giá vốn"] = `${
                       item.inventory?.main_cost_of_capital
                         ? item.inventory?.main_cost_of_capital
