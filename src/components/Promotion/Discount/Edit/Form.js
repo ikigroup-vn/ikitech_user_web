@@ -255,11 +255,12 @@ class Form extends Component {
     }
     var { store_code, discountId } = this.props;
     var listProducts = state.saveListProducts;
-    var product_ids = "";
+    var product_ids = [];
     listProducts.forEach((element, index) => {
-      if (listProducts.length == index + 1)
-        product_ids = product_ids + element.id;
-      else product_ids = product_ids + element.id + ",";
+      product_ids.push(element.id);
+      // if (listProducts.length == index + 1)
+      //   product_ids = product_ids + element.id;
+      // else product_ids = product_ids + element.id + ",";
     });
     var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm:ss").format(
       "YYYY-MM-DD HH:mm:ss"

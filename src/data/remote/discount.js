@@ -5,8 +5,8 @@ export const fetchAllDiscount = (store_code) => {
 };
 
 export const fetchAllDiscountEnd = (store_code, page) => {
-  return callApi(
-    `/store/${store_code}/discounts_end?page=${page}`,
+  return callApi2(
+    `/store/${store_code}/discounts?is_end=true&&page=${page}`,
     "get",
     null
   );
@@ -17,11 +17,11 @@ export const fetchDiscountId = (store_code, id) => {
 };
 
 export const createDiscount = (store_code, data) => {
-  return callApi(`/store/${store_code}/discounts`, "post", data);
+  return callApi2(`/store/${store_code}/discounts`, "post", data);
 };
 
 export const updateDiscount = (store_code, data, id) => {
-  return callApi(`/store/${store_code}/discounts/${id}`, "put", data);
+  return callApi2(`/store/${store_code}/discounts/${id}`, "put", data);
 };
 
 export const destroyDiscount = (store_code, id) => {
