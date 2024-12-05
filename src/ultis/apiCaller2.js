@@ -92,5 +92,6 @@ export default function (endpoint, method, body) {
     url: `https://main.doapp.vn/api/v2${endpoint}`,
     data: body,
     cancelToken: axios.CancelToken.source().token,
+    redirect: "follow",
   });
 }

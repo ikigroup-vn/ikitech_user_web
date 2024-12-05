@@ -23,6 +23,9 @@ export const createDiscount = (store_code, data) => {
 export const updateDiscount = (store_code, data, id) => {
   return callApi2(`/store/${store_code}/discounts/${id}`, "put", data);
 };
+export const updateDiscount2 = (store_code, data, id) => {
+  return callApi2(`/store/${store_code}/discounts/${id}`, "patch", data);
+};
 
 export const destroyDiscount = (store_code, id) => {
   return callApi(`/store/${store_code}/discounts/${id}`, "delete", null);

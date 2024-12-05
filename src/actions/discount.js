@@ -115,7 +115,7 @@ export const updateDiscountIsEnd = (store_code, discount, id) => {
       loading: "show",
     });
     discountApi
-      .updateDiscount(store_code, discount, id)
+      .updateDiscount2(store_code, discount, id)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
@@ -127,7 +127,7 @@ export const updateDiscountIsEnd = (store_code, discount, id) => {
             if (res.data.code !== 401)
               dispatch({
                 type: Types.FETCH_ALL_DISCOUNT,
-                data: res.data.data,
+                data: res.data.data.data,
               });
             dispatch({
               type: Types.ALERT_UID_STATUS,

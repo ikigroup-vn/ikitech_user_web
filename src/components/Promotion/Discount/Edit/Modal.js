@@ -4,12 +4,11 @@ import * as discountAction from "../../../../actions/discount";
 import themeData from "../../../../ultis/theme_data";
 
 class Modal extends Component {
-    
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var {id , store_code} = this.props.modal
-    this.props.updateDiscountIsEnd(store_code, {is_end : true}, id)
+    window.$(".modal").modal("hide");
+    var { id, store_code } = this.props.modal;
+    this.props.updateDiscountIsEnd(store_code, { is_end: true }, id);
   };
 
   render() {
@@ -25,7 +24,10 @@ class Modal extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
               <h4 style={{ color: "white" }}>Thông báo</h4>
               <button
                 type="button"
@@ -57,9 +59,7 @@ class Modal extends Component {
                   Đóng
                 </button>
                 <button type="submit" class="btn btn-warning">
-                Dừng
-
-                  
+                  Dừng
                 </button>
               </div>
             </form>
@@ -73,8 +73,8 @@ class Modal extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     updateDiscountIsEnd: (store_code, discount, id) => {
-        dispatch(discountAction.updateDiscountIsEnd(store_code, discount, id));
-      },
+      dispatch(discountAction.updateDiscountIsEnd(store_code, discount, id));
+    },
   };
 };
 export default connect(null, mapDispatchToProps)(Modal);
