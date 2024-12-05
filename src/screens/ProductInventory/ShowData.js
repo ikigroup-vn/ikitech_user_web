@@ -513,7 +513,7 @@ class ShowData extends Component {
           ) : (
             <>
               <td>{format(Number(data.inventory.main_cost_of_capital))}</td>
-              <td>{data.inventory.main_stock}</td>
+              {/* <td>{data.inventory.main_stock}</td> */}
               {data.check_inventory === true ? (
                 <td>
                   <div

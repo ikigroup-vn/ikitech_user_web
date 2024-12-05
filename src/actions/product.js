@@ -2013,7 +2013,7 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                               newItem["Giá bán lẻ"] = "";
                               // newItem["Giá nhập"] = "";
                               newItem["Giá vốn"] = 0;
-                              newItem["Tồn kho"] = 0;
+                              // newItem["Tồn kho"] = 0;
                               newItem["Tồn Đầu"] = 0;
                               newItem["Xuất trong kỳ"] = 0;
                               newItem["Tồn cuối"] = 0;
@@ -2048,7 +2048,7 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                                   ? elementSub.cost_of_capital
                                   : 0
                               }`;
-                              newItemEmpty["Tồn kho"] = `${elementSub.stock}`;
+                              // newItemEmpty["Tồn kho"] = `${elementSub.stock}`;
                               newItemEmpty["Tồn Đầu"] = `${
                                 element.opening_stock
                                   ? elementSub.opening_stock
@@ -2093,9 +2093,9 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                                   ? elementSub.cost_of_capital
                                   : 0
                               }`;
-                              newItemEmpty["Tồn kho"] = `${
-                                elementSub.stock ? elementSub.stock : 0
-                              }`;
+                              // newItemEmpty["Tồn kho"] = `${
+                              //   elementSub.stock ? elementSub.stock : 0
+                              // }`;
                               newItemEmpty["Tồn Đầu"] = `${
                                 element.opening_stock
                                   ? elementSub.opening_stock
@@ -2124,7 +2124,7 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                             newItem["Giá bán lẻ"] = "";
                             // newItem["Giá nhập"] = "";
                             newItem["Giá vốn"] = "";
-                            newItem["Tồn kho"] = "";
+                            // newItem["Tồn kho"] = "";
                             newItem["Tồn Đầu"] = "";
                             newItem["Xuất trong kỳ"] = "";
                             newItem["Tồn cuối"] = "";
@@ -2153,9 +2153,9 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                                 ? element.cost_of_capital
                                 : 0
                             }`;
-                            newItemEmpty["Tồn kho"] = `${
-                              element.stock ? element.stock : 0
-                            }`;
+                            // newItemEmpty["Tồn kho"] = `${
+                            //   element.stock ? element.stock : 0
+                            // }`;
                             newItemEmpty["Tồn Đầu"] = `${
                               element.opening_stock ? element.opening_stock : 0
                             }`;
@@ -2190,9 +2190,9 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                                 ? element.cost_of_capital
                                 : 0
                             }`;
-                            newItemEmpty["Tồn kho"] = `${
-                              element.stock ? element.stock : 0
-                            }`;
+                            // newItemEmpty["Tồn kho"] = `${
+                            //   element.stock ? element.stock : 0
+                            // }`;
                             newArray.push(newItemEmpty);
                           }
                         }
@@ -2214,11 +2214,11 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                         ? item.inventory?.main_cost_of_capital
                         : 0
                     }`;
-                    newItem["Tồn kho"] = `${
-                      item.inventory?.main_stock
-                        ? item.inventory?.main_stock
-                        : 0
-                    }`;
+                    // newItem["Tồn kho"] = `${
+                    //   item.inventory?.main_stock
+                    //     ? item.inventory?.main_stock
+                    //     : 0
+                    // }`;
                     newItem["Tồn Đầu"] = `${
                       item.opening_stock ? item.opening_stock : 0
                     }`;

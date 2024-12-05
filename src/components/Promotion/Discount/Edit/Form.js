@@ -615,7 +615,7 @@ class Form extends Component {
 
             <div class="form-group">
               <label for="product_name">
-                Giới hạn lượt giảm giá cho từng khách hàng
+                Giới hạn lượt giảm giá trong 1 đơn hàng
               </label>
               <input
                 type="number"
@@ -630,7 +630,9 @@ class Form extends Component {
               />
             </div>
             <div class="form-group">
-              <label for="product_name">Giới hạn số lượng đơn hàng</label>
+              <label for="product_name">
+                Giới hạn số lượng đơn hàng cho 1 khách hàng
+              </label>
               <input
                 type="number"
                 min={1}

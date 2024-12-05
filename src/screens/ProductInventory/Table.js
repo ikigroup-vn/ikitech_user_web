@@ -318,7 +318,7 @@ class Table extends Component {
               <th>Xuất trong kỳ</th>
               <th>Tồn cuối</th>
               <th>Giá vốn</th>
-              <th>Tồn kho</th>
+              {/* <th>Tồn kho</th> */}
 
               <th>Hành động</th>
             </tr>
