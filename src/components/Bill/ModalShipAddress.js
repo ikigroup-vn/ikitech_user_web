@@ -3,8 +3,7 @@ import themeData from "../../ultis/theme_data";
 import * as billAction from "../../actions/bill";
 import * as shipmentAction from "../../actions/shipment";
 import styled from "styled-components";
-import { connect, shallowEqual } from "react-redux";
-import history from "../../history";
+import { connect } from "react-redux";
 
 const ModalDeleteOrderStyles = styled.div`
   background-color: rgba(0, 0, 0, 0.3);
@@ -32,62 +31,48 @@ class ModalShipAddress extends Component {
     super(props);
     this.state = {
       order_code: this.props.order_code,
-      selectedItem: this.props.listShipmentAddress[0],
+      selectedItem: this.props.listShipmentAddress[0], // Địa chỉ được chọn ban đầu
+      searchQuery: "", // Từ khóa tìm kiếm
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("tesssssss===", nextProps);
-    this.setState({ selectedItem: nextProps.order_code });
-    this.setState({ selectedItem: nextProps.listShipmentAddress[0] });
+    if (nextProps.listShipmentAddress !== this.props.listShipmentAddress) {
+      this.setState({ selectedItem: nextProps.listShipmentAddress[0] });
+    }
   }
 
-  showData = (listBakery) => {
-    var result = null;
-
-    if (listBakery.length > 0) {
-      result = listBakery.map((data, index) => {
-        return (
-          <option
-            value={data.storeId}
-            key={index}
-            className={
-              data.is_default_order_online === true
-                ? "active-branch-default"
-                : ""
-            }
-          >
-            {data.storeAddress}
-          </option>
-        );
-      });
-    }
-    return result;
+  handleSearch = (event) => {
+    const searchQuery = event.target.value;
+    this.setState({ searchQuery }, () => {
+      // Sau khi cập nhật searchQuery, chọn giá trị đầu tiên trong danh sách lọc
+      const filteredData = this.filterData();
+      if (filteredData.length > 0) {
+        this.setState({ selectedItem: filteredData[0] });
+      }
+    });
   };
 
-  handleCloseModalDeleteOrder = () => {
-    this.props.setCloseModalShipAddress(false);
-  };
   handleSelectChange = (event) => {
     const selectedValue = event.target.value;
-    const { listShipmentAddress } = this.props;
-
-    // Tìm object của item đã chọn
-    const selectedItem = listShipmentAddress.find(
+    const selectedItem = this.props.listShipmentAddress.find(
       (item) => item.storeId === selectedValue
     );
-
-    console.log("objext====", selectedItem);
-
-    // Cập nhật state với item đã chọn
-    this.setState({ selectedItem: selectedItem });
+    this.setState({ selectedItem });
   };
 
   handleSubmit = () => {
-    var { store_code, order_code } = this.props;
+    const { store_code, order_code } = this.props;
+    const { selectedItem } = this.state;
+
+    if (!selectedItem) {
+      alert("Vui lòng chọn một địa chỉ trước khi xác nhận!");
+      return;
+    }
+
     const dataBody = {
       order_code: this.state.order_code,
-      pickup: this.state.selectedItem,
+      pickup: selectedItem,
     };
 
     this.props.createShipAhamove(store_code, dataBody);
@@ -97,9 +82,25 @@ class ModalShipAddress extends Component {
     }, 5000);
   };
 
-  render() {
+  handleCloseModalDeleteOrder = () => {
+    this.props.setCloseModalShipAddress(false);
+  };
+
+  filterData = () => {
+    const { searchQuery } = this.state;
     const { listShipmentAddress } = this.props;
-    const { selectedItem } = this.state;
+
+    if (!searchQuery) return listShipmentAddress;
+
+    return listShipmentAddress.filter((item) =>
+      item.storeAddress.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  };
+
+  render() {
+    const { selectedItem, searchQuery } = this.state;
+
+    const filteredData = this.filterData();
 
     return (
       <ModalDeleteOrderStyles
@@ -123,24 +124,35 @@ class ModalShipAddress extends Component {
                 <span>&times;</span>
               </button>
             </div>
-            {/* <form> */}
             <div className="modal-body">
-              <input type="hidden" name="remove_id_store" />
-              <div className="alert-remove"></div>
-              <div
-                style={{ margin: "auto" }}
-                className={`nav-item dropdown no-arrow mx-1`}
+              <input
+                type="text"
+                placeholder="Tìm kiếm địa chỉ"
+                className="form-control mb-3"
+                value={searchQuery}
+                onChange={this.handleSearch}
+              />
+              <select
+                id="input"
+                className="form-control border-input"
+                name="store"
+                onChange={this.handleSelectChange}
+                value={selectedItem?.storeId || ""}
               >
-                <select
-                  id="input"
-                  className="form-control border-input"
-                  name="store"
-                  onChange={this.handleSelectChange}
-                  defaultValue={selectedItem?.storeId} // Đặt item đầu tiên làm mặc định
-                >
-                  {this.showData(listShipmentAddress)}
-                </select>
-              </div>
+                {filteredData.map((data, index) => (
+                  <option
+                    value={data.storeId}
+                    key={index}
+                    className={
+                      data.is_default_order_online
+                        ? "active-branch-default"
+                        : ""
+                    }
+                  >
+                    {data.storeAddress}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="modal-footer">
               <button
@@ -154,7 +166,6 @@ class ModalShipAddress extends Component {
                 Xác nhận
               </button>
             </div>
-            {/* </form> */}
           </div>
         </div>
       </ModalDeleteOrderStyles>
