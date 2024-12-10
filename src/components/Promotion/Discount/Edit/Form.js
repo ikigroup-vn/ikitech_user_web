@@ -612,40 +612,6 @@ class Form extends Component {
                 />
               </div>
             ) : null}
-
-            <div class="form-group">
-              <label for="product_name">
-                Giới hạn lượt giảm giá trong 1 đơn hàng
-              </label>
-              <input
-                type="number"
-                class="form-control"
-                min={1}
-                id="txtLimitPerUser"
-                value={txtLimitPerUser}
-                placeholder="Nhập số lượng"
-                autoComplete="off"
-                onChange={this.onChange}
-                name="txtLimitPerUser"
-              />
-            </div>
-            <div class="form-group">
-              <label for="product_name">
-                Giới hạn số lượng đơn hàng cho 1 khách hàng
-              </label>
-              <input
-                type="number"
-                min={1}
-                class="form-control"
-                id="txtLimitOrder"
-                value={txtLimitOrder}
-                placeholder="Nhập số lượng"
-                autoComplete="off"
-                onChange={this.onChange}
-                name="txtLimitOrder"
-              />
-            </div>
-
             {txtDiscountTopPrice == null || txtDiscountTopPrice == "" ? (
               <div class="form-group">
                 <label for="product_name">Giảm giá (%)</label>
@@ -668,6 +634,38 @@ class Form extends Component {
                 </div>
               </div>
             ) : null}
+            {/* <div class="form-group">
+              <label for="product_name">
+                Giới hạn lượt giảm giá trong 1 đơn hàng
+              </label>
+              <input
+                type="number"
+                class="form-control"
+                min={1}
+                id="txtLimitPerUser"
+                value={txtLimitPerUser}
+                placeholder="Nhập số lượng"
+                autoComplete="off"
+                onChange={this.onChange}
+                name="txtLimitPerUser"
+              />
+            </div> */}
+            <div class="form-group">
+              <label for="product_name">
+                Giới hạn số lượng đơn hàng cho 1 khách hàng
+              </label>
+              <input
+                type="number"
+                min={1}
+                class="form-control"
+                id="txtLimitOrder"
+                value={txtLimitOrder}
+                placeholder="Nhập số lượng"
+                autoComplete="off"
+                onChange={this.onChange}
+                name="txtLimitOrder"
+              />
+            </div>
 
             <div className="form-group discount-for">
               <label htmlFor="group_customer">Áp dụng cho</label>
