@@ -304,6 +304,16 @@ function exportExcel(data) {
     .then((workbook) => {
       const sheet = workbook.sheet(0);
 
+      const handleGetPaymentMethodName = (paymentMethodId) => {
+        const payment = [
+          { id: 0, name: "Thanh toán khi nhận hàng" },
+          { id: 1, name: "Chuyển khoản đến tài khoản ngân hàng" },
+          { id: 2, name: "Thanh toán bằng VNPay" },
+          { id: 3, name: "Thanh toán bằng OnePay" },
+          { id: 4, name: "Thanh toán bằng Momo" },
+        ];
+        return payment.find((item) => item.id === paymentMethodId)?.name;
+      };
       // Thiết lập tiêu đề
       const headers = [
         "Ngày",
@@ -323,11 +333,13 @@ function exportExcel(data) {
         "Trạng thái đơn hàng",
         "Địa chỉ lấy hàng",
         "Giá trị voucher",
+        "Giảm giá",
+        "Hình thức thanh toán",
       ];
       headers.forEach((header, index) => {
         sheet.cell(1, index + 1).value(header);
       });
-      sheet.range("A1:Q1").style({ fill: "FFFFF0", bold: true });
+      sheet.range("A1:S1").style({ fill: "FFFFF0", bold: true });
 
       // Điền dữ liệu
       let currentRow = 2; // Bắt đầu từ dòng 2, sau tiêu đề
@@ -396,9 +408,13 @@ function exportExcel(data) {
         sheet.cell(currentRow, 15).value(checkStatusOrder(order.order_status));
         sheet.cell(currentRow, 16).value(order.branch?.branch_code);
         sheet.cell(currentRow, 17).value(order.voucher_discount_amount);
+        sheet.cell(currentRow, 18).value(order.discounts[0]?.name);
+        sheet
+          .cell(currentRow, 19)
+          .value(handleGetPaymentMethodName(order.payment_method_id));
         // Tô màu nền cho dòng đầu tiên của nhóm
         sheet
-          .range(`A${currentRow}:Q${currentRow}`)
+          .range(`A${currentRow}:S${currentRow}`)
           .style({ fill: "FCF5E6", bold: true });
         currentRow++;
 
@@ -413,7 +429,6 @@ function exportExcel(data) {
           sheet
             .cell(currentRow, 11)
             .value(item.quantity * item.product?.price - item.discount_price);
-
           currentRow++; // Tăng dòng sau khi thêm thông tin sản phẩm
         });
       });
@@ -426,11 +441,11 @@ function exportExcel(data) {
 
       // Tô màu nền cho dòng tổng cộng
       sheet
-        .range(`A${currentRow}:Q${currentRow}`)
+        .range(`A${currentRow}:S${currentRow}`)
         .style({ fill: "FAFAD2", bold: true });
 
       // Thiết lập viền đậm cho tất cả các ô có chứa dữ liệu, bao gồm dòng tổng cộng
-      sheet.range(`A1:Q${currentRow}`).style({
+      sheet.range(`A1:S${currentRow}`).style({
         border: true, // Đặt viền cho tất cả các cạnh
         borderColor: "000000", // Màu đen
         borderStyle: "thin", // Độ dày viền
