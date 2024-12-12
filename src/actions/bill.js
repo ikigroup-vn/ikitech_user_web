@@ -306,11 +306,11 @@ function exportExcel(data) {
 
       const handleGetPaymentMethodName = (paymentMethodId) => {
         const payment = [
-          { id: 0, name: "Thanh toán khi nhận hàng" },
-          { id: 1, name: "Chuyển khoản đến tài khoản ngân hàng" },
-          { id: 2, name: "Thanh toán bằng VNPay" },
-          { id: 3, name: "Thanh toán bằng OnePay" },
-          { id: 4, name: "Thanh toán bằng Momo" },
+          { id: 0, name: "Tiền mặt" },
+          { id: 1, name: "Quẹt thẻ" },
+          { id: 2, name: "COD" },
+          { id: 3, name: "Chuyển khoản" },
+          { id: 4, name: "Ví điện tử" },
         ];
         return payment.find((item) => item.id === paymentMethodId)?.name;
       };
