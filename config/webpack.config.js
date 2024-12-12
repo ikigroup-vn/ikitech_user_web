@@ -316,6 +316,17 @@ module.exports = function (webpackEnv) {
       modules: ["node_modules", paths.appNodeModules].concat(
         modules.additionalModulePaths || []
       ),
+      fallback: {
+        crypto: require.resolve("crypto-browserify"),
+        stream: require.resolve("stream-browserify"),
+        http: require.resolve("stream-http"),
+        https: require.resolve("https-browserify"),
+        zlib: require.resolve("browserify-zlib"),
+        buffer: require.resolve("buffer/"),
+        util: require.resolve("util"),
+        fs: false, // fs is not available in the browser
+        vm: require.resolve("vm-browserify"),
+      },
       // These are the reasonable defaults supported by the Node ecosystem.
       // We also include JSX as a common component filename extension to support
       // some tools, although we do not recommend using it, see:
@@ -385,6 +396,7 @@ module.exports = function (webpackEnv) {
             {
               test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
               loader: require.resolve("url-loader"),
+
               options: {
                 limit: imageInlineSizeLimit,
                 name: "static/media/[name].[hash:8].[ext]",
@@ -607,6 +619,12 @@ module.exports = function (webpackEnv) {
       // during a production build.
       // Otherwise React will be compiled in the very slow development mode.
       new webpack.DefinePlugin(env.stringified),
+      new webpack.ProvidePlugin({
+        Buffer: ["buffer", "Buffer"],
+      }),
+      new webpack.ProvidePlugin({
+        process: "process/browser",
+      }),
       // This is necessary to emit hot updates (CSS and Fast Refresh):
       isEnvDevelopment && new webpack.HotModuleReplacementPlugin(),
       // Experimental hot reloading for React .
