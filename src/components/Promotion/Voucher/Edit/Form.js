@@ -1187,11 +1187,21 @@ class Form extends Component {
 
                         <div class="checkbox" onChange={this.onChangeLimit}>
                           <label>
-                            <input type="radio" value="0" name="limit" />
+                            <input
+                              type="radio"
+                              value="0"
+                              name="limit"
+                              checked={limit === "show"}
+                            />
                             Chọn mức giảm
                           </label>
                           <label style={{ marginLeft: "20px" }}>
-                            <input type="radio" value="1" name="limit" />
+                            <input
+                              type="radio"
+                              value="1"
+                              name="limit"
+                              checked={limit === "hide"}
+                            />
                             Không giới hạn
                           </label>
                         </div>
