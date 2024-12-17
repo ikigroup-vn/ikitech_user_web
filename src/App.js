@@ -4,21 +4,15 @@ import { Router, Route, Switch } from "react-router-dom";
 import history from "./history";
 import { randomString } from "./ultis/helpers";
 import themeData from "./ultis/theme_data";
-import getChannel from "./ultis/channel"
+import getChannel from "./ultis/channel";
 
 class App extends Component {
-
-
   componentDidMount() {
-    document.title = `Quản lý - ${themeData().loginTitle}`
+    document.title = `Quản lý - ${themeData().loginTitle}`;
     document.getElementById("root").className = getChannel();
-    document.head.innerHTML = document.head.innerHTML + `<link rel="icon"  href="${themeData().favicon}"/>`
-
- 
-
-
-
-
+    document.head.innerHTML =
+      document.head.innerHTML +
+      `<link rel="icon"  href="${themeData().favicon}"/>`;
   }
 
   showContentMenus = (routes) => {
@@ -40,7 +34,7 @@ class App extends Component {
     return <Switch>{result}</Switch>;
   };
   render() {
-    return <Router history={history}>{this.showContentMenus(routes)}</Router>
+    return <Router history={history}>{this.showContentMenus(routes)}</Router>;
   }
 }
 

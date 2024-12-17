@@ -255,12 +255,12 @@ class Form extends Component {
     }
     var { store_code, discountId } = this.props;
     var listProducts = state.saveListProducts;
-    var product_ids = "";
-    listProducts.forEach((element, index) => {
-      if (listProducts.length == index + 1)
-        product_ids = product_ids + element.id;
-      else product_ids = product_ids + element.id + ",";
+    var product_ids = []; // Khởi tạo mảng rỗng
+
+    listProducts.forEach((element) => {
+      product_ids.push(element.id); // Đẩy từng id vào mảng
     });
+
     var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm:ss").format(
       "YYYY-MM-DD HH:mm:ss"
     );
