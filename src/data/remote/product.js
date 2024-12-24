@@ -118,6 +118,9 @@ export const createProductV2 = (store_code, branch_id, data) => {
 export const updateProduct = (store_code, data, id) => {
   return callApi(`/store/${store_code}/products/${id}`, "put", data);
 };
+export const updateProduct2 = (store_code, data, id) => {
+  return callApi(`/store/${store_code}/products/${id}`, "patch", data);
+};
 
 export const updatePriceOneProduct = (store_code, id, data) => {
   return callApi(`/store/${store_code}/products/${id}/price`, "put", data);

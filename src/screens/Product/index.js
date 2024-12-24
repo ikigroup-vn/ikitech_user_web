@@ -998,7 +998,9 @@ class Product extends Component {
                             pageProduct={true}
                             getParams={this.getParams}
                             categorySelected={this.state.categorySelected}
-                            categoryChildSelected={this.state.categoryChildSelected}
+                            categoryChildSelected={
+                              this.state.categoryChildSelected
+                            }
                           />
                         </div>
                       </div>
@@ -1044,6 +1046,7 @@ const mapStateToProps = (state) => {
     category_product: state.categoryPReducers.category_product.allCategoryP,
   };
 };
+
 const mapDispatchToProps = (dispatch, props) => {
   return {
     fetchAllProduct: (store_code, page, params) => {

@@ -385,7 +385,6 @@ class ShowData extends Component {
             </div>
           )}
 
-          {"  "}
           <span
             style={{
               color: "rgb(127, 140, 141)",
@@ -402,9 +401,33 @@ class ShowData extends Component {
           </span>
         </td>
 
-        {/* <td>
-          <span>{data?.percent_collaborator != 0 ? `${data?.percent_collaborator}%` : data?.money_amount_collaborator.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
-        </td> */}
+        <td>
+          <div className="ctv" style={{ width: 60 }}>
+            <span>
+              {data?.percent_collaborator != 0
+                ? `${data?.percent_collaborator}%`
+                : data?.money_amount_collaborator.toLocaleString("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  })}
+            </span>
+            <span
+              style={{
+                color: "rgb(127, 140, 141)",
+                marginLeft: 5,
+              }}
+            >
+              <i
+                onClick={(e) => {
+                  this.props.handleShowUpdatePriceCtv(data);
+                }}
+                data-toggle="modal"
+                data-target="#updateModalNewPriceCtv"
+                class="fa fa-edit"
+              ></i>
+            </span>
+          </div>
+        </td>
 
         {getChannel() == IKITECH && (
           <td>

@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import UpdatePriceModal from "./Modal/UpdatePriceModal";
 import UpdateNameModal from "./Modal/UpdateNameModal";
 import ModalUpdateCommission from "./ModalUpdateCommission";
+import UpdatePriceCtvModal from "./Modal/UpdatePriceCtvModal";
 
 const TableProductStyles = styled.div`
   .status-product {
@@ -58,6 +59,7 @@ class Table extends Component {
       },
       formData: "",
       currentProductEditPrice: {},
+      currentProductEditPriceCtv: {},
       currentProductEditName: {},
     };
   }
@@ -123,6 +125,11 @@ class Table extends Component {
   handleShowUpdatePrice = (product) => {
     this.setState({
       currentProductEditPrice: product,
+    });
+  };
+  handleShowUpdatePriceCtv = (product) => {
+    this.setState({
+      currentProductEditPriceCtv: product,
     });
   };
   handleShowUpdateName = (product) => {
@@ -212,6 +219,7 @@ class Table extends Component {
             handleCallBackSubElement={this.handleCallBackSubElement}
             handleFetchAllProduct={this.props.handleFetchAllProduct}
             handleShowUpdatePrice={this.handleShowUpdatePrice}
+            handleShowUpdatePriceCtv={this.handleShowUpdatePriceCtv}
             updatePriceOneProduct={this.props.updatePriceOneProduct}
             handleShowUpdateName={this.handleShowUpdateName}
             updateNameOneProduct={this.props.updateNameOneProduct}
@@ -261,6 +269,11 @@ class Table extends Component {
 
     return (
       <TableProductStyles>
+        <UpdatePriceCtvModal
+          store_code={this.props.store_code}
+          modal={this.state.currentProductEditPriceCtv}
+          updatePriceOneProduct={this.props.updatePriceOneProduct}
+        />
         <UpdatePriceModal
           store_code={this.props.store_code}
           modal={this.state.currentProductEditPrice}
@@ -325,7 +338,8 @@ class Table extends Component {
               <th>Tên sản phẩm</th>
 
               <th style={{ width: "20%" }}>Giá bán lẻ</th>
-              {/* <th >Hoa hồng CTV</th> */}
+
+              <th>Hoa hồng CTV</th>
 
               {getChannel() == IKITECH && <th>Trạng thái </th>}
 

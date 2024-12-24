@@ -3625,7 +3625,59 @@ export const updateProduct = (
       });
   };
 };
-
+export const updateProduct2 = (
+  store_code,
+  data,
+  productId,
+  page,
+  params,
+  funcModal
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    productApi
+      .updateProduct2(store_code, data, productId)
+      .then((res) => {
+        funcModal();
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        // history.goBack();
+      })
+      .catch(function (error) {
+        var content = "";
+        // if (typeof error.response.data.msg == "undefined")
+        //   content = "Vui lòng chọn ảnh và nhập đầy đủ các thông tin";
+        // else content = error.response.data.msg;
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        // dispatch({
+        //   type: Types.ALERT_UID_STATUS,
+        //   alert: {
+        //     type: "danger",
+        //     title: "Lỗi",
+        //     disable: "show",
+        //     content: content,
+        //   },
+        // });
+      });
+  };
+};
 export const updateDistribute = (
   store_code,
   data,

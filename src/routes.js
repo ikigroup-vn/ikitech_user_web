@@ -1278,14 +1278,14 @@ const routes = [
     path: "/expired",
     exact: true,
 
-    main: ({ match }) => <Expired match={match}/>,
+    main: ({ match }) => <Expired match={match} />,
   },
 
   {
     path: "/community/:store_code",
     exact: true,
 
-    main: ({ match }) => <Community match={match}/>,
+    main: ({ match }) => <Community match={match} />,
   },
 
   {

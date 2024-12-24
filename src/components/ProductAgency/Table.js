@@ -13,6 +13,8 @@ import * as Env from "../../ultis/default";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import * as productAction from "../../actions/product";
 import UpdatePriceAgencyModal from "../../screens/ProductAgency/UpdatePriceAgencyModal";
+import * as agencyAction from "../../actions/agency";
+
 import { connect } from "react-redux";
 class Table extends Component {
   constructor(props) {
@@ -22,6 +24,13 @@ class Table extends Component {
       arrayCheckBox: [],
       productId: null,
       showModalUpdatePriceAgency: false,
+      checkedItems: [],
+      isListVisible: false,
+      selectedOptions: [],
+      productSelections: {},
+      selectedProduct: null, // Sản phẩm được chọn để hiển thị trong popup
+      showPopup: false, // Trạng thái hiển thị popup
+      selectedCheckboxes: [],
     };
   }
 
@@ -191,9 +200,113 @@ class Table extends Component {
     );
     this.handleShowUpdatePrice(data);
   }
+  componentDidMount() {
+    var { store_code } = this.props;
+
+    this.props.fetchAllAgencyType(store_code);
+  }
+  // handleCheckboxChange = (id) => {
+  //   this.setState((prevState) => {
+  //     const isChecked = prevState.selectedCheckboxes.includes(id);
+  //     if (isChecked) {
+  //       return {
+  //         selectedCheckboxes: prevState.selectedCheckboxes.filter(
+  //           (checkboxId) => checkboxId !== id
+  //         ),
+  //       };
+  //     } else {
+  //       return {
+  //         selectedCheckboxes: [...prevState.selectedCheckboxes, id],
+  //       };
+  //     }
+  //   });
+  // };
+  handleCheckboxChange = (id) => {
+    this.setState((prevState) => {
+      const isChecked = prevState.selectedCheckboxes.includes(id);
+      const isInitiallyChecked =
+        prevState.selectedProduct.agency_type &&
+        prevState.selectedProduct.agency_type.some(
+          (agency) => agency.id === id
+        );
+
+      let updatedCheckboxes;
+
+      if (isChecked) {
+        // Nếu checkbox đã được chọn, bỏ chọn nó
+        updatedCheckboxes = prevState.selectedCheckboxes.filter(
+          (checkboxId) => checkboxId !== id
+        );
+      } else {
+        // Nếu checkbox chưa được chọn, thêm nó vào danh sách
+        updatedCheckboxes = [...prevState.selectedCheckboxes, id];
+      }
+
+      return {
+        selectedCheckboxes: updatedCheckboxes,
+        // Nếu cần cập nhật `selectedProduct.agency_type` khi bỏ chọn ban đầu
+        selectedProduct: {
+          ...prevState.selectedProduct,
+          agency_type: isInitiallyChecked
+            ? prevState.selectedProduct.agency_type.filter(
+                (agency) => agency.id !== id
+              )
+            : prevState.selectedProduct.agency_type,
+        },
+      };
+    });
+  };
+
+  // Hàm ẩn/hiện danh sách
+  toggleListVisibility = () => {
+    this.setState((prevState) => ({
+      isListVisible: !prevState.isListVisible,
+    }));
+  };
+
+  handleShowPopup = (product) => {
+    this.setState({
+      selectedProduct: product,
+      showPopup: true,
+      selectedCheckboxes: product.agency_type
+        ? product.agency_type.map((agency) => agency.id)
+        : [], // Thiết lập lại selectedCheckboxes
+    });
+  };
+
+  handleClosePopup = () => {
+    this.setState({ showPopup: false, selectedProduct: null });
+  };
+
+  handleUpdateSelections = () => {
+    const { selectedCheckboxes, selectedProduct } = this.state;
+    var { store_code } = this.props;
+    // Lấy id từ selectedProduct.agency_type nếu tồn tại
+    const existingIds = selectedProduct.agency_type
+      ? selectedProduct.agency_type.map((agency) => agency.id)
+      : [];
+
+    // Kết hợp selectedCheckboxes và existingIds (tránh trùng lặp)
+    const allSelectedIds = Array.from(
+      new Set([...selectedCheckboxes, ...existingIds])
+    );
+
+    console.log("Selected IDs:", allSelectedIds);
+    const form = { list_agency_id: selectedCheckboxes };
+
+    this.props.updateProduct2(store_code, form, selectedProduct?.id, null);
+    setTimeout(() => {
+      this.fetchAllProduct();
+    }, 1000);
+    this.handleClosePopup();
+  };
+
   showData = (products, per_page, current_page) => {
+    const { checkedItems, isListVisible, selectedOptions, productSelections } =
+      this.state;
     var result = null;
-    var { store_code, page, agency_type_id } = this.props;
+    var { store_code, page, agency_type_id, types } = this.props;
+    console.log("types ======", types);
     if (typeof products === "undefined") {
       return result;
     }
@@ -255,6 +368,40 @@ class Table extends Component {
                 {data.name}
               </Link>
             </td>
+            <td
+              onClick={() => this.handleShowPopup(data)}
+              style={{ cursor: "pointer" }}
+            >
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "10px" }}
+              >
+                <div style={{ flexGrow: 1 }}>
+                  {data.agency_type.map((option) => (
+                    <div key={option.id} style={{ marginBottom: "10px" }}>
+                      <label style={{ display: "flex", alignItems: "center" }}>
+                        <div className="option-container">
+                          <span className="option-button">{option.name}</span>
+                        </div>
+                      </label>
+                    </div>
+                  ))}
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <span
+                    style={{ color: "rgb(127, 140, 141)", cursor: "pointer" }}
+                  >
+                    <i className="fa fa-edit"></i>
+                  </span>
+                </div>
+              </div>
+            </td>
+
             <td>{data?.agency_price?.percent_agency}%</td>
             <td>
               {product_discount == null && (
@@ -558,6 +705,7 @@ class Table extends Component {
               <th>Mã SKU</th>
 
               <th>Tên sản phẩm</th>
+              <th>Nhóm đại lý</th>
 
               <th>Hoa hồng</th>
 
@@ -570,6 +718,116 @@ class Table extends Component {
           </thead>
 
           <tbody>{this.showData(listProduct, per_page, current_page)}</tbody>
+          {this.state.showPopup && (
+            <div
+              className="popup-overlay"
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                background: "rgba(0, 0, 0, 0.5)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: 1000,
+              }}
+            >
+              <div
+                className="popup-content"
+                style={{
+                  position: "relative",
+                  background: "#fff",
+                  padding: "20px",
+                  borderRadius: "10px",
+                  width: "400px",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                }}
+              >
+                <button
+                  onClick={this.handleClosePopup}
+                  style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px",
+                    background: "none",
+                    border: "none",
+                    fontSize: "20px",
+                    color: "#000",
+                    cursor: "pointer",
+                  }}
+                >
+                  &times;
+                </button>
+                <h3 style={{ textAlign: "center", color: "#333" }}>
+                  Chọn hiển thị
+                </h3>
+                <div style={{ marginTop: "20px", marginBottom: "60px" }}>
+                  {this.props.types.map((option) => (
+                    <div key={option.id} style={{ marginBottom: "10px" }}>
+                      <label style={{ display: "flex", alignItems: "center" }}>
+                        <input
+                          type="checkbox"
+                          checked={
+                            this.state.selectedCheckboxes.includes(option.id) ||
+                            (this.state.selectedProduct.agency_type &&
+                              this.state.selectedProduct.agency_type.some(
+                                (agency) => agency.id === option.id
+                              ))
+                          }
+                          onChange={() => this.handleCheckboxChange(option.id)}
+                          style={{
+                            marginRight: "10px",
+                            width: "18px",
+                            height: "18px",
+                            cursor: "pointer",
+                          }}
+                        />
+                        {option.name}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+                <button
+                  onClick={this.handleClosePopup}
+                  style={{
+                    position: "relative",
+                    left: 206,
+                    padding: "6px 20px",
+                    background: "gray",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "5px",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                    textAlign: "center",
+                  }}
+                >
+                  Đóng
+                </button>
+                <button
+                  onClick={this.handleUpdateSelections}
+                  style={{
+                    position: "relative",
+                    left: 214,
+                    padding: "6px 20px",
+                    background: "#F6C23D",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "5px",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                    textAlign: "center",
+                  }}
+                >
+                  Lưu
+                </button>
+              </div>
+            </div>
+          )}
         </table>
       </div>
     );
@@ -579,6 +837,7 @@ class Table extends Component {
 const mapStateToProps = (state) => {
   return {
     product: state.productReducers.product.product_agency_price_id,
+    types: state.agencyReducers.agency.allAgencyType,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -595,6 +854,14 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllProduct: (store_code, page, params, agency_type_id) => {
       dispatch(
         productAction.fetchAllProduct(store_code, page, params, agency_type_id)
+      );
+    },
+    fetchAllAgencyType: (store_code) => {
+      dispatch(agencyAction.fetchAllAgencyType(store_code));
+    },
+    updateProduct2: (store_code, product, productId, page) => {
+      dispatch(
+        productAction.updateProduct2(store_code, product, productId, page)
       );
     },
   };
