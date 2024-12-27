@@ -300,8 +300,8 @@ export const ikitech_menu = [
             to: "/revenue_expenditure",
           },
           {
-            class: "report",
-            display: "show",
+            class: "report_payment",
+            display: "hide",
             name: "Báo cáo thanh toán",
             exact: true,
             to: "/report_pay",
@@ -638,12 +638,13 @@ export const ikitech_menu = [
         name: "Chương trình khuyến mại",
         icon: "fas fa-money-bill-alt",
         setOpenKey: ["/discount", "/voucher", "/combo", "/bonus_product"],
+        displayWithTabItem: "hide",
         open: "promotion",
         children: [
           {
             name: "Giảm giá sản phẩm",
             class: "promotion_discount_list",
-            display: "hide",
+            display: "show",
             icon: "fas-usd-circle",
             exact: true,
             to: "/discount",
@@ -651,7 +652,7 @@ export const ikitech_menu = [
           {
             name: "Voucher giảm giá hóa đơn",
             class: "promotion_voucher_list",
-            display: "hide",
+            display: "show",
             icon: "fas fa-fw fa-cog",
             exact: true,
             to: "/voucher",
@@ -659,7 +660,7 @@ export const ikitech_menu = [
           {
             name: "Combo giảm giá",
             class: "promotion_combo_list",
-            display: "hide",
+            display: "show",
             icon: "fas fa-fw fa-cog",
             exact: true,
             to: "/combo",
@@ -667,7 +668,7 @@ export const ikitech_menu = [
           {
             name: "Thưởng sản phẩm",
             class: "promotion_bonus_product_list",
-            display: "hide",
+            display: "show",
             icon: "fas fa-fw fa-cog",
             exact: true,
             to: "/bonus_product",

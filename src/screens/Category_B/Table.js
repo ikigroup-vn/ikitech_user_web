@@ -29,9 +29,7 @@ class Table extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      !shallowEqual(this.props.data, nextProps.data)
-    ) {
+    if (!shallowEqual(this.props.data, nextProps.data)) {
       this.setState({ listArr: nextProps.data });
     }
   }
@@ -94,7 +92,7 @@ class Table extends Component {
           <SortableItem key={data.id}>
             <div class="resp-table-row hover-product" style={{ width: "100%" }}>
               <div class="table-body-cell">{index + 1}</div>
-              <div class="table-body-cell" style={{ width: "15%" }}>
+              <div class="table-body-cell" style={{ width: "45%" }}>
                 <img
                   src={image_url}
                   className="img-responsive"
@@ -105,7 +103,7 @@ class Table extends Component {
               </div>
               <div
                 class="table-body-cell table-custom"
-                style={{ width: "35%" }}
+                style={{ width: "55%" }}
               >
                 <div
                   className="wrap-conten"
@@ -121,15 +119,15 @@ class Table extends Component {
                   >
                     {data.title}
                   </div>
-                  <div
-                    className="group-btn-table"
-                  >
+                  <div className="group-btn-table">
                     <Link
-                to={`/posts/category/edit/${this.props.store_code}/${data.id}`}
-                class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
-              >
-                <i class="fa fa-edit"></i> Sửa
-              </Link>
+                      to={`/posts/category/edit/${this.props.store_code}/${data.id}`}
+                      class={`btn btn-warning btn-sm ${
+                        update == true ? "show" : "hide"
+                      }`}
+                    >
+                      <i class="fa fa-edit"></i> Sửa
+                    </Link>
 
                     <a
                       style={{ marginLeft: "10px", color: "white" }}
@@ -148,7 +146,7 @@ class Table extends Component {
                 </div>
               </div>
 
-              <div class="table-body-cell" style={{ position: "relative" }}>
+              {/* <div class="table-body-cell" style={{ position: "relative" }}>
                 {data.category_children.map((data1, index) => {
                   var image_url_child =
                     data1.image_url == null || data1.image_url == ""
@@ -246,7 +244,7 @@ class Table extends Component {
                     <i class="fas fa-plus" style={{ padding: "6px" }}></i>
                   </a>
                 </div>
-              </div>
+              </div> */}
               <div></div>
             </div>
           </SortableItem>
@@ -272,12 +270,12 @@ class Table extends Component {
           <div style={{ fontWeight: "500" }} class="table-body-cell">
             Tên danh mục
           </div>
-          <div style={{ fontWeight: "500" }} class="table-body-cell">
+          {/* <div style={{ fontWeight: "500" }} class="table-body-cell">
             Danh mục con
-          </div>
+          </div> */}
         </div>
         <SortableList
-        allowDrag={false}
+          allowDrag={false}
           onSortEnd={this.onSortEnd}
           className="resp-table-body"
           draggedItemClassName="dragged"

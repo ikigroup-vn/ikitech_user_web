@@ -24,6 +24,9 @@ class ModalUpload extends Component {
       fd.append("image", await compressed(file));
       if (typeUpload == "LOGO") this.props.uploadImgTheme_Logo(fd);
       if (typeUpload == "DELIVERY") this.props.uploadImgTheme_Delivery(fd);
+      if (typeUpload == "EARN_POINT") this.props.uploadImgTheme_Earn_Point(fd);
+      if (typeUpload == "PAYMENT") this.props.uploadImgTheme_Payment(fd);
+      if (typeUpload == "GUARANTEE") this.props.uploadImgTheme_Guarantee(fd);
       if (typeUpload == "FACE") this.props.uploadImgTheme_Face(fd);
       if (typeUpload == "FAVICON") this.props.uploadImgTheme_Favicon(fd);
 
@@ -114,6 +117,15 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     uploadImgTheme_Delivery: (file) => {
       dispatch(themeAction.uploadImgTheme_Delivery(file));
+    },
+    uploadImgTheme_Earn_Point: (file) => {
+      dispatch(themeAction.uploadImgTheme_Earn_Point(file));
+    },
+    uploadImgTheme_Payment: (file) => {
+      dispatch(themeAction.uploadImgTheme_Payment(file));
+    },
+    uploadImgTheme_Guarantee: (file) => {
+      dispatch(themeAction.uploadImgTheme_Guarantee(file));
     },
   };
 };

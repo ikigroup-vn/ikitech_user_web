@@ -4,12 +4,11 @@ import * as comboAction from "../../../../actions/combo";
 import themeData from "../../../../ultis/theme_data";
 
 class Modal extends Component {
-    
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var {id , store_code} = this.props.modal
-    this.props.updateComboIsEnd(store_code, {is_end : true}, id)
+    window.$(".modal").modal("hide");
+    var { id, store_code } = this.props.modal;
+    this.props.updateComboIsEnd(store_code, { is_end: true }, id);
   };
 
   render() {
@@ -25,7 +24,10 @@ class Modal extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
               <h4 style={{ color: "white" }}>Thông báo</h4>
               <button
                 type="button"
@@ -46,7 +48,7 @@ class Modal extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-               Bạn có muốn kết thúc chương trình khuyến mãi này không ?
+                Bạn có muốn kết thúc chương trình khuyến mãi này không ?
               </div>
               <div class="modal-footer">
                 <button
@@ -57,9 +59,7 @@ class Modal extends Component {
                   Đóng
                 </button>
                 <button type="submit" class="btn btn-warning">
-                Dừng
-
-                  
+                  Dừng
                 </button>
               </div>
             </form>
@@ -73,8 +73,8 @@ class Modal extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     updateComboIsEnd: (store_code, combo, id) => {
-        dispatch(comboAction.updateComboIsEnd(store_code, combo, id));
-      },
+      dispatch(comboAction.updateComboIsEnd(store_code, combo, id));
+    },
   };
 };
 export default connect(null, mapDispatchToProps)(Modal);

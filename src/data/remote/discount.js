@@ -5,7 +5,7 @@ export const fetchAllDiscount = (store_code) => {
 };
 
 export const fetchAllDiscountEnd = (store_code, page) => {
-  return callApi2(
+  return callApi(
     `/store/${store_code}/discounts?is_end=true&&page=${page}`,
     "get",
     null

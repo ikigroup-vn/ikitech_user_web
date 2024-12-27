@@ -13,6 +13,9 @@ class Overview extends Component {
       store_id: "",
       logo_url: null,
       logo_delivery: null,
+      logo_earn_point: null,
+      logo_payment: null,
+      logo_guarantee: null,
       favicon_url: null,
       image_share_web_url: null,
       home_title: "",
@@ -43,6 +46,12 @@ class Overview extends Component {
       this.setState({
         delivery: theme.benefitIcons[0].content,
         logo_delivery: theme.benefitIcons[0].image_url,
+        earn_point: theme.benefitIcons[1].content,
+        logo_earn_point: theme.benefitIcons[1].image_url,
+        payment: theme.benefitIcons[2].content,
+        logo_payment: theme.benefitIcons[2].image_url,
+        guarantee: theme.benefitIcons[3].content,
+        logo_guarantee: theme.benefitIcons[3].image_url,
         store_id: theme.store_id,
         logo_url: theme.logo_url,
         favicon_url: theme.favicon_url,
@@ -57,7 +66,7 @@ class Overview extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("receipt");
+    console.log("receipt", nextProps);
     if (
       !shallowEqual(nextProps.theme, this.props.theme) ||
       nextProps.tabId != this.props.tabId
@@ -66,6 +75,12 @@ class Overview extends Component {
       this.setState({
         delivery: theme.benefitIcons[0].content,
         logo_delivery: theme.benefitIcons[0].image_url,
+        earn_point: theme.benefitIcons[1].content,
+        logo_earn_point: theme.benefitIcons[1].image_url,
+        payment: theme.benefitIcons[2].content,
+        logo_payment: theme.benefitIcons[2].image_url,
+        guarantee: theme.benefitIcons[3].content,
+        logo_guarantee: theme.benefitIcons[3].image_url,
         store_id: theme.store_id,
         logo_url: theme.logo_url,
         favicon_url: theme.favicon_url,
@@ -81,6 +96,12 @@ class Overview extends Component {
       this.setState({ image_share_web_url: nextProps.faceImg });
     if (nextProps.logoDelivery != this.props.logoDelivery)
       this.setState({ logo_delivery: nextProps.logoDelivery });
+    if (nextProps.logoEarnPoint != this.props.logoEarnPoint)
+      this.setState({ logo_earn_point: nextProps.logoEarnPoint });
+    if (nextProps.logoPayment != this.props.logoPayment)
+      this.setState({ logo_payment: nextProps.logoPayment });
+    if (nextProps.logoGuarantee != this.props.logoGuarantee)
+      this.setState({ logo_guarantee: nextProps.logoGuarantee });
     if (nextProps.logoImg != this.props.logoImg)
       this.setState({ logo_url: nextProps.logoImg });
     if (nextProps.faviconImg != this.props.faviconImg)
@@ -112,6 +133,18 @@ class Overview extends Component {
       {
         image_url: theme.logo_delivery,
         content: theme.delivery,
+      },
+      {
+        image_url: theme.logo_earn_point,
+        content: theme.earn_point,
+      },
+      {
+        image_url: theme.logo_payment,
+        content: theme.payment,
+      },
+      {
+        image_url: theme.logo_guarantee,
+        content: theme.guarantee,
       },
     ];
     // form.delivery = theme.delivery;
@@ -146,6 +179,12 @@ class Overview extends Component {
     var {
       delivery,
       logo_delivery,
+      earn_point,
+      logo_earn_point,
+      payment,
+      logo_payment,
+      guarantee,
+      logo_guarantee,
       logo_url,
       favicon_url,
       image_share_web_url,
@@ -159,6 +198,11 @@ class Overview extends Component {
 
     var logo_delivery =
       logo_delivery == null ? Env.IMG_NOT_FOUND : logo_delivery;
+    var logo_earn_point =
+      logo_earn_point == null ? Env.IMG_NOT_FOUND : logo_earn_point;
+    var logo_payment = logo_payment == null ? Env.IMG_NOT_FOUND : logo_payment;
+    var logo_guarantee =
+      logo_guarantee == null ? Env.IMG_NOT_FOUND : logo_guarantee;
     var logo_url = logo_url == null ? Env.IMG_NOT_FOUND : logo_url;
     var favicon_url = favicon_url == null ? Env.IMG_NOT_FOUND : favicon_url;
     var image_share_web_url =
@@ -312,6 +356,87 @@ class Overview extends Component {
                     </div>
                   </div>
                 </div>
+
+                <div class="form-group col-xs-4 col-lg-4 col-md-6 col-sm-6">
+                  <label>Icon tích điểm: &nbsp; </label>
+
+                  <img
+                    style={{ display: "block" }}
+                    src={`${logo_earn_point}`}
+                    width="150"
+                    height="150"
+                  />
+                  <br />
+                  <div class="kv-avatar">
+                    <div>
+                      <button
+                        onClick={() => this.onChangeUpload("EARN_POINT")}
+                        type="button"
+                        class="btn btn-primary-no-background btn-sm"
+                        // style={{ marginLeft: "10px" }}
+                        data-toggle="modal"
+                        data-target="#uploadModalTheme"
+                      >
+                        <i class="fas fa-plus"></i>
+                        <span class="text">&nbsp; Upload Icon</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-xs-4 col-lg-4 col-md-6 col-sm-6">
+                  <label>Icon ưu đãi thanh toán online: &nbsp; </label>
+
+                  <img
+                    style={{ display: "block" }}
+                    src={`${logo_payment}`}
+                    width="150"
+                    height="150"
+                  />
+                  <br />
+                  <div class="kv-avatar">
+                    <div>
+                      <button
+                        onClick={() => this.onChangeUpload("PAYMENT")}
+                        type="button"
+                        class="btn btn-primary-no-background btn-sm"
+                        // style={{ marginLeft: "10px" }}
+                        data-toggle="modal"
+                        data-target="#uploadModalTheme"
+                      >
+                        <i class="fas fa-plus"></i>
+                        <span class="text">&nbsp; Upload Icon</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-xs-4 col-lg-4 col-md-6 col-sm-6">
+                  <label>Icon cam kết chính hãng: &nbsp; </label>
+
+                  <img
+                    style={{ display: "block" }}
+                    src={`${logo_guarantee}`}
+                    width="150"
+                    height="150"
+                  />
+                  <br />
+                  <div class="kv-avatar">
+                    <div>
+                      <button
+                        onClick={() => this.onChangeUpload("GUARANTEE")}
+                        type="button"
+                        class="btn btn-primary-no-background btn-sm"
+                        // style={{ marginLeft: "10px" }}
+                        data-toggle="modal"
+                        data-target="#uploadModalTheme"
+                      >
+                        <i class="fas fa-plus"></i>
+                        <span class="text">&nbsp; Upload Icon</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="form-group">
@@ -367,6 +492,45 @@ class Overview extends Component {
                 onChange={this.onChange}
                 value={delivery || ""}
                 name="delivery"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="name">Title tích điểm</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Tiêu để tích điểm của bạn"
+                id="txtName"
+                onChange={this.onChange}
+                value={earn_point || ""}
+                name="earn_point"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="name">Title ưu đãi thanh toán online</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Tiêu để ưu đãi thanh toán online của bạn"
+                id="txtName"
+                onChange={this.onChange}
+                value={payment || ""}
+                name="payment"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="name">Title cam kết chính hãng</label>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Tiêu để cam kết chính hãng của bạn"
+                id="txtName"
+                onChange={this.onChange}
+                value={guarantee || ""}
+                name="guarantee"
                 autoComplete="off"
               />
             </div>
@@ -434,6 +598,9 @@ const mapStateToProps = (state) => {
     logoImg: state.UploadReducers.themeImg.logo_img,
     logoDelivery: state.UploadReducers.themeImg.logo_delivery,
     faviconImg: state.UploadReducers.themeImg.favicon_img,
+    logoEarnPoint: state.UploadReducers.themeImg.logo_earn_point,
+    logoPayment: state.UploadReducers.themeImg.logo_payment,
+    logoGuarantee: state.UploadReducers.themeImg.logo_guarantee,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

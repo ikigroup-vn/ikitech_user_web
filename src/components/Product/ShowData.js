@@ -255,6 +255,7 @@ class ShowData extends Component {
     if (product_discount) {
       discount_percent = product_discount.value;
     }
+    console.log("adg==", data);
     return (
       <tr className="hover-product">
         <td className={`${_delete == true ? "show" : "hide"} `}>

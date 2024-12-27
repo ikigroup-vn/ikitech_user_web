@@ -2,7 +2,7 @@ import getChannel, { IKIPOS } from "./channel";
 
 const posTheme = {
   loginTitle: "IKIPOS",
-  backgroundColor: "#E56F25",
+  backgroundColor: "#3234f5",
   modalNoti: "#E56F25",
   buttonYes: "#F7C23E",
   logoTab: "/images/logo/ikipos_logo_tab.png",
@@ -14,8 +14,8 @@ const posTheme = {
 };
 
 const ikitechTheme = {
-  loginTitle: "IKITECH",
-  backgroundColor: "#C12026",
+  loginTitle: "KHKcare",
+  backgroundColor: "#3234f5",
   modalNoti: "#E56F25",
   buttonYes: "#F7C23E",
   logoTab: "/images/logo/ikitech_logo_tab.png",

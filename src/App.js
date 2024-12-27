@@ -34,6 +34,7 @@ class App extends Component {
     return <Switch>{result}</Switch>;
   };
   render() {
+    console.log("");
     return <Router history={history}>{this.showContentMenus(routes)}</Router>;
   }
 }

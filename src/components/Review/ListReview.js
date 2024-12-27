@@ -105,7 +105,19 @@ class ListReview extends Component {
     }
     return result;
   };
+  showVideo = (video_url) => {
+    if (!video_url) return null;
 
+    return (
+      <video
+        controls
+        style={{ maxWidth: "100%", maxHeight: "300px", marginBottom: "10px" }}
+      >
+        <source src={video_url} type="video/mp4" />
+        Trình duyệt của bạn không hỗ trợ thẻ video.
+      </video>
+    );
+  };
   showData = (reviews) => {
     var result = null;
     if (typeof reviews == "undefined") {
@@ -116,6 +128,7 @@ class ListReview extends Component {
       result = reviews.map((data, index) => {
         var image_product = "";
         var image_review = [];
+        var video_url = data?.video_url || "";
         try {
           image_product =
             data.product.images.length > 0
@@ -258,14 +271,35 @@ class ListReview extends Component {
                       <p class="sale_user_label" id="sale_user_name">
                         Nội dung: <span id="user_name"> {data.content} </span>
                       </p>
-                      <p class="sale_user_label" id="sale_user_name">
-                        Hình ảnh:
-                      </p>
                       <div
-                        class=""
-                        style={{ display: "flex", flexWrap: "wrap" }}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "16px",
+                        }}
                       >
-                        {this.showListImg(image_review)}
+                        <div>
+                          <p class="sale_user_label" id="sale_user_name">
+                            Hình ảnh:
+                          </p>
+                          <div
+                            class=""
+                            style={{ display: "flex", flexWrap: "wrap" }}
+                          >
+                            {this.showListImg(image_review)}
+                          </div>
+                        </div>
+                        <div>
+                          <p class="sale_user_label" id="sale_user_name">
+                            Video:
+                          </p>
+                          <div
+                            class=""
+                            style={{ display: "flex", flexWrap: "wrap" }}
+                          >
+                            {this.showVideo(video_url)}
+                          </div>
+                        </div>
                       </div>
                       <p class="sale_user_label" id="sale_user_name">
                         Thời gian: {time}

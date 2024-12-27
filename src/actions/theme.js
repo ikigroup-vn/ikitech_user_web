@@ -49,6 +49,84 @@ export const uploadImgTheme_Delivery = (file) => {
       });
   };
 };
+export const uploadImgTheme_Earn_Point = (file) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    uploadApi
+      .upload(file)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.UPLOAD_THEME_IMG_EARN_POINT,
+          data: res.data.data,
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+      });
+  };
+};
+export const uploadImgTheme_Payment = (file) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    uploadApi
+      .upload(file)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.UPLOAD_THEME_IMG_PAYMENT,
+          data: res.data.data,
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+      });
+  };
+};
+export const uploadImgTheme_Guarantee = (file) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    uploadApi
+      .upload(file)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.UPLOAD_THEME_IMG_GUARANTEE,
+          data: res.data.data,
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+      });
+  };
+};
 export const uploadImgTheme_Logo = (file) => {
   return (dispatch) => {
     dispatch({

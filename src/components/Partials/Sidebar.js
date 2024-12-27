@@ -286,7 +286,8 @@ class Sidebar extends Component {
                         className={`collapse-item  ${active} ${
                           _class[link.class] == true ||
                           typeof link.class == "undefined" ||
-                          link.class == null || link.display == "show"
+                          link.class == null ||
+                          link.display == "show"
                             ? "show"
                             : "hide"
                         }`}
@@ -352,7 +353,11 @@ class Sidebar extends Component {
           const isActive = this.activeCollapes(link.children, newLocation);
           var active = isActive ? "active" : "";
           var disableHeading =
-            this.checkDisplayTitle(link.children) == false ? "show" : "hide";
+            link.name === "Chương trình khuyến mại"
+              ? "show"
+              : this.checkDisplayTitle(link.children) == false
+              ? "show"
+              : "hide";
 
           return (
             <React.Fragment>
@@ -548,7 +553,8 @@ class Sidebar extends Component {
     }
   }
   render() {
-    var { badges, stores, permission } = this.props;
+    var { badges, stores, permission, theme } = this.props;
+    console.log("asddd", stores);
     return (
       <div className="col-2 col-2-nav">
         <ul

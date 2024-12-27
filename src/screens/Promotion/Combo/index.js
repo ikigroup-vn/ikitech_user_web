@@ -217,126 +217,121 @@ class Combo extends Component {
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">
                 <Topbar store_code={params.store_code} />
-                {typeof isShow == "undefined" ? (
-                  <div></div>
-                ) : isShow == true ? (
-                  <div class="container-fluid">
-                    <Alert
-                      type={Types.ALERT_UID_STATUS}
-                      alert={this.props.alert}
-                    />
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
+
+                <div class="container-fluid">
+                  <Alert
+                    type={Types.ALERT_UID_STATUS}
+                    alert={this.props.alert}
+                  />
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <h3 class="h3 title_content mb-2 text-gray-800">
+                      Combo giảm giá
+                    </h3>
+                    <Link
+                      to={`/combo/create/${params.store_code}`}
+                      class={`btn btn-info btn-icon-split  ${
+                        insert == true ? "show" : "hide"
+                      }`}
                     >
-                      <h3 class="h3 title_content mb-2 text-gray-800">
-                        Combo giảm giá
-                      </h3>
-                      <Link
-                        to={`/combo/create/${params.store_code}`}
-                        class={`btn btn-info btn-icon-split  ${
-                          insert == true ? "show" : "hide"
-                        }`}
+                      <span
+                        style={{
+                          display: "flex",
+                          margin: "auto",
+                          height: "100%",
+                          "justify-content": "center",
+                          "align-items": "center",
+                        }}
+                        class="icon text-white-50"
                       >
-                        <span
-                          style={{
-                            display: "flex",
-                            margin: "auto",
-                            height: "100%",
-                            "justify-content": "center",
-                            "align-items": "center",
-                          }}
-                          class="icon text-white-50"
-                        >
-                          <i class="fas fa-plus"></i>
-                        </span>
-                        <span style={{ margin: "auto" }} class="text">
-                          Tạo combo giảm giá
-                        </span>
-                      </Link>
-                    </div>
+                        <i class="fas fa-plus"></i>
+                      </span>
+                      <span style={{ margin: "auto" }} class="text">
+                        Tạo combo giảm giá
+                      </span>
+                    </Link>
+                  </div>
 
-                    <div
-                      class="form-group"
-                      style={{
-                        marginTop: "20px",
-                      }}
-                    >
-                      <div className="form-header">
-                        <div
-                          class="col-sm-3"
-                          style={{
-                            paddingLeft: "0px",
-                            paddingRight: 0,
-                            maxWidth: "20%",
-                          }}
+                  <div
+                    class="form-group"
+                    style={{
+                      marginTop: "20px",
+                    }}
+                  >
+                    <div className="form-header">
+                      <div
+                        class="col-sm-3"
+                        style={{
+                          paddingLeft: "0px",
+                          paddingRight: 0,
+                          maxWidth: "20%",
+                        }}
+                      >
+                        <select
+                          name="is_end"
+                          id="input"
+                          class="form-control"
+                          required="required"
+                          value={is_end}
+                          onChange={this.onChange}
                         >
-                          <select
-                            name="is_end"
-                            id="input"
-                            class="form-control"
-                            required="required"
-                            value={is_end}
-                            onChange={this.onChange}
-                          >
-                            {" "}
-                            <option value="0">Chuẩn bị diễn ra</option>
-                            <option value="2">Đang diễn ra</option>
-                            <option value="1">Đã kết thúc</option>
-                          </select>
-                        </div>
-                        <div className="form-inputSearch">
-                          {is_end != 1 ? (
-                            <>
-                              <input
-                                className="form-control"
-                                value={searchValue}
-                                onChange={this.handleSearchValueChange}
-                                type="text"
-                                placeholder="Tìm kiếm combo..."
-                              />
-                              <span className="search-icon">
-                                <i className="fa fa-search"></i>
-                              </span>
-                            </>
-                          ) : null}
-                        </div>
+                          {" "}
+                          <option value="0">Chuẩn bị diễn ra</option>
+                          <option value="2">Đang diễn ra</option>
+                          <option value="1">Đã kết thúc</option>
+                        </select>
                       </div>
-                    </div>
-
-                    <div class="card shadow mb-4">
-                      <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">
-                          Danh sách combo
-                        </h6>
-                      </div>
-                      <div class="card-body">
-                        <Table
-                          update={update}
-                          _delete={_delete}
-                          is_end={is_end}
-                          page={page}
-                          searchValue={searchValue}
-                          handleIsEndCallback={this.handleIsEndCallback}
-                          handleDelCallBack={this.handleDelCallBack}
-                          params={params}
-                          combos={comboProducts}
-                        />
-                        <Pagination
-                          display={displayPag}
-                          params={params}
-                          combos={comboProducts}
-                          store_code={store_code}
-                          setPage={this.setPage}
-                        />
+                      <div className="form-inputSearch">
+                        {is_end != 1 ? (
+                          <>
+                            <input
+                              className="form-control"
+                              value={searchValue}
+                              onChange={this.handleSearchValueChange}
+                              type="text"
+                              placeholder="Tìm kiếm combo..."
+                            />
+                            <span className="search-icon">
+                              <i className="fa fa-search"></i>
+                            </span>
+                          </>
+                        ) : null}
                       </div>
                     </div>
                   </div>
-                ) : (
-                  <NotAccess />
-                )}
+
+                  <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                      <h6 class="m-0 font-weight-bold text-primary">
+                        Danh sách combo
+                      </h6>
+                    </div>
+                    <div class="card-body">
+                      <Table
+                        update={update}
+                        _delete={_delete}
+                        is_end={is_end}
+                        page={page}
+                        searchValue={searchValue}
+                        handleIsEndCallback={this.handleIsEndCallback}
+                        handleDelCallBack={this.handleDelCallBack}
+                        params={params}
+                        combos={comboProducts}
+                      />
+                      <Pagination
+                        display={displayPag}
+                        params={params}
+                        combos={comboProducts}
+                        store_code={store_code}
+                        setPage={this.setPage}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
               <ModalDelete modal={modal} />
               <ModalIsEnd modal={modalIsEnd} />

@@ -18,6 +18,7 @@ class UpdatePriceCtvModal extends Component {
       distribute: {},
       isFocused: false,
       percent_collaborator: 0,
+      money_amount_collaborator: 0,
       unit: "%",
     };
   }
@@ -30,6 +31,7 @@ class UpdatePriceCtvModal extends Component {
         id: product.id,
         product: product,
         percent_collaborator: product.percent_collaborator,
+        money_amount_collaborator: product.money_amount_collaborator,
         distribute:
           product.distributes.length > 0 ? product.distributes[0] : {},
         txtNewPrice:
@@ -64,7 +66,7 @@ class UpdatePriceCtvModal extends Component {
         }
       } else if (this.state.unit === "VNĐ") {
         // Không giới hạn giá trị khi đơn vị là VNĐ
-        this.setState({ percent_collaborator: inputValue });
+        this.setState({ money_amount_collaborator: inputValue });
       }
     }
   };
@@ -74,9 +76,16 @@ class UpdatePriceCtvModal extends Component {
   };
   handleSubmit = () => {
     var { store_code } = this.props;
-    var { product, percent_collaborator, unit } = this.state;
-    const form = { percent_collaborator: percent_collaborator };
-    const form2 = { money_amount_collaborator: percent_collaborator };
+    var { product, percent_collaborator, money_amount_collaborator, unit } =
+      this.state;
+    const form = {
+      percent_collaborator: percent_collaborator,
+      money_amount_collaborator: 0,
+    };
+    const form2 = {
+      money_amount_collaborator: money_amount_collaborator,
+      percent_collaborator: 0,
+    };
     if (unit == "%") {
       this.props.updateProduct2(store_code, form, product?.id, null);
       setTimeout(() => {
@@ -171,22 +180,42 @@ class UpdatePriceCtvModal extends Component {
                     : "none",
                 }}
               >
-                <input
-                  type="text"
-                  placeholder="Nhập gì đó..."
-                  style={{
-                    padding: "10px",
-                    fontSize: "16px",
-                    border: "none",
-                    outline: "none",
-                    width: "200px",
-                    borderRadius: 10,
-                  }}
-                  value={this.state.percent_collaborator}
-                  onFocus={this.handleFocus}
-                  onBlur={this.handleBlur}
-                  onChange={this.handleChange}
-                />
+                {this.state.unit === "%" ? (
+                  <input
+                    type="text"
+                    placeholder="Nhập gì đó..."
+                    style={{
+                      padding: "10px",
+                      fontSize: "16px",
+                      border: "none",
+                      outline: "none",
+                      width: "200px",
+                      borderRadius: 10,
+                    }}
+                    value={this.state.percent_collaborator}
+                    onFocus={this.handleFocus}
+                    onBlur={this.handleBlur}
+                    onChange={this.handleChange}
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    placeholder="Nhập gì đó..."
+                    style={{
+                      padding: "10px",
+                      fontSize: "16px",
+                      border: "none",
+                      outline: "none",
+                      width: "200px",
+                      borderRadius: 10,
+                    }}
+                    value={this.state.money_amount_collaborator}
+                    onFocus={this.handleFocus}
+                    onBlur={this.handleBlur}
+                    onChange={this.handleChange}
+                  />
+                )}
+
                 <select
                   style={{
                     fontSize: "16px",
