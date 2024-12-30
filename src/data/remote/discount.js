@@ -5,7 +5,7 @@ export const fetchAllDiscount = (store_code) => {
 };
 
 export const fetchAllDiscountEnd = (store_code, page) => {
-  return callApi(
+  return callApi2(
     `/store/${store_code}/discounts?is_end=true&&page=${page}`,
     "get",
     null
@@ -21,7 +21,7 @@ export const createDiscount = (store_code, data) => {
 };
 
 export const updateDiscount = (store_code, data, id) => {
-  return callApi2(`/store/${store_code}/discounts/${id}`, "put", data);
+  return callApi2(`/store/${store_code}/discounts/${id}`, "patch", data);
 };
 
 export const destroyDiscount = (store_code, id) => {

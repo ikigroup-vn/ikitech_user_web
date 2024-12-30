@@ -298,8 +298,8 @@ class Form extends Component {
       value:
         state.txtValue == null ? state.txtValue : parseFloat(state.txtValue),
       amount:
-        state.txtAmount == null
-          ? state.txtAmount
+        state.txtAmount == 0 || state.txtAmount == null
+          ? null
           : formatNumber(state.txtAmount),
       product_ids: product_ids,
       description: state.txtContent,
@@ -326,6 +326,7 @@ class Form extends Component {
     } else {
       this.props.updateDiscount(store_code, form, discountId);
     }
+    console.log("123", form);
   };
   goBack = (e) => {
     var { store_code } = this.props;
