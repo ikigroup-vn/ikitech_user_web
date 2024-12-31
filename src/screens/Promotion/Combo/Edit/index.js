@@ -38,17 +38,17 @@ class Index extends Component {
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">
                 <Topbar store_code={store_code} />
-                {typeof isShow == "undefined" ? (
+                {/* {typeof isShow == "undefined" ? (
                   <div style={{ height: "500px" }}></div>
-                ) : isShow == true ? (
-                  <Edit
-                    comboId={comboId}
-                    store_code={store_code}
-                    history={history}
-                  />
-                ) : (
+                ) : isShow == true ? ( */}
+                <Edit
+                  comboId={comboId}
+                  store_code={store_code}
+                  history={history}
+                />
+                {/* ) : (
                   <NotAccess />
-                )}
+                )} */}
               </div>
 
               <Footer />

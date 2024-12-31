@@ -147,7 +147,18 @@ class Form extends Component {
   };
 
   handleChangeValue = (checked, item) => {
-    this.setState({ [item]: checked });
+    const prefix1 = item.split("_")[0];
+    const string = item.split("_");
+    let prefix = prefix1;
+    for (let i = 1; i < string.length - 1; i++) {
+      prefix = prefix + `_${string[i]}`;
+    }
+    this.setState({
+      [item]: checked,
+      [prefix + "_add"]: checked,
+      [prefix + "_update"]: checked,
+      [prefix + "_end"]: checked,
+    });
   };
 
   showListTable = (data) => {
