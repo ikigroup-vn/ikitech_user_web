@@ -61,7 +61,7 @@ class InfoProduct extends Component {
       attribute_search_children_ids: [],
       txtQuantityInStock: "",
       txtPercentC: "",
-      type_share_collaborator_number: Types.TYPE_SHARE_COLLABORATOR_PERCENT,
+      type_share_collaborator_number: "",
       money_amount_collaborator: "",
       disabledPrice: false,
       icon: true,
@@ -267,7 +267,6 @@ class InfoProduct extends Component {
       });
     }
     const { getAttributeSearch, productId, store_code } = this.props;
-
     getAttributeSearch(store_code, productId);
   }
   getAgencyGroupSelected() {
@@ -431,7 +430,10 @@ class InfoProduct extends Component {
         disabledPrice: _price == 0 ? true : false,
         txtPercentC: product.percent_collaborator,
         money_amount_collaborator: _money_amount_collaborator,
-        type_share_collaborator_number: product.type_share_collaborator_number,
+        type_share_collaborator_number:
+          product.percent_collaborator !== 0
+            ? Types.TYPE_SHARE_COLLABORATOR_PERCENT
+            : Types.TYPE_SHARE_COLLABORATOR_NUMBER,
         // txtBarcode: isCopy ? Math.random().toString().slice(2, 11) :  product.barcode || Math.random().toString().slice(2, 11),
         txtBarcode: product.barcode,
 
@@ -635,15 +637,15 @@ class InfoProduct extends Component {
     // this.setState({ listCategory: option });
   };
   handleChangeTypeShareCollab = (type) => {
-    if (type === "%") {
-      this.setState({
-        money_amount_collaborator: "",
-      });
-    } else {
-      this.setState({
-        txtPercentC: "",
-      });
-    }
+    // if (type === "%") {
+    //   this.setState({
+    //     money_amount_collaborator: "",
+    //   });
+    // } else {http://localhost:3000/dashboard/khkcare
+    //   this.setState({
+    //     txtPercentC: "",
+    //   });
+    // }
     this.setState({
       type_share_collaborator_number:
         type === "%"
