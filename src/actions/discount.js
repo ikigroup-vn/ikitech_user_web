@@ -127,7 +127,7 @@ export const updateDiscountIsEnd = (store_code, discount, id) => {
             if (res.data.code !== 401)
               dispatch({
                 type: Types.FETCH_ALL_DISCOUNT,
-                data: res.data.data,
+                data: res.data.data.data,
               });
             dispatch({
               type: Types.ALERT_UID_STATUS,
@@ -228,7 +228,7 @@ export const destroyDiscount = (store_code, id) => {
             if (res.data.code !== 401)
               dispatch({
                 type: Types.FETCH_ALL_DISCOUNT,
-                data: res.data.data,
+                data: res.data.data.data,
               });
             dispatch({
               type: Types.ALERT_UID_STATUS,
