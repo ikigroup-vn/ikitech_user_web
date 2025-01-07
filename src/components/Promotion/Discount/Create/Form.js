@@ -242,10 +242,10 @@ class Form extends Component {
         // state.txtValue == null ? state.txtValue : formatNumber(state.txtValue),
         state.txtValue == null ? state.txtValue : parseFloat(state.txtValue),
 
-      amount:
-        state.txtAmount == null
-          ? state.txtAmount
-          : formatNumber(state.txtAmount),
+      // amount:
+      //   state.txtAmount == null
+      //     ? state.txtAmount
+      //     : formatNumber(state.txtAmount),
       product_ids: product_ids,
       description: state.txtContent,
       image_url: state.image,
