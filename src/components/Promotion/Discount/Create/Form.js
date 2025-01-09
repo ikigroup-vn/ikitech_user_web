@@ -34,9 +34,10 @@ class Form extends Component {
       group_customer: 0,
       agency_type_id: null,
       group_type_id: null,
-      group_customers: [Types.GROUP_CUSTOMER_ALL],
+      group_customers: [],
       agency_types: [],
       group_types: [],
+      disableList: [],
     };
   }
   componentDidMount() {
@@ -112,6 +113,45 @@ class Form extends Component {
         }
       }
     } else if (name == `group_customer_${value}`) {
+      // let newDisableList = [...this.state.disableList]
+      const index = this.state.disableList.findIndex(
+        (item) => item.id == value
+      );
+      if (index >= 0) {
+        const newDisableList = [...this.state.disableList];
+        newDisableList.splice(index, 1);
+        this.setState({ disableList: newDisableList });
+      } else {
+        let newDisableList = [...this.state.disableList];
+
+        if (value == Types.GROUP_CUSTOMER_ALL) {
+          newDisableList.unshift({
+            id: value,
+            list: [false, true, true, true, true, true],
+          });
+        } else if (
+          value == Types.GROUP_CUSTOMER_AGENCY ||
+          value == Types.GROUP_CUSTOMER_CTV
+        ) {
+          newDisableList.unshift({
+            id: value,
+            list: [true, false, false, true, false, false],
+          });
+        } else if (value == Types.GROUP_CUSTOMER_NORMAL_GUEST) {
+          newDisableList.unshift({
+            id: value,
+            list: [true, true, true, false, true, false],
+          });
+        } else if (value == Types.GROUP_CUSTOMER_BY_CONDITION) {
+          newDisableList.unshift({
+            id: value,
+            list: [true, false, false, true, false, false],
+          });
+        }
+        this.setState({
+          disableList: [...newDisableList],
+        });
+      }
       const valueNumber = Number(value);
       let new_group_customers = [];
 
@@ -323,7 +363,14 @@ class Form extends Component {
   handleChangeGroupCustomer = (group) => {
     this.setState({ group_types: [...group] });
   };
-
+  handleDisable = (index) => {
+    const disableList = this.state.disableList;
+    let boolean = disableList[0]?.list[index];
+    for (let _index = 1; _index < disableList.length; _index++) {
+      boolean = boolean && disableList[_index].list[index];
+    }
+    return boolean;
+  };
   render() {
     var {
       txtName,
@@ -343,10 +390,10 @@ class Form extends Component {
       group_customers,
       agency_types,
       group_types,
+      disableList,
     } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
     var { products, store_code, discounts, types, groupCustomer } = this.props;
-
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
@@ -466,7 +513,7 @@ class Form extends Component {
                 }}
                 className=""
               >
-                {typeGroupCustomer.map((group) => (
+                {typeGroupCustomer.map((group, index) => (
                   <label
                     key={group.id}
                     htmlFor={group.title}
@@ -486,6 +533,7 @@ class Form extends Component {
                       id={group.title}
                       value={group.value}
                       onChange={this.onChange}
+                      disabled={this.handleDisable(index)}
                     />
                     {group.title}
                   </label>
