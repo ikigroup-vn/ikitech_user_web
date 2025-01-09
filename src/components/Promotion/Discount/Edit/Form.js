@@ -21,6 +21,7 @@ import * as AgencyAction from "../../../../actions/agency";
 import * as groupCustomerAction from "../../../../actions/group_customer";
 import Select from "react-select";
 import { typeGroupCustomer } from "../../../../ultis/groupCustomer/typeGroupCustomer";
+import "./style.css";
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -78,36 +79,34 @@ class Form extends Component {
       const group_customers_convert = discount.group_customers
         ? discount.group_customers
         : [Types.GROUP_CUSTOMER_ALL];
-
       let newDisableList = [];
-      if (discount.group_customers == Types.GROUP_CUSTOMER_ALL) {
-        newDisableList.unshift({
-          id: discount.group_customers,
-          list: [false, true, true, true, true, true],
-        });
-      } else if (
-        discount.group_customers == Types.GROUP_CUSTOMER_AGENCY ||
-        discount.group_customers == Types.GROUP_CUSTOMER_CTV
-      ) {
-        newDisableList.unshift({
-          id: discount.group_customers,
-          list: [true, false, false, true, false, false],
-        });
-      } else if (
-        discount.group_customers == Types.GROUP_CUSTOMER_NORMAL_GUEST
-      ) {
-        newDisableList.unshift({
-          id: discount.group_customers,
-          list: [true, true, true, false, true, false],
-        });
-      } else if (
-        discount.group_customers == Types.GROUP_CUSTOMER_BY_CONDITION
-      ) {
-        newDisableList.unshift({
-          id: discount.group_customers,
-          list: [true, false, false, true, false, false],
-        });
-      }
+      discount.group_customers.map((item) => {
+        if (item == Types.GROUP_CUSTOMER_ALL) {
+          newDisableList.unshift({
+            id: item,
+            list: [false, true, true, true, true, true],
+          });
+        } else if (
+          item == Types.GROUP_CUSTOMER_AGENCY ||
+          item == Types.GROUP_CUSTOMER_CTV
+        ) {
+          newDisableList.unshift({
+            id: item,
+            list: [true, false, false, true, false, false],
+          });
+        } else if (item == Types.GROUP_CUSTOMER_NORMAL_GUEST) {
+          newDisableList.unshift({
+            id: item,
+            list: [true, true, true, false, true, false],
+          });
+        } else if (item == Types.GROUP_CUSTOMER_BY_CONDITION) {
+          newDisableList.unshift({
+            id: item,
+            list: [true, false, false, true, false, false],
+          });
+        }
+      });
+
       this.setState({
         disableList: [...newDisableList],
       });
@@ -653,31 +652,34 @@ class Form extends Component {
                 }}
                 className=""
               >
-                {typeGroupCustomer.map((group, index) => (
-                  <label
-                    key={group.id}
-                    htmlFor={group.title}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      columnGap: "5px",
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      name={`group_customer_${group.value}`}
-                      checked={
-                        group_customers.includes(group.value) ? true : false
-                      }
-                      className="group_customer"
-                      id={group.title}
-                      value={group.value}
-                      onChange={this.onChange}
-                      disabled={this.handleDisable(index)}
-                    />
-                    {group.title}
-                  </label>
-                ))}
+                {typeGroupCustomer.map((group, index) => {
+                  const isDisable = this.handleDisable(index);
+                  return (
+                    <label
+                      key={group.id}
+                      htmlFor={group.title}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        columnGap: "5px",
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        name={`group_customer_${group.value}`}
+                        checked={
+                          group_customers.includes(group.value) ? true : false
+                        }
+                        className="group_customer"
+                        id={group.title}
+                        value={group.value}
+                        onChange={this.onChange}
+                        disabled={isDisable}
+                      />
+                      {group.title}
+                    </label>
+                  );
+                })}
               </div>
               <div
                 style={{

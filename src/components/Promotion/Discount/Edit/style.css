@@ -1,0 +1,6 @@
+input[type="checkbox"][disabled] {
+    background: rgb(122, 120, 120);
+    color:  rgb(122, 120, 120); 
+    cursor: not-allowed; 
+  }
+  
