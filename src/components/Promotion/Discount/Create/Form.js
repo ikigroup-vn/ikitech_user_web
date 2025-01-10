@@ -131,21 +131,13 @@ class Form extends Component {
           });
         } else if (
           value == Types.GROUP_CUSTOMER_AGENCY ||
-          value == Types.GROUP_CUSTOMER_CTV
+          value == Types.GROUP_CUSTOMER_CTV ||
+          value == Types.GROUP_CUSTOMER_NORMAL_GUEST ||
+          value == Types.GROUP_CUSTOMER_BY_CONDITION
         ) {
           newDisableList.unshift({
             id: value,
-            list: [true, false, false, true, false, false],
-          });
-        } else if (value == Types.GROUP_CUSTOMER_NORMAL_GUEST) {
-          newDisableList.unshift({
-            id: value,
-            list: [true, true, true, false, true, false],
-          });
-        } else if (value == Types.GROUP_CUSTOMER_BY_CONDITION) {
-          newDisableList.unshift({
-            id: value,
-            list: [true, false, false, true, false, false],
+            list: [true, false, false, false, false, false],
           });
         }
         this.setState({
