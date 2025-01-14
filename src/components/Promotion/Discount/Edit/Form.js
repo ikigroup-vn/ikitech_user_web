@@ -88,21 +88,13 @@ class Form extends Component {
           });
         } else if (
           item == Types.GROUP_CUSTOMER_AGENCY ||
-          item == Types.GROUP_CUSTOMER_CTV
+          item == Types.GROUP_CUSTOMER_CTV ||
+          item == Types.GROUP_CUSTOMER_NORMAL_GUEST ||
+          item == Types.GROUP_CUSTOMER_BY_CONDITION
         ) {
           newDisableList.unshift({
             id: item,
-            list: [true, false, false, true, false, false],
-          });
-        } else if (item == Types.GROUP_CUSTOMER_NORMAL_GUEST) {
-          newDisableList.unshift({
-            id: item,
-            list: [true, true, true, false, true, false],
-          });
-        } else if (item == Types.GROUP_CUSTOMER_BY_CONDITION) {
-          newDisableList.unshift({
-            id: item,
-            list: [true, false, false, true, false, false],
+            list: [true, false, false, false, false, false],
           });
         }
       });
