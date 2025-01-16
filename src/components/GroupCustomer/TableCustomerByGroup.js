@@ -32,9 +32,9 @@ class TableCustomerByGroup extends Component {
             </td>
             <td>
               {" "}
-              {data.total_after_discount_no_use_bonus_with_date
+              {data.total_revenue
                 ? `${new Intl.NumberFormat().format(
-                    data.total_after_discount_no_use_bonus_with_date
+                    data.total_revenue
                   )} ₫`
                 : "0 ₫"}
             </td>
