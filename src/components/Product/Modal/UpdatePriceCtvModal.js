@@ -81,10 +81,12 @@ class UpdatePriceCtvModal extends Component {
     const form = {
       percent_collaborator: percent_collaborator,
       money_amount_collaborator: 0,
+      type_share_collaborator_number: 0
     };
     const form2 = {
       money_amount_collaborator: money_amount_collaborator,
       percent_collaborator: 0,
+      type_share_collaborator_number: 1
     };
     if (unit == "%") {
       this.props.updateProduct2(store_code, form, product?.id, null);
