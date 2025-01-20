@@ -254,7 +254,7 @@ class StoreEdit extends Component {
                                         class="input-group-text"
                                         id="basic-addon2"
                                       >
-                                        .myiki.vn
+                                        .com.vn
                                       </span>
                                     </div>
                                   </div>
