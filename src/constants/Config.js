@@ -6,8 +6,8 @@ import { getBranch } from "../ultis/branchUtils";
 export const API_URL_DEV = "https://main.khk.ikitech.vn/api";
 // export const API_URL_DEV = "http://127.0.0.1:8000/api";
 export const API_URL_MAIN = "https://main.khk.ikitech.vn/api";
-export const API_URL_SOCKET_DEV = "https://main.doapp.vn:6441/";
-export const API_URL_SOCKET_MAIN = "https://main.doapp.vn:6441/";
+export const API_URL_SOCKET_DEV = "https://main.khk.ikitech.vn:6441/";
+export const API_URL_SOCKET_MAIN = "https://main.khk.ikitech.vn:6441/";
 export const getApiImageStore = (store_code) => {
   return `${helpers.callUrl()}/store/${store_code}/images`;
 };
