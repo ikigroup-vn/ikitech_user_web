@@ -217,7 +217,7 @@ class ListProduct3 extends Component {
   };
 
   checkExsit = (list, id) => {
-    if (list.length > 0) {
+    if (list?.length > 0) {
       for (const element of list) {
         if (element?.product?.id == id) {
           return true;
