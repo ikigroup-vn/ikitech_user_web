@@ -327,6 +327,7 @@ class Table extends Component {
         var a_min_price = null;
         var a_max_price = null;
         var a_distributes = null;
+        var discount_for_login_user = data.discount_for_login_user.length ? data.discount_for_login_user[0].value : 0;
         if (data.agency_price) {
           a_min_price = data.agency_price.min_price;
           a_max_price = data.agency_price.max_price;
@@ -420,7 +421,7 @@ class Table extends Component {
                         format(
                           Number(
                             discount_percent == null
-                              ? min_price
+                              ? Math.round(min_price * (1 - discount_for_login_user/100))
                               : min_price - min_price * discount_percent * 0.01
                           )
                         )
