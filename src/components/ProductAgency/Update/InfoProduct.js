@@ -89,8 +89,9 @@ class InfoProduct extends Component {
   };
   render() {
     var { txtName, disabledPrice, txtPrice } = this.state;
-    var { product } = this.props;
-    console.log(product);
+    var { product, itemProduct } = this.props;
+    
+    var discount_for_login_user = itemProduct?.discount_for_login_user?.length ? itemProduct.discount_for_login_user[0].value : 0;
     return (
       <div class="card-body" style={{ padding: "0.8rem" }}>
         {/* <div class="form-group">
@@ -178,7 +179,7 @@ class InfoProduct extends Component {
                     id="txtEmail"
                     placeholder="Nhập giá"
                     autoComplete="off"
-                    value={formatNoD(this.state.price) ?? 0}
+                    value={formatNoD(Math.round(this.state.price * (1- discount_for_login_user/100))) ?? 0}
                   />
                 </div>
               </div>

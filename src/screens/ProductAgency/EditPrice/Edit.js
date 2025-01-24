@@ -153,6 +153,7 @@ class ProductEdit extends Component {
                 <div class="col-lg-6">
                   <div>
                     <InfoProduct
+                      itemProduct={itemProduct}
                       product={product}
                       handleDataFromInfo={this.handleDataFromInfo}
                     />
