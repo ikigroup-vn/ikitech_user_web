@@ -286,7 +286,8 @@ class Sidebar extends Component {
                         className={`collapse-item  ${active} ${
                           _class[link.class] == true ||
                           typeof link.class == "undefined" ||
-                          link.class == null || link.display == "show"
+                          link.class == null ||
+                          link.display == "show"
                             ? "show"
                             : "hide"
                         }`}
@@ -580,7 +581,7 @@ class Sidebar extends Component {
             </div>
             <div className="sidebar-brand-text">
               <img
-                width="80%"
+                width="40%"
                 src={
                   badges?.config_user_vip?.url_logo_image != null
                     ? badges?.config_user_vip?.url_logo_image
