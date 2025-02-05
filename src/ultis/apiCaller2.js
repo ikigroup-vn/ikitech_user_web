@@ -89,7 +89,7 @@ export default function (endpoint, method, body) {
 
   return axios({
     method: method,
-    url: `https://main.doapp.vn/api/v2${endpoint}`,
+    url: `https://snetapi.ikitech.vn/api/v2${endpoint}`,
     data: body,
     cancelToken: axios.CancelToken.source().token,
     redirect: "follow",
