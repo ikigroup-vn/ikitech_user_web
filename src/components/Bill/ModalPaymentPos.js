@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import themeData from "../../ultis/theme_data";
-import { formatNumber } from "../../ultis/helpers";
+import { formatNumber, format } from "../../ultis/helpers";
 import * as Types from "../../constants/ActionType";
 import * as billAction from "../../actions/bill";
 class Modal extends Component {
@@ -150,9 +150,7 @@ class Modal extends Component {
                       type="text"
                       class="form-control"
                       id="txtTitle"
-                      value={new Intl.NumberFormat().format(
-                        formatNumber(remaining_amount)
-                      )}
+                      value={format(remaining_amount)}
                       name="txtName"
                       placeholder="Số tiền KH cần thanh toán"
                       autoComplete="off"
@@ -195,9 +193,7 @@ class Modal extends Component {
                       </div>
                       <input
                         type="text"
-                        value={new Intl.NumberFormat().format(
-                          formatNumber(cash)
-                        )}
+                        value={format(cash)}
                         name="txtName"
                         placeholder="Số tiền KH đưa"
                         onChange={this.onChange}
@@ -214,9 +210,7 @@ class Modal extends Component {
                       type="text"
                       class="form-control"
                       id="txtTitle"
-                      value={new Intl.NumberFormat().format(
-                        formatNumber(balance)
-                      )}
+                      value={format(balance)}
                       name="txtName"
                       placeholder="Tiền thừa của KH"
                       autoComplete="off"
