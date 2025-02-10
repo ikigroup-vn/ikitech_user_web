@@ -479,7 +479,7 @@ class Table extends Component {
                   {min_price === max_price ? (
                     <>
                       <input type={"hidden"} value={min_price}></input>
-                      {contactOrNumber(format(Number(min_price)))}
+                      {contactOrNumber(format(Number(Math.round(min_price * (1 - discount_for_login_user/100)))))}
                     </>
                   ) : (
                     <div className="row e">
