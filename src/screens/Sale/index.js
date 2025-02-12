@@ -114,7 +114,7 @@ class Sale extends Component {
                               >
                                 {" "}
                                 <i class="fa fa-cog"></i>
-                                <span>Cấu hình sale</span>
+                                <span>Cấu hình người giới thiệu</span>
                               </Link>
                             </Tab>
                           ) : null}
@@ -130,7 +130,7 @@ class Sale extends Component {
                               >
                                 {" "}
                                 <i class="fa fa-users"></i>
-                                <span>Danh sách sale</span>
+                                <span>Danh sách người giới thiệu</span>
                               </Link>
                             </Tab>
                           ) : null}
@@ -146,11 +146,11 @@ class Sale extends Component {
                               >
                                 {" "}
                                 <i class="fa fa-chart-bar"></i>
-                                <span> Top sale</span>
+                                <span> Top người giới thiệu</span>
                               </Link>
                             </Tab>
                           ) : null}
-                          {sale_watching == true ? (
+                          {/* {sale_watching == true ? (
                             <Tab>
                               <Link
                                 to={"?tab-index=3"}
@@ -165,7 +165,7 @@ class Sale extends Component {
                                 <span>Giám sát sale thị trường</span>
                               </Link>
                             </Tab>
-                          ) : null}
+                          ) : null} */}
                         </TabList>
 
                         {sale_config == true ? (

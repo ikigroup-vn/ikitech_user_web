@@ -83,9 +83,9 @@ class Form extends Component {
 
           <div
             className="group-button"
-            style={{ display: "flex", justifyContent: "space-between" }}
+            style={{ display: "flex", justifyContent: "center" }}
           >
-            <button
+            {/* <button
               type="button"
               onClick={this.redirectRegister}
               className="btn btn-primary btn-user btn-block"
@@ -101,7 +101,7 @@ class Form extends Component {
               }}
             >
               Đăng ký
-            </button>
+            </button> */}
             <button
               type="submit"
               className="btn btn-primary btn-user btn-block"

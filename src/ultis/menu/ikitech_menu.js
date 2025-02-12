@@ -415,7 +415,7 @@ export const ikitech_menu = [
             to: "/agency",
           },
           {
-            name: "Sale",
+            name: "Người giới thiệu",
             class: "sale_list",
             display: "hide",
             icon: "fa fa-bell",
