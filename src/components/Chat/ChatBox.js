@@ -93,18 +93,18 @@ class ChatBox extends Component {
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-  
+
     try {
       const res = await customerApi.fetchAllCustomer(store_code, page, params);
-  
+
       dispatch({
         type: Types.SHOW_LOADING,
         loading: "hide",
       });
-  
+
       if (res.data.code !== 401) {
         const data = res.data.data;
-  
+
         return {
           options: data.data.map((i) => ({
             value: i.id,
@@ -126,12 +126,12 @@ class ChatBox extends Component {
       }
     } catch (error) {
       console.error("Error fetching customers:", error);
-  
+
       dispatch({
         type: Types.SHOW_LOADING,
         loading: "hide",
       });
-  
+
       return {
         options: [],
         hasMore: false,

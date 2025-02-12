@@ -130,6 +130,29 @@ class FormChat extends Component {
         var showDateTime = date == dateTimeOld ? "hide" : "show";
         dateTimeOld = date;
         var unRead = this.props.unRead == true ? "Đã xem" : "Đã gửi";
+        console.log("tin nhắn", mes.content);
+        const parseMessage = (message) => {
+          if (!message) return null; // Kiểm tra message null hoặc undefined
+
+          const regex =
+            /Tên sản phẩm\s?:\s?(.+),\s?link ảnh\s?:\s?(.+),\s?product\s?:\s?\{id:\s?(\d+),\s?name:\s?(.+),\s?minPrice:\s?([\d.]+),\s?maxPrice:\s?([\d.]+)\}/;
+          const match = message.match(regex);
+
+          if (match && match.length >= 7) {
+            return {
+              name: match[1] || match[4],
+              image: match[2],
+              minPrice: parseFloat(match[5]),
+              maxPrice: parseFloat(match[6]),
+            };
+          }
+
+          return null;
+        };
+
+        // Kiểm tra nếu tin nhắn là sản phẩm
+        const productData = parseMessage(mes?.content);
+
         return (
           <React.Fragment>
             <div
@@ -137,10 +160,10 @@ class FormChat extends Component {
               className={showLoading}
             >
               <img
-                class={`img-profile rounded-circle ${showIconLoading}`}
+                className={`img-profile rounded-circle ${showIconLoading}`}
                 width="28px"
                 src="https://icon-library.com/images/facebook-loading-icon/facebook-loading-icon-8.jpg"
-              ></img>
+              />
               <a
                 onClick={this.loadData}
                 style={{
@@ -157,38 +180,82 @@ class FormChat extends Component {
               style={{ textAlign: "center", marginBottom: "10px" }}
               className={showDateTime}
             >
-              <span
+              <span style={{ fontSize: "14px" }}>{date}</span>
+            </div>
+
+            {/* Nếu tin nhắn chứa thông tin sản phẩm */}
+            {productData ? (
+              <div
+                className={`msg ${isUser}`}
                 style={{
-                  fontSize: "14px",
+                  display: "flex",
+                  alignItems: "center",
+                  background: "#f8f9fa",
+                  padding: "10px",
+                  borderRadius: "10px",
+                  maxWidth: "70%",
                 }}
               >
-                {date}
-              </span>
-            </div>
-
-            <div class={`msg ${isUser}`}>
-              <div
-                onClick={() => this.showListImg(img)}
-                class="msg-img"
-                style={{ backgroundImage: `url(${img})`, cursor: "pointer" }}
-              ></div>
-
-              <div
-                class={`msg-bubble ${backGroundImg}`}
-                style={{ maxWidth: "35%" }}
-              >
-                <div class={` ${isImg}`}>{this.showListImg(listimg)}</div>
-                <div class={`msg-text ${isContent}`}>{mes.content}</div>
-                <div class="msg-info">
-                  <div class="msg-info-time">{time}</div>
-                  {isUser == "right-msg" && (
-                    <div class="msg-info-time" style={{ marginLeft: "10px" }}>
-                      {unRead}
-                    </div>
-                  )}
+                <img
+                  src={productData.image}
+                  alt={productData.name}
+                  style={{
+                    width: "80px",
+                    height: "80px",
+                    borderRadius: "8px",
+                    marginRight: "10px",
+                    objectFit: "cover",
+                  }}
+                />
+                <div>
+                  <h4
+                    style={{
+                      margin: "0",
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {productData.name}
+                  </h4>
+                  <p
+                    style={{ margin: "5px 0", fontSize: "12px", color: "#555" }}
+                  >
+                    Giá:{" "}
+                    <span style={{ color: "red", fontWeight: "bold" }}>
+                      {productData.minPrice.toLocaleString()} -{" "}
+                      {productData.maxPrice.toLocaleString()} VND
+                    </span>
+                  </p>
                 </div>
               </div>
-            </div>
+            ) : (
+              // Nếu không phải tin nhắn sản phẩm, hiển thị bình thường
+              <div className={`msg ${isUser}`}>
+                <div
+                  onClick={() => this.showListImg(img)}
+                  className="msg-img"
+                  style={{ backgroundImage: `url(${img})`, cursor: "pointer" }}
+                ></div>
+                <div
+                  className={`msg-bubble ${backGroundImg}`}
+                  style={{ maxWidth: "35%" }}
+                >
+                  <div className={`${isImg}`}>{this.showListImg(listimg)}</div>
+                  <div className={`msg-text ${isContent}`}>{mes.content}</div>
+                  <div className="msg-info">
+                    <div className="msg-info-time">{time}</div>
+                    {isUser == "right-msg" && (
+                      <div
+                        className="msg-info-time"
+                        style={{ marginLeft: "10px" }}
+                      >
+                        {unRead}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </React.Fragment>
         );
       });
