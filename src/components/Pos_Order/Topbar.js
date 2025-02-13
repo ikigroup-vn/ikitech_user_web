@@ -293,7 +293,7 @@ class Topbar extends Component {
     var { store_code } = this.props;
     var branch_id = getBranchId();
 
-    const params = `&search=${search}&limit=6`;
+    const params = `&search=${search}&limit=6&is_selected=true`;
     const res = await productApi.fetchAllProductV2(
       store_code,
       branch_id,

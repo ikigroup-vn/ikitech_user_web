@@ -420,7 +420,7 @@ class PostOrder extends Component {
   refreshProductList = () => {
     const branch_id = getBranchId();
     const limit = this.state.numPage;
-    const params = `&limit=${limit}`;
+    const params = `&limit=${limit}&is_selected=true`;
     this.props.fetchAllProductV2(
       this.props.match.params.store_code,
       branch_id,
