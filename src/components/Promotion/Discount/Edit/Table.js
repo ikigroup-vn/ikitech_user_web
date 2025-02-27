@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Cascader, InputNumber, Select, Space } from 'antd';
+
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +13,10 @@ class Table extends Component {
   removeItem = (id) => {
     this.props.handleAddProduct(null, id, "remove", true);
   };
+
+  handleChangePercent = (e, productId) => {
+    this.props.handleChangePercentProduct(productId, e)
+  }
 
   showData = (products) => {
     var result = null;
@@ -26,6 +32,15 @@ class Table extends Component {
             <td>{data.sku}</td>
 
             <td>{data.name}</td>
+
+            <td>
+              <InputNumber
+                addonAfter="%"
+                defaultValue={data.discount_value || 1}
+                onChange={(e) => this.handleChangePercent(e, data.id)} key={data.sku}
+                min={1}
+                max={99}/>
+            </td>
             <td>
               <button
                 type="button"
@@ -77,6 +92,7 @@ class Table extends Component {
                     <th>STT</th>
                     <th>Mã SKU</th>
                     <th>Tên sản phẩm</th>
+                    <th>Giảm giá (%)</th>
                     <th>Hành động</th>
                   </tr>
                 </thead>

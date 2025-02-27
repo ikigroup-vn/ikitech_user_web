@@ -66,6 +66,18 @@ class Form extends Component {
     }
   }
 
+  handleChangePercentProduct = (productId, percent) => {
+    var index = this.state.saveListProducts.findIndex(el => el.id == productId);
+    if (index > -1)
+      this.setState({
+        saveListProducts: [
+           ...this.state.saveListProducts.slice(0,index),
+           Object.assign({}, this.state.saveListProducts[index], {discountPercent: percent}),
+           ...this.state.saveListProducts.slice(index+1)
+        ]
+      });
+  }
+
   setListProducts = (listProducts) => {
     this.setState({ listProducts });
   };
@@ -217,24 +229,15 @@ class Form extends Component {
       return;
     }
     var state = this.state;
-    if (state.txtValue == null || !isEmpty(state.txtValue)) {
-      this.props.showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Vui lòng chọn giá trị giảm giá",
-        },
-      });
-      return;
-    }
     var { store_code } = this.props;
     var listProducts = state.saveListProducts;
     var product_ids = []; // Khởi tạo mảng rỗng
 
     listProducts.forEach((element) => {
-      product_ids.push(element.id); // Đẩy từng id vào mảng
+      product_ids.push({
+        id: element.id,
+        value: element?.discountPercent || 0
+      });// Đẩy từng id vào mảng
     });
     var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm").format(
       "YYYY-MM-DD HH:mm:ss"
@@ -473,7 +476,7 @@ class Form extends Component {
             <div class={`alert alert-danger ${displayError}`} role="alert">
               Thời gian kết thúc phải sau thời gian bắt đầu
             </div>
-            <div class="form-group">
+            {/* <div class="form-group">
               <label for="product_name">Giảm giá (%)</label>
               <div class="input-group">
                 <input
@@ -492,7 +495,7 @@ class Form extends Component {
                   </span>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="form-group discount-for">
               <label htmlFor="group_customer">Áp dụng cho</label>
@@ -656,6 +659,7 @@ class Form extends Component {
             <Table
               handleAddProduct={this.handleAddProduct}
               products={saveListProducts}
+                  handleChangePercentProduct={this.handleChangePercentProduct}
             ></Table>
             {/* {
               getChannel() == IKITECH &&
