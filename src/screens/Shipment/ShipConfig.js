@@ -91,6 +91,9 @@ class Setting extends Component {
 
     this.props.createFeeShipment(store_code, configShipData);
     this.props.updateShipConfig(store_code, formData);
+    setTimeout(() => {
+      this.props.fetchShipConfig(store_code);
+    }, 2000);
   };
 
   componentWillReceiveProps = (nextProps) => {
