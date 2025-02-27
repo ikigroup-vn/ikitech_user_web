@@ -157,6 +157,17 @@ class Form extends Component {
     this.setState({ defaultListProducts: this.state.listProducts });
   };
 
+  handleChangePercentProduct = (productId, percent) => {
+    var index = this.state.saveListProducts.findIndex(el=> el.id == productId);
+    if (index > -1)
+      this.setState({
+        saveListProducts: [
+           ...this.state.saveListProducts.slice(0,index),
+           Object.assign({}, this.state.saveListProducts[index], {discount_value: percent}),
+           ...this.state.saveListProducts.slice(index+1)
+        ]
+      });
+  }
   onChange = (e) => {
     var target = e.target;
     var name = target.name;
@@ -313,7 +324,10 @@ class Form extends Component {
     var product_ids = []; // Khởi tạo mảng rỗng
 
     listProducts.forEach((element) => {
-      product_ids.push(element.id); // Đẩy từng id vào mảng
+      product_ids.push({
+        id: element.id,
+        value: element?.discount_value || 0
+      }); // Đẩy từng id vào mảng
     });
 
     var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm:ss").format(
@@ -604,26 +618,6 @@ class Form extends Component {
             <div class={`alert alert-danger ${displayError}`} role="alert">
               Thời gian kết thúc phải sau thời gian bắt đầu
             </div>
-            <div class="form-group">
-              <label for="product_name">Giảm giá (%)</label>
-              <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="txtValue"
-                  name="txtValue"
-                  value={txtValue}
-                  placeholder="nhập giảm giá"
-                  autoComplete="off"
-                  onChange={this.onChange}
-                />
-                <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon2">
-                    %
-                  </span>
-                </div>
-              </div>
-            </div>
 
             <div className="form-group discount-for">
               <label htmlFor="group_customer">Áp dụng cho</label>
@@ -759,6 +753,7 @@ class Form extends Component {
               products={saveListProducts}
               handleAddProduct={this.handleAddProduct}
               setDefaultListProducts={this.setDefaultListProducts}
+              handleChangePercentProduct={this.handleChangePercentProduct}
             ></Table>
             {/* {
               getChannel() == IKITECH &&
