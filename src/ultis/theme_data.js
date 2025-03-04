@@ -23,7 +23,7 @@ const ikitechTheme = {
   // logoLogin: "/images/logo/ikitech_login.jpg",
   logo: "/images/logo/ikitech_logo.jpg",
   logoLogin: "/images/logo/ikitech_login.jpg",
-  favicon: "/images/logo/ikitech_favicon.png",
+  favicon: "/images/logo/dongtien_favicon.png",
 };
 
 export default function themeData() {
