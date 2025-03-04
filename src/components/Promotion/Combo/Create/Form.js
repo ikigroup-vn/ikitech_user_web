@@ -29,6 +29,7 @@ class Form extends Component {
       txtStart: "",
       txtEnd: "",
       txtAmount: "",
+      txtLimitUser: "",
       txtContent: "",
       txtDiscoutType: 0,
       txtValueDiscount: "",
@@ -94,7 +95,11 @@ class Form extends Component {
     var value = target.value;
     const _value = formatNumber(value);
     const { group_customers } = this.state;
-    if (name == "txtAmount" || name == "txtValueDiscount") {
+    if (
+      name == "txtAmount" ||
+      name == "txtValueDiscount" ||
+      name == "txtLimitUser"
+    ) {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
         if (name == "txtValueDiscount" && this.state.txtDiscoutType == "1") {
@@ -298,6 +303,10 @@ class Form extends Component {
       group_customers,
       agency_types: agency_types_convert,
       group_types: group_types_convert,
+      limit_per_customer:
+        state.txtLimitUser == null
+          ? state.txtLimitUser
+          : formatNumber(state.txtLimitUser),
     };
     var amount = form.amount;
     if (typeof amount == "undefined" || amount == null || !isEmpty(amount))
@@ -428,6 +437,7 @@ class Form extends Component {
       txtStart,
       txtEnd,
       txtAmount,
+      txtLimitUser,
       listProducts,
       listProducts2,
       txtContent,
@@ -696,6 +706,21 @@ class Form extends Component {
                     name="txtAmount"
                     value={txtAmount}
                     placeholder="Số lượng mã phiểu có thể sử dụng"
+                    autoComplete="off"
+                    onChange={this.onChange}
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="product_name">
+                    Giới hạn số lượng đơn hàng cho 1 khách hàng
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtLimitUser"
+                    name="txtLimitUser"
+                    value={txtLimitUser}
+                    placeholder="Số lượng đơn hàng có thể sử dụng"
                     autoComplete="off"
                     onChange={this.onChange}
                   />

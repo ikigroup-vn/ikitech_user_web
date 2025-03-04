@@ -33,6 +33,7 @@ class Form extends Component {
       txtContent: "",
       txtDiscoutType: 0,
       txtValueDiscount: "",
+      txtLimitUser: "",
       listProducts: [],
       image: "",
       saveListProducts: [],
@@ -100,6 +101,12 @@ class Form extends Component {
           combo.amount == null
             ? null
             : new Intl.NumberFormat().format(combo.amount.toString()),
+        txtLimitUser:
+          combo.limit_per_customer == null
+            ? null
+            : new Intl.NumberFormat().format(
+                combo.limit_per_customer.toString()
+              ),
         txtLastAmount:
           combo.amount == null
             ? null
@@ -294,6 +301,10 @@ class Form extends Component {
         state.txtAmount == null
           ? state.txtAmount
           : formatNumber(state.txtAmount),
+      limit_per_customer:
+        state.txtLimitUser == null
+          ? state.txtLimitUser
+          : formatNumber(state.txtLimitUser),
       value_discount:
         state.txtValueDiscount == null
           ? state.txtValueDiscount
@@ -436,13 +447,14 @@ class Form extends Component {
       txtDiscoutType,
       txtValueDiscount,
       image,
+      txtLimitUser,
       saveListProducts,
       group_customer,
       agency_type_id,
       group_type_id,
       displayError,
       isLoading,
-
+      txtLimitUser,
       group_customers,
       agency_types,
       group_types,
@@ -694,7 +706,21 @@ class Form extends Component {
                     onChange={this.onChange}
                   />
                 </div>
-
+                <div class="form-group">
+                  <label for="product_name">
+                    Giới hạn số lượng đơn hàng cho 1 khách hàng
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtLimitUser"
+                    name="txtLimitUser"
+                    value={txtLimitUser}
+                    placeholder="Số lượng đơn hàng có thể sử dụng"
+                    autoComplete="off"
+                    onChange={this.onChange}
+                  />
+                </div>
                 <div class="form-group">
                   <label for="product_name">Loại giảm giá</label>
 
