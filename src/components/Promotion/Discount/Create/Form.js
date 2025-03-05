@@ -236,7 +236,7 @@ class Form extends Component {
     listProducts.forEach((element) => {
       product_ids.push({
         id: element.id,
-        value: element?.discountPercent || 0
+        value: element?.discountPercent || 1
       });// Đẩy từng id vào mảng
     });
     var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm").format(
