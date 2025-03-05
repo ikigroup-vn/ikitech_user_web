@@ -14,6 +14,7 @@ import {
 import ModalCancelDelivery from "./ModalCancelDelivery";
 import * as Types from "../../constants/ActionType";
 import ModalShipAddress from "./ModalShipAddress";
+import eventEmitter from "../../eventEmitter";
 
 const InfoShipperStyles = styled.div`
   .shipping__packet {
@@ -111,7 +112,15 @@ class InfoShipper extends Component {
       },
     };
   }
+  componentDidMount() {
+    // Lắng nghe sự kiện "toggleModal"
+    eventEmitter.on("toggleModal", this.setShowModalShipAddress);
+  }
 
+  componentWillUnmount() {
+    // Hủy lắng nghe khi component bị unmount để tránh memory leak
+    eventEmitter.off("toggleModal", this.setShowModalShipAddress);
+  }
   setShowModalShipAddress = (showModal) => {
     var customer = this.props.bill.customer_address;
     console.log("customer========", customer);

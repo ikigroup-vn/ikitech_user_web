@@ -30,6 +30,7 @@
     "draftjs-to-html": "^0.9.1",
     "eject": "^0.0.4",
     "embed-video": "^1.6.0",
+    "eventemitter3": "^5.0.1",
     "file-saver": "^2.0.5",
     "font-picker-react": "^3.5.2",
     "fs": "^0.0.2",
@@ -101,8 +102,8 @@
     "buffer": false
   },
   "engines": {
-  "node": ">=12.0.0"
-},
+    "node": ">=12.0.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
