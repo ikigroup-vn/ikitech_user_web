@@ -307,18 +307,18 @@ class Form extends Component {
       return;
     }
     var state = this.state;
-    if (state.txtValue == null || !isEmpty(state.txtValue)) {
-      this.props.showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Vui lòng chọn giá trị giảm giá",
-        },
-      });
-      return;
-    }
+    // if (state.txtValue == null || !isEmpty(state.txtValue)) {
+    //   this.props.showError({
+    //     type: Types.ALERT_UID_STATUS,
+    //     alert: {
+    //       type: "danger",
+    //       title: "Lỗi",
+    //       disable: "show",
+    //       content: "Vui lòng chọn giá trị giảm giá",
+    //     },
+    //   });
+    //   return;
+    // }
     var { store_code, discountId } = this.props;
     var listProducts = state.saveListProducts;
     var product_ids = []; // Khởi tạo mảng rỗng

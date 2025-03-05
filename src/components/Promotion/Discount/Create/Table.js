@@ -31,7 +31,7 @@ class Table extends Component {
              <td>
                 <InputNumber
                   addonAfter="%"
-                  defaultValue={data.discount_value || 1}
+                  defaultValue={data.discountPercent || 1}
                   onChange={(e) => this.handleChangePercent(e, data.id)} key={data.sku}
                   min={1}
                   max={99}/>

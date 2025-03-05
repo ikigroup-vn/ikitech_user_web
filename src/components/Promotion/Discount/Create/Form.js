@@ -303,10 +303,10 @@ class Form extends Component {
   };
 
   handleAddProduct = (product, id, type, onSave = null) => {
-    console.log(product);
-    var products = [...this.state.listProducts];
+    let products;
 
     if (type == "remove") {
+      products = [...this.state.saveListProducts];
       if (products.length > 0) {
         products.forEach((item, index) => {
           if (item.id === id) {
@@ -315,6 +315,7 @@ class Form extends Component {
         });
       }
     } else {
+      products = [...this.state.listProducts];
       var checkExsit = true;
       products.forEach((item, index) => {
         if (item.id === product.id) {
