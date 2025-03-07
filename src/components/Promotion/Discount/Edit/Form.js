@@ -168,6 +168,16 @@ class Form extends Component {
         ]
       });
   }
+
+  handleChangeMultiProductPercent = (listProductId, percent) => {
+    let newState = this.state.saveListProducts.map(product => {
+      if (listProductId.includes(product.id)) {
+        return Object.assign({}, product, {discount_value: percent})
+      }
+      return product
+    })
+    this.setState({saveListProducts: newState})
+  }
   onChange = (e) => {
     var target = e.target;
     var name = target.name;
@@ -754,6 +764,7 @@ class Form extends Component {
               handleAddProduct={this.handleAddProduct}
               setDefaultListProducts={this.setDefaultListProducts}
               handleChangePercentProduct={this.handleChangePercentProduct}
+              handleChangeMultiProductPercent={this.handleChangeMultiProductPercent}
             ></Table>
             {/* {
               getChannel() == IKITECH &&

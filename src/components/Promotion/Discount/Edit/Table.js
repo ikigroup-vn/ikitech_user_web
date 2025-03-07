@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Cascader, InputNumber, Select, Space } from 'antd';
+import { InputNumber, Checkbox } from 'antd';
 
 class Table extends Component {
   constructor(props) {
     super(props);
     this.state = {
       products: [],
+      isCheckAll: false,
+      selectedProduct: [],
     };
   }
 
@@ -15,9 +17,34 @@ class Table extends Component {
   };
 
   handleChangePercent = (e, productId) => {
-    this.props.handleChangePercentProduct(productId, e)
+    if (this.state.selectedProduct.includes(productId)) {
+      return this.props.handleChangeMultiProductPercent(this.state.selectedProduct, e);
+    }
+    return this.props.handleChangePercentProduct(productId, e)
   }
 
+  onSelectProduct = (e, product_id) => {
+    if (e.target.checked) {
+      return this.setState(function (state) {
+        return {
+          selectedProduct: [...state.selectedProduct, product_id]
+        }
+      })
+    }
+
+    return this.setState(function (state) {
+      return {
+        selectedProduct: [...state.selectedProduct.filter(e => e == product_id)]
+      }
+    })
+    
+  }
+  onSelectAll = (e) => {
+    if (e.target.checked) {
+      return this.setState({selectedProduct: [...this.props.products.map(e => e.id)]})
+    }
+    return this.setState({ selectedProduct: [] })
+  }
   showData = (products) => {
     var result = null;
     if (typeof products === "undefined") {
@@ -27,6 +54,9 @@ class Table extends Component {
       result = products.map((data, index) => {
         return (
           <tr>
+            <td>
+              <Checkbox onChange={(e) => this.onSelectProduct(e, data.id)} checked={this.state.selectedProduct.includes(data.id)} />
+            </td>
             <td>{index + 1}</td>
 
             <td>{data.sku}</td>
@@ -36,8 +66,9 @@ class Table extends Component {
             <td>
               <InputNumber
                 addonAfter="%"
-                defaultValue={data.discount_value || 1}
-                onChange={(e) => this.handleChangePercent(e, data.id)} key={data.sku}
+                value={data.discount_value || 1}
+                // defaultValue={data.discount_value || 1}
+                onChange={(e) => this.handleChangePercent(e, data.id)} key={data.id}
                 min={1}
                 max={99}/>
             </td>
@@ -89,6 +120,7 @@ class Table extends Component {
               <table class="table table-border table-hover">
                 <thead>
                   <tr>
+                    <th><Checkbox checked={ this.state.selectedProduct.length}  onChange={(e) => this.onSelectAll(e)}/></th>
                     <th>STT</th>
                     <th>Mã SKU</th>
                     <th>Tên sản phẩm</th>

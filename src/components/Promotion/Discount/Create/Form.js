@@ -78,6 +78,16 @@ class Form extends Component {
       });
   }
 
+  handleChangeMultiProductPercent = (listProductId, percent) => {
+    let newState = this.state.saveListProducts.map(product => {
+      if (listProductId.includes(product.id)) {
+        return Object.assign({}, product, {discountPercent: percent})
+      }
+      return product
+    })
+    this.setState({saveListProducts: newState})
+  }
+
   setListProducts = (listProducts) => {
     this.setState({ listProducts });
   };
@@ -660,7 +670,8 @@ class Form extends Component {
             <Table
               handleAddProduct={this.handleAddProduct}
               products={saveListProducts}
-                  handleChangePercentProduct={this.handleChangePercentProduct}
+              handleChangePercentProduct={this.handleChangePercentProduct}
+              handleChangeMultiProductPercent={this.handleChangeMultiProductPercent}
             ></Table>
             {/* {
               getChannel() == IKITECH &&
