@@ -779,6 +779,7 @@ export const ikitech_menu = [
         icon: "fas fa-th-list",
         open: "another",
         setOpenKey: [
+          "/appointments",
           "/store_address",
           "/shipment",
           "payment",
@@ -790,6 +791,14 @@ export const ikitech_menu = [
         ],
 
         children: [
+          {
+            name: "Lịch hẹn",
+            class: "delivery_pick_address_list",
+            display: "hide",
+            icon: "fas fa-fw fa-cog",
+            exact: true,
+            to: "/appointments",
+          },
           {
             name: "Địa chỉ giao vận",
             class: "delivery_pick_address_list",

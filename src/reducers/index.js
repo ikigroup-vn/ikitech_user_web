@@ -57,6 +57,7 @@ import { attributeSearchReducers } from "./attribute_search";
 import { ecommerceReducers } from "./ecommerce";
 import { configSmsReducers } from "./config_sms";
 import { otpUnitReducers } from "./otp_unit";
+import { appointmentReducers} from "./appointment/index"
 
 const appReducers = combineReducers({
   authReducers,
@@ -117,6 +118,7 @@ const appReducers = combineReducers({
   ecommerceReducers,
   configSmsReducers,
   otpUnitReducers,
+  appointmentReducers
 });
 
 export default appReducers;

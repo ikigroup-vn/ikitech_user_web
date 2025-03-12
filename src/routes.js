@@ -187,6 +187,7 @@ import HistoryDetailQuizForCustomer from "./screens/Train/HistoryQuiz/historyDet
 import ReportProduct from "./screens/Report/report_product";
 import Expired from "./screens/Expired/index.js";
 import Community from "./screens/Community/index.js";
+import Appointment from "./screens/Appointment/index.js";
 
 const routes = [
   {
@@ -1340,6 +1341,12 @@ const routes = [
     exact: true,
 
     main: ({ match, history }) => <PopupEdit match={match} history={history} />,
+  },
+  {
+    path: "/appointments/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Appointment match={match} />,
   },
 
   {
