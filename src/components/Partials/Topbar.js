@@ -293,7 +293,7 @@ class Topbar extends Component {
                 <option value="" disabled>
                   -- Chọn chi nhánh --
                 </option>
-                {!badges.is_staff && branchStore?.length > 1 && (
+                {branchStore?.length > 1 && (
                   <option
                     value="all"
                     style={{
