@@ -3,7 +3,7 @@ import { filter_var } from "../../ultis/helpers";
 import { connect } from "react-redux";
 import * as billAction from "../../actions/bill";
 import * as Types from "../../constants/ActionType";
-
+import eventEmitter from "../../eventEmitter";
 const statusCode = {
   WAITING_FOR_PROGRESSING: "WAITING_FOR_PROGRESSING",
   PACKING: "PACKING",
@@ -124,6 +124,12 @@ class OrderStatus extends Component {
   }
 
   changeStatus = (statusCode, name, statusCheck) => {
+    // nghĩa đang sửa
+    console.log("status_cus====", statusCode);
+    // eventEmitter.emit("toggleModal", true);
+    if (statusCode == "PACKING" && statusCheck == false) {
+      eventEmitter.emit("toggleModal", true);
+    }
     if (statusCheck == true) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
@@ -151,17 +157,21 @@ class OrderStatus extends Component {
       return;
     }
 
-    window.$("#postModal").modal("show");
-
-    this.props.handleUpdateStatusOrder(
-      {
-        order_status_code: statusCode,
-        statusName: name,
-      },
-      () => {
-        this.props.fetchBillHistory(this.props.store_code, this.props.bill?.id);
-      }
-    );
+    if (statusCode != "PACKING") {
+      window.$("#postModal").modal("show");
+      this.props.handleUpdateStatusOrder(
+        {
+          order_status_code: statusCode,
+          statusName: name,
+        },
+        () => {
+          this.props.fetchBillHistory(
+            this.props.store_code,
+            this.props.bill?.id
+          );
+        }
+      );
+    }
   };
 
   checkStatus = (status, curentStatus) => {
