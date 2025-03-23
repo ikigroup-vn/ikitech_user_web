@@ -497,7 +497,7 @@ class Topbar extends Component {
                       </div>
                     )}
 
-                    <Link className="show-store" to={`/home`}>
+                    {/* <Link className="show-store" to={`/home`}>
                       <i
                         class="fas fa-store"
                         style={{
@@ -508,7 +508,7 @@ class Topbar extends Component {
                         }}
                       ></i>
                       {stores?.length > 0 && this.getNameBranch(stores)}
-                    </Link>
+                    </Link> */}
                   </div>
                 ) : (
                   <a className="show-store">
