@@ -9,9 +9,8 @@ class Table extends Component {
   }
 
   removeItem = (id) => {
-    this.props.handleAddStaff(null, id, "remove" , true);
+    this.props.handleAddStaff(null, id, "remove", true);
   };
-
 
   showData = (staffs) => {
     var result = null;
@@ -29,14 +28,14 @@ class Table extends Component {
           <tr>
             <td>{data.name}</td>
 
-            <td >{data.username}</td>
+            <td>{data.username}</td>
             <td>{data.phone_number}</td>
 
             <td>
               {" "}
-              {new Intl.NumberFormat("vi-VN", {
+              {new Intl.NumberFormat("ja-JP", {
                 style: "currency",
-                currency: "VND",
+                currency: "JPY",
               }).format(data.salary_one_hour)}
             </td>
             <td>{decentralization}</td>
@@ -128,17 +127,15 @@ class Table extends Component {
           </>
         )}
         <div
-          class={`form-group d-flex align-items-center my-3 ${staffs.length > 0 ? "justify-content-center" : null}`}
+          class={`form-group d-flex align-items-center my-3 ${
+            staffs.length > 0 ? "justify-content-center" : null
+          }`}
           data-toggle="modal"
           data-target="#showListStaff"
           style={{ cursor: "pointer" }}
         >
-      <button
-            type="button"
-            class="btn btn-primary-no-background btn-sm"
-
-          >
-            <i class="fas fa-plus" ></i>
+          <button type="button" class="btn btn-primary-no-background btn-sm">
+            <i class="fas fa-plus"></i>
             <span class="text">&nbsp;Thêm nhân viên</span>
           </button>
         </div>

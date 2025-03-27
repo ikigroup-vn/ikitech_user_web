@@ -99,9 +99,9 @@ class ModalChooseTypeImport extends Component {
         return;
       }
       //Filter Data
-      //Index: 0: "Tên sản phẩm", 1: "Mã SKU", 2: "Mã BARCODE", 3: "Theo dõi kho (Có/Không)", 4: "Danh mục", 5: "Thuộc tính", 6: "Thuộc tính tìm kiếm", 7: "Cân nặng(g)", 8: "Hoa hồng CTV (%/VND)", 9: "Xu cho đại lý", 10: "Mô tả", 11: "Nội dung cho CTV", 12: "Trạng thái (Ẩn/Hiện)", 13: "Tiêu đề SEO", 14: "Miêu tả SEO", 15: "Phân loại (Có/Không)", 16: "Phân loại chính", 17: "Phân loại phụ", 18: "DS phân loại", 19: "Giá bán lẻ", 20: "Giá nhập", 21: "Hình ảnh",
+      //Index: 0: "Tên sản phẩm", 1: "Mã SKU", 2: "Mã BARCODE", 3: "Theo dõi kho (Có/Không)", 4: "Danh mục", 5: "Thuộc tính", 6: "Thuộc tính tìm kiếm", 7: "Cân nặng(g)", 8: "Hoa hồng CTV (%/JPY)", 9: "Xu cho đại lý", 10: "Mô tả", 11: "Nội dung cho CTV", 12: "Trạng thái (Ẩn/Hiện)", 13: "Tiêu đề SEO", 14: "Miêu tả SEO", 15: "Phân loại (Có/Không)", 16: "Phân loại chính", 17: "Phân loại phụ", 18: "DS phân loại", 19: "Giá bán lẻ", 20: "Giá nhập", 21: "Hình ảnh",
 
-      //Index: 0: "Tên sản phẩm", 1: "Mã BARCODE", 2: "Theo dõi kho (Có/Không)", 3: "Vị trí kệ hàng" , 4: "Danh mục", 5: "Thuộc tính", 6: "Thuộc tính tìm kiếm", 7: "Cân nặng(g)", 8: "Hoa hồng CTV (%/VND)", 9: "Xu cho đại lý", 10: "Mô tả", 11: "Nội dung cho CTV", 12: "Trạng thái (Ẩn/Hiện)", 13: "Tiêu đề SEO", 14: "Miêu tả SEO", 15: "Phân loại (Có/Không)", 16: "Phân loại chính", 17: "Phân loại phụ", 18: "DS phân loại", 19: "Giá bán lẻ", 20: "Giá nhập", 21: "Mã SKU", 22: "Hình ảnh",
+      //Index: 0: "Tên sản phẩm", 1: "Mã BARCODE", 2: "Theo dõi kho (Có/Không)", 3: "Vị trí kệ hàng" , 4: "Danh mục", 5: "Thuộc tính", 6: "Thuộc tính tìm kiếm", 7: "Cân nặng(g)", 8: "Hoa hồng CTV (%/JPY)", 9: "Xu cho đại lý", 10: "Mô tả", 11: "Nội dung cho CTV", 12: "Trạng thái (Ẩn/Hiện)", 13: "Tiêu đề SEO", 14: "Miêu tả SEO", 15: "Phân loại (Có/Không)", 16: "Phân loại chính", 17: "Phân loại phụ", 18: "DS phân loại", 19: "Giá bán lẻ", 20: "Giá nhập", 21: "Mã SKU", 22: "Hình ảnh",
 
       const dataXlsxEmptyTitle = data.slice(1);
       const newProducts = [];
@@ -124,8 +124,8 @@ class ModalChooseTypeImport extends Component {
             product[12]?.toString().toLowerCase().trim() === "hiện" ? 0 : -1;
           newProduct["seo_title"] = product[13];
           newProduct["seo_description"] = product[14];
-          if (product[8]?.includes("(VND)")) {
-            const money_amount_collaborator = product[8]?.split("(VND)")?.[0];
+          if (product[8]?.includes("(JPY)")) {
+            const money_amount_collaborator = product[8]?.split("(JPY)")?.[0];
             newProduct["percent_collaborator"] = 0;
             newProduct["money_amount_collaborator"] = Number(
               money_amount_collaborator
@@ -225,8 +225,8 @@ class ModalChooseTypeImport extends Component {
             product[12]?.toString().toLowerCase().trim() === "hiện" ? 0 : -1;
           newProductHasDistribute["seo_title"] = product[13];
           newProductHasDistribute["seo_description"] = product[14];
-          if (product[8]?.includes("(VND)")) {
-            const money_amount_collaborator = product[8]?.split("(VND)")?.[0];
+          if (product[8]?.includes("(JPY)")) {
+            const money_amount_collaborator = product[8]?.split("(JPY)")?.[0];
             newProductHasDistribute["percent_collaborator"] = 0;
             newProductHasDistribute["money_amount_collaborator"] = Number(
               money_amount_collaborator

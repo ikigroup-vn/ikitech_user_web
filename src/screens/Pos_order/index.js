@@ -1560,7 +1560,7 @@ class PostOrder extends Component {
                                     }
                                     onClick={() => this.ChangeTypeDiscount(0)}
                                   >
-                                    VND
+                                    JPY
                                   </div>
                                   <div
                                     className={

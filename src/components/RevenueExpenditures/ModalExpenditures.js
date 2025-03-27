@@ -437,7 +437,7 @@ class ModalExpenditures extends Component {
                   <label htmlFor="validationCustom01">Giá trị chi</label>
 
                   <CurrencyInput
-                    intlConfig={{ locale: "vi-VN", currency: "VND" }}
+                    intlConfig={{ locale: "ja-JP", currency: "JPY" }}
                     id="input-example"
                     name="changeMoney"
                     className={`form-control`}

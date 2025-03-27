@@ -1131,7 +1131,7 @@ class ItemInCart extends Component {
                     type="text"
                     value={this.state.txtCostInput}
                     onChange={this.handleChangeCost}
-                    placeholder="0₫"
+                    placeholder="0￥"
                   />
                   <div className="iconInputConfirm">
                     <span onClick={() => this.handleUpdatePriceItem(item)}>

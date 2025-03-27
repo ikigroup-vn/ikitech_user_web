@@ -767,7 +767,7 @@ class InfoProduct extends Component {
                         type_share_collaborator_number ==
                         Types.TYPE_SHARE_COLLABORATOR_PERCENT
                           ? "%"
-                          : "VND"
+                          : "JPY"
                       }`}
                       autoComplete="off"
                       value={
@@ -828,7 +828,7 @@ class InfoProduct extends Component {
                               : "pointer",
                         }}
                       >
-                        VND
+                        JPY
                       </span>
                     </div>
                   </div>

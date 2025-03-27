@@ -35,8 +35,8 @@ class TableCustomerOfSale extends Component {
               {data.total_after_discount_no_use_bonus_with_date
                 ? `${new Intl.NumberFormat().format(
                     data.total_after_discount_no_use_bonus_with_date
-                  )} ₫`
-                : "0 ₫"}
+                  )} ￥`
+                : "0 ￥"}
             </td>
             <td
               className={`${

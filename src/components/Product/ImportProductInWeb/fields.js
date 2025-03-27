@@ -7,7 +7,7 @@ export const fields = [
   "Thuộc tính",
   "Thuộc tính tìm kiếm",
   "Cân nặng(g)",
-  "Hoa hồng CTV (%/VND)",
+  "Hoa hồng CTV (%/JPY)",
   "Xu cho đại lý",
   "Mô tả",
   "Nội dung cho CTV",

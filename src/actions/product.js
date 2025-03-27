@@ -830,7 +830,7 @@ function sheetTemplate(workbook, endColumn, listColumn) {
       "Thuộc tính",
       "Thuộc tính tìm kiếm",
       "Cân nặng(g)",
-      "Hoa hồng CTV (%/VND)",
+      "Hoa hồng CTV (%/JPY)",
       "Xu cho đại lý",
       "Mô tả",
       "Nội dung cho CTV",
@@ -980,7 +980,7 @@ function sheetTemplate(workbook, endColumn, listColumn) {
       "Xuất xứ:Việt Nam",
       "Kem rửa mặt",
       "50",
-      "1000(VND)",
+      "1000(JPY)",
       "10",
       "Thiết kế hiện đại.",
       "",
@@ -1199,7 +1199,7 @@ function sheetTemplate(workbook, endColumn, listColumn) {
     },
     {
       range: "B19:D20",
-      value: "Hoa hồng CTV(%/VND)",
+      value: "Hoa hồng CTV(%/JPY)",
       style: {
         horizontalAlignment: "center",
         verticalAlignment: "center",
@@ -1219,7 +1219,7 @@ function sheetTemplate(workbook, endColumn, listColumn) {
     },
     {
       range: "E20:I20",
-      value: "Giatri(VND)",
+      value: "Giatri(JPY)",
       style: {
         horizontalAlignment: "left",
         verticalAlignment: "top",
@@ -1239,7 +1239,7 @@ function sheetTemplate(workbook, endColumn, listColumn) {
     },
     {
       range: "J20:N20",
-      value: "200000(VND)",
+      value: "200000(JPY)",
       style: {
         horizontalAlignment: "left",
         verticalAlignment: "top",
@@ -1528,15 +1528,15 @@ export const fetchAllListProduct = (store_code, search) => {
 
                   if (key == "type_share_collaborator_number" && value == 0) {
                     newItem[
-                      "Hoa hồng CTV (%/VND)"
+                      "Hoa hồng CTV (%/JPY)"
                     ] = `${arangeKeyItem["percent_collaborator"]}(%)`;
                   } else if (
                     key == "type_share_collaborator_number" &&
                     value == 1
                   ) {
                     newItem[
-                      "Hoa hồng CTV (%/VND)"
-                    ] = `${arangeKeyItem["money_amount_collaborator"]}(VND)`;
+                      "Hoa hồng CTV (%/JPY)"
+                    ] = `${arangeKeyItem["money_amount_collaborator"]}(JPY)`;
                   }
                   if (key == "shelf_position") {
                     newItem["Vị trí kệ hàng"] = value;

@@ -87,7 +87,7 @@ class Table extends Component {
                   ? `${format(
                       Number(data.sum_total_after_discount_no_use_bonus)
                     )}`
-                  : "0 ₫"}
+                  : "0 ￥"}
               </td>
             </tr>
           </React.Fragment>
@@ -126,7 +126,7 @@ class Table extends Component {
                           .sum_total_after_discount_no_use_bonus
                       )
                     )}`
-                  : "0 ₫"}
+                  : "0 ￥"}
                 )
               </th>
             </tr>

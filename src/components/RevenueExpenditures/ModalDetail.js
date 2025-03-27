@@ -262,7 +262,7 @@ class ModalDetail extends Component {
                   </label>
 
                   <CurrencyInput
-                    intlConfig={{ locale: "vi-VN", currency: "VND" }}
+                    intlConfig={{ locale: "ja-JP", currency: "JPY" }}
                     id="input-example"
                     name="changeMoney"
                     className={`form-control`}

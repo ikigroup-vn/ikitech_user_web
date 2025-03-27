@@ -46,7 +46,7 @@ class Table extends Component {
       (this.props.revenueExpendituresValue !=
         nextProps.revenueExpendituresValue ||
         nextState.revenueExpendituresValue !=
-        nextProps.revenueExpendituresValue ||
+          nextProps.revenueExpendituresValue ||
         !shallowEqual(
           nextProps.revenueExpenditures,
           this.props.revenueExpenditures
@@ -65,7 +65,7 @@ class Table extends Component {
       (this.props.revenueExpendituresValue !=
         nextProps.revenueExpendituresValue ||
         this.state.revenueExpendituresValue !=
-        nextProps.revenueExpendituresValue) &&
+          nextProps.revenueExpendituresValue) &&
       this.state.isLoading == true
     )
       this.setState({
@@ -121,15 +121,15 @@ class Table extends Component {
                 )}
               </td>
               <td>
-                {new Intl.NumberFormat("vi-VN", {
+                {new Intl.NumberFormat("ja-JP", {
                   style: "currency",
-                  currency: "VND",
+                  currency: "JPY",
                 }).format(data?.change_money)}
               </td>
               <td>
-                {new Intl.NumberFormat("vi-VN", {
+                {new Intl.NumberFormat("ja-JP", {
                   style: "currency",
-                  currency: "VND",
+                  currency: "JPY",
                 }).format(data?.current_money)}
               </td>
 
@@ -138,7 +138,6 @@ class Table extends Component {
               </td>
 
               <td>{data.created_at}</td>
-
 
               <td>{data?.type_action_name}</td>
             </tr>

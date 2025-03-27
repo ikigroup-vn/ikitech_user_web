@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import themeData from "../../../../ultis/theme_data";
 import * as staffAction from "../../../../actions/staff";
-import config from "../../../../ultis/datatable"
+import config from "../../../../ultis/datatable";
 import $ from "jquery";
 
 import { filter_arr, format } from "../../../../ultis/helpers";
@@ -13,7 +13,6 @@ class ListStaff extends Component {
     this.state = {
       numPage: 10,
       searchValue: "",
-
     };
   }
   onChangeSearch = (e) => {
@@ -47,23 +46,19 @@ class ListStaff extends Component {
     return false;
   };
   onSaveStaff = () => {
-    this.props.onSaveStaff()
+    this.props.onSaveStaff();
     window.$(".modal").modal("hide");
-  }
+  };
   componentWillReceiveProps(nextProps) {
     $("#dataTable").DataTable().destroy();
   }
 
   componentDidUpdate(prevProps, prevState) {
-
-    $("#dataTable").DataTable(
-      config()
-    );
+    $("#dataTable").DataTable(config());
 
     $("#dataTable").DataTable(config());
 
-    window.$(".dataTables_info").hide()
-
+    window.$(".dataTables_info").hide();
   }
   showData = (staffs, list) => {
     console.log("dfasufbasdbfasdkjfbasdkf", staffs, list);
@@ -75,7 +70,7 @@ class ListStaff extends Component {
       result = staffs.map((data, index) => {
         var decentralization =
           typeof data.decentralization != "undefined" &&
-            data.decentralization != null
+          data.decentralization != null
             ? data.decentralization.name
             : "";
         var checked = this.checkExsit(list, data.id);
@@ -101,9 +96,9 @@ class ListStaff extends Component {
             <td>{data.phone_number}</td>
             <td>
               {" "}
-              {new Intl.NumberFormat("vi-VN", {
+              {new Intl.NumberFormat("ja-JP", {
                 style: "currency",
-                currency: "VND",
+                currency: "JPY",
               }).format(data.salary_one_hour)}
             </td>
             <td>{decentralization}</td>
@@ -161,12 +156,11 @@ class ListStaff extends Component {
       >
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content" style={{ maxHeight: "630px" }}>
-            <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
-              <h4
-                class="modal-title"
-              >
-                Nhân viên
-              </h4>
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
+              <h4 class="modal-title">Nhân viên</h4>
               <button
                 type="button"
                 class="close"
@@ -200,7 +194,13 @@ class ListStaff extends Component {
         
             </form> */}
             <div class="table-responsive table-staff">
-              <table style = {{marginTop : "15px"}} class="table pag-staff-datatable " id="dataTable" width="100%" cellspacing="0">
+              <table
+                style={{ marginTop: "15px" }}
+                class="table pag-staff-datatable "
+                id="dataTable"
+                width="100%"
+                cellspacing="0"
+              >
                 <thead>
                   <tr>
                     <th></th>
@@ -216,8 +216,10 @@ class ListStaff extends Component {
                 <tbody>{this.showData(staffs, listStaff)}</tbody>
               </table>
             </div>
-            <div class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12" style={{ display: "flex", justifyContent: "end" }}>
-
+            <div
+              class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12"
+              style={{ display: "flex", justifyContent: "end" }}
+            >
               {/* <Pagination
                 style="float-fix"
                 store_code={store_code}
@@ -229,7 +231,7 @@ class ListStaff extends Component {
                 <button
                   style={{
                     border: "1px solid",
-                    marginRight: "10px"
+                    marginRight: "10px",
                   }}
                   type="button"
                   class="btn btn-default"
@@ -237,15 +239,15 @@ class ListStaff extends Component {
                 >
                   Hủy
                 </button>
-                <button style={{ backgroundColor: themeData().backgroundColor }} onClick={this.onSaveStaff} class="btn btn-info">
+                <button
+                  style={{ backgroundColor: themeData().backgroundColor }}
+                  onClick={this.onSaveStaff}
+                  class="btn btn-info"
+                >
                   Xác nhận
                 </button>
               </div>
             </div>
-
-
-
-
           </div>
         </div>
       </div>
@@ -255,7 +257,6 @@ class ListStaff extends Component {
 
 const mapStateToProps = (state) => {
   return {
-
     staff: state.staffReducers.staff.allStaff,
   };
 };
@@ -265,7 +266,6 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllStaff: (id) => {
       dispatch(staffAction.fetchAllStaff(id));
     },
-
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ListStaff);

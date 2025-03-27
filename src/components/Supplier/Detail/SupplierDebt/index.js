@@ -185,15 +185,15 @@ class Footer extends Component {
               )}
             </td>
             <td>
-              {new Intl.NumberFormat("vi-VN", {
+              {new Intl.NumberFormat("ja-JP", {
                 style: "currency",
-                currency: "VND",
+                currency: "JPY",
               }).format(data?.change_money)}
             </td>
             <td>
-              {new Intl.NumberFormat("vi-VN", {
+              {new Intl.NumberFormat("ja-JP", {
                 style: "currency",
-                currency: "VND",
+                currency: "JPY",
               }).format(data?.current_money)}
             </td>
 

@@ -196,9 +196,9 @@ export const filter_var = (variable) => {
 
 export const format = (number) => {
   var num = Number(number);
-  return num.toLocaleString("vi-VN", {
+  return num.toLocaleString("ja-JP", {
     style: "currency",
-    currency: "VND",
+    currency: "JPY",
   });
 };
 export const formatNoD = (number) => {

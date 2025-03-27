@@ -244,8 +244,8 @@ class ModalHistoryChangeLevelAgency extends Component {
                             {historyLevel.auto_set_value_import
                               ? `${formatNumberV2(
                                   historyLevel.auto_set_value_import
-                                )} ₫`
-                              : "0 ₫"}
+                                )} ￥`
+                              : "0 ￥"}
                           </span>
                         </td>
                         <td>
@@ -257,8 +257,8 @@ class ModalHistoryChangeLevelAgency extends Component {
                             {historyLevel.current_total_after_discount_no_use_bonus
                               ? `${formatNumberV2(
                                   historyLevel.current_total_after_discount_no_use_bonus
-                                )} ₫`
-                              : "0 ₫"}
+                                )} ￥`
+                              : "0 ￥"}
                           </span>
                         </td>
                         <td>
@@ -270,8 +270,8 @@ class ModalHistoryChangeLevelAgency extends Component {
                             {historyLevel.auto_set_value_share
                               ? `${formatNumberV2(
                                   historyLevel.auto_set_value_share
-                                )} ₫`
-                              : "0 ₫"}
+                                )} ￥`
+                              : "0 ￥"}
                           </span>
                         </td>
                         <td>
@@ -283,8 +283,8 @@ class ModalHistoryChangeLevelAgency extends Component {
                             {historyLevel.current_share_agency
                               ? `${formatNumberV2(
                                   historyLevel.current_share_agency
-                                )} ₫`
-                              : "0 ₫"}
+                                )} ￥`
+                              : "0 ￥"}
                           </span>
                         </td>
 
