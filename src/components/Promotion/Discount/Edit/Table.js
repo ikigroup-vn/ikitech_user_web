@@ -34,7 +34,7 @@ class Table extends Component {
 
     return this.setState(function (state) {
       return {
-        selectedProduct: [...state.selectedProduct.filter(e => e == product_id)]
+        selectedProduct: [...state.selectedProduct.filter(e => e != product_id)]
       }
     })
     
