@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { InputNumber, Checkbox } from 'antd';
-
+import { InputNumber, Checkbox, Input, Flex } from 'antd';
+const { Search } = Input;
+function stripAccents(str) {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -9,6 +12,7 @@ class Table extends Component {
       products: [],
       isCheckAll: false,
       selectedProduct: [],
+      searchValue: ''
     };
   }
 
@@ -45,13 +49,24 @@ class Table extends Component {
     }
     return this.setState({ selectedProduct: [] })
   }
+  
   showData = (products) => {
     var result = null;
     if (typeof products === "undefined") {
       return result;
     }
     if (products.length > 0) {
-      result = products.map((data, index) => {
+      result = products.filter(e => {
+        if (this.state.searchValue) {
+        const search = stripAccents(this.state.searchValue);
+        const regex = new RegExp(search, 'i');
+          if(regex.test(e.name) || regex.test(e.sku)) {
+            return e;
+          }
+          return null;
+        }
+        return e;
+    }).map((data, index) => {
         return (
           <tr>
             <td>
@@ -92,7 +107,7 @@ class Table extends Component {
     }
     return result;
   };
-
+   
   render() {
     var { products, setDefaultListProducts } = this.props;
     return (
@@ -112,9 +127,11 @@ class Table extends Component {
             <span class="text">&nbsp;Chọn sản phẩm</span>
           </button>
         </div>
-        <div class="form-group" >
+        <Flex gap={100}>
           <label for="product_name">Danh sách sản phẩm : </label>
-
+          <Search placeholder="Tìm kiếm sản phẩm" allowClear style={{ width: 300 }} onChange={(e) => this.setState({searchValue: e.target.value})}/>
+        </Flex>
+        <div class="form-group" >
           <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
             <div class="table-responsive">
               <table class="table table-border table-hover">
