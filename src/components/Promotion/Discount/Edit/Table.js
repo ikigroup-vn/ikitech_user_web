@@ -2,9 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { InputNumber, Checkbox, Input, Flex } from 'antd';
 const { Search } = Input;
-function stripAccents(str) {
-  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -49,7 +46,8 @@ class Table extends Component {
     }
     return this.setState({ selectedProduct: [] })
   }
-  
+  normalizeText = (text) => text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
   showData = (products) => {
     var result = null;
     if (typeof products === "undefined") {
@@ -58,9 +56,8 @@ class Table extends Component {
     if (products.length > 0) {
       result = products.filter(e => {
         if (this.state.searchValue) {
-        const search = stripAccents(this.state.searchValue);
-        const regex = new RegExp(search, 'i');
-          if(regex.test(e.name) || regex.test(e.sku)) {
+        const search = this.normalizeText(this.state.searchValue);
+          if (this.normalizeText(e.name).includes(search) || this.normalizeText(e.sku).includes(search)) {
             return e;
           }
           return null;
