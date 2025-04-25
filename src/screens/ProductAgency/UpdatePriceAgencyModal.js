@@ -121,7 +121,7 @@ class UpdatePriceAgencyModal extends Component {
   };
 
   render() {
-    var { product } = this.props;
+    var { product, discount_value_for_login_user } = this.props;
 
     return (
       <div
@@ -167,6 +167,7 @@ class UpdatePriceAgencyModal extends Component {
                         <InfoProduct
                           product={product}
                           handleDataFromInfo={this.handleDataFromInfo}
+                          discountValueForLoginUser={discount_value_for_login_user}
                         />
                       </div>
                     </div>
@@ -216,9 +217,12 @@ class UpdatePriceAgencyModal extends Component {
 }
 
 const mapStateToProps = (state) => {
+  let productId = state.productReducers.product.product_agency_price_id.productId
+  let discount_for_login_user = state.productReducers.product.allProduct.data.filter(item => item.id == productId)?.[0]?.discount_for_login_user
   return {
     alert: state.productReducers.alert.alert_uid,
     product: state.productReducers.product.product_agency_price_id,
+    discount_value_for_login_user: discount_for_login_user?.length ? discount_for_login_user[0].value : 0
   };
 };
 

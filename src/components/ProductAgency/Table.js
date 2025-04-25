@@ -489,10 +489,10 @@ class Table extends Component {
                             // textDecoration: "line-through",
                           }
                         }
-                      >
-                        {format(Number(min_price))}
+                        >
+                        {format(Number(min_price * (1 - discount_for_login_user/100)))}
                         {" - "}
-                        {format(Number(max_price))}
+                        {format(Number(max_price * (1 - discount_for_login_user/100)))}
                       </div>
 
                       {/* <div className="discount e">&emsp; -{discount_percent}%</div> */}
