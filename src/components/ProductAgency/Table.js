@@ -452,7 +452,7 @@ class Table extends Component {
                       {format(
                         Number(
                           discount_percent == null
-                            ? min_price
+                            ? Math.round(min_price * (1 - discount_for_login_user/100))
                             : min_price - min_price * discount_percent * 0.01
                         )
                       )}
@@ -460,7 +460,7 @@ class Table extends Component {
                       {format(
                         Number(
                           discount_percent == null
-                            ? max_price
+                            ? Math.round(max_price * (1 - discount_for_login_user/100))
                             : max_price - max_price * discount_percent * 0.01
                         )
                       )}

@@ -3910,7 +3910,10 @@ export const fetchProductAgencyPrice = (store_code, id, agency_id) => {
         if (res.data.code !== 401)
           dispatch({
             type: Types.FETCH_ID_PRODUCT_AGENCY_PRICE,
-            data: res.data.data,
+            data: {
+              ...res.data.data,
+              productId: id
+            },
           });
       });
   };

@@ -476,7 +476,7 @@ class Distribute extends Component {
     return true;
   }
 
-  showDetail = (list_distribute, list_distribute_default) => {
+  showDetail = (list_distribute, list_distribute_default, discount_value_for_login_user) => {
     var result = [];
     if (typeof list_distribute == "undefined" || list_distribute.length == 0) {
       return result;
@@ -703,8 +703,9 @@ class Distribute extends Component {
                     />
                   </td>
                   <td>
+                    {console.log(list_distribute_default[0].element_distributes[_index].price, discount_value_for_login_user, 'dcmm')}
                     <input
-                      value={price_default}
+                      value={formatNoD(Math.round(list_distribute_default[0].element_distributes[_index].price * (1 - discount_value_for_login_user/100)))}
                       id="input"
                       class="form-control"
                       title=""
@@ -730,6 +731,7 @@ class Distribute extends Component {
   };
 
   render() {
+    const { discount_value_for_login_user } = this.props;
     var { list_distribute, list_distribute_default } = this.state;
     var disable = "";
     try {
@@ -787,7 +789,7 @@ class Distribute extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.showDetail(list_distribute, list_distribute_default)}
+                {this.showDetail(list_distribute, list_distribute_default, discount_value_for_login_user)}
               </tbody>
             </table>
           </div>
@@ -810,10 +812,13 @@ const mapDispatchToProps = (dispatch, props) => {
   };
 };
 const mapStateToProps = (state) => {
+  let productId = state.productReducers.product.product_agency_price_id.productId
+  let discount_for_login_user = state.productReducers.product.allProduct.data.filter(item => item.id == productId)?.[0]?.discount_for_login_user
   return {
     listImgDistribute: state.UploadReducers.productImg.listImgDistribute,
 
     alert: state.UploadReducers.alert.alert_uploadDis,
+    discount_value_for_login_user: discount_for_login_user?.length ? discount_for_login_user[0].value : 0
   };
 };
 
