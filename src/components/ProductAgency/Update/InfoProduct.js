@@ -6,6 +6,7 @@ import {
   formatNoD,
   getQueryParams,
 } from "../../../ultis/helpers";
+import { connect } from "react-redux";
 import { product } from "../../../reducers/product/product";
 class InfoProduct extends Component {
   constructor(props) {
@@ -89,7 +90,8 @@ class InfoProduct extends Component {
   };
   render() {
     var { txtName, disabledPrice, txtPrice } = this.state;
-    var { product, itemProduct, discountValueForLoginUser} = this.props;
+    var { product, itemProduct, discountValueForLoginUser, discount_value_for_login_user } = this.props;
+    
     return (
       <div class="card-body" style={{ padding: "0.8rem" }}>
         {/* <div class="form-group">
@@ -177,7 +179,7 @@ class InfoProduct extends Component {
                     id="txtEmail"
                     placeholder="Nhập giá"
                     autoComplete="off"
-                    value={formatNoD(Math.round(this.state.price * (1- discountValueForLoginUser/100))) ?? 0}
+                    value={formatNoD(Math.round(this.state.price * (1- discount_value_for_login_user/100))) ?? this.state.price}
                   />
                 </div>
               </div>
@@ -204,4 +206,13 @@ class InfoProduct extends Component {
   }
 }
 
-export default InfoProduct;
+const mapStateToProps = (state) => {
+  let productId = state.productReducers.product.product_agency_price_id.productId
+  let discount_for_login_user = state.productReducers.product.allProduct.data.filter(item => item.id == productId)?.[0]?.discount_for_login_user
+  
+  return {
+    discount_value_for_login_user: discount_for_login_user?.length ? discount_for_login_user[0].value : 0
+  };
+};
+
+export default connect(mapStateToProps)(InfoProduct);
