@@ -7,6 +7,7 @@ import { shallowEqual } from "../../ultis/shallowEqual";
 import ComponentTemplate0ToPrint from "./orderTemplates/ComponentTemplate0ToPrint";
 import { dataOrderExample } from "./orderTemplates/dataOrderExample";
 import ComponentTemplate1ToPrint from "./orderTemplates/ComponentTemplate1ToPrint";
+import MiraiTemplate from "./orderTemplates/MiraiTemplate";
 import * as dashboardAction from "../../actions/dashboard";
 import { getInvoiceTemplate, setInvoiceTemplate } from "../../data/local/print";
 import ComponentTemplate2ToPrint from "./orderTemplates/ComponentTemplate2ToPrint";
@@ -127,6 +128,16 @@ class OrderInvoice extends Component {
             bill={dataOrderExample}
             store={this.store}
             ref={(el) => (this.initTheme[2].componentRef = el)}
+          />
+        ),
+      },
+      {
+        index: 4,
+        name: "Mẫu Miraimobile",
+        image: "/images/invoice_templates/2.png",
+        componentPrint: (
+          <MiraiTemplate
+            ref={(el) => (this.initTheme[3].componentRef = el)}
           />
         ),
       },

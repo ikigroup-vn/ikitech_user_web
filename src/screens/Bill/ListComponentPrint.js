@@ -5,6 +5,7 @@ import ComponentTemplate1ToPrint from "../InvoiceTemplate/orderTemplates/Compone
 import { getInvoiceTemplate } from "../../data/local/print";
 import ComponentTemplate2ToPrint from "../InvoiceTemplate/orderTemplates/ComponentTemplate2ToPrint";
 import ComponentTemplate3ToPrint from "../InvoiceTemplate/orderTemplates/ComponentTemplate3ToPrint";
+import MiraiTemplate from "../InvoiceTemplate/orderTemplates/MiraiTemplate";
 
 export default class ListComponentToPrint extends Component {
   constructor(props) {
@@ -43,6 +44,18 @@ export default class ListComponentToPrint extends Component {
     if (typeInvoice == 3) {
       return (
         <ComponentTemplate3ToPrint
+          currentBranch={currentBranch}
+          badges={badges}
+          bill={bill}
+          store={store}
+          ref={(el) => (this.componentRef = el)}
+        />
+      );
+    }
+
+    if (typeInvoice == 4 ) {
+      return (
+        <MiraiTemplate
           currentBranch={currentBranch}
           badges={badges}
           bill={bill}
