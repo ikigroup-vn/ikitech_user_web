@@ -137,6 +137,10 @@ class OrderInvoice extends Component {
         image: "/images/invoice_templates/2.png",
         componentPrint: (
           <MiraiTemplate
+            currentBranch={this.props.currentBranch}
+            badges={this.props.badges}
+            bill={dataOrderExample}
+            store={this.store}
             ref={(el) => (this.initTheme[3].componentRef = el)}
           />
         ),

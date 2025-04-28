@@ -6,17 +6,20 @@ import { formatNumberV2 } from "../../../ultis/helpers";
 const MiraiTemplate = forwardRef((props, ref) => {
   const { currentBranch, badges, bill, store } = props;
   function getColor(item) {
-    return item.distributes_selected.filter(
-      (e) => e.name.toLowerCase() == "màu"
+    return item?.distributes_selected?.filter(
+      (e) => e.name?.toLowerCase() == "màu"
     )?.[0]?.value;
   }
   function getBrand(item) {
-    return item.product.attributes.filter((e) => e.name == "Thương hiệu")?.[0]
+    return item.product?.attributes?.filter((e) => e.name == "Thương hiệu")?.[0]
       ?.value;
   }
 
   function mappingBillData() {
     let result = [];
+    if (!bill.line_items) {
+      return result;
+    }
     bill.line_items.forEach((item) => {
       result.push({
         name: `${item.product.name} ${getColor(item) ? getColor(item) : ''}`,
