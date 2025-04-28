@@ -152,7 +152,7 @@ const MiraiTemplate = forwardRef((props, ref) => {
                 colSpan={3}
                 style={{ border: "1px solid #000", padding: "8px" }}
               >
-                {bill.customer.name}
+                {bill?.customer?.name}
               </td>
               <td
                 colSpan={3}
@@ -194,7 +194,7 @@ const MiraiTemplate = forwardRef((props, ref) => {
                 colSpan={6}
                 style={{ border: "1px solid #000", padding: "8px" }}
               >
-                〒 {bill.customer_address_detail}
+                〒 {bill?.customer_address_detail}
               </td>
             </tr>
             <tr>
@@ -501,7 +501,7 @@ const MiraiTemplate = forwardRef((props, ref) => {
         }}
       >
         <div>
-          <div>金額 (Tổng tiền) {formatNumberV2(bill.total_final)} 円</div>
+          <div>金額 (Tổng tiền) {formatNumberV2(bill?.total_final)} 円</div>
           <div style={{ marginTop: "20px" }}>
             記入日 (Năm/Tháng/Ngày) {new Date().getFullYear()} 年{" "}
             {new Date().getMonth()} 月 {new Date().getDate()} 日
