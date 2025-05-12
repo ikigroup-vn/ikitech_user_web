@@ -45,6 +45,7 @@ class Form extends Component {
       store_code,
       billId,
       statusName: data.statusName,
+      trackingNumber: data.trackingNumber,
     };
     order.value = value;
     order.nameModal = "đơn hàng";
@@ -141,6 +142,8 @@ class Form extends Component {
                           order_code={order_code}
                           store_code={store_code}
                           bill={bill}
+                          order={orderData}
+                          order_id={bill.id}
                         />
                       </aside>
                     </div>

@@ -3,6 +3,7 @@ import { filter_var } from "../../ultis/helpers";
 import { connect } from "react-redux";
 import * as billAction from "../../actions/bill";
 import * as Types from "../../constants/ActionType";
+import { Modal, Input } from "antd";
 
 const statusCode = {
   WAITING_FOR_PROGRESSING: "WAITING_FOR_PROGRESSING",
@@ -120,6 +121,8 @@ class OrderStatus extends Component {
           accept: [],
         },
       ],
+      showModalTracking: false,
+      trackingNumber: ""
     };
   }
 
@@ -151,8 +154,18 @@ class OrderStatus extends Component {
       return;
     }
 
+    if (statusCode == "PACKING") {
+      this.setState({ showModalTracking: true })
+      this.updateStatusOrder(statusCode, name);
+      return;
+    }
+
     window.$("#postModal").modal("show");
 
+    this.updateStatusOrder(statusCode, name);
+  };
+
+  updateStatusOrder = (statusCode, name) => {
     this.props.handleUpdateStatusOrder(
       {
         order_status_code: statusCode,
@@ -195,6 +208,18 @@ class OrderStatus extends Component {
 
     return false;
   };
+
+  handleConfirmTracking = () => {
+    const { trackingNumber } = this.state;
+    let { store_code, order_id, order_code, order } = this.props;
+    this.props.updateStatusOrder(
+      { order_code, order_status_code: statusCode.PACKING, trackingNumber },
+      store_code,
+      order_id,
+      order_code,
+    );
+    this.setState({ showModalTracking: false });
+  }
 
   // checkStatus = (status, curentStatus) => {
   //   if (curentStatus == "WAITING_FOR_PROGRESSING") {
@@ -296,7 +321,6 @@ class OrderStatus extends Component {
 
       result = orderStatus.map((item, index) => {
         var statusCheck = this.checkStatus(item.code, status);
-        console.log(item.code, status, this.checkStatus(item.code, status));
         var disable_back_status = statusCheck == true ? "disable-color" : "";
         var active = item.code == status ? "active_status" : "";
         if (active != "") {
@@ -334,31 +358,49 @@ class OrderStatus extends Component {
     var disable = this.props.order_allow_change_status == true ? "" : "#cac4c4";
 
     return (
-      <nav class="left-nav hidden-xs hidden-sm hidden-md">
-        <ul class="nolist" style={{ minHeight: "300px" }}>
-          <li
-            style={{ background: "#EAEFF3", border: "2px solid #e3e5e6" }}
-            class=""
-          >
-            <a
+      <>
+        <nav class="left-nav hidden-xs hidden-sm hidden-md">
+          <ul class="nolist" style={{ minHeight: "300px" }}>
+            <li
+              style={{ background: "#EAEFF3", border: "2px solid #e3e5e6" }}
+              class=""
+            >
+              <a
+                style={{
+                  fontWeight: 600,
+                }}
+              >
+                Trạng thái đơn hàng
+              </a>
+            </li>
+            <li
               style={{
-                fontWeight: 600,
+                maxHeight: "510px",
+                overflow: "auto",
+                background: disable,
               }}
             >
-              Trạng thái đơn hàng
-            </a>
-          </li>
-          <li
-            style={{
-              maxHeight: "510px",
-              overflow: "auto",
-              background: disable,
+              {this.showOrderStatus(status)}
+            </li>
+          </ul>
+        </nav>
+          <Modal
+          title="Vui lòng điền mã vận đơn"
+          centered
+          open={this.state.showModalTracking}
+          onOk={() => this.handleConfirmTracking()}
+          onCancel={() => this.setState({showModalTracking: false})}
+        >
+          <Input
+            count={{
+              show: true,
+              min: 1,
             }}
-          >
-            {this.showOrderStatus(status)}
-          </li>
-        </ul>
-      </nav>
+            onChange={(e) => this.setState({trackingNumber: e.target.value})}
+            value={this.trackingNumber}
+          />
+        </Modal>
+      </>
     );
   }
 }
