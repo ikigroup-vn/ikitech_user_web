@@ -154,7 +154,7 @@ class OrderStatus extends Component {
       return;
     }
 
-    if (statusCode == "PACKING") {
+    if (statusCode == "SHIPPING") {
       this.setState({ showModalTracking: true })
       this.updateStatusOrder(statusCode, name);
       return;
@@ -213,7 +213,7 @@ class OrderStatus extends Component {
     const { trackingNumber } = this.state;
     let { store_code, order_id, order_code, order } = this.props;
     this.props.updateStatusOrder(
-      { order_code, order_status_code: statusCode.PACKING, trackingNumber },
+      { order_code, order_status_code: statusCode.SHIPPING, trackingNumber },
       store_code,
       order_id,
       order_code,
