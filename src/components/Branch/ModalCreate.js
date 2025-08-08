@@ -77,6 +77,7 @@ class ModalCreate extends Component {
   onChangeProvince = (e) => {
     this.setState({ txtProvince: e.target.value, isLoaded: true });
     this.props.fetchPlaceDistrict(e.target.value);
+    this.props.fetchPlaceWards(e.target.value);
     var indexProvince = this.props.province
       .map((e) => e.id)
       .indexOf(parseInt(e.target.value));
@@ -193,7 +194,7 @@ class ModalCreate extends Component {
       email: txtEmail_branch,
       branch_code: txtCode_branch,
       province: txtProvince,
-      district: txtDistrict,
+      district: txtProvince,
       wards: txtWards,
       address_detail: txtAddress_detail,
       postcode: txtPost_branch,
@@ -473,7 +474,7 @@ class ModalCreate extends Component {
                             {this.showProvince(province)}
                           </select>
                         </div>
-                        <div class="form-group">
+                        {/* <div class="form-group">
                           <label for="product_name">Quận/huyện</label>
 
                           <select
@@ -486,7 +487,7 @@ class ModalCreate extends Component {
                             <option value="">-- Chọn quận/huyện --</option>
                             {this.showDistrict(listDistrict)}
                           </select>
-                        </div>
+                        </div> */}
                         <div class="form-group">
                           <label for="product_name">Phường/xã</label>
 

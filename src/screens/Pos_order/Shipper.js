@@ -264,10 +264,8 @@ class PanelBottom extends Component {
       var data = selectValue.value;
       this.setState({ txtProvince: data.id, isLoaded: true });
       this.onSelectChangeProvinceById(data.id);
-
-      this.props.fetchPlaceDistrict(data.id);
-
-      this.toggleOpenDistrict();
+      this.props.fetchPlaceWards(data.id);
+      this.toggleOpenWards();
     }
   };
   onChangeDistrict2 = (selectValue) => {
@@ -478,7 +476,6 @@ class PanelBottom extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log("Đã vô:::", nextState.weight);
     if (
       nextState.weight != this.state.weight ||
       nextState.length != this.state.length ||
@@ -730,11 +727,15 @@ class PanelBottom extends Component {
           label: pro.name,
           value: pro,
         },
+        valueDistrict: {
+          label: pro.name,
+          value: pro,
+        },
         provinceName: pro.name,
         txtProvince: pro.id,
         listWards: [],
         listDistrict: [],
-        txtDistrict: "",
+        txtDistrict: pro.id,
         txtWards: "",
         districtName: "",
         wardsName: "",
@@ -852,7 +853,6 @@ class PanelBottom extends Component {
     // this.setState({ select_storeAddress: selectValue, ...store_address });
   };
   loadCustomers = async (search, loadedOptions, { page }) => {
-    console.log("vaooooooooooooooooooo");
     var { store_code } = this.props;
     const params = `&search=${search}`;
     const res = await customerApi.fetchAllCustomer(store_code, page, params);
@@ -1308,7 +1308,7 @@ class PanelBottom extends Component {
               />
             </Dropdown>
 
-            <Dropdown
+            {/* <Dropdown
               menuPlacement="bottom"
               isOpen={isOpenDistrict}
               onClose={this.toggleOpenDistrict}
@@ -1348,7 +1348,6 @@ class PanelBottom extends Component {
                         ? "- Quận huyện -"
                         : districtName}
                     </option>
-                    {/* {this.showDistrict(listDistrict)} */}
                   </select>
                 </div>
               }
@@ -1360,7 +1359,6 @@ class PanelBottom extends Component {
                 autoFocus
                 menuPlacement="bottom"
                 backspaceRemovesValue={false}
-                //    components={{ DropdownIndicator, IndicatorSeparator: null }}
                 controlShouldRenderValue={false}
                 hideSelectedOptions={false}
                 isClearable={false}
@@ -1373,7 +1371,7 @@ class PanelBottom extends Component {
                 tabSelectsValue={false}
                 value={valueDistrict}
               />
-            </Dropdown>
+            </Dropdown> */}
 
             <Dropdown
               menuPlacement="bottom"
@@ -1949,7 +1947,7 @@ const mapStateToProps = (state) => {
     customers: state.customerReducers.customer.allCustomer,
     wards: state.placeReducers.wards,
     province: state.placeReducers.province,
-    district: state.placeReducers.district,
+    district: state.placeReducers.province,
     customerCreated: state.customerReducers.customer.customerCreated,
     isFromPosAndSave: state.customerReducers.customer.isFromPosAndSave,
     oneCart: state.posReducers.pos_reducer.oneCart,

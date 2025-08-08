@@ -501,7 +501,7 @@ class ModalEdit extends Component {
                             {this.showProvince(province)}
                           </select>
                         </div>
-                        <div class="form-group">
+                        {/* <div class="form-group">
                           <label for="product_name">Quận/huyện</label>
 
                           <select
@@ -514,7 +514,7 @@ class ModalEdit extends Component {
                             <option value="">-- Chọn quận/huyện --</option>
                             {this.showDistrict(listDistrict)}
                           </select>
-                        </div>
+                        </div> */}
                         <div class="form-group">
                           <label for="product_name">Phường/xã</label>
 
