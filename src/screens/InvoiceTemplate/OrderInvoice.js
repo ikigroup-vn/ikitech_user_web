@@ -5,6 +5,7 @@ import styled from "styled-components";
 import ItemInvoiceTemplate from "./ItemInvoiceTemplate";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import ComponentTemplate0ToPrint from "./orderTemplates/ComponentTemplate0ToPrint";
+import ComponentTemplateAnhDuongPrint from "./orderTemplates/ComponentTemplateAnhDuongPrint";
 import { dataOrderExample } from "./orderTemplates/dataOrderExample";
 import ComponentTemplate1ToPrint from "./orderTemplates/ComponentTemplate1ToPrint";
 import * as dashboardAction from "../../actions/dashboard";
@@ -130,6 +131,20 @@ class OrderInvoice extends Component {
           />
         ),
       },
+      {
+        index: 3,
+        name: "Mẫu mặc định (Ánh dương)",
+        image: "/images/invoice_templates/0.png",
+        componentPrint: (
+          <ComponentTemplateAnhDuongPrint
+            currentBranch={this.props.currentBranch}
+            badges={this.props.badges}
+            bill={dataOrderExample}
+            store={this.store}
+            ref={(el) => (this.initTheme[3].componentRef = el)}
+          />
+        ),
+      }
       // {
       //   index: 3,
       //   name: "Mẫu 3 (Đại lý in cho khách lẻ)",
