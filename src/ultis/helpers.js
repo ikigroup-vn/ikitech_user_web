@@ -61,7 +61,7 @@ export const contactOrNumber = (data) => {
 };
 
 export const containsSpecialChars = (str) => {
-  const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+  const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/;
   return specialChars.test(str);
 };
 
