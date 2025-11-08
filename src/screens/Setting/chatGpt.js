@@ -31,7 +31,7 @@ const Title = styled.h1`
 `;
 
 const FileInput = styled.input`
-  background-color: #f1f1f1;
+  background-color: #c12026;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 12px;

@@ -113,7 +113,7 @@ class Table extends Component {
           </div>
         ) : (
           <>
-            <span style={{ color: "#C12026" }}>Chưa chọn ca làm việc</span>
+            <span style={{ color: "#c12026" }}>Chưa chọn ca làm việc</span>
           </>
         )}
         <div

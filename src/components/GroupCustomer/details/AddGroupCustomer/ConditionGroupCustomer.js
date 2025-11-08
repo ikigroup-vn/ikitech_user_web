@@ -72,7 +72,7 @@ const ConditionGroupCustomerStyles = styled.div`
     }
   }
   .form-condition-required {
-    color: rgb(193, 32, 38);
+    color: rgb(24 183 135);
     display: flex;
     align-items: center;
     font-size: 30px;

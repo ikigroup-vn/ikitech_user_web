@@ -128,7 +128,7 @@ div.title {
     background-position: -5px -5px;
     background-repeat: no-repeat;
     background-size: auto auto;
-    border-bottom-color: #F1F1F1;
+    border-bottom-color: #c12026;
     border-bottom-style: none;
     border-bottom-width: 0px;
     box-sizing: border-box;
@@ -194,7 +194,7 @@ div.title {
 }
 
 .contents h1, .contents h2 {
-    border-bottom-color: #F1F1F1;
+    border-bottom-color: #c12026;
     border-bottom-style: solid;
     border-bottom-width: 1px;
 }

@@ -53,6 +53,656 @@ export const fetchBranchStore = (store_code) => {
   };
 };
 
+/// Thêm sửa xóa Danh sách xe
+
+export const fetchCarlist = (
+  store_code,
+  page = 1,
+  params
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.FETCH_CAR_LIST_LOADING,
+    });
+
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    storeApi.fetchCarlist(store_code, page, params).then((res) => {
+      dispatch({
+        type: Types.FETCH_CAR_LIST_NONE,
+      });
+
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_CAR_LIST,
+          data: res.data.data,
+        });
+    });
+  };
+};
+
+export const createCar = (store_code, id, $this, funcModal = null) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    storeApi
+      .createCar(store_code, id)
+      .then((res) => {
+        if (res.data.success && funcModal != null) {
+          console.log("da vao r");
+          funcModal();
+        }
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        storeApi
+          .fetchCarlist(store_code)
+          .then((res) => {
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_CAR_LIST,
+                data: res.data.data,
+              });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide",
+            });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error?.response?.data?.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+
+        if (
+          $this &&
+          error.response &&
+          error.response.data.msg_code == "DUPLICATE_NUMBER"
+        ) {
+          $this.setState({
+            error_name: { text: error.response.data.msg, status: true },
+          });
+        } else {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: error?.response?.data?.msg,
+            },
+          });
+        }
+      });
+  };
+};
+
+export const updateCar = (
+  store_code,
+  data,
+  id,
+  $this,
+  funcModal = null
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    storeApi
+      .updateCar(store_code, data, id)
+      .then((res) => {
+        if (res.data.success && funcModal != null) {
+          console.log("da vao r");
+          funcModal();
+        }
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        storeApi
+          .fetchCarlist(store_code)
+          .then((res) => {
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_CAR_LIST,
+                data: res.data.data,
+              });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide",
+            });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error?.response?.data?.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (
+          $this &&
+          error.response &&
+          error.response.data.msg_code == "DUPLICATE_NUMBER"
+        ) {
+          $this.setState({
+            error_name: { text: error.response.data.msg, status: true },
+          });
+        } else {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: error?.response?.data?.msg,
+            },
+          });
+        }
+      });
+  };
+};
+
+export const deleteCar = (store_code, id) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    storeApi
+      .deleteCar(store_code, id)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        storeApi
+          .fetchCarlist(store_code)
+          .then((res) => {
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_CAR_LIST,
+                data: res.data.data,
+              });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide",
+            });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error?.response?.data?.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+////
+
+
+
+/// Thêm sửa xóa Danh sách nhân viên
+
+export const fetchEmployeeList = (
+  store_code,
+  page = 1,
+  params = null
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.FETCH_EMPLOYEE_LIST_LOADING,
+    });
+
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    storeApi.fetchEmployeeList(store_code, page, params).then((res) => {
+      dispatch({
+        type: Types.FETCH_EMPLOYEE_LIST_NONE,
+      });
+
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_EMPLOYEE_LIST,
+          data: res.data.data,
+        });
+    });
+  };
+};
+
+export const createEmployee = (store_code, id, $this, funcModal = null) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    storeApi
+      .createEmployee(store_code, id)
+      .then((res) => {
+        if (res.data.success && funcModal != null) {
+          console.log("da vao r");
+          funcModal();
+        }
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        storeApi
+          .fetchEmployeeList(store_code)
+          .then((res) => {
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_EMPLOYEE_LIST,
+                data: res.data.data,
+              });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide",
+            });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error?.response?.data?.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+
+        if (
+          $this &&
+          error.response &&
+          error.response.data.msg_code == "DUPLICATE_PHONE"
+        ) {
+          $this.setState({
+            error_name: { text: error.response.data.msg, status: true },
+          });
+        } else {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: error?.response?.data?.msg,
+            },
+          });
+        }
+      });
+  };
+};
+
+export const updateEmployee = (
+  store_code,
+  data,
+  id,
+  $this,
+  funcModal = null
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    storeApi
+      .updateEmployee(store_code, data, id)
+      .then((res) => {
+        if (res.data.success && funcModal != null) {
+          console.log("da vao r");
+          funcModal();
+        }
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        storeApi
+          .fetchEmployeeList(store_code)
+          .then((res) => {
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_EMPLOYEE_LIST,
+                data: res.data.data,
+              });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide",
+            });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error?.response?.data?.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (
+          $this &&
+          error.response &&
+          error.response.data.msg_code == "DUPLICATE_PHONE"
+        ) {
+          $this.setState({
+            error_name: { text: error.response.data.msg, status: true },
+          });
+        } else {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: error?.response?.data?.msg,
+            },
+          });
+        }
+      });
+  };
+};
+
+export const deleteEmployee = (store_code, id) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    storeApi
+      .deleteEmployee(store_code, id)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        storeApi
+          .fetchEmployeeList(store_code)
+          .then((res) => {
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_EMPLOYEE_LIST,
+                data: res.data.data,
+              });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide",
+            });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error?.response?.data?.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+////
+
+/// Thêm sửa xóa Danh sách chuyến đi
+
+export const fetchTripList = (
+  store_code,
+  page = 1,
+  params = null
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.FETCH_TRIP_LIST_LOADING,
+    });
+
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    storeApi.fetchTripList(store_code, page, params).then((res) => {
+      dispatch({
+        type: Types.FETCH_TRIP_LIST_NONE,
+      });
+
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_TRIP_LIST,
+          data: res.data.data,
+        });
+    });
+  };
+};
+
+export const createTrip = (store_code, id, $this, funcModal = null) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    storeApi
+      .createTrip(store_code, id)
+      .then((res) => {
+        if (res.data.success && funcModal != null) {
+          console.log("da vao r");
+          funcModal();
+        }
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        storeApi
+          .fetchTripList(store_code)
+          .then((res) => {
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_TRIP_LIST,
+                data: res.data.data,
+              });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide",
+            });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error?.response?.data?.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+
+        if (
+          $this &&
+          error.response &&
+          error.response.data.msg_code == "DUPLICATE_PHONE"
+        ) {
+          $this.setState({
+            error_name: { text: error.response.data.msg, status: true },
+          });
+        } else {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: error?.response?.data?.msg,
+            },
+          });
+        }
+      });
+  };
+};
+///
 export const fetchAllSupplier = (store_code, page, params) => {
   console.log("store_code", store_code);
   return (dispatch) => {
@@ -204,7 +854,6 @@ export const deleteSupplier = (store_code, id, page, params) => {
       });
   };
 };
-
 export const updateBranchStore = (
   store_code,
   data,
@@ -289,7 +938,6 @@ export const updateBranchStore = (
       });
   };
 };
-
 export const createBranchStore = (store_code, id, $this, funcModal = null) => {
   return (dispatch) => {
     dispatch({

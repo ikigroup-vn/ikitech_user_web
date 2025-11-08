@@ -152,7 +152,7 @@ const ActionsGameGuessNumberContentStyles = styled.div`
         width: 150px;
       }
       &:last-child {
-        color: rgb(193, 32, 38);
+        color: rgb(24 183 135);
       }
     }
   }
@@ -1268,7 +1268,7 @@ class ActionsGameGuessNumberContent extends Component {
                             ?.length === 0 ? (
                             <div
                               style={{
-                                color: "rgb(193, 32, 38)",
+                                color: "rgb(24 183 135)",
                               }}
                             >
                               Không có người nào trúng thưởng !

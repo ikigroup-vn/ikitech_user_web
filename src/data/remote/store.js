@@ -220,6 +220,7 @@ export const destroyStore = (id) => {
 export const fetchBranchStore = (store_code) => {
   return callApi(`/store/${store_code}/branches`, "get", null);
 };
+
 export const fetchAllSupplier = (store_code, page, params) => {
   return callApi(
     `/store/${store_code}/suppliers?page=${page}${params}`,
@@ -241,6 +242,125 @@ export const updateBranchStore = (store_code, data, id) => {
   return callApi(`/store/${store_code}/branches/${id}`, "put", data);
 };
 
+// Thêm sửa xóa Danh sách xe
+export const fetchCarlist = (
+  store_code,
+  page = 1,
+  params
+) => {
+  if (params)
+    return callApi(
+      `/store/${store_code}/cars?page=${page}${params}`,
+      "get",
+      null
+    );
+  else
+    return callApi(
+      `/store/${store_code}/cars?page=${page}`,
+      "get",
+      null
+    );
+};
+
+export const createCar = (store_code, data) => {
+  return callApi(`/store/${store_code}/cars`, "post", data);
+};
+
+export const updateCar = (store_code,data, id) => {
+  return callApi(`/store/${store_code}/cars/${id}`, "put", data);
+};
+
+export const deleteCar = (store_code,id) => {
+  return callApi(`/store/${store_code}/cars/${id}`, "delete", null);
+};
+
+
+// Thêm sửa xóa Danh sách nhân viên
+export const fetchEmployeeList = (
+  store_code,
+  page = 1,
+  params
+) => {
+  if (params)
+    return callApi(
+      `/store/${store_code}/employees?page=${page}${params}`,
+      "get",
+      null
+    );
+  else
+    return callApi(
+      `/store/${store_code}/employees?page=${page}`,
+      "get",
+      null
+    );
+};
+
+export const createEmployee = (store_code, data) => {
+  return callApi(`/store/${store_code}/employees`, "post", data);
+};
+
+export const updateEmployee= (store_code,data, id) => {
+  return callApi(`/store/${store_code}/employees/${id}`, "put", data);
+};
+
+export const deleteEmployee = (store_code,id) => {
+  return callApi(`/store/${store_code}/employees/${id}`, "delete", null);
+};
+
+// Thêm sửa xóa Danh sách nhân viên
+export const fetchTripList = (
+  store_code,
+  page = 1,
+  params
+) => {
+  if (params)
+    return callApi(
+      `/store/${store_code}/trips?page=${page}${params}`,
+      "get",
+      null
+    );
+  else
+    return callApi(
+      `/store/${store_code}/trips?page=${page}`,
+      "get",
+      null
+    );
+};
+
+export const createTrip = (store_code, data) => {
+  return callApi(`/store/${store_code}/trips`, "post", data);
+};
+
+export const updateTrip= (store_code,data, id) => {
+  return callApi(`/store/${store_code}/trips/${id}`, "put", data);
+};
+
+export const deleteTrip = (store_code,id) => {
+  return callApi(`/store/${store_code}/trips/${id}`, "delete", null);
+};
+
+
+
+export const fetchAllAgencyRegisterRequests = (
+  store_code,
+  page = 1,
+  params
+) => {
+  if (params)
+    return callApi(
+      `/store/${store_code}/agency_register_requests?page=${page}${params}`,
+      "get",
+      null
+    );
+  else
+    return callApi(
+      `/store/${store_code}/agency_register_requests?page=${page}`,
+      "get",
+      null
+    );
+};
+
+///
 export const createSupplier = (store_code, data) => {
   return callApi(`/store/${store_code}/suppliers`, "post", data);
 };

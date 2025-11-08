@@ -5892,7 +5892,7 @@ button i {
 }
 
 .IKITECH input[type="checkbox"] {
-  accent-color: rgb(193, 32, 38) !important;
+  accent-color: rgb(24 183 135) !important;
 }
 
 .IKIPOS input[type="radio"] {
@@ -5900,7 +5900,7 @@ button i {
 }
 
 .IKITECH input[type="radio"] {
-  accent-color: rgb(193, 32, 38) !important;
+  accent-color: rgb(24 183 135) !important;
 }
 
 .wap-header {
@@ -5980,7 +5980,7 @@ button i {
 }
 
 .IKITECH .dataTables_paginate .current {
-  background: rgb(193, 32, 38) !important;
+  background: rgb(24 183 135) !important;
   color: white !important;
 }
 
@@ -6255,7 +6255,7 @@ button i {
   display: inline-block;
   width: 30px;
   line-height: 33px;
-  background: #f1f1f1;
+  background: #c12026;
   color: #444;
   text-align: center;
   font-weight: bold;

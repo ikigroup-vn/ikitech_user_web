@@ -15,7 +15,7 @@ const posTheme = {
 
 const ikitechTheme = {
   loginTitle: "IKITECH",
-  backgroundColor: "#C12026",
+  backgroundColor: "#c12026",
   modalNoti: "#E56F25",
   buttonYes: "#F7C23E",
   logoTab: "/images/logo/ikitech_logo_tab.png",

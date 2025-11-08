@@ -49,7 +49,7 @@ const ModalAddGroupCustomerStyles = styled.div`
           font-size: 15px;
           font-weight: 600;
           sup {
-            color: rgb(193, 32, 38);
+            color: rgb(24 183 135);
           }
         }
         & > div {
@@ -97,7 +97,7 @@ const ModalAddGroupCustomerStyles = styled.div`
       }
       .form-group-customer-error {
         margin-top: 10px;
-        color: rgb(193, 32, 38);
+        color: rgb(24 183 135);
 
         h4 {
           font-size: 18px;
@@ -107,7 +107,7 @@ const ModalAddGroupCustomerStyles = styled.div`
         p {
           margin-bottom: 5px;
           font-size: 14px;
-          color: rgb(193, 32, 38);
+          color: rgb(24 183 135);
         }
       }
     }

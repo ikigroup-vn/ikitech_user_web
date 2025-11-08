@@ -122,7 +122,7 @@ class Table extends Component {
           </div>
         ) : (
           <>
-            <span style={{ color: "#C12026" }}>
+            <span style={{ color: "#c12026" }}>
               Chưa chọn đối tượng áp dụng
             </span>
           </>

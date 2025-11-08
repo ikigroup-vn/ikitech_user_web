@@ -578,7 +578,7 @@ class Sidebar extends Component {
                 alt="logo_image"
               />
             </div>
-            <div className="sidebar-brand-text">
+            {/* <div className="sidebar-brand-text">
               <img
                 width="80%"
                 src={
@@ -586,6 +586,14 @@ class Sidebar extends Component {
                     ? badges?.config_user_vip?.url_logo_image
                     : themeData().logo
                 }
+                className="img-responsive"
+                alt="logo_text"
+              />
+            </div> */}
+            <div className="sidebar-brand-text">
+              <img
+                width="80%"
+                src="https://fss.com.vn/uploaded/logo/logofss.png"
                 className="img-responsive"
                 alt="logo_text"
               />

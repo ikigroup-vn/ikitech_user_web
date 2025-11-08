@@ -187,6 +187,9 @@ import HistoryDetailQuizForCustomer from "./screens/Train/HistoryQuiz/historyDet
 import ReportProduct from "./screens/Report/report_product";
 import Expired from "./screens/Expired/index.js";
 import Community from "./screens/Community/index.js";
+import CarList from "./screens/CarList/index.js";
+import EmployeeList from "./screens/EmployeeList/index.js";
+import TripList from "./screens/TripList/index.js";
 
 const routes = [
   {
@@ -347,6 +350,28 @@ const routes = [
 
     main: ({ match }) => <Branch match={match} />,
   },
+
+  // Danh sách xe
+  {
+    path: "/carlist/index/:store_code",
+    exact: true,
+
+    main: ({ match }) => <CarList match={match} />,
+  },
+   // Danh sách nhân viên
+   {
+    path: "/employee/index/:store_code",
+    exact: true,
+
+    main: ({ match }) => <EmployeeList match={match} />,
+  },
+    // Danh sách chuyến đi
+    {
+      path: "/trip/index/:store_code",
+      exact: true,
+  
+      main: ({ match }) => <TripList match={match} />,
+    },
   {
     path: "/supplier/:store_code",
     exact: true,
