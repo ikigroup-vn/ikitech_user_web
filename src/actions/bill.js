@@ -326,6 +326,7 @@ function exportExcel(data) {
         "Giá bán",
         "Doanh thu",
         "Giảm giá",
+        "Giảm giá xu",
         "Thành tiền",
         "Phí vận chuyển",
         "Tổng thanh toán",
@@ -339,13 +340,14 @@ function exportExcel(data) {
       headers.forEach((header, index) => {
         sheet.cell(1, index + 1).value(header);
       });
-      sheet.range("A1:S1").style({ fill: "FFFFF0", bold: true });
+      sheet.range("A1:T1").style({ fill: "FFFFF0", bold: true });
 
       // Điền dữ liệu
       let currentRow = 2; // Bắt đầu từ dòng 2, sau tiêu đề
       let totalQuantityOverall = 0; // Tổng số lượng
       let totalRevenueOverall = 0; // Tổng doanh thu
       let totalDiscountOverall = 0; // Tổng doanh thu
+      let totalPointUsed = 0; // Tổng xu giảm giá
 
       data.forEach((order) => {
         const totalQuantity = order.items.reduce(
@@ -371,6 +373,7 @@ function exportExcel(data) {
         totalQuantityOverall += totalQuantity;
         totalRevenueOverall += totalDoanhThu;
         totalDiscountOverall += totalDiscount;
+        totalPointUsed += order.total_points_used;
         // Dòng đầu của mỗi nhóm (thông tin đơn hàng)
         sheet.cell(currentRow, 1).value(formatDate(order.created_at));
         sheet.cell(currentRow, 2).value(order.order_code);
@@ -386,31 +389,23 @@ function exportExcel(data) {
             .join(" ,") // Kết hợp các trường không null thành chuỗi
         );
 
-        sheet.cell(currentRow, 6).value(
-          [
-            order.branch?.address_detail,
-            order.branch?.wards_name,
-            order.branch?.district_name,
-            order.branch?.province_name,
-          ]
-            .filter((field) => field != null && field !== "") // Loại bỏ các giá trị null hoặc rỗng
-            .join(" ,")
-        );
+        sheet.cell(currentRow, 6).value('');
         sheet.cell(currentRow, 7).value(totalQuantity);
         sheet.cell(currentRow, 9).value(totalDoanhThu);
         sheet.cell(currentRow, 10).value(totalDiscount);
-        sheet.cell(currentRow, 11).value(totalFinal);
-        sheet.cell(currentRow, 12).value(order.total_shipping_fee);
-        sheet.cell(currentRow, 13).value(order.total_final);
+        sheet.cell(currentRow, 11).value(order.total_points_used);
+        sheet.cell(currentRow, 12).value(totalFinal);
+        sheet.cell(currentRow, 13).value(order.total_shipping_fee);
+        sheet.cell(currentRow, 14).value(order.total_final);
         sheet
-          .cell(currentRow, 14)
+          .cell(currentRow, 15)
           .value(checkStatusPayment(order.payment_status));
-        sheet.cell(currentRow, 15).value(checkStatusOrder(order.order_status));
-        sheet.cell(currentRow, 16).value(order.branch?.branch_code);
-        sheet.cell(currentRow, 17).value(order.voucher_discount_amount);
-        sheet.cell(currentRow, 18).value(order.discounts[0]?.name);
+        sheet.cell(currentRow, 16).value(checkStatusOrder(order.order_status));
+        sheet.cell(currentRow, 17).value(order.branch?.branch_code);
+        sheet.cell(currentRow, 18).value(order.voucher_discount_amount);
+        sheet.cell(currentRow, 19).value(order.discounts[0]?.name);
         sheet
-          .cell(currentRow, 19)
+          .cell(currentRow, 20)
           .value(handleGetPaymentMethodName(order.payment_method_id));
         // Tô màu nền cho dòng đầu tiên của nhóm
         sheet
@@ -427,7 +422,7 @@ function exportExcel(data) {
           sheet.cell(currentRow, 9).value(item.quantity * item.product?.price);
           sheet.cell(currentRow, 10).value(item.discount_price);
           sheet
-            .cell(currentRow, 11)
+            .cell(currentRow, 12)
             .value(item.quantity * item.product?.price - item.discount_price);
           currentRow++; // Tăng dòng sau khi thêm thông tin sản phẩm
         });
@@ -438,14 +433,15 @@ function exportExcel(data) {
       sheet.cell(currentRow, 7).value(totalQuantityOverall); // Tổng số lượng
       sheet.cell(currentRow, 9).value(totalRevenueOverall); // Tổng doanh thu
       sheet.cell(currentRow, 10).value(totalDiscountOverall); // Tổng doanh thu
+      sheet.cell(currentRow, 11).value(totalPointUsed); // Tổng xu giảm giá
 
       // Tô màu nền cho dòng tổng cộng
       sheet
-        .range(`A${currentRow}:S${currentRow}`)
+        .range(`A${currentRow}:T${currentRow}`)
         .style({ fill: "FAFAD2", bold: true });
 
       // Thiết lập viền đậm cho tất cả các ô có chứa dữ liệu, bao gồm dòng tổng cộng
-      sheet.range(`A1:S${currentRow}`).style({
+      sheet.range(`A1:T${currentRow}`).style({
         border: true, // Đặt viền cho tất cả các cạnh
         borderColor: "000000", // Màu đen
         borderStyle: "thin", // Độ dày viền
