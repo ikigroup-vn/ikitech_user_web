@@ -11,9 +11,8 @@ class ModalCreate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      
       isLoaded: false,
-     
+      txtStatus: "",
       txtNumber: "",
       txtType: "",
       txtSeat_count: "",
@@ -40,6 +39,12 @@ class ModalCreate extends Component {
         validWhen: false,
         message: "Số ghế không được để trống.",
       },
+      {
+        field: "txtStatus",
+        method: "isEmpty",
+        validWhen: false,
+        message: "Trạng thái không được để trống.",
+      },
     ];
     this.validator = new Validator(rules);
   }
@@ -59,12 +64,11 @@ class ModalCreate extends Component {
       [name]: value,
     });
   };
-  
+
   goBack = () => {
     var { history } = this.props;
     history.goBack();
   };
-
 
   componentWillReceiveProps(nextProps, nextState) {
     if (nextState.isLoaded === true) {
@@ -90,26 +94,21 @@ class ModalCreate extends Component {
         txtNumber: "",
         txtType: "",
         txtSeat_count: "",
+        txtStatus: "",
         ...this.listErrors(),
       });
       this.props.resetModal();
     }
   }
   handleOnClick = () => {
-
     const errors = this.validator.validate(this.state);
 
-    var {
-      txtNumber,
-      txtType,
-      txtSeat_count
-    } = this.state;
+    var { txtNumber, txtType, txtSeat_count, txtStatus } = this.state;
 
     var error = false;
     this.setState({
       errors: errors,
     });
-    console.log('errors=====',errors);
     if (Object.keys(errors).length > 0) {
       error = true;
     }
@@ -120,25 +119,19 @@ class ModalCreate extends Component {
     const Formdata = {
       number: txtNumber,
       type: txtType,
-      seat_count: txtSeat_count
+      seat_count: txtSeat_count,
+      status: txtStatus,
     };
 
     this.props.createCar(store_code, Formdata, this, function () {
       window.$(".modal").modal("hide");
     });
   };
-  
+
   render() {
     var { province } = this.props;
-    var {
-      errors,
-      error_name,
-    } = this.state;
-    var {
-      txtNumber,
-      txtType,
-      txtSeat_count
-    } = this.state;
+    var { errors, error_name } = this.state;
+    var { txtNumber, txtType, txtSeat_count, txtStatus } = this.state;
     return (
       <>
         {this.state.status && (
@@ -164,9 +157,7 @@ class ModalCreate extends Component {
                   backgroundColor: themeData().backgroundColor,
                 }}
               >
-                <h4 style={{ color: "white", margin: "10px" }}>
-                  Thêm xe
-                </h4>
+                <h4 style={{ color: "white", margin: "10px" }}>Thêm xe</h4>
                 <button type="button" class="close" data-dismiss="modal">
                   &times;
                 </button>
@@ -204,7 +195,6 @@ class ModalCreate extends Component {
                               {error_name.text}
                             </div>
                           )}
-                        
                         </div>
                         <div class="form-group">
                           <label for="product_name">Loại xe</label>
@@ -218,7 +208,7 @@ class ModalCreate extends Component {
                             onChange={this.onChange}
                             name="txtType"
                           />
-                           {errors.txtType && (
+                          {errors.txtType && (
                             <div
                               className="validation"
                               style={{ display: "block" }}
@@ -226,7 +216,6 @@ class ModalCreate extends Component {
                               {errors.txtType}
                             </div>
                           )}
-                         
                         </div>
 
                         <div class="form-group">
@@ -250,11 +239,29 @@ class ModalCreate extends Component {
                             </div>
                           )}
                         </div>
-                       
-
-                       
+                        <div class="form-group">
+                          <label>Trạng thái hoạt động</label>
+                          <select
+                            class="form-control"
+                            id="txtStatus"
+                            name="txtStatus"
+                            value={txtStatus || ""}
+                            onChange={this.onChange}
+                          >
+                            <option value="">-- Chọn trạng thái --</option>
+                            <option value="1">Đang hoạt động</option>
+                            <option value="2">Ngừng hoạt động</option>
+                          </select>
+                          {errors.txtStatus && (
+                            <div
+                              className="validation"
+                              style={{ display: "block" }}
+                            >
+                              {errors.txtStatus}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                     
                     </div>
                   </form>
                 </React.Fragment>

@@ -15,7 +15,7 @@ class ModalDelete extends Component {
         window.$('.modal').modal('hide');
         var id = this.props.id_branch;
         var { store_code } = this.props
-        this.props.deleteTrip(store_code,id);
+        this.props.deleteCustomer(store_code,id);
     };
    
     render() {
@@ -53,7 +53,7 @@ class ModalDelete extends Component {
                             <div class="modal-body">
                                 <input type="hidden" name="remove_id_store" />
                                 <div class="alert-remove"></div>
-                                Bạn có muốn xóa chuyến đi này không?
+                                Bạn có muốn xóa khách hàng này không?
                             </div>
                             <div class="modal-footer">
                                 <button
@@ -77,8 +77,8 @@ class ModalDelete extends Component {
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        deleteTrip: (store_code, id) => {
-            dispatch(dashboardAction.deleteTrip(store_code, id))
+        deleteCustomer: (store_code, id) => {
+            dispatch(dashboardAction.deleteCustomer(store_code, id))
         }
     };
 };

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import * as tripListAction from "../../actions/dashboard";
+import * as customerListAction from "../../actions/dashboard";
 import { insertParam } from "../../ultis/helpers";
 class Pagination extends Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class Pagination extends Component {
       this.props;
     insertParam({ page: page });
     setPage(page);
-    this.props.fetchTripList(
+    this.props.fetchCustomerList(
       this.props.store_code,
       page,
       getParams(searchValue, numPage, statusRequest)
@@ -68,7 +68,7 @@ class Pagination extends Component {
     return (
       <nav aria-label="Page navigation" className="float-pagination">
         <ul class="pagination  tab-pagination pg-blue">
-          {this.showData(this.props.tripList.links)} 
+          {this.showData(this.props.customerList.links)} 
         </ul>
       </nav>
     );
@@ -77,9 +77,9 @@ class Pagination extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchTripList: (store_code, page, params) => {
+    fetchCustomerList: (store_code, page, params) => {
       dispatch(
-        tripListAction.fetchTripList(store_code, page, params)
+        customerListAction.fetchCustomerList(store_code, page, params)
       );
     },
   };

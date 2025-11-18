@@ -58,9 +58,8 @@ class CarList extends Component {
     const { page, searchValue, numPage, statusRequest } = this.state;
     const params = this.getParams(searchValue, numPage, statusRequest);
     var { store_code } = this.props.match.params;
-    this.props.fetchCarList(store_code,page,params);
+    this.props.fetchCarList(store_code, page, params);
     this.props.fetchPlaceProvince();
-
   }
 
   getParams = (searchValue, limit = 20, statusRequest = "") => {
@@ -93,10 +92,15 @@ class CarList extends Component {
         return (
           <tr className="hover-product">
             <td>{index + 1}</td>
-        
+
             <td>{data.number}</td>
             <td>{data.type}</td>
             <td>{data.seat_count}</td>
+            {data.status == "1" ? (
+              <td style={{ color: "rgb(17 168 62)" }}>Đang Hoạt động</td>
+            ) : (
+              <td style={{ color: "red" }}>Ngừng hoạt động</td>
+            )}
             <td>
               <button
                 onClick={() => this.handleSetInfor(data)}
@@ -127,7 +131,16 @@ class CarList extends Component {
   render() {
     var { store_code } = this.props.match.params;
     var carlist = this.props.carlist ? this.props.carlist : [];
-    var { id_branch, modal, openModal, isShow,statusRequest,searchValue, page, numPage } = this.state;
+    var {
+      id_branch,
+      modal,
+      openModal,
+      isShow,
+      statusRequest,
+      searchValue,
+      page,
+      numPage,
+    } = this.state;
     var { wards, district, province, name } = this.props;
     return (
       <div id="wrapper">
@@ -177,36 +190,36 @@ class CarList extends Component {
                   <br></br>
                   <div className="card">
                     <div className="card-body">
-                        <div class="table-responsive">
-                          <table
-                            class="table  "
-                            id="dataTable"
-                            width="100%"
-                            cellspacing="0"
-                          >
-                            <thead>
-                              <tr>
-                                <th>STT</th>
-                                <th>Biển số</th>
-                                <th>Loại xe</th>
-                                <th>Số ghế</th>
-                                <th>Hành động</th>
-                              </tr>
-                            </thead>
+                      <div class="table-responsive">
+                        <table
+                          class="table  "
+                          id="dataTable"
+                          width="100%"
+                          cellspacing="0"
+                        >
+                          <thead>
+                            <tr>
+                              <th>STT</th>
+                              <th>Biển số</th>
+                              <th>Loại xe</th>
+                              <th>Số ghế</th>
+                              <th>Trạng thái</th>
+                              <th>Hành động</th>
+                            </tr>
+                          </thead>
 
-                            <tbody>{this.showData(carlist.data)}</tbody>
-                          </table>
-                        </div>
-                        <Pagination
-              statusRequest={statusRequest}
-              searchValue={searchValue}
-              numPage={numPage}
-              getParams={this.getParams}
-              store_code={store_code}
-              carlist={carlist}
-              setPage={this.setPage}
-            />
-                      
+                          <tbody>{this.showData(carlist.data)}</tbody>
+                        </table>
+                      </div>
+                      <Pagination
+                        statusRequest={statusRequest}
+                        searchValue={searchValue}
+                        numPage={numPage}
+                        getParams={this.getParams}
+                        store_code={store_code}
+                        carlist={carlist}
+                        setPage={this.setPage}
+                      />
                     </div>
                   </div>
                 </div>
@@ -226,10 +239,7 @@ class CarList extends Component {
             resetModal={this.resetModal}
             store_code={store_code}
           />
-          <ModalEdit
-            store_code={store_code}
-            modal={modal}
-          />
+          <ModalEdit store_code={store_code} modal={modal} />
         </div>
       </div>
     );
@@ -251,8 +261,8 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchPlaceProvince: () => {
       dispatch(placeAction.fetchPlaceProvince());
     },
-    fetchCarList: (store_code,page,params) => {
-      dispatch(dashboardAction.fetchCarlist(store_code,page,params));
+    fetchCarList: (store_code, page, params) => {
+      dispatch(dashboardAction.fetchCarlist(store_code, page, params));
     },
   };
 };

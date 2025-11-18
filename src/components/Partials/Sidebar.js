@@ -286,7 +286,8 @@ class Sidebar extends Component {
                         className={`collapse-item  ${active} ${
                           _class[link.class] == true ||
                           typeof link.class == "undefined" ||
-                          link.class == null || link.display == "show"
+                          link.class == null ||
+                          link.display == "show"
                             ? "show"
                             : "hide"
                         }`}
@@ -426,8 +427,11 @@ class Sidebar extends Component {
                     to={link.to + "/" + this.props.store_code}
                     style={{ padding: "0.75rem" }}
                   >
-                    <i className={`fas fa-fw ${link.icon} `}></i>
-                    <span>{link.name}</span>
+                    <i
+                      style={{ color: "black" }}
+                      className={`fas fa-fw ${link.icon} `}
+                    ></i>
+                    <span style={{ color: "black" }}>{link.name}</span>
                   </Link>
                 </li>
               );
@@ -550,18 +554,18 @@ class Sidebar extends Component {
   render() {
     var { badges, stores, permission } = this.props;
     return (
-      <div className="col-2 col-2-nav">
+      <div style={{ backgroundColor: "black" }} className="col-2 col-2-nav">
         <ul
           className="navbar-nav navbar-main sidebar sidebar-dark accordion"
           style={{
             overflowX: "hidden",
-            backgroundColor: themeData().backgroundColor,
+            backgroundColor: "rgb(230 230 230)",
           }}
           id="accordionSidebar"
         >
           <Link
             className="sidebar-brand d-flex align-items-center justify-content-center"
-            to={`/dashboard/${this.props.store_code}`}
+            to={`/trip/index/${this.props.store_code}`}
           >
             {/* <div className="sidebar-brand-icon rotate-n-15">
             <i className="fas fa-laugh-wink"></i>
@@ -578,7 +582,7 @@ class Sidebar extends Component {
                 alt="logo_image"
               />
             </div>
-            {/* <div className="sidebar-brand-text">
+            <div className="sidebar-brand-text">
               <img
                 width="80%"
                 src={
@@ -589,24 +593,24 @@ class Sidebar extends Component {
                 className="img-responsive"
                 alt="logo_text"
               />
-            </div> */}
-            <div className="sidebar-brand-text">
+            </div>
+            {/* <div className="sidebar-brand-text">
               <img
                 width="80%"
                 src="https://fss.com.vn/uploaded/logo/logofss.png"
                 className="img-responsive"
                 alt="logo_text"
               />
-            </div>
+            </div> */}
           </Link>
           {stores?.length > 0 && this.showMenus(menu)}
 
-          <div className="text-center d-none d-md-inline">
+          {/* <div className="text-center d-none d-md-inline">
             <button
               className="rounded-circle border-0"
               id="sidebarToggle"
             ></button>
-          </div>
+          </div> */}
         </ul>
       </div>
     );

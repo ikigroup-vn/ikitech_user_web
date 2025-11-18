@@ -7,15 +7,14 @@ import { isEmail, isEmpty, isPhone } from "../../ultis/helpers";
 import Validator from "../../ultis/validator";
 import themeData from "../../ultis/theme_data";
 
-class ModalCreate extends Component {
+class ModalEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoaded: false,
-      txtStatus: "",
+      txtNote: "",
       txtUserName: "",
       txtPhone: "",
-      txtRule: "",
       errors: {},
       error_name: { status: false, text: "" },
     };
@@ -31,18 +30,6 @@ class ModalCreate extends Component {
         method: "isEmpty",
         validWhen: false,
         message: "Số điện thoại không được để trống.",
-      },
-      {
-        field: "txtRule",
-        method: "isEmpty",
-        validWhen: false,
-        message: "Vai trò không được để trống.",
-      },
-      {
-        field: "txtStatus",
-        method: "isEmpty",
-        validWhen: false,
-        message: "Trạng thái không được để trống.",
       },
     ];
     this.validator = new Validator(rules);
@@ -69,23 +56,20 @@ class ModalCreate extends Component {
   };
 
   componentWillReceiveProps(nextProps, nextState) {
-    if (nextProps.openModal == true) {
+    if (!shallowEqual(nextProps.modal, this.props.modal)) {
       this.setState({
-        isLoaded: false,
-        txtUserName: "",
-        txtPhone: "",
-        txtRule: "",
-        txtStatus: "",
-        ...this.listErrors(),
+        id: nextProps.modal.id,
+        txtUserName: nextProps.modal.username,
+        txtPhone: nextProps.modal.phone,
+        txtNote: nextProps.modal.note,
       });
-      this.props.resetModal();
     }
   }
   handleOnClick = () => {
     const errors = this.validator.validate(this.state);
 
-    var { txtUserName, txtPhone, txtRule, txtStatus } = this.state;
-
+    var { txtUserName, txtPhone, txtNote } = this.state;
+    const { store_code } = this.props;
     var error = false;
     this.setState({
       errors: errors,
@@ -96,23 +80,27 @@ class ModalCreate extends Component {
 
     if (error == true) return;
 
-    const { store_code } = this.props;
     const Formdata = {
       username: txtUserName,
       phone: txtPhone,
-      rule: txtRule,
-      status: txtStatus,
+      note: txtNote,
     };
 
-    this.props.createEmployee(store_code, Formdata, this, function () {
-      window.$(".modal").modal("hide");
-    });
+    this.props.updateCustomer(
+      store_code,
+      Formdata,
+      this.state.id,
+      this,
+      function () {
+        window.$(".modal").modal("hide");
+      }
+    );
   };
 
   render() {
     var { province } = this.props;
     var { errors, error_name } = this.state;
-    var { txtUserName, txtPhone, txtRule, txtStatus } = this.state;
+    var { txtUserName, txtPhone, txtNote } = this.state;
     return (
       <>
         {this.state.status && (
@@ -123,11 +111,11 @@ class ModalCreate extends Component {
             <a href="#" class="close" data-dismiss="alert" aria-label="close">
               &times;
             </a>
-            <strong>Chưa nhập đủ thông tin nhân viên</strong>
+            <strong>Chưa nhập đủ thông tin khách hàng</strong>
           </div>
         )}
 
-        <div class="modal" id="modalAddress">
+        <div class="modal" id="modalEdit">
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
               <div
@@ -139,7 +127,7 @@ class ModalCreate extends Component {
                 }}
               >
                 <h4 style={{ color: "white", margin: "10px" }}>
-                  Thêm nhân viên
+                  Chỉnh sửa khách hàng
                 </h4>
                 <button type="button" class="close" data-dismiss="modal">
                   &times;
@@ -156,7 +144,7 @@ class ModalCreate extends Component {
                             type="text"
                             class="form-control"
                             id="txtUserName"
-                            placeholder="Nhập họ tên nhân viên"
+                            placeholder="Nhập họ tên khách hàng"
                             autoComplete="off"
                             value={txtUserName || ""}
                             onChange={this.onChange}
@@ -201,48 +189,17 @@ class ModalCreate extends Component {
                           )}
                         </div>
                         <div class="form-group">
-                          <label for="product_name">Vai trò</label>
-                          <select
+                          <label for="product_name">Ghi chú</label>
+                          <textarea
                             class="form-control"
-                            id="txtRule"
-                            name="txtRule"
-                            value={txtRule || ""}
+                            id="txtNote"
+                            placeholder="Nhập ghi chú"
+                            autoComplete="off"
+                            value={txtNote || ""}
                             onChange={this.onChange}
-                          >
-                            <option value="">-- Chọn vai trò --</option>
-                            <option value="1">Tài xế</option>
-                            <option value="2">Phụ xe</option>
-                          </select>
-                          {errors.txtRule && (
-                            <div
-                              className="validation"
-                              style={{ display: "block" }}
-                            >
-                              {errors.txtRule}
-                            </div>
-                          )}
-                        </div>
-                        <div class="form-group">
-                          <label>Trạng thái làm việc</label>
-                          <select
-                            class="form-control"
-                            id="txtStatus"
-                            name="txtStatus"
-                            value={txtStatus || ""}
-                            onChange={this.onChange}
-                          >
-                            <option value="">-- Chọn trạng thái --</option>
-                            <option value="1">Đang làm</option>
-                            <option value="2">Đã nghỉ</option>
-                          </select>
-                          {errors.txtStatus && (
-                            <div
-                              className="validation"
-                              style={{ display: "block" }}
-                            >
-                              {errors.txtStatus}
-                            </div>
-                          )}
+                            name="txtNote"
+                            rows="3"
+                          />
                         </div>
                       </div>
                     </div>
@@ -262,7 +219,7 @@ class ModalCreate extends Component {
                   onClick={this.handleOnClick}
                   class="btn btn-warning"
                 >
-                  Tạo
+                  Cập nhật
                 </button>
               </div>
             </div>
@@ -274,10 +231,12 @@ class ModalCreate extends Component {
 }
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    createEmployee: (id, form, $this, funcModal) => {
-      dispatch(dashboardAction.createEmployee(id, form, $this, funcModal));
+    updateCustomer: (store_code, form, id, $this, funcModal) => {
+      dispatch(
+        dashboardAction.updateCustomer(store_code, form, id, $this, funcModal)
+      );
     },
   };
 };
 
-export default connect(null, mapDispatchToProps)(ModalCreate);
+export default connect(null, mapDispatchToProps)(ModalEdit);

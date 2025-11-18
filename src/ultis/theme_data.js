@@ -18,12 +18,12 @@ const ikitechTheme = {
   backgroundColor: "#c12026",
   modalNoti: "#E56F25",
   buttonYes: "#F7C23E",
-  logoTab: "/images/logo/ikitech_logo_tab.png",
+  logoTab: "https://xethaiduong.com/xekhachs_files/logo.png",
   // logo: "/images/logo/ikitech_logo.jpg",
   // logoLogin: "/images/logo/ikitech_login.jpg",
   logo: "/images/logo/ikitech_logo.jpg",
   logoLogin: "/images/logo/ikitech_login.jpg",
-  favicon: "/images/logo/ikitech_favicon.png",
+  favicon: "https://xethaiduong.com/xekhachs_files/logo.png",
 };
 
 export default function themeData() {

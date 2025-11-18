@@ -243,44 +243,30 @@ export const updateBranchStore = (store_code, data, id) => {
 };
 
 // Thêm sửa xóa Danh sách xe
-export const fetchCarlist = (
-  store_code,
-  page = 1,
-  params
-) => {
+export const fetchCarlist = (store_code, page = 1, params) => {
   if (params)
     return callApi(
       `/store/${store_code}/cars?page=${page}${params}`,
       "get",
       null
     );
-  else
-    return callApi(
-      `/store/${store_code}/cars?page=${page}`,
-      "get",
-      null
-    );
+  else return callApi(`/store/${store_code}/cars?page=${page}`, "get", null);
 };
 
 export const createCar = (store_code, data) => {
   return callApi(`/store/${store_code}/cars`, "post", data);
 };
 
-export const updateCar = (store_code,data, id) => {
+export const updateCar = (store_code, data, id) => {
   return callApi(`/store/${store_code}/cars/${id}`, "put", data);
 };
 
-export const deleteCar = (store_code,id) => {
+export const deleteCar = (store_code, id) => {
   return callApi(`/store/${store_code}/cars/${id}`, "delete", null);
 };
 
-
 // Thêm sửa xóa Danh sách nhân viên
-export const fetchEmployeeList = (
-  store_code,
-  page = 1,
-  params
-) => {
+export const fetchEmployeeList = (store_code, page = 1, params) => {
   if (params)
     return callApi(
       `/store/${store_code}/employees?page=${page}${params}`,
@@ -288,58 +274,74 @@ export const fetchEmployeeList = (
       null
     );
   else
-    return callApi(
-      `/store/${store_code}/employees?page=${page}`,
-      "get",
-      null
-    );
+    return callApi(`/store/${store_code}/employees?page=${page}`, "get", null);
 };
 
 export const createEmployee = (store_code, data) => {
   return callApi(`/store/${store_code}/employees`, "post", data);
 };
 
-export const updateEmployee= (store_code,data, id) => {
+export const updateEmployee = (store_code, data, id) => {
   return callApi(`/store/${store_code}/employees/${id}`, "put", data);
 };
 
-export const deleteEmployee = (store_code,id) => {
+export const deleteEmployee = (store_code, id) => {
   return callApi(`/store/${store_code}/employees/${id}`, "delete", null);
 };
 
-// Thêm sửa xóa Danh sách nhân viên
-export const fetchTripList = (
-  store_code,
-  page = 1,
-  params
-) => {
+// Thêm sửa xóa Danh sách khách hàng
+export const fetchCustomerList = (store_code, page = 1, params) => {
+  if (params)
+    return callApi(
+      `/store/${store_code}/customers2?page=${page}${params}`,
+      "get",
+      null
+    );
+  else
+    return callApi(`/store/${store_code}/customers2?page=${page}`, "get", null);
+};
+
+export const createCustomer = (store_code, data) => {
+  return callApi(`/store/${store_code}/customers2`, "post", data);
+};
+
+export const updateCustomer = (store_code, data, id) => {
+  return callApi(`/store/${store_code}/customers2/${id}`, "put", data);
+};
+
+export const deleteCustomer = (store_code, id) => {
+  return callApi(`/store/${store_code}/customers2/${id}`, "delete", null);
+};
+
+// Thêm sửa xóa Danh sách chuyến xe
+export const fetchTripList = (store_code, page = 1, params) => {
   if (params)
     return callApi(
       `/store/${store_code}/trips?page=${page}${params}`,
       "get",
       null
     );
-  else
-    return callApi(
-      `/store/${store_code}/trips?page=${page}`,
-      "get",
-      null
-    );
+  else return callApi(`/store/${store_code}/trips?page=${page}`, "get", null);
+};
+
+export const fetchTripDetail = (store_code, id) => {
+  return callApi(`/store/${store_code}/trips/${id}`, "get", null);
 };
 
 export const createTrip = (store_code, data) => {
   return callApi(`/store/${store_code}/trips`, "post", data);
 };
 
-export const updateTrip= (store_code,data, id) => {
+export const updateTrip = (store_code, data, id) => {
   return callApi(`/store/${store_code}/trips/${id}`, "put", data);
 };
-
-export const deleteTrip = (store_code,id) => {
-  return callApi(`/store/${store_code}/trips/${id}`, "delete", null);
+export const updateTripStatus = (store_code, data) => {
+  return callApi(`/store/${store_code}/trips`, "put", data);
 };
 
-
+export const deleteTrip = (store_code, id) => {
+  return callApi(`/store/${store_code}/trips/${id}`, "delete", null);
+};
 
 export const fetchAllAgencyRegisterRequests = (
   store_code,

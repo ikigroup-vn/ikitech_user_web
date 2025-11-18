@@ -7,15 +7,14 @@ import Footer from "../../components/Partials/Footer";
 import * as Types from "../../constants/ActionType";
 import * as dashboardAction from "../../actions/dashboard";
 import { connect } from "react-redux";
-import ModalDelete from "../../components/EmployeeList/ModalDelete";
-import ModalView from "../../components/EmployeeList/ModalView";
-import ModalCreate from "../../components/EmployeeList/ModalCreate";
-import Pagination from "../../components/EmployeeList/Pagination";
+import ModalDelete from "../../components/CustomerList/ModalDelete";
+import ModalCreate from "../../components/CustomerList/ModalCreate";
+import ModalView from "../../components/CustomerList/ModalView";
+import Pagination from "../../components/CustomerList/Pagination";
 import * as placeAction from "../../actions/place";
-import ModalEdit from "../../components/EmployeeList/ModalEdit";
+import ModalEdit from "../../components/CustomerList/ModalEdit";
 import { getQueryParams } from "../../ultis/helpers";
 import styled from "styled-components";
-
 const TableStyles = styled.div`
   .select-role {
     &:hover {
@@ -28,7 +27,7 @@ const TableStyles = styled.div`
     }
   }
 `;
-class EmployeeList extends Component {
+class CustomerList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -72,7 +71,7 @@ class EmployeeList extends Component {
     const { page, searchValue, numPage, statusRequest } = this.state;
     const params = this.getParams(searchValue, numPage, statusRequest);
     var { store_code } = this.props.match.params;
-    this.props.fetchEmployeeList(store_code, page, params);
+    this.props.fetchCustomerList(store_code, page, params);
   }
 
   getParams = (searchValue, limit = 20, statusRequest = "") => {
@@ -89,13 +88,13 @@ class EmployeeList extends Component {
     this.setState({ page });
   };
 
-  showData = (employeeList) => {
+  showData = (customerList) => {
     var { store_code } = this.props;
     var result = null;
-    if (employeeList?.length > 0) {
+    if (customerList?.length > 0) {
       var { update, _delete } = this.props;
 
-      result = employeeList.map((data, index) => {
+      result = customerList.map((data, index) => {
         var decentralization =
           typeof data.decentralization != "undefined" &&
           data.decentralization != null
@@ -108,19 +107,16 @@ class EmployeeList extends Component {
             <td
               className="primary name_customer_hover"
               data-toggle="modal"
-              data-target="#modalViewEmployee"
+              data-target="#modalViewCustomer"
               onClick={() => this.handleSetInfor(data)}
             >
               {data.username}
             </td>
 
             <td>{data.phone}</td>
-            {data.rule == "1" ? <td>Tài xế</td> : <td>Phụ xe</td>}
-            {data.status == "1" ? (
-              <td style={{ color: "rgb(17 168 62)" }}>Đang làm</td>
-            ) : (
-              <td style={{ color: "red" }}>Đã nghỉ</td>
-            )}
+            <td>{data.total_tickets_purchased}</td>
+            <td>{data.note}</td>
+
             <td>
               <button
                 onClick={() => this.handleSetInfor(data)}
@@ -155,15 +151,11 @@ class EmployeeList extends Component {
     e.preventDefault();
     const { page, searchValue, numPage, statusRequest } = this.state;
     var { store_code } = this.props.match.params;
-    this.props.fetchEmployeeList(
-      store_code,
-      page,
-      `&phone=${searchValue}&limit=20`
-    );
+    this.props.fetchCustomerList(store_code, page, `&phone=${searchValue}`);
   };
   render() {
     var { store_code } = this.props.match.params;
-    var employeeList = this.props.employeeList ? this.props.employeeList : [];
+    var customerList = this.props.customerList ? this.props.customerList : [];
     var {
       id_branch,
       modal,
@@ -200,7 +192,7 @@ class EmployeeList extends Component {
                       }}
                     >
                       <h4 class="h4 title_content mb-0 text-gray-800">
-                        Danh sách nhân viên
+                        Danh sách khách hàng
                       </h4>
 
                       <a
@@ -219,7 +211,7 @@ class EmployeeList extends Component {
                           <i class="fas fa-plus"></i>
                         </span>
                         <span style={{ color: "white" }} class={`text `}>
-                          Thêm nhân viên
+                          Thêm khách hàng
                         </span>
                       </a>
                     </div>
@@ -256,6 +248,7 @@ class EmployeeList extends Component {
                           </div>
                         </div>
                       </form>
+
                       <div className="card-body">
                         <div class="table-responsive">
                           <table
@@ -269,13 +262,13 @@ class EmployeeList extends Component {
                                 <th>STT</th>
                                 <th>Họ và tên</th>
                                 <th>Số điện thoại</th>
-                                <th>Vai trò</th>
-                                <th>Trạng thái</th>
+                                <th>Tổng số vé</th>
+                                <th>Ghi chú</th>
                                 <th>Hành động</th>
                               </tr>
                             </thead>
 
-                            <tbody>{this.showData(employeeList.data)}</tbody>
+                            <tbody>{this.showData(customerList.data)}</tbody>
                           </table>
                         </div>
                         <Pagination
@@ -284,7 +277,7 @@ class EmployeeList extends Component {
                           numPage={numPage}
                           getParams={this.getParams}
                           store_code={store_code}
-                          employeeList={employeeList}
+                          customerList={customerList}
                           setPage={this.setPage}
                         />
                       </div>
@@ -318,7 +311,7 @@ class EmployeeList extends Component {
 const mapStateToProps = (state) => {
   return {
     branchStore: state.storeReducers.store.branchStore,
-    employeeList: state.storeReducers.store.employeeList,
+    customerList: state.storeReducers.store.customerList,
     wards: state.placeReducers.wards,
     district: state.placeReducers.district,
     permission: state.authReducers.permission.data,
@@ -326,10 +319,10 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchEmployeeList: (store_code, page, params) => {
-      dispatch(dashboardAction.fetchEmployeeList(store_code, page, params));
+    fetchCustomerList: (store_code, page, params) => {
+      dispatch(dashboardAction.fetchCustomerList(store_code, page, params));
     },
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EmployeeList);
+export default connect(mapStateToProps, mapDispatchToProps)(CustomerList);

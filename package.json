@@ -62,7 +62,7 @@
     "react-resize-panel": "^0.3.5",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^4.0.3",
-    "react-select": "^5.7.2",
+    "react-select": "^4.3.1",
     "react-select-async-paginate": "^0.6.1",
     "react-shallow-compare": "^1.0.3",
     "react-slick": "^0.28.1",
@@ -82,6 +82,7 @@
     "version": "^0.1.2",
     "web-vitals": "^1.1.2",
     "xlsx": "^0.17.2",
+    "xlsx-js-style": "^1.2.0",
     "xlsx-populate": "^1.21.0"
   },
   "scripts": {

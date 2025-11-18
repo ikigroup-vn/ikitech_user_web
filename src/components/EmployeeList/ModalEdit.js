@@ -11,9 +11,8 @@ class ModalEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      
       isLoaded: false,
-     
+      txtStatus: "",
       txtUserName: "",
       txtPhone: "",
       txtRule: "",
@@ -39,6 +38,12 @@ class ModalEdit extends Component {
         validWhen: false,
         message: "Vai trò không được để trống.",
       },
+      {
+        field: "txtStatus",
+        method: "isEmpty",
+        validWhen: false,
+        message: "Trạng thái không được để trống.",
+      },
     ];
     this.validator = new Validator(rules);
   }
@@ -57,12 +62,11 @@ class ModalEdit extends Component {
       [name]: value,
     });
   };
-  
+
   goBack = () => {
     var { history } = this.props;
     history.goBack();
   };
-
 
   componentWillReceiveProps(nextProps, nextState) {
     if (!shallowEqual(nextProps.modal, this.props.modal)) {
@@ -71,19 +75,14 @@ class ModalEdit extends Component {
         txtUserName: nextProps.modal.username,
         txtPhone: nextProps.modal.phone,
         txtRule: nextProps.modal.rule,
+        txtStatus: nextProps.modal.status,
       });
     }
-
   }
   handleOnClick = () => {
-
     const errors = this.validator.validate(this.state);
 
-    var {
-      txtUserName,
-      txtPhone,
-      txtRule,
-    } = this.state;
+    var { txtUserName, txtPhone, txtRule, txtStatus } = this.state;
     const { store_code } = this.props;
     var error = false;
     this.setState({
@@ -95,13 +94,12 @@ class ModalEdit extends Component {
 
     if (error == true) return;
 
-
     const Formdata = {
       username: txtUserName,
-      phone   :txtPhone,
-      rule    :txtRule,
+      phone: txtPhone,
+      rule: txtRule,
+      status: txtStatus,
     };
-    
 
     this.props.upadateEmployee(
       store_code,
@@ -109,22 +107,15 @@ class ModalEdit extends Component {
       this.state.id,
       this,
       function () {
-      window.$(".modal").modal("hide");
+        window.$(".modal").modal("hide");
       }
     );
   };
-  
+
   render() {
     var { province } = this.props;
-    var {
-      errors,
-      error_name,
-    } = this.state;
-    var {
-      txtUserName,
-      txtPhone,
-      txtRule,
-    } = this.state;
+    var { errors, error_name } = this.state;
+    var { txtUserName, txtPhone, txtRule, txtStatus } = this.state;
     return (
       <>
         {this.state.status && (
@@ -182,7 +173,6 @@ class ModalEdit extends Component {
                               {errors.txtUserName}
                             </div>
                           )}
-                        
                         </div>
                         <div class="form-group">
                           <label for="product_name">Số điện thoại</label>
@@ -212,7 +202,6 @@ class ModalEdit extends Component {
                               {error_name.text}
                             </div>
                           )}
-                        
                         </div>
                         <div class="form-group">
                           <label for="product_name">Vai trò</label>
@@ -235,10 +224,30 @@ class ModalEdit extends Component {
                               {errors.txtRule}
                             </div>
                           )}
-                        
+                        </div>
+                        <div class="form-group">
+                          <label>Trạng thái làm việc</label>
+                          <select
+                            class="form-control"
+                            id="txtStatus"
+                            name="txtStatus"
+                            value={txtStatus || ""}
+                            onChange={this.onChange}
+                          >
+                            <option value="">-- Chọn trạng thái --</option>
+                            <option value="1">Đang làm</option>
+                            <option value="2">Đã nghỉ</option>
+                          </select>
+                          {errors.txtStatus && (
+                            <div
+                              className="validation"
+                              style={{ display: "block" }}
+                            >
+                              {errors.txtStatus}
+                            </div>
+                          )}
                         </div>
                       </div>
-                     
                     </div>
                   </form>
                 </React.Fragment>
@@ -269,7 +278,9 @@ class ModalEdit extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     upadateEmployee: (store_code, form, id, $this, funcModal) => {
-      dispatch(dashboardAction.updateEmployee(store_code, form, id, $this, funcModal));
+      dispatch(
+        dashboardAction.updateEmployee(store_code, form, id, $this, funcModal)
+      );
     },
   };
 };

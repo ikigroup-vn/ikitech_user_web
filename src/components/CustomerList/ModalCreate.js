@@ -12,10 +12,10 @@ class ModalCreate extends Component {
     super(props);
     this.state = {
       isLoaded: false,
-      txtStatus: "",
+
       txtUserName: "",
       txtPhone: "",
-      txtRule: "",
+      txtNote: "",
       errors: {},
       error_name: { status: false, text: "" },
     };
@@ -31,18 +31,6 @@ class ModalCreate extends Component {
         method: "isEmpty",
         validWhen: false,
         message: "Số điện thoại không được để trống.",
-      },
-      {
-        field: "txtRule",
-        method: "isEmpty",
-        validWhen: false,
-        message: "Vai trò không được để trống.",
-      },
-      {
-        field: "txtStatus",
-        method: "isEmpty",
-        validWhen: false,
-        message: "Trạng thái không được để trống.",
       },
     ];
     this.validator = new Validator(rules);
@@ -74,8 +62,8 @@ class ModalCreate extends Component {
         isLoaded: false,
         txtUserName: "",
         txtPhone: "",
-        txtRule: "",
-        txtStatus: "",
+
+        txtNote: "",
         ...this.listErrors(),
       });
       this.props.resetModal();
@@ -84,7 +72,7 @@ class ModalCreate extends Component {
   handleOnClick = () => {
     const errors = this.validator.validate(this.state);
 
-    var { txtUserName, txtPhone, txtRule, txtStatus } = this.state;
+    var { txtUserName, txtPhone, txtNote } = this.state;
 
     var error = false;
     this.setState({
@@ -100,11 +88,11 @@ class ModalCreate extends Component {
     const Formdata = {
       username: txtUserName,
       phone: txtPhone,
-      rule: txtRule,
-      status: txtStatus,
+
+      note: txtNote,
     };
 
-    this.props.createEmployee(store_code, Formdata, this, function () {
+    this.props.createCustomer(store_code, Formdata, this, function () {
       window.$(".modal").modal("hide");
     });
   };
@@ -112,7 +100,7 @@ class ModalCreate extends Component {
   render() {
     var { province } = this.props;
     var { errors, error_name } = this.state;
-    var { txtUserName, txtPhone, txtRule, txtStatus } = this.state;
+    var { txtUserName, txtPhone, txtNote } = this.state;
     return (
       <>
         {this.state.status && (
@@ -123,7 +111,7 @@ class ModalCreate extends Component {
             <a href="#" class="close" data-dismiss="alert" aria-label="close">
               &times;
             </a>
-            <strong>Chưa nhập đủ thông tin nhân viên</strong>
+            <strong>Chưa nhập đủ thông tin khách hàng</strong>
           </div>
         )}
 
@@ -139,7 +127,7 @@ class ModalCreate extends Component {
                 }}
               >
                 <h4 style={{ color: "white", margin: "10px" }}>
-                  Thêm nhân viên
+                  Thêm khách hàng
                 </h4>
                 <button type="button" class="close" data-dismiss="modal">
                   &times;
@@ -156,7 +144,7 @@ class ModalCreate extends Component {
                             type="text"
                             class="form-control"
                             id="txtUserName"
-                            placeholder="Nhập họ tên nhân viên"
+                            placeholder="Nhập họ tên khách hàng"
                             autoComplete="off"
                             value={txtUserName || ""}
                             onChange={this.onChange}
@@ -201,48 +189,17 @@ class ModalCreate extends Component {
                           )}
                         </div>
                         <div class="form-group">
-                          <label for="product_name">Vai trò</label>
-                          <select
+                          <label for="product_name">Ghi chú</label>
+                          <textarea
                             class="form-control"
-                            id="txtRule"
-                            name="txtRule"
-                            value={txtRule || ""}
+                            id="txtNote"
+                            placeholder="Nhập ghi chú"
+                            autoComplete="off"
+                            value={txtNote || ""}
                             onChange={this.onChange}
-                          >
-                            <option value="">-- Chọn vai trò --</option>
-                            <option value="1">Tài xế</option>
-                            <option value="2">Phụ xe</option>
-                          </select>
-                          {errors.txtRule && (
-                            <div
-                              className="validation"
-                              style={{ display: "block" }}
-                            >
-                              {errors.txtRule}
-                            </div>
-                          )}
-                        </div>
-                        <div class="form-group">
-                          <label>Trạng thái làm việc</label>
-                          <select
-                            class="form-control"
-                            id="txtStatus"
-                            name="txtStatus"
-                            value={txtStatus || ""}
-                            onChange={this.onChange}
-                          >
-                            <option value="">-- Chọn trạng thái --</option>
-                            <option value="1">Đang làm</option>
-                            <option value="2">Đã nghỉ</option>
-                          </select>
-                          {errors.txtStatus && (
-                            <div
-                              className="validation"
-                              style={{ display: "block" }}
-                            >
-                              {errors.txtStatus}
-                            </div>
-                          )}
+                            name="txtNote"
+                            rows="3"
+                          />
                         </div>
                       </div>
                     </div>
@@ -274,8 +231,8 @@ class ModalCreate extends Component {
 }
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    createEmployee: (id, form, $this, funcModal) => {
-      dispatch(dashboardAction.createEmployee(id, form, $this, funcModal));
+    createCustomer: (id, form, $this, funcModal) => {
+      dispatch(dashboardAction.createCustomer(id, form, $this, funcModal));
     },
   };
 };

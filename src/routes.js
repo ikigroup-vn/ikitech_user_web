@@ -190,6 +190,7 @@ import Community from "./screens/Community/index.js";
 import CarList from "./screens/CarList/index.js";
 import EmployeeList from "./screens/EmployeeList/index.js";
 import TripList from "./screens/TripList/index.js";
+import CustomerList from "./screens/CustomerList/index.js";
 
 const routes = [
   {
@@ -358,20 +359,27 @@ const routes = [
 
     main: ({ match }) => <CarList match={match} />,
   },
-   // Danh sách nhân viên
-   {
+  // Danh sách nhân viên
+  {
     path: "/employee/index/:store_code",
     exact: true,
 
     main: ({ match }) => <EmployeeList match={match} />,
   },
-    // Danh sách chuyến đi
-    {
-      path: "/trip/index/:store_code",
-      exact: true,
-  
-      main: ({ match }) => <TripList match={match} />,
-    },
+  // Danh sách chuyến xe
+  {
+    path: "/trip/index/:store_code",
+    exact: true,
+
+    main: ({ match }) => <TripList match={match} />,
+  },
+  // Danh sách khách hàng
+  {
+    path: "/customers/index/:store_code",
+    exact: true,
+
+    main: ({ match }) => <CustomerList match={match} />,
+  },
   {
     path: "/supplier/:store_code",
     exact: true,
@@ -1303,14 +1311,14 @@ const routes = [
     path: "/expired",
     exact: true,
 
-    main: ({ match }) => <Expired match={match}/>,
+    main: ({ match }) => <Expired match={match} />,
   },
 
   {
     path: "/community/:store_code",
     exact: true,
 
-    main: ({ match }) => <Community match={match}/>,
+    main: ({ match }) => <Community match={match} />,
   },
 
   {

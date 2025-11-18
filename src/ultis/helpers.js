@@ -317,6 +317,12 @@ export const formatNumber = (value) => {
   var numStr = parseFloat(numStr);
   return isNaN(numStr) ? 0 : numStr;
 };
+export const displayMoney = (value) => {
+  if (value === null || value === undefined || value === "") return "";
+  const num = parseFloat(value);
+  if (isNaN(num)) return value;
+  return num.toLocaleString("en-US"); // sẽ hiển thị 1,234,567
+};
 
 export const getQueryParams = (name) => {
   return new URLSearchParams(window ? window.location.search : {}).get(name);

@@ -283,7 +283,7 @@ class Topbar extends Component {
               style={{ margin: "auto" }}
               className={`nav-item dropdown no-arrow mx-1 ${chooseStore}`}
             >
-              <select
+              {/* <select
                 id="input"
                 className="form-control border-input"
                 name="store"
@@ -305,7 +305,7 @@ class Topbar extends Component {
                 )}
 
                 {this.showData(branchStore)}
-              </select>
+              </select> */}
             </div>
             {/* <div className="categories__content">
               <div
@@ -457,7 +457,7 @@ class Topbar extends Component {
                 </div>
               </li>
 
-              <li className="nav-item dropdown no-arrow">
+              {/* <li className="nav-item dropdown no-arrow">
                 {typeof isShow == "undefined" ? (
                   <div></div>
                 ) : isShow == true ? (
@@ -524,7 +524,7 @@ class Topbar extends Component {
                     {stores?.length > 0 && this.getNameBranch(stores)}
                   </a>
                 )}{" "}
-              </li>
+              </li> */}
 
               <div className="topbar-divider d-none d-sm-block"></div>
 
