@@ -5,14 +5,168 @@ import { v4 as uuidv4 } from "uuid";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import Validator from "../../ultis/validator";
 import themeData from "../../ultis/theme_data";
-import Select from "react-select";
+import Downshift from "downshift";
+import LunarSolarDatePicker from "./LunarSolarDatePicker";
 
+// ========== Component Select tái sử dụng ==========
+const SelectWithSearch = ({
+  options = [],
+  value,
+  onChange,
+  placeholder = "-- Chọn --",
+  isClearable = true,
+  instanceId,
+}) => {
+  const [searchValue, setSearchValue] = React.useState("");
+  const [isTyping, setIsTyping] = React.useState(false);
+  const selectedItem = options.find((opt) => opt.value === value) || null;
+
+  return (
+    <Downshift
+      selectedItem={selectedItem}
+      onChange={(selection) => {
+        onChange(selection);
+        setSearchValue("");
+        setIsTyping(false);
+      }}
+      itemToString={(item) => (item ? item.label : "")}
+    >
+      {({
+        getInputProps,
+        getItemProps,
+        getMenuProps,
+        isOpen,
+        highlightedIndex,
+        clearSelection,
+        openMenu,
+      }) => {
+        // Hiển thị giá trị đã chọn, hoặc searchValue nếu đang gõ
+        const displayValue = isTyping
+          ? searchValue
+          : selectedItem
+          ? selectedItem.label
+          : "";
+
+        return (
+          <div style={{ position: "relative" }}>
+            <div style={{ position: "relative", display: "flex" }}>
+              <input
+                {...getInputProps({
+                  placeholder,
+                  className: "form-control",
+                  onFocus: () => {
+                    openMenu();
+                    // Không xóa giá trị khi focus
+                  },
+                  onClick: () => {
+                    openMenu();
+                  },
+                  value: displayValue,
+                  onChange: (e) => {
+                    setSearchValue(e.target.value);
+                    setIsTyping(true); // Đánh dấu đang gõ
+                  },
+                  onKeyDown: (e) => {
+                    // Khi bắt đầu gõ, bật chế độ typing
+                    if (e.key.length === 1) {
+                      setIsTyping(true);
+                    }
+                  },
+                  style: {
+                    paddingRight: isClearable && selectedItem ? "30px" : "10px",
+                  },
+                })}
+              />
+
+              {isClearable && selectedItem && !isOpen && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    clearSelection();
+                    onChange(null);
+                    setSearchValue("");
+                    setIsTyping(false);
+                  }}
+                  style={{
+                    position: "absolute",
+                    right: "5px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    border: "none",
+                    background: "transparent",
+                    cursor: "pointer",
+                    padding: "0 5px",
+                    fontSize: "18px",
+                    color: "#999",
+                  }}
+                >
+                  ×
+                </button>
+              )}
+            </div>
+
+            <ul
+              {...getMenuProps()}
+              style={{
+                position: "absolute",
+                top: "100%",
+                left: 0,
+                right: 0,
+                maxHeight: "200px",
+                overflowY: "auto",
+                backgroundColor: "white",
+                border: isOpen ? "1px solid #ccc" : "none",
+                borderRadius: "4px",
+                margin: 0,
+                padding: 0,
+                listStyle: "none",
+                zIndex: 1050,
+                boxShadow: isOpen ? "0 2px 8px rgba(0,0,0,0.15)" : "none",
+              }}
+            >
+              {isOpen &&
+                options
+                  .filter((item) =>
+                    item.label.toLowerCase().includes(searchValue.toLowerCase())
+                  )
+                  .map((item, index) => (
+                    <li
+                      key={item.value}
+                      {...getItemProps({
+                        index,
+                        item,
+                        style: {
+                          padding: "8px 12px",
+                          cursor: "pointer",
+                          backgroundColor:
+                            highlightedIndex === index ? "#f0f0f0" : "white",
+                          fontWeight:
+                            selectedItem?.value === item.value
+                              ? "bold"
+                              : "normal",
+                        },
+                      })}
+                    >
+                      {item.label}
+                    </li>
+                  ))}
+            </ul>
+          </div>
+        );
+      }}
+    </Downshift>
+  );
+};
+
+// ========== Component chính ==========
 class ModalUpdateTrip extends Component {
   constructor(props) {
     super(props);
     this.state = {
       phoneEditingIndex: null,
       date: "",
+      date_lunar: "",
       car_id: "",
       route_name: "",
       driver_1: "",
@@ -21,12 +175,10 @@ class ModalUpdateTrip extends Component {
       assistant_2: "",
       customers: [],
       shipments: [],
-      // Thêm state cho phone suggestions
       phoneSuggestions: [],
       showSuggestions: false,
       activeSuggestionIndex: null,
-      currentSearchPhone: "", // Lưu số điện thoại đang tìm kiếm
-      // Thêm state cho shipment phone suggestions
+      currentSearchPhone: "",
       shipmentPhoneEditingIndex: null,
       showShipmentSuggestions: false,
       activeShipmentSuggestionIndex: null,
@@ -52,7 +204,7 @@ class ModalUpdateTrip extends Component {
     ];
     this.validator = new Validator(rules);
   }
-  // Thêm các hàm xử lý cho shipment
+
   searchShipmentCustomerByPhone = (index, phone) => {
     const { store_code } = this.props;
 
@@ -115,16 +267,13 @@ class ModalUpdateTrip extends Component {
   componentDidUpdate(prevProps) {
     const { modal, store_code, tripDetail, customerList } = this.props;
 
-    // Khi modal thay đổi (mở modal edit chuyến khác)
     if (modal !== prevProps.modal && modal.id) {
       this.props.fetchTripDetail(store_code, modal.id);
     }
 
-    // Khi tripDetail được load xong
     if (tripDetail !== prevProps.tripDetail && tripDetail) {
       const t = tripDetail;
 
-      // Format lại các giá trị tiền
       const formattedCustomers = (t.customers || []).map((c) => ({
         ...c,
         price: this.formatMoney(c.price),
@@ -138,10 +287,12 @@ class ModalUpdateTrip extends Component {
         quantity: this.formatMoney(s.quantity),
         total_price: this.formatMoney(s.total_price),
       }));
+
       this.setState({
         id: t.trip.id,
         trip_code: t.trip.trip_code,
         date: t.trip.date || "",
+        date_lunar: t.trip.date_lunar || "",
         car_id: t.trip.car_id || "",
         route_name: t.trip.route_name || "",
         driver_1: t.trip.driver_1 || "",
@@ -153,7 +304,6 @@ class ModalUpdateTrip extends Component {
       });
     }
 
-    // Xử lý khi customerList thay đổi (kết quả tìm kiếm)
     if (prevProps.customerList !== customerList) {
       const index = this.state.phoneEditingIndex;
       if (
@@ -162,7 +312,6 @@ class ModalUpdateTrip extends Component {
         customerList.data &&
         customerList.data.length > 0
       ) {
-        // Hiển thị danh sách gợi ý
         this.setState({
           showSuggestions: true,
         });
@@ -170,11 +319,9 @@ class ModalUpdateTrip extends Component {
     }
   }
 
-  // Hàm tìm kiếm khách hàng theo số điện thoại
   searchCustomerByPhone = (index, phone) => {
     const { store_code } = this.props;
 
-    // Chỉ tìm kiếm khi nhập đủ 4 số
     if (phone.length >= 4) {
       this.setState({
         phoneEditingIndex: index,
@@ -182,7 +329,6 @@ class ModalUpdateTrip extends Component {
         activeSuggestionIndex: index,
       });
 
-      // Gọi API tìm kiếm khách hàng
       this.props.fetchCustomerList(store_code, 1, { phone: phone });
     } else {
       this.setState({
@@ -193,7 +339,6 @@ class ModalUpdateTrip extends Component {
     }
   };
 
-  // Đóng dropdown gợi ý
   closeSuggestions = () => {
     this.setState({
       showSuggestions: false,
@@ -202,7 +347,6 @@ class ModalUpdateTrip extends Component {
     });
   };
 
-  // Hàm sắp xếp danh sách khách hàng theo độ khớp với số điện thoại
   sortCustomersByMatch = (customers, searchPhone) => {
     if (!searchPhone || !customers || customers.length === 0) return customers;
 
@@ -210,26 +354,22 @@ class ModalUpdateTrip extends Component {
       const phoneA = (a.phone || "").toString();
       const phoneB = (b.phone || "").toString();
 
-      // Kiểm tra số nào khớp từ đầu (ưu tiên cao nhất)
       const aStartsWith = phoneA.startsWith(searchPhone);
       const bStartsWith = phoneB.startsWith(searchPhone);
 
       if (aStartsWith && !bStartsWith) return -1;
       if (!aStartsWith && bStartsWith) return 1;
 
-      // Nếu cả hai đều khớp từ đầu, ưu tiên số ngắn hơn (chính xác hơn)
       if (aStartsWith && bStartsWith) {
         return phoneA.length - phoneB.length;
       }
 
-      // Kiểm tra số nào chứa chuỗi tìm kiếm
       const aIncludes = phoneA.includes(searchPhone);
       const bIncludes = phoneB.includes(searchPhone);
 
       if (aIncludes && !bIncludes) return -1;
       if (!aIncludes && bIncludes) return 1;
 
-      // Nếu cả hai đều chứa, ưu tiên vị trí xuất hiện sớm hơn
       if (aIncludes && bIncludes) {
         return phoneA.indexOf(searchPhone) - phoneB.indexOf(searchPhone);
       }
@@ -238,38 +378,27 @@ class ModalUpdateTrip extends Component {
     });
   };
 
-  // ================== KHÁCH HÀNG ==================
   onChangeCustomer = (index, e) => {
     const { name, value } = e.target;
     const customers = [...this.state.customers];
 
-    // Xử lý khi thay đổi số điện thoại
     if (name === "phone") {
-      //  Chỉ cho phép nhập số (0-9)
       const onlyNumbers = value.replace(/[^0-9]/g, "");
-
       customers[index][name] = onlyNumbers;
       this.setState({ customers, currentSearchPhone: onlyNumbers });
-
-      // Tìm kiếm gợi ý
       this.searchCustomerByPhone(index, onlyNumbers);
       return;
     }
 
-    // Nếu là trường giá tiền
     if (name === "price" || name === "total_card") {
-      // Xóa dấu phẩy cũ
       let rawValue = value.replace(/,/g, "");
 
-      // Cho phép rỗng (để người dùng xóa)
       if (rawValue === "") {
         customers[index][name] = "";
       } else if (!isNaN(rawValue)) {
-        // Format lại giá tiền
         customers[index][name] = this.formatMoney(rawValue);
       }
 
-      // Tính lại tổng tiền
       const total_card = this.parseMoney(customers[index].total_card || 0);
       const price = this.parseMoney(customers[index].price || 0);
       customers[index].total_price = this.formatMoney(total_card * price);
@@ -323,34 +452,27 @@ class ModalUpdateTrip extends Component {
     });
   };
 
-  // ================== HÀNG GỬI ==================
   onChangeShipment = (index, e) => {
     const { name, value } = e.target;
     const shipments = [...this.state.shipments];
 
-    // Xử lý khi thay đổi số điện thoại
     if (name === "phone") {
-      //  Chỉ cho phép nhập số (0-9)
       const onlyNumbers = value.replace(/[^0-9]/g, "");
       shipments[index][name] = onlyNumbers;
       this.setState({ shipments, currentSearchShipmentPhone: onlyNumbers });
       this.searchShipmentCustomerByPhone(index, onlyNumbers);
       return;
     }
-    // Nếu là trường giá tiền hoặc số lượng
+
     if (name === "price" || name === "quantity") {
-      // Xóa dấu phẩy cũ
       let rawValue = value.replace(/,/g, "");
 
-      // Cho phép rỗng
       if (rawValue === "") {
         shipments[index][name] = "";
       } else if (!isNaN(rawValue)) {
-        // Format lại giá trị hiển thị
         shipments[index][name] = this.formatMoney(rawValue);
       }
 
-      // Tính tổng tiền
       const quantity = this.parseMoney(shipments[index].quantity || 0);
       const price = this.parseMoney(shipments[index].price || 0);
       shipments[index].total_price = this.formatMoney(quantity * price);
@@ -388,10 +510,6 @@ class ModalUpdateTrip extends Component {
     });
   };
 
-  handleChangeCar = (e) => {
-    this.setState({ car_id: e.target.value });
-  };
-
   handleOnClick = () => {
     const { store_code } = this.props;
     const customers = this.state.customers.map((c) => ({
@@ -410,6 +528,7 @@ class ModalUpdateTrip extends Component {
 
     const Formdata = {
       date: this.state.date,
+      date_lunar: this.state.date_lunar,
       car_id: this.state.car_id,
       route_name: this.state.route_name,
       driver_1: this.state.driver_1,
@@ -429,6 +548,21 @@ class ModalUpdateTrip extends Component {
         window.$(".modal").modal("hide");
       }
     );
+  };
+
+  formatSolarToYMD(solar) {
+    if (!solar) return "";
+    const year = solar.year;
+    const month = String(solar.month).padStart(2, "0");
+    const day = String(solar.day).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  handleDateChange = (dateInfo) => {
+    this.setState({
+      date: this.formatSolarToYMD(dateInfo.solar),
+      date_lunar: this.formatSolarToYMD(dateInfo.lunar),
+    });
   };
 
   componentDidMount() {
@@ -451,12 +585,11 @@ class ModalUpdateTrip extends Component {
     const employeeList = normalizeData(this.props.employeeList);
     const customerListData = normalizeData(this.props.customerList);
 
-    // Sắp xếp danh sách khách hàng theo độ khớp
     const sortedCustomerList = this.sortCustomersByMatch(
       customerListData,
       this.state.currentSearchPhone
     );
-    // Thêm sorted list cho shipment
+
     const sortedShipmentCustomerList = this.sortCustomersByMatch(
       customerListData,
       this.state.currentSearchShipmentPhone
@@ -473,12 +606,11 @@ class ModalUpdateTrip extends Component {
       errors,
       customers,
       shipments,
-      car_id,
       trip_code,
       showSuggestions,
       activeSuggestionIndex,
-      showShipmentSuggestions, // Thêm
-      activeShipmentSuggestionIndex, // Thêm
+      showShipmentSuggestions,
+      activeShipmentSuggestionIndex,
     } = this.state;
 
     return (
@@ -503,74 +635,57 @@ class ModalUpdateTrip extends Component {
               </div>
 
               <div className="modal-body">
-                {/* ======= THÔNG TIN CHUYẾN ======= */}
                 <form>
                   <div className="row">
                     <div className="col-4">
                       <div className="form-group">
                         <label>Ngày chạy</label>
-                        <input
-                          type="date"
-                          className="form-control"
-                          name="date"
+                        <LunarSolarDatePicker
+                          onChange={this.handleDateChange}
                           value={this.state.date}
-                          onChange={this.onChange}
                         />
                         {errors.date && (
                           <div className="validation">{errors.date}</div>
                         )}
                       </div>
                     </div>
+
                     <div className="col-4">
                       <div className="form-group">
                         <label>Xe</label>
-                        <Select
+                        <SelectWithSearch
                           instanceId="select-car"
-                          value={
-                            cars_filter
-                              ?.map((car) => ({
-                                value: car.id,
-                                label: car.number,
-                              }))
-                              .find((opt) => opt.value === this.state.car_id) ||
-                            null
-                          }
+                          options={cars_filter?.map((car) => ({
+                            value: car.id,
+                            label: car.number,
+                          }))}
+                          value={this.state.car_id}
                           onChange={(selected) =>
                             this.setState({
                               car_id: selected ? selected.value : "",
                             })
                           }
-                          options={cars_filter?.map((car) => ({
-                            value: car.id,
-                            label: car.number,
-                          }))}
                           placeholder="-- Chọn xe --"
                           isClearable
                         />
                       </div>
                     </div>
+
                     <div className="col-4">
                       <div className="form-group">
                         <label>Tuyến đường</label>
-                        <Select
+                        <SelectWithSearch
                           instanceId="select-route"
-                          value={
-                            [
-                              { value: "1", label: "Nam Định đi Sài Gòn" },
-                              { value: "2", label: "Sài Gòn đi Nam Định" },
-                            ].find(
-                              (opt) => opt.value === this.state.route_name
-                            ) || null
-                          }
+                          options={[
+                            { value: "1", label: "Nam Định đi Sài Gòn" },
+                            { value: "2", label: "Sài Gòn đi Nam Định" },
+                          ]}
+                          value={this.state.route_name}
                           onChange={(selected) =>
                             this.setState({
                               route_name: selected ? selected.value : "",
                             })
                           }
-                          options={[
-                            { value: "1", label: "Nam Định đi Sài Gòn" },
-                            { value: "2", label: "Sài Gòn đi Nam Định" },
-                          ]}
                           placeholder="-- Chọn tuyến đường --"
                           isClearable
                         />
@@ -580,35 +695,25 @@ class ModalUpdateTrip extends Component {
 
                   {/* ======= NHÂN SỰ ======= */}
                   <div className="row">
-                    {/* --- Tài xế --- */}
                     {[
                       { field: "driver_1", label: "Tài xế 1" },
                       { field: "driver_2", label: "Tài xế 2" },
-                    ].map(({ field, label }, i) => (
+                    ].map(({ field, label }) => (
                       <div className="col-3" key={field}>
                         <div className="form-group">
                           <label>{label}</label>
-                          <Select
+                          <SelectWithSearch
                             instanceId={`select-${field}`}
-                            value={
-                              drivers
-                                .map((emp) => ({
-                                  value: emp.id,
-                                  label: emp.username,
-                                }))
-                                .find(
-                                  (opt) => opt.value === this.state[field]
-                                ) || null
-                            }
+                            options={drivers.map((emp) => ({
+                              value: emp.id,
+                              label: emp.username,
+                            }))}
+                            value={this.state[field]}
                             onChange={(selected) =>
                               this.setState({
                                 [field]: selected ? selected.value : "",
                               })
                             }
-                            options={drivers.map((emp) => ({
-                              value: emp.id,
-                              label: emp.username,
-                            }))}
                             placeholder="-- Chọn tài xế --"
                             isClearable
                           />
@@ -616,35 +721,25 @@ class ModalUpdateTrip extends Component {
                       </div>
                     ))}
 
-                    {/* --- Phụ xe --- */}
                     {[
                       { field: "assistant_1", label: "Phụ xe 1" },
                       { field: "assistant_2", label: "Phụ xe 2" },
-                    ].map(({ field, label }, i) => (
+                    ].map(({ field, label }) => (
                       <div className="col-3" key={field}>
                         <div className="form-group">
                           <label>{label}</label>
-                          <Select
+                          <SelectWithSearch
                             instanceId={`select-${field}`}
-                            value={
-                              assistants
-                                .map((emp) => ({
-                                  value: emp.id,
-                                  label: emp.username,
-                                }))
-                                .find(
-                                  (opt) => opt.value === this.state[field]
-                                ) || null
-                            }
+                            options={assistants.map((emp) => ({
+                              value: emp.id,
+                              label: emp.username,
+                            }))}
+                            value={this.state[field]}
                             onChange={(selected) =>
                               this.setState({
                                 [field]: selected ? selected.value : "",
                               })
                             }
-                            options={assistants.map((emp) => ({
-                              value: emp.id,
-                              label: emp.username,
-                            }))}
                             placeholder="-- Chọn phụ xe --"
                             isClearable
                           />
@@ -692,11 +787,9 @@ class ModalUpdateTrip extends Component {
                               onChange={(e) => this.onChangeCustomer(idx, e)}
                               placeholder="Nhập SĐT..."
                               onBlur={() => {
-                                // Delay để có thể click vào suggestion trước khi đóng
                                 setTimeout(() => this.closeSuggestions(), 200);
                               }}
                             />
-                            {/* Dropdown gợi ý */}
                             {showSuggestions &&
                               activeSuggestionIndex === idx &&
                               sortedCustomerList.length > 0 && (
@@ -932,7 +1025,6 @@ class ModalUpdateTrip extends Component {
                                 );
                               }}
                             />
-                            {/* Dropdown gợi ý cho Shipment */}
                             {showShipmentSuggestions &&
                               activeShipmentSuggestionIndex === idx &&
                               sortedShipmentCustomerList.length > 0 && (
@@ -1170,4 +1262,5 @@ const mapDispatchToProps = (dispatch, props) => {
     },
   };
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(ModalUpdateTrip);

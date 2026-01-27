@@ -9,11 +9,25 @@ import * as dashboardAction from "../../actions/dashboard";
 import { connect } from "react-redux";
 import ModalDelete from "../../components/CarList/ModalDelete";
 import ModalCreate from "../../components/CarList/ModalCreate";
+import ModalView from "../../components/CarList/ModalView";
 import Pagination from "../../components/CarList/Pagination";
 import * as placeAction from "../../actions/place";
 import ModalEdit from "../../components/CarList/ModalEdit";
 import { getQueryParams } from "../../ultis/helpers";
+import styled from "styled-components";
 
+const TableStyles = styled.div`
+  .select-role {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  .name_customer_hover {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
 class CarList extends Component {
   constructor(props) {
     super(props);
@@ -92,8 +106,15 @@ class CarList extends Component {
         return (
           <tr className="hover-product">
             <td>{index + 1}</td>
+            <td
+              className="primary name_customer_hover"
+              data-toggle="modal"
+              data-target="#modalViewCar"
+              onClick={() => this.handleSetInfor(data)}
+            >
+              {data.number}
+            </td>
 
-            <td>{data.number}</td>
             <td>{data.type}</td>
             <td>{data.seat_count}</td>
             {data.status == "1" ? (
@@ -143,105 +164,111 @@ class CarList extends Component {
     } = this.state;
     var { wards, district, province, name } = this.props;
     return (
-      <div id="wrapper">
-        <Sidebar store_code={store_code} />
+      <TableStyles>
+        <div id="wrapper">
+          <Sidebar store_code={store_code} />
 
-        <div className="col-10 col-10-wrapper">
-          <div id="content-wrapper" className="d-flex flex-column">
-            <div id="content">
-              <Topbar store_code={store_code} />
-              {typeof isShow == "undefined" ? (
-                <div></div>
-              ) : isShow == true ? (
-                <div className="container-fluid">
-                  <Alert
-                    type={Types.ALERT_UID_STATUS}
-                    alert={this.props.alert}
-                  />
+          <div className="col-10 col-10-wrapper">
+            <div id="content-wrapper" className="d-flex flex-column">
+              <div id="content">
+                <Topbar store_code={store_code} />
+                {typeof isShow == "undefined" ? (
+                  <div></div>
+                ) : isShow == true ? (
+                  <div className="container-fluid">
+                    <Alert
+                      type={Types.ALERT_UID_STATUS}
+                      alert={this.props.alert}
+                    />
 
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <h4 class="h4 title_content mb-0 text-gray-800">
-                      Danh sách xe
-                    </h4>
-
-                    <a
-                      onClick={this.openModal}
-                      data-toggle="modal"
-                      data-target="#modalAddress"
-                      class={`btn btn-info btn-icon-split btn-sm ${
-                        true ? "show" : "hide"
-                      }`}
-                      style={{ marginRight: "1rem" }}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
                     >
-                      <span
-                        class="icon text-white-50"
-                        style={{ marginRight: 0 }}
+                      <h4 class="h4 title_content mb-0 text-gray-800">
+                        Danh sách xe
+                      </h4>
+
+                      <a
+                        onClick={this.openModal}
+                        data-toggle="modal"
+                        data-target="#modalAddress"
+                        class={`btn btn-info btn-icon-split btn-sm ${
+                          true ? "show" : "hide"
+                        }`}
+                        style={{ marginRight: "1rem" }}
                       >
-                        <i class="fas fa-plus"></i>
-                      </span>
-                      <span style={{ color: "white" }} class={`text `}>
-                        Thêm xe
-                      </span>
-                    </a>
-                  </div>
-
-                  <br></br>
-                  <div className="card">
-                    <div className="card-body">
-                      <div class="table-responsive">
-                        <table
-                          class="table  "
-                          id="dataTable"
-                          width="100%"
-                          cellspacing="0"
+                        <span
+                          class="icon text-white-50"
+                          style={{ marginRight: 0 }}
                         >
-                          <thead>
-                            <tr>
-                              <th>STT</th>
-                              <th>Biển số</th>
-                              <th>Loại xe</th>
-                              <th>Số ghế</th>
-                              <th>Trạng thái</th>
-                              <th>Hành động</th>
-                            </tr>
-                          </thead>
+                          <i class="fas fa-plus"></i>
+                        </span>
+                        <span style={{ color: "white" }} class={`text `}>
+                          Thêm xe
+                        </span>
+                      </a>
+                    </div>
 
-                          <tbody>{this.showData(carlist.data)}</tbody>
-                        </table>
+                    <br></br>
+                    <div className="card">
+                      <div className="card-body">
+                        <div class="table-responsive">
+                          <table
+                            class="table  "
+                            id="dataTable"
+                            width="100%"
+                            cellspacing="0"
+                          >
+                            <thead>
+                              <tr>
+                                <th>STT</th>
+                                <th>Biển số</th>
+                                <th>Loại xe</th>
+                                <th>Số ghế</th>
+                                <th>Trạng thái</th>
+                                <th>Hành động</th>
+                              </tr>
+                            </thead>
+
+                            <tbody>{this.showData(carlist.data)}</tbody>
+                          </table>
+                        </div>
+                        <Pagination
+                          statusRequest={statusRequest}
+                          searchValue={searchValue}
+                          numPage={numPage}
+                          getParams={this.getParams}
+                          store_code={store_code}
+                          carlist={carlist}
+                          setPage={this.setPage}
+                        />
                       </div>
-                      <Pagination
-                        statusRequest={statusRequest}
-                        searchValue={searchValue}
-                        numPage={numPage}
-                        getParams={this.getParams}
-                        store_code={store_code}
-                        carlist={carlist}
-                        setPage={this.setPage}
-                      />
                     </div>
                   </div>
-                </div>
-              ) : (
-                <NotAccess />
-              )}
+                ) : (
+                  <NotAccess />
+                )}
+              </div>
+              <Footer />
             </div>
-            <Footer />
+            <ModalDelete
+              store_code={store_code}
+              id_branch={id_branch}
+              brand_name={this.state.name}
+            />
+            <ModalCreate
+              openModal={openModal}
+              resetModal={this.resetModal}
+              store_code={store_code}
+            />
+            <ModalEdit store_code={store_code} modal={modal} />
+            <ModalView modal={modal} store_code={store_code} />
           </div>
-          <ModalDelete
-            store_code={store_code}
-            id_branch={id_branch}
-            brand_name={this.state.name}
-          />
-          <ModalCreate
-            openModal={openModal}
-            resetModal={this.resetModal}
-            store_code={store_code}
-          />
-          <ModalEdit store_code={store_code} modal={modal} />
         </div>
-      </div>
+      </TableStyles>
     );
   }
 }

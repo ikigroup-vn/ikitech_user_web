@@ -199,6 +199,7 @@ class TripList extends Component {
             </td>
 
             <td>{data.date}</td>
+            <td>{data.date_lunar}</td>
             <td>{data.number}</td>
             {data.route_name == "1" ? (
               <td>Nam Định đi Sài Gòn</td>
@@ -458,6 +459,7 @@ class TripList extends Component {
                                 <th>STT</th>
                                 <th>Mã chuyến</th>
                                 <th>Ngày chạy</th>
+                                <th>Lịch âm</th>
                                 <th>Xe chạy</th>
                                 <th>Hành chình</th>
                                 <th>Trạng thái</th>

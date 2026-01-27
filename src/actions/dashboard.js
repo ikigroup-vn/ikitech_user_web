@@ -1993,9 +1993,27 @@ export const exportToExcel = (data) => {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
+  function formatDateToDDMMYYYY(dateStr) {
+    if (!dateStr) return "";
+
+    const parts = dateStr.split("-");
+    if (parts.length !== 3) return "";
+
+    const year = parts[0];
+    const month = parts[1].padStart(2, "0"); // đảm bảo 2 chữ số
+    const day = parts[2].padStart(2, "0"); // đảm bảo 2 chữ số
+
+    return `${day}/${month}/${year}`;
+  }
+
   // ===== SHEET 1: KHÁCH HÀNG =====
   const infoSheet = [
-    ["Ngày chạy", trip.date],
+    [
+      "Ngày chạy",
+      `${formatDateToDDMMYYYY(trip.date)} (Âm lịch: ${formatDateToDDMMYYYY(
+        trip.date_lunar
+      )})`,
+    ],
     ["Tài xế", trip.driver_1_name, trip.driver_2_name],
     ["Phụ xe", trip.assistant_1_name, trip.assistant_2_name],
     [

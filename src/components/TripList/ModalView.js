@@ -2,7 +2,47 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as dashboardAction from "../../actions/dashboard";
 import themeData from "../../ultis/theme_data";
-import Select from "react-select";
+import Downshift from "downshift";
+import LunarSolarDatePicker from "./LunarSolarDatePicker";
+
+// ========== Component Select tái sử dụng ==========
+const SelectWithSearch = ({
+  options = [],
+  value,
+  placeholder = "-- Chọn --",
+  instanceId,
+  disabled = false,
+}) => {
+  const selectedItem = options.find((opt) => opt.value === value) || null;
+
+  return (
+    <Downshift
+      selectedItem={selectedItem}
+      itemToString={(item) => (item ? item.label : "")}
+    >
+      {({ getInputProps }) => {
+        const displayValue = selectedItem ? selectedItem.label : "";
+
+        return (
+          <div style={{ position: "relative" }}>
+            <input
+              {...getInputProps({
+                placeholder,
+                className: "form-control",
+                value: displayValue,
+                disabled: disabled,
+                style: {
+                  backgroundColor: disabled ? "#e9ecef" : "white",
+                  cursor: disabled ? "not-allowed" : "text",
+                },
+              })}
+            />
+          </div>
+        );
+      }}
+    </Downshift>
+  );
+};
 
 class ModalViewTrip extends Component {
   constructor(props) {
@@ -125,10 +165,7 @@ class ModalViewTrip extends Component {
                     <div className="col-4">
                       <div className="form-group">
                         <label>Ngày chạy</label>
-                        <input
-                          type="date"
-                          className="form-control"
-                          name="date"
+                        <LunarSolarDatePicker
                           value={this.state.date}
                           disabled
                         />
@@ -137,45 +174,30 @@ class ModalViewTrip extends Component {
                     <div className="col-4">
                       <div className="form-group">
                         <label>Xe</label>
-                        <Select
+                        <SelectWithSearch
                           instanceId="select-car-view"
-                          value={
-                            cars_filter
-                              ?.map((car) => ({
-                                value: car.id,
-                                label: car.number,
-                              }))
-                              .find((opt) => opt.value === this.state.car_id) ||
-                            null
-                          }
                           options={cars_filter?.map((car) => ({
                             value: car.id,
                             label: car.number,
                           }))}
+                          value={this.state.car_id}
                           placeholder="-- Chọn xe --"
-                          isDisabled
+                          disabled
                         />
                       </div>
                     </div>
                     <div className="col-4">
                       <div className="form-group">
                         <label>Tuyến đường</label>
-                        <Select
+                        <SelectWithSearch
                           instanceId="select-route-view"
-                          value={
-                            [
-                              { value: "1", label: "Nam Định đi Sài Gòn" },
-                              { value: "2", label: "Sài Gòn đi Nam Định" },
-                            ].find(
-                              (opt) => opt.value === this.state.route_name
-                            ) || null
-                          }
                           options={[
                             { value: "1", label: "Nam Định đi Sài Gòn" },
                             { value: "2", label: "Sài Gòn đi Nam Định" },
                           ]}
+                          value={this.state.route_name}
                           placeholder="-- Chọn tuyến đường --"
-                          isDisabled
+                          disabled
                         />
                       </div>
                     </div>
@@ -187,28 +209,19 @@ class ModalViewTrip extends Component {
                     {[
                       { field: "driver_1", label: "Tài xế 1" },
                       { field: "driver_2", label: "Tài xế 2" },
-                    ].map(({ field, label }, i) => (
+                    ].map(({ field, label }) => (
                       <div className="col-3" key={field}>
                         <div className="form-group">
                           <label>{label}</label>
-                          <Select
+                          <SelectWithSearch
                             instanceId={`select-${field}-view`}
-                            value={
-                              drivers
-                                .map((emp) => ({
-                                  value: emp.id,
-                                  label: emp.username,
-                                }))
-                                .find(
-                                  (opt) => opt.value === this.state[field]
-                                ) || null
-                            }
                             options={drivers.map((emp) => ({
                               value: emp.id,
                               label: emp.username,
                             }))}
+                            value={this.state[field]}
                             placeholder="-- Chọn tài xế --"
-                            isDisabled
+                            disabled
                           />
                         </div>
                       </div>
@@ -218,28 +231,19 @@ class ModalViewTrip extends Component {
                     {[
                       { field: "assistant_1", label: "Phụ xe 1" },
                       { field: "assistant_2", label: "Phụ xe 2" },
-                    ].map(({ field, label }, i) => (
+                    ].map(({ field, label }) => (
                       <div className="col-3" key={field}>
                         <div className="form-group">
                           <label>{label}</label>
-                          <Select
+                          <SelectWithSearch
                             instanceId={`select-${field}-view`}
-                            value={
-                              assistants
-                                .map((emp) => ({
-                                  value: emp.id,
-                                  label: emp.username,
-                                }))
-                                .find(
-                                  (opt) => opt.value === this.state[field]
-                                ) || null
-                            }
                             options={assistants.map((emp) => ({
                               value: emp.id,
                               label: emp.username,
                             }))}
+                            value={this.state[field]}
                             placeholder="-- Chọn phụ xe --"
-                            isDisabled
+                            disabled
                           />
                         </div>
                       </div>
